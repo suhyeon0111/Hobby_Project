@@ -9,10 +9,10 @@ https://assorted-handstand-230.notion.site/b0b500ceb21c4129838ecb1d37e09f94
 
 ## 📋 공통 컨벤션
 ### 브랜치 관리 전략
+#### 브랜치는 이슈를 기반으로 생성한다. (이슈 생성 -> 브랜치 생성)
 ⚙️ github-flow
 
 ![](https://lh3.googleusercontent.com/h5H7FB2-aBPVThE4ZlZt919Fl9CstlD17NlJoODMKOlMEHmEV0encsCR2KmJ4yc6JwMsqoyv7u3jWVtW17Q3EqcHzPxUya85fRwRjgDlL2BapLtarQiu-SnjpUjyC2weng-PAXwx)
-
 
 | 브랜치 종류  | 설명                                                         |
 | ------------ | ------------------------------------------------------------ |
@@ -24,6 +24,8 @@ https://assorted-handstand-230.notion.site/b0b500ceb21c4129838ecb1d37e09f94
 1. [Git 브랜칭 전략 : Git-flow와 Github-flow](https://hellowoori.tistory.com/56)
 2. [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow)
 
+---
+
 ### 브랜치 네이밍
 ⚙️ 네이밍 패턴
 
@@ -34,6 +36,15 @@ Ex) backend에서 '로그인 기능' 이슈를 구현하는 브랜치를 생성�
 *feature/backend-Login* 로 작성한다.
 
 *feature/frontend-PostsCard* 로 작성한다.
+
+---
+
+### PR 규칙
+구현한 기능에 대해서 최대한 상세히 설명한다.
+
+브랜치의 기반이 되는 이슈를 Close 한다.
+
+---
 
 ### 커밋 메시지
 
