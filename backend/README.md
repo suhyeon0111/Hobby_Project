@@ -5,7 +5,7 @@
 <details>
 <summary>자세히 보기</summary>
 <div markdown="1">
-Google Java style guide를 기반으로 JAVA 코딩 컨벤션을 설정한다.
+프로젝트에 사용할 JAVA 코딩 컨벤션을 설정한다.
 
 
 ### intellij에 google-style-guide 적용
