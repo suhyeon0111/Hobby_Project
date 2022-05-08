@@ -22,7 +22,6 @@
 - 불필요한 주석을 지양한다
 - Service는 Interface로 작성하고 DIP를 적용하여 약한 결합력을 유지한다.
 - 데이터를 받고 보내는 객체는 무조건 엔티티가 아닌 Dto 혹은 일반 변수여야 한다
-- 엔티티와 Dto를 매핑할 때에는 Mapstruct의 Mapper를 이용한다
 - Controller에서는 최대한 어떤 Service를 호출할지 결정하는 역할과 Exception 처리만을 담당한다
 - Rest API는 커스텀하게 정의한 ResponseDto를 사용한다
 - 예외는 반드시 처리한다 (처리하지 않을 경우 주석으로 이유를 설명한다)
