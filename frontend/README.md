@@ -74,7 +74,7 @@ Hoppy 자바스크립트 코딩 컨벤션 가이드는
     }
     console.log(a); // ReferenceError
     console.log(b); // ReferenceError
-    ```**
+    ```
     
 **[⬆ back to top](#table-of-contents)**
 
