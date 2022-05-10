@@ -1,12 +1,9 @@
 ## 백엔드
 
-
 ### 코딩 컨벤션
 <details>
 <summary>자세히 보기</summary>
 <div markdown="1">
-프로젝트에 사용할 JAVA 코딩 컨벤션을 설정한다.
-
 
 ### intellij에 google-style-guide 적용
 1. https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml 다운
