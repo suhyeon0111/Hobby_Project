@@ -385,7 +385,7 @@ eslint: [`import/first`](https://github.com/benmosher/eslint-plugin-import/blob/
     foo.init();
     ```
     
-- [7.6](#7.6) <a name='7.6'></a>멀티 라인 imports 문은 배열이나 오브젝트의 literal과 같이 표현한다. [19.1](#19.1)을 참조한다.
+- [7.6](#7.6) <a name='7.6'></a>멀티 라인 imports 문은 배열이나 오브젝트의 literal과 같이 표현한다.
 
     ```javascript
     // good
