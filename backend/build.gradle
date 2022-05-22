@@ -49,6 +49,9 @@ test {
 
 asciidoctor {
 	dependsOn 'test'
+	sourceDir 'src/docs/asciidoc'
+
+	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
 }
 
