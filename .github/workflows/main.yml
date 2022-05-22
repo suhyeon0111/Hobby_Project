@@ -85,7 +85,7 @@ jobs:
   deploy:
     needs: build
     name: 무중단 배포
-    runs-on: [ self-hosted, label-dev ]
+    runs-on: [ self-hosted, hoppy ]
     steps:
       - name: Docker run
         run: |
