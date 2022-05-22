@@ -1,5 +1,6 @@
 # MONO-REPO
-취미 공유 플랫폼 프로젝트
+취미 공유 플랫폼 프로젝트 https://hoppy.kro.kr/
+
 <br><br>
 
 ## 👀 노션 공개 URL
