@@ -1,0 +1,17 @@
+= Spring REST Docs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[resources-post]]
+== Health
+
+[[resources-post-create]]
+=== Health check
+
+==== HTTP request
+
+include::{snippets}/health-check/http-request.adoc[]
+
+==== HTTP response
+include::{snippets}/health-check/http-response.adoc[]
