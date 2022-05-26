@@ -42,7 +42,8 @@ jobs:
         run: cd backend && chmod +x ./gradlew
         
       - name: 캐시 설정
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.2
+        id: cache_gradle
         with:
           path: |
             ~/.gradle/caches
@@ -50,10 +51,12 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+            
       - name: 백엔드 Gradle 테스트
         run: cd backend && ./gradlew test
 
       - name: 백엔드 Gradle 빌드
+        if: steps.cache_gradle.outputs.cache-hit == ''
         run: cd backend && ./gradlew build
 
       - name: Set up Docker Buildx
