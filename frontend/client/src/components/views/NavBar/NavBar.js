@@ -4,22 +4,31 @@ import RightMenu from './Sections/RightMenu';
 import { Drawer, Button, Icon } from 'antd';
 import './Sections/Navbar.css';
 import LogoImg from './img/logo.png'
+import Bell from './img/Bell.png'
 
 function NavBar() {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {
-    setVisible(true)
+    setVisible(true);
   };
 
   const onClose = () => {
-    setVisible(false)
+    setVisible(false);
   };
 
   return (
-    <nav className="menu" style={{ position: 'fixed', zIndex: 5, width: '100%' }}>
+    <nav
+      className="menu"
+      style={{ position: "fixed", zIndex: 5, width: "100%" }}
+    >
       <div className="menu__logo">
-        <a href="/"><img src={LogoImg} style={{width: '147px'}} /></a>
+        <a href="/">
+          <img src={LogoImg} style={{ width: "147px" }} />
+        </a>
+        <a href="/notification" className="menu__bell">
+          <img src={Bell} style={{ width: "45px" }} />
+        </a>
       </div>
       <div className="menu__container">
         <div className="menu_left">
@@ -32,9 +41,10 @@ function NavBar() {
           className="menu__mobile-button"
           type="text"
           onClick={showDrawer}
-          style={{width: '40px', height: '40px', marginTop: '20px'}}
+          style={{ width: "40px", height: "40px", marginTop: "20px" }}
         >
-          <Icon type="menu" style={{fontSize: '25px'}} />
+          {/* <img src={MenuIcon} style={{ width: "30px", marginRight: "2px" }} /> */}
+          <Icon type="menu" style={{ fontSize: "25px", color: "#A5A5A5" }} />
         </Button>
         <Drawer
           title="Hoppy"
@@ -44,18 +54,15 @@ function NavBar() {
           onClose={onClose}
           visible={visible}
         >
-          
-          <RightMenu mode="inline"/>
-          <hr style={{width: '80%', backgroundColor: '#D3BA9C'}}/>
+          <RightMenu mode="inline" />
+          <hr style={{ width: "80%", backgroundColor: "#D3BA9C" }} />
           <LeftMenu mode="inline" />
           {/* <RightMenu mode="inline" /> */}
         </Drawer>
       </div>
-      {/* <div style={{float: 'right', display: 'inline-block'}}>
-        <Icon type='bell' />
-      </div> */}
+      <div style={{ float: "right", display: "inline-block" }}></div>
     </nav>
-  )
+  );
 }
 
-export default NavBar
+export default NavBar;

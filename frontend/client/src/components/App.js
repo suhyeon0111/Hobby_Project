@@ -5,7 +5,8 @@ import Auth from "../hoc/auth";
 import LandingPage from "./views/LandingPage/LandingPage.js";
 
 import NavBar from "./views/NavBar/NavBar";
-import Footer from "./views/Footer/Footer"
+import Footer from "./views/Footer/Footer";
+import NotificationPage from './views/NotificationPage/NotificationPage';
 
 // import LoginPage from "./views/LoginPage/LoginPage.js";
 import RegisterPage from "./views/RegisterPage/RegisterPage.js";
@@ -15,6 +16,7 @@ import KakaoLoginPage from './views/LoginPage/KakaoLogin/KakaoLoginPage';
 import MyPage from './views/MyPage/MyPage';
 import MyMeeting from './views/MyPage/MyMeeting/MyMeeting';
 import LikeMeetingList from './views/MyPage/LikeMeetingList/LikeMeetingList';
+import MyStoryList from './views/MyPage/MyStoryList/MyStoryList';
 
 import ExitPage from './views/ExitPage/ExitPage';
 
@@ -52,11 +54,14 @@ function App() {
           <Route exact path="/oauth/login/kakao" component={Auth(AuthRedirectHandler, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
 
+          <Route exact path="/notification" component={Auth(NotificationPage, null)} />
+
           {/* 마이페이지 */}
           {/* 나중에 null->true로 변경 + userId가 주소값에 할당되게 */}
           <Route exact path="/mypage" component={Auth(MyPage, null)} />
           <Route exact path="/mypage/mymeeting" component={Auth(MyMeeting, null)} />
           <Route exact path="/mypage/likemeeting" component={Auth(LikeMeetingList, null)} />
+          <Route exact path="/mypage/mystory" component={Auth(MyStoryList, null)} />
 
           <Route exact path="/exit" component={Auth(ExitPage, null)} />
 

@@ -10,9 +10,16 @@
 }
 
 .menu__logo {
-  width: 150px;
+  width: 300px;
   float: right;
-  display: inline-block;
+  text-align: center;
+}
+
+.menu__bell {
+  /* width: 150px; */
+  margin-top: 15px;
+  float: right;
+  display: block;
   text-align: center;
 }
 
