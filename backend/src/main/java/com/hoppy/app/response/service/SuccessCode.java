@@ -1,4 +1,4 @@
-package com.hoppy.app.response.code;
+package com.hoppy.app.response.service;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
