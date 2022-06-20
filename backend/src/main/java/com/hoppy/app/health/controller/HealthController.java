@@ -1,6 +1,6 @@
 package com.hoppy.app.health.controller;
 
-import com.hoppy.app.response.code.SuccessCode;
+import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
 import lombok.RequiredArgsConstructor;
