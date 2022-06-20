@@ -24,9 +24,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "member")
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "member")
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 }
