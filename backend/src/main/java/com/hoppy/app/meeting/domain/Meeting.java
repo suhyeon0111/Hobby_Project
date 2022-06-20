@@ -12,15 +12,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Meeting {
 
@@ -29,9 +29,10 @@ public class Meeting {
     private Long id;
 
     @Column(nullable = false)
-    private Long owner;
+    private Long meetingOwner;
 
-    private String url;
+    @Builder.Default
+    private String url = "none";
 
     @Column(nullable = false) // length 옵션 추가 논의 필요
     private String title;
@@ -43,7 +44,7 @@ public class Meeting {
     private Category category;
 
     @Column(nullable = false)
-    private int limit;
+    private Integer memberLimit;
 
     @OneToMany(mappedBy = "meeting")
     @Builder.Default
