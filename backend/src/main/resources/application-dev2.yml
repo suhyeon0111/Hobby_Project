@@ -1,0 +1,52 @@
+server:
+  port: 8888
+spring:
+#  profiles.active: dev2
+  # ??? ??
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hiberate:
+        format_sql: true
+  security:
+    oauth2.client:
+      registration:
+        kakao:
+          clientId: '146414e0f2cf5ef05dee863aae51615a'
+          clientSecret: 'OrUztJzuetPh4l6KPIpxDkX2bpOeWRmv'
+          clientAuthenticationMethod: post
+          authorizationGrantType: authorization_code
+          redirect_Uri: "localhost:8888/login/oauth2/code/kakao"
+          scope:
+            - profile_nickname
+            - profile_image
+            - account_email
+          clientName: kakao
+      provider:
+        kakao:
+          authorizationUri: https://kauth.kakao.com/oauth/authorize
+          tokenUri: https://kauth.kakao.com/oauth/token
+          userInfoUri: https://kapi.kakao.com/v2/user/me
+          userNameAttribute: id
+cors:
+  allowed-origins: 'https://localhost:8888'
+  allowed-methods: GET, POST, PUT, DELETE, OPTIONS
+  allowed-headers: "*"
+  max-age: 3600
+
+jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds'
+
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpiry: 14400000
+    refreshTokenExpiry: 604800000
+  oauth2:
+    authorizationRedirectUris:
+      - https://localhost:8888/oauth/redirect
