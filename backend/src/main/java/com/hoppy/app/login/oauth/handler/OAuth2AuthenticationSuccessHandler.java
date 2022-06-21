@@ -1,134 +1,67 @@
 package com.hoppy.app.login.oauth.handler;
 
-import static com.hoppy.app.login.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-import static com.hoppy.app.login.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
-
-import com.hoppy.app.login.api.entity.user.UserRefreshToken;
-import com.hoppy.app.login.api.repository.user.UserRefreshTokenRepository;
-import com.hoppy.app.login.config.properties.AppProperties;
-import com.hoppy.app.login.oauth.entity.ProviderType;
-import com.hoppy.app.login.oauth.entity.RoleType;
-import com.hoppy.app.login.oauth.info.OAuth2UserInfo;
-import com.hoppy.app.login.oauth.info.OAuth2UserInfoFactory;
-import com.hoppy.app.login.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoppy.app.domain.JwtResponseDto;
+import com.hoppy.app.domain.Role;
+import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
+import com.hoppy.app.login.oauth.service.LoadUserService;
+import com.hoppy.app.login.oauth.service.SocialLoadStrategy;
 import com.hoppy.app.login.oauth.token.AuthToken;
-import com.hoppy.app.login.oauth.token.AuthTokenProvider;
-import com.hoppy.app.login.utils.CookieUtil;
+import com.hoppy.app.login.oauth.provider.AuthTokenProvider;
 import java.io.IOException;
-import java.net.URI;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Optional;
+import java.util.Map;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final AuthTokenProvider tokenProvider;
-    private final AppProperties appProperties;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
-    private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
+    private final AuthTokenProvider authTokenProvider;
+    private SocialLoadStrategy socialLoadStrategy;
+    private final LoadUserService loadUserService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+        System.out.println("로그인 성공!: " + authentication.getPrincipal());
+        OAuth2UserDetails oAuth2User = (OAuth2UserDetails) authentication.getPrincipal();
 
-        if(response.isCommitted()) {
-            logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+        AuthToken token = authTokenProvider.createUserAuthToken(oAuth2User.getMemberId());
+        System.out.println("jwt = " + token.getToken());
+        JwtResponseDto jwtResponseDto = new JwtResponseDto(token.getToken());
+        System.out.println("jwtResponseDto = " + jwtResponseDto);
+
+
+        System.out.println("oAuth2User = " + oAuth2User.getSocialId());
+        System.out.println("oAuth2User.getUsername() = " + oAuth2User.getUsername());
+
+
+        if(authentication.getAuthorities().stream().anyMatch(s -> s.getAuthority().equals(Role.GUEST.getGrantedAuthority()))) {
+            System.out.println("가입되지 않은 유저입니다. 회원가입으로 이동합니다.");
+            System.out.println("authentication.getName() = " + authentication.getName());
+            System.out.println("authentication.getAuthorities() = " + authentication.getAuthorities());
+            System.out.println("authentication.getDetails() = " + authentication.getDetails());
+            System.out.println("authentication.getClass() = " + authentication.getClass());
+            System.out.println("authentication = " + authentication.getCredentials());
+//            response.sendRedirect("/singUp");
             return;
         }
 
-        clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-    }
+        System.out.println("토큰을 발급합니다.");
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(
-                Cookie::getValue);
-        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new IllegalArgumentException("Sorry, We've got an Unauthorized Redirect URI and can't proceed with the authentication");
-        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        ObjectMapper mapper = new ObjectMapper();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(mapper.writeValueAsString(jwtResponseDto));
 
-        OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
-        ProviderType providerType = ProviderType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
-
-        OidcUser user = ((OidcUser) authentication.getPrincipal());
-        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
-        Collection<? extends GrantedAuthority> authorities = ((OidcUser) authentication.getPrincipal()).getAuthorities();
-
-        RoleType roleType = hasAuthority(authorities, RoleType.ADMIN.getCode()) ? RoleType.ADMIN : RoleType.USER;
-
-        Date now = new Date();
-        AuthToken accessToken = tokenProvider.createAuthToken(
-                userInfo.getId(),
-                roleType.getCode(),
-                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-        );
-
-        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-
-        AuthToken refreshToken = tokenProvider.createAuthToken(
-                appProperties.getAuth().getTokenSecret(),
-                new Date(now.getTime() + refreshTokenExpiry)
-        );
-
-        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userInfo.getId());
-        if(userRefreshToken != null) {
-            userRefreshToken.setRefreshToken(refreshToken.getToken());
-        } else {
-            userRefreshToken = new UserRefreshToken(userInfo.getId(), refreshToken.getToken());
-            userRefreshTokenRepository.saveAndFlush(userRefreshToken);
-        }
-
-        int cookieMaxAge = (int) refreshTokenExpiry / 60;
-
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
-
-        return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token", accessToken.getToken()).build().toString();
-    }
-
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
-
-    private boolean hasAuthority(Collection<? extends GrantedAuthority> authorities, String authority) {
-        if(authorities == null) {
-            return false;
-        }
-        for (GrantedAuthority grantedAuthority : authorities) {
-            if (authorities.equals(grantedAuthority.getAuthority())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
-
-        return appProperties.getOAuth2().getAuthorizedRedirectUris().stream()
-                .anyMatch(authorizedRedirectUri -> {
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
-                    if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) && authorizedURI.getPort() == clientRedirectUri.getPort()) {
-                        return true;
-                    }
-                    return false;
-                });
     }
 }
