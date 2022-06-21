@@ -16,7 +16,7 @@ public abstract class SocialLoadStrategy {
 
     protected final RestTemplate restTemplate = new RestTemplate();
 
-    public String getSocialPk(String accessToken) {
+    public Map<String, Object> getUserInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
 
         setHeaders(accessToken, headers);
@@ -28,7 +28,7 @@ public abstract class SocialLoadStrategy {
         return sendRequestToSocialSite(request);  // 구체 클래스가 구현
     }
 
-    protected abstract String sendRequestToSocialSite(HttpEntity request);
+    protected abstract Map<String, Object> sendRequestToSocialSite(HttpEntity request);
 
     public void setHeaders(String accessToken, HttpHeaders headers) {
         headers.set("Authorization", "Bearer " + accessToken);

@@ -11,6 +11,9 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -63,6 +66,7 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+
         // AbstractAuthenticationProcessingFilter 의 추상 메서드를 구현. Authentication 객체를 반환
         SocialType socialType = extractSocialType(request);
 

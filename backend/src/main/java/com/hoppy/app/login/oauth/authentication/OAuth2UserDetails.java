@@ -21,6 +21,8 @@ public class OAuth2UserDetails implements UserDetails {
     private String socialId;
     private String username;
     private Set<GrantedAuthority> authorities;
+    private String socialEmail;
+    private String profileUrl;
 
     public SocialType getSocialType() {
         return socialType;
@@ -36,6 +38,14 @@ public class OAuth2UserDetails implements UserDetails {
 
     public Long getMemberId() {
         return this.memberId;
+    }
+
+    public String getSocialEmail() {
+        return this.socialEmail;
+    }
+
+    public String getProfileUrl() {
+        return this.profileUrl;
     }
 
     @Override

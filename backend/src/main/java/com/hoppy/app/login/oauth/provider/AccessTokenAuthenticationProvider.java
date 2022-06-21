@@ -33,12 +33,17 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
         Member member = saveOrGet(oAuth2User);  // 식별자와 소셜 로그인 방식을 통해 회원을 DB 에서 조회 후 없다면 추가. 있다면 그대로 반환
         oAuth2User.setRoles(member.getRole().name());  // Role 의 name 은 ADMIN, USER, GUEST 로 ROLE_ 을 붙여주는 과정이 필요. setRoles 가 담당.
         oAuth2User.setMemberId(member.getId());
-        System.out.println("member.getSocialId() = " + member.getSocialId());
-        System.out.println("member.getId() = " + member.getId());
-        System.out.println("member.getSocialType() = " + member.getSocialType());
-        System.out.println("member.getName() = " + member.getName());
-        System.out.println("member.getRole() = " + member.getRole());
-        System.out.println("member.getUsername() = " + member.getUsername());
+
+//        System.out.println("*********************************************");
+//        System.out.println("oAuth2User = " + oAuth2User.getSocialEmail());
+//        System.out.println("oAuth2User = " + oAuth2User.getUsername());
+//
+//        System.out.println("member.getSocialId() = " + member.getSocialId());
+//        System.out.println("member.getId() = " + member.getId());
+//        System.out.println("member.getSocialType() = " + member.getSocialType());
+//        System.out.println("member.getName() = " + member.getName());
+//        System.out.println("member.getRole() = " + member.getRole());
+//        System.out.println("member.getUsername() = " + member.getUsername());
 
         return AccessTokenSocialTypeToken.builder().principal(oAuth2User).authorities(oAuth2User.getAuthorities()).build();
 
