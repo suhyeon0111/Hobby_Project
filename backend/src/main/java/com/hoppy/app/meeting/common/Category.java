@@ -9,13 +9,11 @@ import lombok.Getter;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Category {
 
-    HEALTH(1),
-    ART(2),
-    MUSIC(3),
-    LIFE(4),
-    FOOD(5),
-    TRIP(6)
+    HEALTH,
+    ART,
+    MUSIC,
+    LIFE,
+    FOOD,
+    TRIP
     ;
-
-    private int category;
 }
