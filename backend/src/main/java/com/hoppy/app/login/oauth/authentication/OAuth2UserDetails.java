@@ -1,6 +1,8 @@
 package com.hoppy.app.login.oauth.authentication;
 
 import com.hoppy.app.login.oauth.SocialType;
+import com.hoppy.app.member.domain.MemberMeeting;
+import com.hoppy.app.member.domain.MemberMeetingLike;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +25,17 @@ public class OAuth2UserDetails implements UserDetails {
     private Set<GrantedAuthority> authorities;
     private String socialEmail;
     private String profileUrl;
+
+    private Set<MemberMeeting> myMeetings;
+    private Set<MemberMeetingLike> myMeetingLikes;
+
+    public Set<MemberMeeting> getMyMeetings() {
+        return myMeetings;
+    }
+
+    public Set<MemberMeetingLike> getMyMeetingLikes() {
+        return myMeetingLikes;
+    }
 
     public SocialType getSocialType() {
         return socialType;

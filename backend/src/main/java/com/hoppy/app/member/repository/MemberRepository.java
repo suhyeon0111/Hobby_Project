@@ -1,6 +1,6 @@
-package com.hoppy.app.domain.repository;
+package com.hoppy.app.member.repository;
 
-import com.hoppy.app.domain.Member;
+import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.login.oauth.SocialType;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

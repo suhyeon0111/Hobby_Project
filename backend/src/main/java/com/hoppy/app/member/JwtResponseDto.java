@@ -1,4 +1,4 @@
-package com.hoppy.app.domain;
+package com.hoppy.app.member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;

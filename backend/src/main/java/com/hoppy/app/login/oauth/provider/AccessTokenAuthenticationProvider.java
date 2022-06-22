@@ -1,8 +1,8 @@
 package com.hoppy.app.login.oauth.provider;
 
-import com.hoppy.app.domain.Member;
-import com.hoppy.app.domain.Role;
-import com.hoppy.app.domain.repository.MemberRepository;
+import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.Role;
+import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.login.oauth.authentication.AccessTokenSocialTypeToken;
 import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.oauth.service.LoadUserService;
@@ -34,17 +34,6 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
         oAuth2User.setRoles(member.getRole().name());  // Role 의 name 은 ADMIN, USER, GUEST 로 ROLE_ 을 붙여주는 과정이 필요. setRoles 가 담당.
         oAuth2User.setMemberId(member.getId());
 
-//        System.out.println("*********************************************");
-//        System.out.println("oAuth2User = " + oAuth2User.getSocialEmail());
-//        System.out.println("oAuth2User = " + oAuth2User.getUsername());
-//
-//        System.out.println("member.getSocialId() = " + member.getSocialId());
-//        System.out.println("member.getId() = " + member.getId());
-//        System.out.println("member.getSocialType() = " + member.getSocialType());
-//        System.out.println("member.getName() = " + member.getName());
-//        System.out.println("member.getRole() = " + member.getRole());
-//        System.out.println("member.getUsername() = " + member.getUsername());
-
         return AccessTokenSocialTypeToken.builder().principal(oAuth2User).authorities(oAuth2User.getAuthorities()).build();
 
         // AuthenticationManager 로  applicationToken 을 함께 build 해서 반환되고, 최종적으로 filter 로 반환됨.
@@ -54,13 +43,23 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
     }
 
     private Member saveOrGet(OAuth2UserDetails oAuth2User) {
+        // 기존 member builder
+//        return memberRepository.findBySocialTypeAndSocialId(oAuth2User.getSocialType(),
+//                        oAuth2User.getSocialId())
+//                .orElseGet(()-> memberRepository.save(Member.builder()
+//                        .socialType(oAuth2User.getSocialType())
+//                        .socialId(oAuth2User.getSocialId())
+//                        .role(Role.USER).build()));
         return memberRepository.findBySocialTypeAndSocialId(oAuth2User.getSocialType(),
                         oAuth2User.getSocialId())
-                .orElseGet(()-> memberRepository.save(Member.builder()
-                        .socialType(oAuth2User.getSocialType())
+                .orElseGet(() -> memberRepository.save(Member.builder()
                         .socialId(oAuth2User.getSocialId())
-                        .role(Role.USER).build()));
-//                        .role(Role.GUEST).build()));  // GUEST로 설정..
+                        .socialType(oAuth2User.getSocialType())
+                        .email(oAuth2User.getSocialEmail())
+                        .role(Role.USER)
+                        .myMeetingLikes(null)  // 아닌듯..
+                        .myMeetingLikes(null)
+                        .username(oAuth2User.getUsername()).build()));
     }
     @Override
     public boolean supports(Class<?> authentication) {

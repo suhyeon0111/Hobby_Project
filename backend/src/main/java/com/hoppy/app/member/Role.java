@@ -1,4 +1,4 @@
-package com.hoppy.app.domain;
+package com.hoppy.app.member;
 
 public enum Role {
 

@@ -1,24 +1,20 @@
 package com.hoppy.app.login.oauth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoppy.app.domain.JwtResponseDto;
-import com.hoppy.app.domain.Role;
-import com.hoppy.app.login.oauth.authentication.AccessTokenSocialTypeToken;
+import com.hoppy.app.member.JwtResponseDto;
+import com.hoppy.app.member.Role;
 import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.oauth.service.LoadUserService;
 import com.hoppy.app.login.oauth.service.SocialLoadStrategy;
 import com.hoppy.app.login.oauth.token.AuthToken;
 import com.hoppy.app.login.oauth.provider.AuthTokenProvider;
 import java.io.IOException;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -59,9 +55,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         System.out.println("토큰을 발급합니다.");
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         ObjectMapper mapper = new ObjectMapper();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
