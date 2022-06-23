@@ -21,26 +21,22 @@ public class KakaoLoadStrategy extends SocialLoadStrategy{
                     SocialType.KAKAO.getMethod(),
                     request,
                     RESPONSE_TYPE);
-            System.out.println("response.getBody() = " + response.getBody());
 
             LinkedHashMap properties = (LinkedHashMap) response.getBody().get("properties");
             String nickname = (String) properties.get("nickname");
-            System.out.println("nickname = " + nickname);
             String profileImageUrl = (String) properties.get("profile_image");
-            System.out.println("profileImageUrl = " + profileImageUrl);
 
             LinkedHashMap kakaoAccount = (LinkedHashMap) response.getBody().get("kakao_account");
             String email = (String) kakaoAccount.get("email");
-            System.out.println("email = " + email);
             
             Map<String, Object> userInfoMap = new HashMap<>();
-
             userInfoMap.put("id", response.getBody().get("id"));
             userInfoMap.put("nickname", nickname);
             userInfoMap.put("profile_image", profileImageUrl);
             userInfoMap.put("email", email);
+
             System.out.println("userInfoMap = " + userInfoMap);
-//            return response.getBody().get("id").toString();
+
             return userInfoMap;
 
         } catch (Exception e) {

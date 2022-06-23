@@ -49,6 +49,7 @@ public class Member {
     private String email;
     private String username;
     private String socialId;
+    private String profileUrl;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;

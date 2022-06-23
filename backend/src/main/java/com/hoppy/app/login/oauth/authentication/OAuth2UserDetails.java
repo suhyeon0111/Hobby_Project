@@ -23,19 +23,8 @@ public class OAuth2UserDetails implements UserDetails {
     private String socialId;
     private String username;
     private Set<GrantedAuthority> authorities;
-    private String socialEmail;
+    private String email;
     private String profileUrl;
-
-    private Set<MemberMeeting> myMeetings;
-    private Set<MemberMeetingLike> myMeetingLikes;
-
-    public Set<MemberMeeting> getMyMeetings() {
-        return myMeetings;
-    }
-
-    public Set<MemberMeetingLike> getMyMeetingLikes() {
-        return myMeetingLikes;
-    }
 
     public SocialType getSocialType() {
         return socialType;
@@ -53,8 +42,8 @@ public class OAuth2UserDetails implements UserDetails {
         return this.memberId;
     }
 
-    public String getSocialEmail() {
-        return this.socialEmail;
+    public String getEmail() {
+        return this.email;
     }
 
     public String getProfileUrl() {

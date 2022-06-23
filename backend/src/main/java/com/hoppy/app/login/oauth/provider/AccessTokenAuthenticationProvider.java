@@ -1,5 +1,6 @@
 package com.hoppy.app.login.oauth.provider;
 
+import com.hoppy.app.login.oauth.SocialType;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.repository.MemberRepository;
@@ -32,6 +33,10 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
 //        getOAuth2UserDetails 에서는 restTemplate 와 AccessToken 을 가지고 회원 정보를 조회한다.
         Member member = saveOrGet(oAuth2User);  // 식별자와 소셜 로그인 방식을 통해 회원을 DB 에서 조회 후 없다면 추가. 있다면 그대로 반환
         oAuth2User.setRoles(member.getRole().name());  // Role 의 name 은 ADMIN, USER, GUEST 로 ROLE_ 을 붙여주는 과정이 필요. setRoles 가 담당.
+        System.out.println("member.getRole().name() = " + member.getRole().name());
+        System.out.println("member.getSocialType() = " + member.getSocialType());
+        System.out.println("member.getEmail() = " + member.getEmail());
+        System.out.println("oAuth2User = " + oAuth2User.getEmail());
         oAuth2User.setMemberId(member.getId());
 
         return AccessTokenSocialTypeToken.builder().principal(oAuth2User).authorities(oAuth2User.getAuthorities()).build();
@@ -50,15 +55,30 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
 //                        .socialType(oAuth2User.getSocialType())
 //                        .socialId(oAuth2User.getSocialId())
 //                        .role(Role.USER).build()));
+
+        // 코드 동작 확인용 임의 사용자 추가..
+        memberRepository.save(Member.builder()
+                .socialId("3333333333")
+                .socialType(SocialType.KAKAO)
+                .email("choikorea88@sch.ac.kr")
+                .role(Role.USER)
+                .username("김홍합").build());
+
+        memberRepository.save(Member.builder()
+                .socialId("9999999999")
+                .socialType(SocialType.KAKAO)
+                .email("abcde1234@gmail.com")
+                .role(Role.USER)
+                .username("이멸근").build());
+
         return memberRepository.findBySocialTypeAndSocialId(oAuth2User.getSocialType(),
                         oAuth2User.getSocialId())
                 .orElseGet(() -> memberRepository.save(Member.builder()
                         .socialId(oAuth2User.getSocialId())
                         .socialType(oAuth2User.getSocialType())
-                        .email(oAuth2User.getSocialEmail())
+                        .email(oAuth2User.getEmail())
+                        .profileUrl(oAuth2User.getProfileUrl())
                         .role(Role.USER)
-                        .myMeetingLikes(null)  // 아닌듯..
-                        .myMeetingLikes(null)
                         .username(oAuth2User.getUsername()).build()));
     }
     @Override
