@@ -28,6 +28,9 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'junit:junit'
 
+	implementation 'software.amazon.awssdk:s3:2.17.217'
+	testImplementation 'software.amazon.awssdk:s3:2.17.217'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
