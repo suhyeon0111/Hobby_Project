@@ -21,8 +21,9 @@ public class MemberDTOService {
         String socialId = oAuth2User.getSocialId();
         SocialType socialType = oAuth2User.getSocialType();
 
-        if (memberRepository.findBySocialTypeAndSocialId(socialType, socialId).isPresent()) {
-            Optional<Member> memberInfo = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
+        Optional<Member> memberInfo = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
+
+        if (memberInfo.isPresent()) {
             return MemberDto.builder()
                     .socialId(memberInfo.get().getSocialId())
                     .email(memberInfo.get().getEmail())
