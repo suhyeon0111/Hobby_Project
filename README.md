@@ -1,10 +1,9 @@
 # MONO-REPO
-취미 공유 플랫폼 프로젝트
+취미 공유 플랫폼 https://hoppy.kro.kr/
 <br><br>
 
 ## 👀 노션 공개 URL
 https://assorted-handstand-230.notion.site/b0b500ceb21c4129838ecb1d37e09f94
-
 <br>
 
 ## 📋 공통 컨벤션

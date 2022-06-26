@@ -23,7 +23,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @ExtendWith(SpringExtension.class)
 @EnableMockMvc
 @AutoConfigureRestDocs
-public class HealthControllerTest {
+class HealthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,7 +32,7 @@ public class HealthControllerTest {
     void checkHealth() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/health"))
+                .get("/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("message", is("정상 동작 중")))
                 .andDo(document("health-check",
