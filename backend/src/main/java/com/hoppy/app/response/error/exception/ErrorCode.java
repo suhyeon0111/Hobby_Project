@@ -21,6 +21,13 @@ public enum ErrorCode {
     SIGNATURE_INVALID_JWT(403, "JOO3", "토큰 Signature 오류"),
     JWT_NOT_FOUND(403, "J004", "Jwt 토큰을 찾을 수 없습니다"),
 
+    // s3
+    S3_ACCESS_FAIL(500, "S001", "S3 버킷 접근 에러"),
+
+    // Meeting
+    TITLE_DUPLICATE(403, "M001", "이미 존재하는 모임 제목입니다"),
+    CATEGORY_ERROR(403, "M002", "잘못된 카테고리 번호입니다"),
+
     ;
     private final String code;
     private final String message;

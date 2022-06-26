@@ -15,6 +15,8 @@ public enum SuccessCode {
     REISSUE_SUCCESS("토큰 재발급 성공", 200),
 
     HEALTH_CHECK_SUCCESS("정상 동작 중", 200),
+
+    GET_PRESIGNED_URL_SUCCESS("URL 발급 완료", 200),
     ;
 
     private final String message;
