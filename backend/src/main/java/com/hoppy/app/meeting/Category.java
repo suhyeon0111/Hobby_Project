@@ -1,4 +1,4 @@
-package com.hoppy.app.meeting.common;
+package com.hoppy.app.meeting;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
