@@ -17,6 +17,8 @@ public enum SuccessCode {
     HEALTH_CHECK_SUCCESS("정상 동작 중", 200),
 
     GET_PRESIGNED_URL_SUCCESS("URL 발급 완료", 200),
+
+    CREATE_MEETING_SUCCESS("모임 생성 완료", 200),
     ;
 
     private final String message;
