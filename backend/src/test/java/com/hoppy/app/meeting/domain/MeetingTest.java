@@ -1,6 +1,6 @@
 package com.hoppy.app.meeting.domain;
 
-import com.hoppy.app.meeting.common.Category;
+import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
@@ -10,14 +10,10 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
 
 @SpringBootTest
 class MeetingTest {
@@ -80,5 +76,9 @@ class MeetingTest {
         assert findMeeting.isPresent();
 
         Assertions.assertThat(findMeeting.get().getParticipants().size()).isEqualTo(2);
+
+        memberMeetingRepository.deleteAll();
+        memberRepository.deleteAll();
+        meetingRepository.deleteAll();
     }
 }

@@ -1,8 +1,6 @@
 package com.hoppy.app.meeting.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.hoppy.app.meeting.common.Category;
+import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
@@ -12,6 +10,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
@@ -37,6 +35,7 @@ class MeetingRepositoryTest {
     @Autowired
     EntityManager em;
 
+    @Transactional
     @BeforeAll
     void beforeAll() {
         /*
@@ -78,6 +77,14 @@ class MeetingRepositoryTest {
             memberMeetingRepository.save(memberMeeting1);
             memberMeetingRepository.save(memberMeeting2);
         }
+    }
+
+    @Transactional
+    @AfterAll
+    void after() {
+        memberMeetingRepository.deleteAll();
+        memberRepository.deleteAll();
+        meetingRepository.deleteAll();
     }
 
     @DisplayName("HEALTH, LIFE 카테고리 모임을 조회하고 멤버의 수를 확인하는 테스트")
