@@ -19,19 +19,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthTokenProvider authTokenProvider;
 
     @Override
-    public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity.ignoring().antMatchers("/swagger*/**");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
         System.out.println("Security Config Running..");
 
-        http.authorizeRequests()
-                .anyRequest().permitAll()
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .cors()
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+//                .antMatchers(publicApiList).permitAll()
+//                .anyRequest().hasRole("USER")
+                .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(oAuth2AccessTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
