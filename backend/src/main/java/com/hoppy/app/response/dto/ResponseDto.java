@@ -19,6 +19,4 @@ public class ResponseDto {
     public static ResponseDto commonResponse(int status, String msg, Data responseData) {
         return new ResponseDto(status, msg, responseData);
     }
-
-    // 기본적으로 ResponseData를 상속받아 필요한 데이터 타입의 shape을 정의하고, ResponseDto에 주입하여 응답 Dto로 사용한다.
 }
