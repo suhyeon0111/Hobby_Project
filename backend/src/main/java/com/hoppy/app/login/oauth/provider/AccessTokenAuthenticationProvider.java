@@ -18,10 +18,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccessTokenAuthenticationProvider implements AuthenticationProvider {
 
-    private final LoadUserService loadUserService;  // restTemplate 를 통해서 AccessToken 을 가지고 회원 정보를 가져오는 역할
-    private final MemberRepository memberRepository;  // 받아온 정보를 통해 DB에서 회원을 조회하는 역할
-
-    private final AuthTokenProvider authTokenProvider;
+    private final LoadUserService loadUserService;
+    private final MemberRepository memberRepository;
 
     @SneakyThrows
     @Override
@@ -29,47 +27,14 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
 
         OAuth2UserDetails oAuth2User = loadUserService.getOAuth2UserDetails((AccessTokenSocialTypeToken) authentication);
 
-//        OAuth2UserDetails 는 UserDetails 를 상속받아 구현한 클래스. 이후 일반 회원가입 시 UserDetails 를 사용하는 부분과의 다형성을 위해 이처럼 구현
-//        getOAuth2UserDetails 에서는 restTemplate 와 AccessToken 을 가지고 회원 정보를 조회한다.
-        Member member = saveOrGet(oAuth2User);  // 식별자와 소셜 로그인 방식을 통해 회원을 DB 에서 조회 후 없다면 추가. 있다면 그대로 반환
-        oAuth2User.setRoles(member.getRole().name());  // Role 의 name 은 ADMIN, USER, GUEST 로 ROLE_ 을 붙여주는 과정이 필요. setRoles 가 담당.
-        System.out.println("member.getRole().name() = " + member.getRole().name());
-        System.out.println("member.getSocialType() = " + member.getSocialType());
-        System.out.println("member.getEmail() = " + member.getEmail());
-        System.out.println("oAuth2User = " + oAuth2User.getEmail());
+        Member member = saveOrGet(oAuth2User);
+        oAuth2User.setRoles(member.getRole().name());
         oAuth2User.setMemberId(member.getId());
 
         return AccessTokenSocialTypeToken.builder().principal(oAuth2User).authorities(oAuth2User.getAuthorities()).build();
-
-        // AuthenticationManager 로  applicationToken 을 함께 build 해서 반환되고, 최종적으로 filter 로 반환됨.
-//        return AccessTokenSocialTypeToken.builder().principal(oAuth2User).authorities(oAuth2User.getAuthorities()).applicationToken(applicationToken.getToken()).build();
-        // AccessTokenSocialTypeToken 객체를 반환. principal 은 OAuth2UserDetails 객체
-        // UserDetails 타입으로 회원의 정보를 어디서든 조회 가능
     }
 
     private Member saveOrGet(OAuth2UserDetails oAuth2User) {
-        // 기존 member builder
-//        return memberRepository.findBySocialTypeAndSocialId(oAuth2User.getSocialType(),
-//                        oAuth2User.getSocialId())
-//                .orElseGet(()-> memberRepository.save(Member.builder()
-//                        .socialType(oAuth2User.getSocialType())
-//                        .socialId(oAuth2User.getSocialId())
-//                        .role(Role.USER).build()));
-
-        // 코드 동작 확인용 임의 사용자 추가..
-        memberRepository.save(Member.builder()
-                .socialId("3333333333")
-                .socialType(SocialType.KAKAO)
-                .email("choikorea88@sch.ac.kr")
-                .role(Role.USER)
-                .username("김홍합").build());
-
-        memberRepository.save(Member.builder()
-                .socialId("9999999999")
-                .socialType(SocialType.KAKAO)
-                .email("abcde1234@gmail.com")
-                .role(Role.USER)
-                .username("이멸근").build());
 
         return memberRepository.findBySocialTypeAndSocialId(oAuth2User.getSocialType(),
                         oAuth2User.getSocialId())
@@ -81,9 +46,12 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
                         .role(Role.USER)
                         .username(oAuth2User.getUsername()).build()));
     }
+
     @Override
     public boolean supports(Class<?> authentication) {
+        /**
+         * AccessTokenSocialTypeToken 타입의 authentication 객체이면 해당 Provider 가 처리한다.
+         */
         return AccessTokenSocialTypeToken.class.isAssignableFrom(authentication);
-        // AccessTokenSocialTypeToken 타입의 authentication 객체이면 해당 Provider 가 처리한다.
     }
 }

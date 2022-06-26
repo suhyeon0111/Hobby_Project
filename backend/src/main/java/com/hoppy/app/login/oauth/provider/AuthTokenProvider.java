@@ -46,7 +46,6 @@ public class AuthTokenProvider {
     }
 
     public static Date getExpiryDate(String expiry) {
-//        System.out.println("System.currentTimeMillis() + Long.parseLong(expiry) = " + System.currentTimeMillis() + Long.parseLong(expiry));
         return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
     }
 
@@ -64,7 +63,7 @@ public class AuthTokenProvider {
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
         } else {
             System.out.println("ApplicationTokenProvider-getAuthentication Error cause");
-//            throw new TokenValiedException();
+//            throw new TokenValidException();
             authToken.getTokenClaims();
             throw new NullPointerException();
         }

@@ -18,12 +18,4 @@ public class MemberDto {
     private String socialId;
     private String jwt;
 
-//    public static MemberDto of(Member member) {
-//
-//        return MemberDto.builder()
-//                .email(member.getEmail())
-//                .username(member.getUsername())
-//                .socialId(member.getSocialId())
-//                .build();
-//    }
 }

@@ -1,20 +1,16 @@
 package com.hoppy.app.login.oauth.service;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.hoppy.app.login.oauth.SocialType;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
 @Slf4j
 public class KakaoLoadStrategy extends SocialLoadStrategy{
 
-//    protected String sendRequestToSocialSite(HttpEntity request) {
     protected Map<String, Object> sendRequestToSocialSite(HttpEntity request) {
         try {
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(SocialType.KAKAO.getUserInfoUrl(),

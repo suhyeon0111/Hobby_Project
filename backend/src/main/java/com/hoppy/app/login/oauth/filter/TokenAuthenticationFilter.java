@@ -36,7 +36,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } else {
-            System.out.println("JwtAuthenticationFilter.doFilterInternal, there's no JWT!!!");
+            System.out.println("There's No Jwt in Request Header.");
         }
     }
 }

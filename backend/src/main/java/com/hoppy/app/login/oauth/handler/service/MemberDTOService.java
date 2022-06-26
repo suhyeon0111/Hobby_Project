@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 public class MemberDTOService {
 
     private final MemberRepository memberRepository;
-
+    /**
+     * DTO는 우리 application용 jwt를 포함해서 반환함.
+     */
     public MemberDto loadMember(OAuth2UserDetails oAuth2User, String jwt) {
         String socialId = oAuth2User.getSocialId();
         SocialType socialType = oAuth2User.getSocialType();
 
-        // Member DB에 사용자가 존재한다면, DB에 저장된 사용자 정보를 DTO 로 반환
-        // DB에 존재하지 않다면, 카카오 유저 정보를 그대로 DTO 로 반환
         if (memberRepository.findBySocialTypeAndSocialId(socialType, socialId).isPresent()) {
             Optional<Member> memberInfo = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
             return MemberDto.builder()

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthTokenProvider authTokenProvider;
-    private final MemberDTOService loadMemberService;
+    private final MemberDTOService memberDTOService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -38,16 +38,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 //            response.sendRedirect("/singUp");
             return;
         }
-
-        /*
-         * 각 사용자별 SocialType 과 고유 식별 번호인 socialID 값으로 db 조회
-         * if (DB 에서 조회한 후 가입한 회원일 경우) , DB에 존재하는 멤버 정보를 응답,
-         * else if(DB에 존재하지 않은 회원일 경우), 카카오 유저 정보 그대로 응답.
-         *
-         * 이후 사용자가 자신의 정보를 바꾸면 (DB 에서 UPDATE), socialPK 값으로 구분
-         * */
-
-        MemberDto memberDto = loadMemberService.loadMember(oAuth2User, token.getToken());
+        /**
+         * 각 사용자별 SocialType 과 고유 식별 번호인 socialID 로 db 조회
+         * DB 에서 조회한 후 가입한 회원일 경우, DB에 존재하는 멤버 정보를 응답,
+         * DB에 존재하지 않은 회원일 경우, 카카오를 통해 얻은 유저 정보 그대로 응답.
+         * 이후 사용자가 자신의 정보를 바꾸면, socialPK 값으로 구분
+         */
+        MemberDto memberDto = memberDTOService.loadMember(oAuth2User, token.getToken());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

@@ -67,11 +67,12 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
-        // AbstractAuthenticationProcessingFilter 의 추상 메서드를 구현. Authentication 객체를 반환
+        /***
+         * AbstractAuthenticationProcessingFilter 의 추상 메서드를 구현.
+         * Authentication 객체를 반환
+         */
         SocialType socialType = extractSocialType(request);
 
-        // 인가 코드 및 access_token 받기 (프론트에서 넘겨받을 예정)
-        // start
         String authCode = request.getParameter("code");
         log.info("authCode: {}", authCode);
 
@@ -87,7 +88,6 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
         HttpEntity<MultiValueMap<String, String>> socialRequest = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        // kauth.kakao.com/oauth/token 에 요청하고 헤더 정보를 포함한 (위의 map.add) 응답받기
         ResponseEntity<String> socialResponse = restTemplate.postForEntity("https://kauth.kakao.com/oauth/token", socialRequest , String.class );
         log.info("Social Response: {}", socialResponse);
 
@@ -95,13 +95,6 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
         String accessToken = result.get("access_token");
         String refreshToken = result.get("refresh_token");
 
-        log.info("{}", socialType.getSocialName());
-        log.info("accessToken: " + accessToken);
-        log.info("refreshToken: " + refreshToken);
-
-        // end
-
-//        String accessToken = request.getHeader(ACCESS_TOKEN_HEADER_NAME);
         return this.getAuthenticationManager().authenticate(new AccessTokenSocialTypeToken(accessToken, socialType));
     }
 
@@ -111,7 +104,6 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
                 .filter(socialType ->
                         socialType.getSocialName()
                                 .equals(request.getRequestURI().substring(DEFAULT_OAUTH2_LOGIN_REQUEST_URL_PREFIX.length())))
-                // ~/kakao에서 kakao 추출
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 URL 주소입니다."));
     }

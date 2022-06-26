@@ -24,23 +24,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-//    @Id
-//    @GeneratedValue
-//    @Column(name = "member_id")
-//    private Long id;
-//    private String username;
-//    private String password;
-//    private String name;
-//
-//    private String socialId;
-//
-//    @Enumerated(EnumType.STRING)
-//    private SocialType socialType;
-//
-//    @Enumerated(EnumType.STRING)
-//    private Role role;
-    // 클래스 추가. 내글, 관심글, 모임 등등
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,7 +39,6 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    // end
 
     @OneToMany(mappedBy = "member")
     private Set<MemberMeeting> myMeetings = new HashSet<>();

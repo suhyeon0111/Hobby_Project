@@ -21,8 +21,6 @@ public class AuthToken {
 
     private static final String AUTHORITIES_KEYS = "ROLE";
 
-//    private static final String AUTHORITIES_KEY = "ROLE_USER";
-
     public AuthToken(String socialId, Date expiry, Key key) {
         this.key = key;
         this.token = createAuthToken(socialId, expiry);
