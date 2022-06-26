@@ -168,7 +168,8 @@ dist
 .gradle/
 build/
 out/
-#application-oauth.properties
-#application-real-db.properties
-application.properties
 temp_sdm/
+
+application-dev1.properties
+application-dev2.properties
+application-test.properties
