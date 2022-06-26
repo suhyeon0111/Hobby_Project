@@ -1,6 +1,6 @@
 package com.hoppy.app.meeting.repository;
 
-import com.hoppy.app.meeting.common.Category;
+import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

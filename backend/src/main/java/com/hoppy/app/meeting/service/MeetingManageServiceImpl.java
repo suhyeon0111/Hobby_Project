@@ -1,17 +1,15 @@
 package com.hoppy.app.meeting.service;
 
-import com.hoppy.app.meeting.common.Category;
+import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
-import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service

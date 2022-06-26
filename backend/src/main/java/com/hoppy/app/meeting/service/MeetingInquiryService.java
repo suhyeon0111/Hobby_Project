@@ -1,6 +1,6 @@
 package com.hoppy.app.meeting.service;
 
-import com.hoppy.app.meeting.common.Category;
+import com.hoppy.app.meeting.Category;
 
 /*
 * 모임 조회 서비스
