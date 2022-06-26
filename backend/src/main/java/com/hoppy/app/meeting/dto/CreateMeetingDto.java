@@ -1,6 +1,5 @@
 package com.hoppy.app.meeting.dto;
 
-import com.hoppy.app.meeting.common.Category;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -10,13 +9,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateMeetingDto {
+
+    @NotNull(message = "멤버 id를 전송해주세요")
+    Long memberId;
 
     @NotNull(message = "카테고리를 선택해주세요")
     int category;
