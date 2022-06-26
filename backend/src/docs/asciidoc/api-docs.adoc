@@ -4,15 +4,22 @@
 :sectlinks:
 
 == Health
-=== Health check
+=== 서버 상태 확인하기
 .request
 include::{snippets}/health-check/http-request.adoc[]
 .response
-include::{snippets}/health-check/http-response.adoc[]
+include::{snippets}/health-check/response-body.adoc[]
 
 == Upload
-=== Get PresignedURL
+=== PresignedURL 발급받기
 .request
 include::{snippets}/get-presigned-url/http-request.adoc[]
 .response
-include::{snippets}/get-presigned-url/http-response.adoc[]
+include::{snippets}/get-presigned-url/response-body.adoc[]
+
+== Meeting
+=== Meeting 생성하기
+.request
+include::{snippets}/create-meeting/http-request.adoc[]
+.response
+include::{snippets}/create-meeting/response-body.adoc[]
