@@ -1,6 +1,6 @@
 package com.hoppy.app.meeting.domain;
 
-import com.hoppy.app.meeting.common.Category;
+import com.hoppy.app.meeting.Category;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.domain.MemberMeetingLike;
 import java.util.HashSet;
