@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Spring REST Docs</title>
+<title>Spring REST Docs [Hoppy API DOCS]</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,7 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Spring REST Docs</h1>
+<h1>Spring REST Docs [Hoppy API DOCS]</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
@@ -448,6 +448,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_health">Health</a>
 <ul class="sectlevel2">
 <li><a href="#_health_check">Health check</a></li>
+</ul>
+</li>
+<li><a href="#_upload">Upload</a>
+<ul class="sectlevel2">
+<li><a href="#_get_presignedurl">Get PresignedURL</a></li>
 </ul>
 </li>
 </ul>
@@ -471,12 +476,43 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 83
+Content-Length: 75
 
 {
   "status" : 200,
   "message" : "정상 동작 중",
-  "responseData" : { }
+  "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_upload"><a class="link" href="#_upload">Upload</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_get_presignedurl"><a class="link" href="#_get_presignedurl">Get PresignedURL</a></h3>
+<div class="listingblock">
+<div class="title">request</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /upload/presigned/{filename} HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 437
+
+{
+  "status" : 200,
+  "message" : "URL 발급 완료",
+  "data" : {
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220626T062245Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=AKIAYPXBGEP2FZZXEBZ6%2F20220626%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=3117d9a07c574a456025cf555047b3a3395ea953abbbad5b46c59420cfaff221"
+  }
 }</code></pre>
 </div>
 </div>
@@ -487,7 +523,7 @@ Content-Length: 83
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-05-23 03:17:03 +0900
+Last updated 2022-06-26 01:17:02 +0900
 </div>
 </div>
 </body>

@@ -9,3 +9,10 @@
 include::{snippets}/health-check/http-request.adoc[]
 .response
 include::{snippets}/health-check/http-response.adoc[]
+
+== Upload
+=== Get PresignedURL
+.request
+include::{snippets}/get-presigned-url/http-request.adoc[]
+.response
+include::{snippets}/get-presigned-url/http-response.adoc[]
