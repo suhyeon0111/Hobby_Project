@@ -36,8 +36,11 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
 
     private Member saveOrGet(OAuth2UserDetails oAuth2User) {
 
-        return memberRepository.findBySocialTypeAndSocialId(oAuth2User.getSocialType(),
-                        oAuth2User.getSocialId())
+        return memberRepository
+                .findBySocialTypeAndSocialId(
+                    oAuth2User.getSocialType(),
+                    oAuth2User.getSocialId()
+                )
                 .orElseGet(() -> memberRepository.save(Member.builder()
                         .socialId(oAuth2User.getSocialId())
                         .socialType(oAuth2User.getSocialType())
