@@ -41,9 +41,11 @@ public class Member {
     private Role role;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
 
