@@ -14,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthToken {
-
-    @Getter
     private final String token;
     private final Key key;
 
