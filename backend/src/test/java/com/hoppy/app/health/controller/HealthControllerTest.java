@@ -24,7 +24,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 @ExtendWith(SpringExtension.class)
 @EnableMockMvc
 @AutoConfigureRestDocs
-@ActiveProfiles("test")
 class HealthControllerTest {
 
     @Autowired
