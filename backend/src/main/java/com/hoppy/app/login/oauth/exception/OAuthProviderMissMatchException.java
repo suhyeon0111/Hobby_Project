@@ -1,8 +1,0 @@
-package com.hoppy.app.login.oauth.exception;
-
-public class OAuthProviderMissMatchException extends RuntimeException {
-
-    public OAuthProviderMissMatchException(String message) {
-        super(message);
-    }
-}

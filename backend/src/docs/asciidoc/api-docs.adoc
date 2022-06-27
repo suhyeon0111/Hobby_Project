@@ -3,9 +3,35 @@
 :toclevels: 4
 :sectlinks:
 
-== Health
-=== Health check
-.request
-include::{snippets}/health-check/http-request.adoc[]
-.response
-include::{snippets}/health-check/http-response.adoc[]
+== 점검 API
+=== 서버 상태 확인하기
+.request url
+----
+GET /api/health
+----
+.request body
+include::{snippets}/health-check/request-body.adoc[]
+.response body
+include::{snippets}/health-check/response-body.adoc[]
+
+== 업로드 API
+=== PresignedURL 발급받기
+.request url
+----
+GET /api/upload/presigned/{filename}
+----
+.request body
+include::{snippets}/get-presigned-url/request-body.adoc[]
+.response body
+include::{snippets}/get-presigned-url/response-body.adoc[]
+
+== 모임 API
+=== 모임 생성하기
+.request url
+----
+POST /api/meeting
+----
+.request body
+include::{snippets}/create-meeting/request-body.adoc[]
+.response body
+include::{snippets}/create-meeting/response-body.adoc[]

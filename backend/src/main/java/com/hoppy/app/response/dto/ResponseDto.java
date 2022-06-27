@@ -11,12 +11,12 @@ import lombok.Getter;
 public class ResponseDto {
     private int status;
     private String message;
-    private Data responseData;
+    private Object data;
 
     public static ResponseDto commonResponse(int status, String msg) {
-        return new ResponseDto(status, msg, new Data());
+        return new ResponseDto(status, msg, new ArrayList<>());
     }
-    public static ResponseDto commonResponse(int status, String msg, Data responseData) {
-        return new ResponseDto(status, msg, responseData);
+    public static ResponseDto commonResponse(int status, String msg, Object data) {
+        return new ResponseDto(status, msg, data);
     }
 }

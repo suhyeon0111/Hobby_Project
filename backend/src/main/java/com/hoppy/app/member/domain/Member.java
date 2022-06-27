@@ -1,6 +1,6 @@
 package com.hoppy.app.member.domain;
 
-import com.hoppy.app.login.oauth.SocialType;
+import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,9 +41,11 @@ public class Member {
     private Role role;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
 

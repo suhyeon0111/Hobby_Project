@@ -1,12 +1,14 @@
 package com.hoppy.app.meeting.domain;
 
-import com.hoppy.app.meeting.common.Category;
+import com.hoppy.app.meeting.Category;
+import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.domain.MemberMeetingLike;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Getter
@@ -27,9 +30,6 @@ public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private Long meetingOwner;
 
     @Builder.Default
     private String url = "none";
@@ -46,11 +46,24 @@ public class Meeting {
     @Column(nullable = false)
     private Integer memberLimit;
 
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     @Builder.Default
     private Set<MemberMeeting> participants = new HashSet<>();
 
-    @OneToMany(mappedBy = "meeting")
+//  batch size를 설정하여 DB 성능 이슈(N + 1)가 발생하는 것을 방지할 수 있다.
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
+
+    public static Meeting dtoToMeeting(CreateMeetingDto dto) {
+        return Meeting.builder()
+                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .memberLimit(dto.getMemberLimit())
+                .category(Category.intToCategory(dto.getCategory()))
+                .build();
+    }
 }

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Spring REST Docs</title>
+<title>Spring REST Docs [Hoppy API DOCS]</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,16 +438,26 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Spring REST Docs</h1>
+<h1>Spring REST Docs [Hoppy API DOCS]</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_health">Health</a>
+<li><a href="#_점검_api">점검 API</a>
 <ul class="sectlevel2">
-<li><a href="#_health_check">Health check</a></li>
+<li><a href="#_서버_상태_확인하기">서버 상태 확인하기</a></li>
+</ul>
+</li>
+<li><a href="#_업로드_api">업로드 API</a>
+<ul class="sectlevel2">
+<li><a href="#_presignedurl_발급받기">PresignedURL 발급받기</a></li>
+</ul>
+</li>
+<li><a href="#_모임_api">모임 API</a>
+<ul class="sectlevel2">
+<li><a href="#_모임_생성하기">모임 생성하기</a></li>
 </ul>
 </li>
 </ul>
@@ -455,28 +465,98 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_health"><a class="link" href="#_health">Health</a></h2>
+<h2 id="_점검_api"><a class="link" href="#_점검_api">점검 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_health_check"><a class="link" href="#_health_check">Health check</a></h3>
+<h3 id="_서버_상태_확인하기"><a class="link" href="#_서버_상태_확인하기">서버 상태 확인하기</a></h3>
 <div class="listingblock">
-<div class="title">request</div>
+<div class="title">request url</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /health HTTP/1.1
-Host: localhost:8080</code></pre>
+<pre>GET /api/health</pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">response</div>
+<div class="title">request body</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 83
-
-{
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
   "status" : 200,
   "message" : "정상 동작 중",
-  "responseData" : { }
+  "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_업로드_api"><a class="link" href="#_업로드_api">업로드 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_presignedurl_발급받기"><a class="link" href="#_presignedurl_발급받기">PresignedURL 발급받기</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/upload/presigned/{filename}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "URL 발급 완료",
+  "data" : {
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220627T091559Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220627%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=142054adffe86c0f068ffd48009f24817291880649f4e72e473e084b6e88fd32"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_모임_api"><a class="link" href="#_모임_api">모임 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_모임_생성하기"><a class="link" href="#_모임_생성하기">모임 생성하기</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/meeting</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "memberId" : 1,
+  "category" : 1,
+  "title" : "testTitle",
+  "content" : "testContent",
+  "memberLimit" : 10,
+  "filename" : "test"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "모임 생성 완료",
+  "data" : [ ]
 }</code></pre>
 </div>
 </div>
@@ -487,7 +567,7 @@ Content-Length: 83
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-05-23 03:17:03 +0900
+Last updated 2022-06-27 18:15:06 +0900
 </div>
 </div>
 </body>
