@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @ExtendWith(SpringExtension.class)
 @EnableMockMvc
 @AutoConfigureRestDocs
+@ActiveProfiles("test")
 class UploadControllerTest {
 
     @Autowired
