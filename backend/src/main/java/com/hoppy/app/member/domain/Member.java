@@ -1,6 +1,6 @@
 package com.hoppy.app.member.domain;
 
-import com.hoppy.app.login.oauth.SocialType;
+import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import java.util.HashSet;
 import java.util.Set;

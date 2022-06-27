@@ -1,19 +1,16 @@
-package com.hoppy.app.login.oauth.filter;
+package com.hoppy.app.login.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoppy.app.login.oauth.SocialType;
-import com.hoppy.app.login.oauth.authentication.AccessTokenSocialTypeToken;
-import com.hoppy.app.login.oauth.provider.AccessTokenAuthenticationProvider;
-import com.hoppy.app.login.oauth.service.LoadUserService;
+import com.hoppy.app.login.auth.SocialType;
+import com.hoppy.app.login.auth.authentication.AccessTokenSocialTypeToken;
+import com.hoppy.app.login.auth.provider.AccessTokenAuthenticationProvider;
+import com.hoppy.app.login.auth.service.LoadUserService;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

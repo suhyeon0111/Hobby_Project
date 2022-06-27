@@ -1,11 +1,11 @@
-package com.hoppy.app.login.oauth.handler;
+package com.hoppy.app.login.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoppy.app.login.oauth.handler.service.MemberDTOService;
+import com.hoppy.app.login.auth.handler.service.MemberDTOService;
 import com.hoppy.app.member.Role;
-import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
-import com.hoppy.app.login.oauth.token.AuthToken;
-import com.hoppy.app.login.oauth.provider.AuthTokenProvider;
+import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
+import com.hoppy.app.login.auth.token.AuthToken;
+import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import com.hoppy.app.member.dto.MemberDto;
 import java.io.IOException;
 import javax.servlet.ServletException;

@@ -1,6 +1,6 @@
-package com.hoppy.app.login.oauth.service;
+package com.hoppy.app.login.auth.service;
 
-import com.hoppy.app.login.oauth.SocialType;
+import com.hoppy.app.login.auth.SocialType;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;

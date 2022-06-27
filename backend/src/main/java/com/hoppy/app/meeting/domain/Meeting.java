@@ -1,6 +1,7 @@
 package com.hoppy.app.meeting.domain;
 
 import com.hoppy.app.meeting.Category;
+import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.domain.MemberMeetingLike;
 import java.util.HashSet;
@@ -55,4 +56,14 @@ public class Meeting {
     @BatchSize(size = 100)
     @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
+
+    public static Meeting dtoToMeeting(CreateMeetingDto dto) {
+        return Meeting.builder()
+                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .memberLimit(dto.getMemberLimit())
+                .category(Category.intToCategory(dto.getCategory()))
+                .build();
+    }
 }

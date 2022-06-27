@@ -445,19 +445,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_health">Health</a>
+<li><a href="#_점검_api">점검 API</a>
 <ul class="sectlevel2">
 <li><a href="#_서버_상태_확인하기">서버 상태 확인하기</a></li>
 </ul>
 </li>
-<li><a href="#_upload">Upload</a>
+<li><a href="#_업로드_api">업로드 API</a>
 <ul class="sectlevel2">
 <li><a href="#_presignedurl_발급받기">PresignedURL 발급받기</a></li>
 </ul>
 </li>
-<li><a href="#_meeting">Meeting</a>
+<li><a href="#_모임_api">모임 API</a>
 <ul class="sectlevel2">
-<li><a href="#_meeting_생성하기">Meeting 생성하기</a></li>
+<li><a href="#_모임_생성하기">모임 생성하기</a></li>
 </ul>
 </li>
 </ul>
@@ -465,19 +465,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_health"><a class="link" href="#_health">Health</a></h2>
+<h2 id="_점검_api"><a class="link" href="#_점검_api">점검 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_서버_상태_확인하기"><a class="link" href="#_서버_상태_확인하기">서버 상태 확인하기</a></h3>
 <div class="listingblock">
-<div class="title">request</div>
+<div class="title">request url</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /health HTTP/1.1
-Host: localhost:8080</code></pre>
+<pre>GET /api/health</pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">response</div>
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
@@ -490,25 +495,30 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_upload"><a class="link" href="#_upload">Upload</a></h2>
+<h2 id="_업로드_api"><a class="link" href="#_업로드_api">업로드 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_presignedurl_발급받기"><a class="link" href="#_presignedurl_발급받기">PresignedURL 발급받기</a></h3>
 <div class="listingblock">
-<div class="title">request</div>
+<div class="title">request url</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /upload/presigned/test HTTP/1.1
-Host: localhost:8080</code></pre>
+<pre>GET /api/upload/presigned/{filename}</pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">response</div>
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220626T143424Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220626%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=c5ef862900e22c5c2f250a094cac85888a89e1e079635e04df838509e268845b"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220627T091559Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220627%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=142054adffe86c0f068ffd48009f24817291880649f4e72e473e084b6e88fd32"
   }
 }</code></pre>
 </div>
@@ -517,20 +527,20 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_meeting"><a class="link" href="#_meeting">Meeting</a></h2>
+<h2 id="_모임_api"><a class="link" href="#_모임_api">모임 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_meeting_생성하기"><a class="link" href="#_meeting_생성하기">Meeting 생성하기</a></h3>
+<h3 id="_모임_생성하기"><a class="link" href="#_모임_생성하기">모임 생성하기</a></h3>
 <div class="listingblock">
-<div class="title">request</div>
+<div class="title">request url</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /meeting HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Accept: application/json
-Content-Length: 144
-Host: localhost:8080
-
-{
+<pre>POST /api/meeting</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
   "memberId" : 1,
   "category" : 1,
   "title" : "testTitle",
@@ -541,7 +551,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="listingblock">
-<div class="title">response</div>
+<div class="title">response body</div>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
@@ -557,7 +567,7 @@ Host: localhost:8080
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-06-26 23:34:04 +0900
+Last updated 2022-06-27 18:15:06 +0900
 </div>
 </div>
 </body>

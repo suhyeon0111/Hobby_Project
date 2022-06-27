@@ -1,7 +1,7 @@
-package com.hoppy.app.login.oauth.filter;
+package com.hoppy.app.login.auth.filter;
 
-import com.hoppy.app.login.oauth.token.AuthToken;
-import com.hoppy.app.login.oauth.provider.AuthTokenProvider;
+import com.hoppy.app.login.auth.token.AuthToken;
+import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import com.hoppy.app.login.utils.HeaderUtil;
 import java.io.IOException;
 import javax.servlet.FilterChain;

@@ -1,4 +1,4 @@
-package com.hoppy.app.login.oauth.exception;
+package com.hoppy.app.login.auth.exception;
 
 public class OAuthProviderMissMatchException extends RuntimeException {
 

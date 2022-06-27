@@ -1,4 +1,4 @@
-package com.hoppy.app.login.oauth;
+package com.hoppy.app.login.auth;
 
 import org.springframework.http.HttpMethod;
 

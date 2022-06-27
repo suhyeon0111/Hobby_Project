@@ -43,18 +43,11 @@ public class MeetingManageServiceImpl implements MeetingManageService {
         }
 
         // 카테고리 유효성 검사
-        Category category = Category.intToEnum(dto.getCategory());
-        if(category == Category.ERROR) {
+        if(Category.intToCategory(dto.getCategory()) == Category.ERROR) {
             throw new BusinessException(ErrorCode.CATEGORY_ERROR);
         }
 
-        return Meeting.builder()
-                .category(category)
-                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .memberLimit(dto.getMemberLimit())
-                .build();
+        return Meeting.dtoToMeeting(dto);
     }
 
     @Override

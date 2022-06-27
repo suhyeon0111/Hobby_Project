@@ -1,12 +1,11 @@
-package com.hoppy.app.login.oauth.provider;
+package com.hoppy.app.login.auth.provider;
 
-import com.hoppy.app.login.oauth.SocialType;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.repository.MemberRepository;
-import com.hoppy.app.login.oauth.authentication.AccessTokenSocialTypeToken;
-import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
-import com.hoppy.app.login.oauth.service.LoadUserService;
+import com.hoppy.app.login.auth.authentication.AccessTokenSocialTypeToken;
+import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
+import com.hoppy.app.login.auth.service.LoadUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationProvider;

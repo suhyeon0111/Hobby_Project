@@ -1,11 +1,10 @@
-package com.hoppy.app.login.config.security;
+package com.hoppy.app.login.auth.config;
 
-import com.hoppy.app.login.oauth.filter.OAuth2AccessTokenAuthenticationFilter;
-import com.hoppy.app.login.oauth.provider.AuthTokenProvider;
+import com.hoppy.app.login.auth.filter.OAuth2AccessTokenAuthenticationFilter;
+import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -30,7 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//                .antMatchers(publicApiList).permitAll()
 //                .anyRequest().hasRole("USER")
                 .anyRequest().permitAll()
                 .and()

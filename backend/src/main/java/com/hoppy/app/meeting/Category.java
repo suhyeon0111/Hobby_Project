@@ -20,7 +20,7 @@ public enum Category {
 
     private int num;
 
-    public static Category intToEnum(int categoryNum) {
+    public static Category intToCategory(int categoryNum) {
 
         for(Category c : Category.values()) {
             if(c.getNum() == categoryNum) {

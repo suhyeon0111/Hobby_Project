@@ -1,4 +1,4 @@
-package com.hoppy.app.login.oauth.service;
+package com.hoppy.app.login.auth.service;
 
 import java.util.Collections;
 import java.util.Map;

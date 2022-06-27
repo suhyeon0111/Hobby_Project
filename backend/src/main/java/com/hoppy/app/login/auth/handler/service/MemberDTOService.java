@@ -1,7 +1,7 @@
-package com.hoppy.app.login.oauth.handler.service;
+package com.hoppy.app.login.auth.handler.service;
 
-import com.hoppy.app.login.oauth.SocialType;
-import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
+import com.hoppy.app.login.auth.SocialType;
+import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.MemberDto;
 import com.hoppy.app.member.repository.MemberRepository;

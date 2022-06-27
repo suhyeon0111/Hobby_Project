@@ -1,6 +1,6 @@
-package com.hoppy.app.login.oauth.provider;
+package com.hoppy.app.login.auth.provider;
 
-import com.hoppy.app.login.oauth.token.AuthToken;
+import com.hoppy.app.login.auth.token.AuthToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;

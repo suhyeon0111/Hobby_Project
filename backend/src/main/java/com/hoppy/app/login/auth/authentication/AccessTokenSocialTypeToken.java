@@ -1,6 +1,6 @@
-package com.hoppy.app.login.oauth.authentication;
+package com.hoppy.app.login.auth.authentication;
 
-import com.hoppy.app.login.oauth.SocialType;
+import com.hoppy.app.login.auth.SocialType;
 import java.util.Collection;
 import lombok.Builder;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

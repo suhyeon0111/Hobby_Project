@@ -1,8 +1,8 @@
-package com.hoppy.app.login.oauth.service;
+package com.hoppy.app.login.auth.service;
 
-import com.hoppy.app.login.oauth.SocialType;
-import com.hoppy.app.login.oauth.authentication.AccessTokenSocialTypeToken;
-import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
+import com.hoppy.app.login.auth.SocialType;
+import com.hoppy.app.login.auth.authentication.AccessTokenSocialTypeToken;
+import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

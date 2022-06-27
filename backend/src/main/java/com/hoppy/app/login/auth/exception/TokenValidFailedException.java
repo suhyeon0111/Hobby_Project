@@ -1,4 +1,4 @@
-package com.hoppy.app.login.oauth.exception;
+package com.hoppy.app.login.auth.exception;
 
 /***
  * Exception 관련 추가 작업 필요

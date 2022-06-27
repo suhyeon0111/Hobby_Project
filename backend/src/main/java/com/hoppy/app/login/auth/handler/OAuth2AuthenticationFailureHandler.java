@@ -1,4 +1,4 @@
-package com.hoppy.app.login.oauth.handler;
+package com.hoppy.app.login.auth.handler;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
