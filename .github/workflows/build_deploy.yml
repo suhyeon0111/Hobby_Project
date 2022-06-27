@@ -60,10 +60,10 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: ${{ always() }}  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
         with:
-          files: "test-results/**/*.xml"
+          files: "./backend/build/test-results/**/*.xml"
 
       - name: 백엔드 Gradle 빌드
-        run: cd backend && ./gradlew build
+        run: cd backend && ./gradlew build -x test
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
