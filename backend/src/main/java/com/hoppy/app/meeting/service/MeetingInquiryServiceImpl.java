@@ -18,6 +18,6 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
         List<Meeting> meetingList = meetingRepository.findAllMeetingByCategoryUsingFetch(category);
 
-
+        
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
-//    @Query("select distinct m from Meeting as m join fetch m.participants join fetch m.myMeetingLikes")
     @Query("select distinct m from Meeting as m left join m.participants left join m.myMeetingLikes where m.category = :category")
     List<Meeting> findAllMeetingByCategoryUsingFetch(@Param("category") Category category);
 
