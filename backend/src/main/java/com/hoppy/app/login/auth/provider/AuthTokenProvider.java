@@ -2,6 +2,7 @@ package com.hoppy.app.login.auth.provider;
 
 import com.hoppy.app.login.auth.token.AuthToken;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Arrays;
@@ -24,7 +25,6 @@ public class AuthTokenProvider {
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
     private final Key key;
-    private String socialId;
 
     private static final String AUTHORITIES_KEY = "ROLE_";
 
@@ -32,13 +32,13 @@ public class AuthTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public AuthToken createToken(String id, String expiry) {
+    public AuthToken createToken(String socialId, String expiry) {
         Date expiryDate = getExpiryDate(expiry);
-        return new AuthToken(id, expiryDate, key);
+        return new AuthToken(socialId, expiryDate, key);
     }
 
-    public AuthToken createUserAuthToken(Long id) {
-        return createToken(id.toString(), expiry);
+    public AuthToken createUserAuthToken(String socialId) {
+        return createToken(socialId, expiry);
     }
 
     public AuthToken convertAuthToken(String token) {
@@ -47,6 +47,13 @@ public class AuthTokenProvider {
 
     public static Date getExpiryDate(String expiry) {
         return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
+    }
+
+    /**
+     * Jwt decode를 통해 사용자 고유식별 값인 socialId(pk)를 추출
+     */
+    public String getSocialId(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public Authentication getAuthentication(AuthToken authToken) {
