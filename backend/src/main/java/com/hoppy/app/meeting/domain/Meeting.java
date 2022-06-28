@@ -16,8 +16,11 @@ import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.ToString.Exclude;
 import org.hibernate.annotations.BatchSize;
 
 @Entity
@@ -25,6 +28,7 @@ import org.hibernate.annotations.BatchSize;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Meeting {
 
     @Id
@@ -48,14 +52,24 @@ public class Meeting {
 
     @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
     @BatchSize(size = 100)
-    @Builder.Default
+    @Default
+    @Exclude
     private Set<MemberMeeting> participants = new HashSet<>();
 
 //  batch size를 설정하여 DB 성능 이슈(N + 1)가 발생하는 것을 방지할 수 있다.
     @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
     @BatchSize(size = 100)
-    @Builder.Default
+    @Default
+    @Exclude
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
+
+    public void setMyMeetingLikes(Set<MemberMeetingLike> myMeetingLikes) {
+        this.myMeetingLikes = myMeetingLikes;
+    }
+
+    public void setParticipants(Set<MemberMeeting> participants) {
+        this.participants = participants;
+    }
 
     public static Meeting dtoToMeeting(CreateMeetingDto dto) {
         return Meeting.builder()
