@@ -22,14 +22,6 @@ function NavBar() {
       className="menu"
       style={{ position: "fixed", zIndex: 5, width: "100%" }}
     >
-      <div className="menu__logo">
-        <a href="/">
-          <img src={LogoImg} style={{ width: "147px" }} />
-        </a>
-        <a href="/notification" className="menu__bell">
-          <img src={Bell} style={{ width: "45px" }} />
-        </a>
-      </div>
       <div className="menu__container">
         <div className="menu_left">
           <LeftMenu mode="horizontal" />
@@ -47,20 +39,31 @@ function NavBar() {
           <Icon type="menu" style={{ fontSize: "25px", color: "#A5A5A5" }} />
         </Button>
         <Drawer
-          title="Hoppy"
+          title=""
           placement="left"
           className="menu_drawer"
           closable={false}
           onClose={onClose}
           visible={visible}
         >
-          <RightMenu mode="inline" />
-          <hr style={{ width: "80%", backgroundColor: "#D3BA9C" }} />
-          <LeftMenu mode="inline" />
-          {/* <RightMenu mode="inline" /> */}
-        </Drawer>
+          <div style={{ marginTop: '100px' }}>
+            <img src={LogoImg} style={{ width: '107px', height: '54px', marginLeft: '25%', marginBottom: '30px'}} />
+            <RightMenu mode="inline" />
+            <hr style={{ width: "80%", backgroundColor: "#D3BA9C" }} />
+            <LeftMenu mode="inline" />
+          </div>
+          </Drawer>
       </div>
-      <div style={{ float: "right", display: "inline-block" }}></div>
+      <div style={{ float: 'right' }}>
+        <a href="/notification" className="menu__bell">
+          <img src={Bell} style={{ width: "45px" }} />
+        </a>
+      </div>
+      <div className="menu__logo">
+        <a href="/">
+          <img src={LogoImg} style={{ width: "147px" }} />
+        </a>
+      </div>
     </nav>
   );
 }

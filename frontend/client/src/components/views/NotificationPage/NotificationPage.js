@@ -14,7 +14,9 @@ function NotificaionPage() {
           width: "100%",
           margin: "3rem auto",
         }}
-      ></div>
+      >
+        hi
+      </div>
     </div>
   );
 }

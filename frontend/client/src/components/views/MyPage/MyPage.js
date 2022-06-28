@@ -1,5 +1,8 @@
-import {Avatar, Button, Icon} from 'antd'
+import {Avatar, Button, Icon, Tabs} from 'antd'
 import React from 'react'
+import './MyPage.css'
+
+const { TabPane } = Tabs;
 
 function MyPage() {
 
@@ -19,6 +22,10 @@ function MyPage() {
             MBTI는 ENFP!
         </div>
     }
+
+    const onChange = (key) => {
+        console.log(key);
+    };
 
     return (
         <div
@@ -89,64 +96,22 @@ function MyPage() {
                     }}>
                     {Infomation()}
                 </div>
-                <p
-                    style={{
-                        margin: '36px 0px 0px 30px',
-                        fontSize: '14px',
-                        textAlign: 'left'
-                    }}>모임</p>
-                <a href='/mypage/mymeeting'>
-                    <div
+                <div>
+                    <p
                         style={{
-                            color: '#858585',
-                            marginLeft: '30px',
+                            margin: '36px 0px 0px 30px',
+                            fontSize: '14px',
                             textAlign: 'left'
-                        }}>
-                        <p
-                            style={{
-                                margin: '18px 0px 0px 0px',
-                                fontSize: '12px',
-                                display: 'inline-block'
-                            }}>나의 모임</p>
-                        <Icon
-                            type='right'
-                            style={{
-                                marginLeft: '250px'
-                            }}/>
-                        <hr
-                            style={{
-                                width: '90%',
-                                float: 'left',
-                                display: 'inline-block'
-                            }}/>
-                    </div>
-                </a>
-                <a href='/mypage/likemeeting'>
-                    <div
-                        style={{
-                            color: '#858585',
-                            marginLeft: '30px',
-                            textAlign: 'left'
-                        }}>
-                        <p
-                            style={{
-                                margin: '18px 0px 0px 0px',
-                                fontSize: '12px',
-                                display: 'inline-block'
-                            }}>관심 모임 리스트</p>
-                        <Icon
-                            type='right'
-                            style={{
-                                marginLeft: '210px'
-                            }}/>
-                        <hr
-                            style={{
-                                width: '90%',
-                                float: 'left',
-                                display: 'inline-block'
-                            }}/>
-                    </div>
-                </a>
+                        }}>모임</p>
+                    <Tabs defaultActiveKey="1" centered onChange={onChange} style={{ primaryColor: '#D3BA9C'}}>
+                        <TabPane tab="나의 모임" key="1">
+                            나의 모임
+                        </TabPane>
+                        <TabPane tab="관심 모임" key="2">
+                            관심 모임
+                        </TabPane>
+                    </Tabs>
+                </div>
                 <p
                     style={{
                         margin: '36px 0px 0px 30px',

@@ -36,7 +36,7 @@ function UploadExercise() {
                             height: '46px',
                             background: '#F0F0F0',
                             borderRadius: '14px',
-                            margin: '36px 20px 0px 11px',
+                            margin: '36px 10px 0px 11px',
                             fontSize: '12px'
                         }}/>
                     <Button
@@ -50,6 +50,7 @@ function UploadExercise() {
                             textAlign: 'left',
                             fontSize: '12px'
                         }}>모임의 대표 이미지를 첨부해주세요.
+                        {/* https://ant.design/components/upload/ */}
                         <Icon
                         type='paper-clip'
                         style={{

@@ -10,34 +10,16 @@
 }
 
 .menu__logo {
-  width: 300px;
-  float: right;
-  text-align: center;
+  display: inline-block;
+  margin: 0px auto
 }
 
 .menu__bell {
   /* width: 150px; */
   margin-top: 15px;
-  float: right;
-  display: block;
+  /* float: right; */
+  display: inline-block;
   text-align: center;
-}
-
-.menu__container .ant-menu-item {
-  padding: 0px 5px;
-}
-
-.menu__container .ant-menu-submenu-title {
-  padding: 10px 20px;
-}
-
-.menu__container .ant-menu-item a,
-.menu__container .ant-menu-submenu-title a {
-  padding: 10px 15px;
-}
-
-.menu__container .ant-menu-horizontal {
-  border-bottom: none;
 }
 
 .menu__container .menu_left {
@@ -55,15 +37,6 @@
   margin-top: 8px;
   display: none !important; /* use of important to overwrite ant-btn */
   background: #fff;
-}
-
-.menu_drawer .ant-drawer-body {
-  padding: 0 !important;
-}
-
-/* align header of Drawer with header of page */
-.menu_drawer .ant-drawer-header {
-  padding: 14px 24px !important;
 }
 
 @media (max-width: 767px) {

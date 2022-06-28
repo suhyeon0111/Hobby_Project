@@ -105,11 +105,6 @@ function MakeMeetingPage() {
                         <img src={TripImg} style={hobbyImageStyle}/>
                     </div>
                 </a>
-                <div>
-                  <Button style={{width: '131px', height: '38px', background: '#D3BA9C', borderRadius: '19px', marginTop: '68px'}}>
-                    다음
-                  </Button>
-                </div>
             </div>
         </div>
     )
