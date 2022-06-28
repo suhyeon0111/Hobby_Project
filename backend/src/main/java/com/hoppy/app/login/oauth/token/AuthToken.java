@@ -19,6 +19,7 @@ public class AuthToken {
     private final String token;
     private final Key key;
 
+
     private static final String AUTHORITIES_KEYS = "ROLE";
 
     public AuthToken(String socialId, Date expiry, Key key) {

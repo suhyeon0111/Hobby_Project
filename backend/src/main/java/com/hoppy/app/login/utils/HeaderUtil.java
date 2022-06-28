@@ -12,11 +12,15 @@ public class HeaderUtil {
     public static String getAccessToken(HttpServletRequest request) {
         String headerValue = request.getHeader(AUTHORIZATION_HEADER_PREFIX);
 
+        System.out.println("headerValue = " + headerValue);
+        
         if(headerValue == null) {
+            System.out.println("headerValue == null");
             return null;
         }
 
         if(headerValue.startsWith(AUTHORIZATION_TOKEN_PREFIX)) {
+            System.out.println("headerValue.substring(AUTHORIZATION_TOKEN_PREFIX.length()) = " + headerValue.substring(AUTHORIZATION_TOKEN_PREFIX.length()));
             return headerValue.substring(AUTHORIZATION_TOKEN_PREFIX.length());
         }
         return null;

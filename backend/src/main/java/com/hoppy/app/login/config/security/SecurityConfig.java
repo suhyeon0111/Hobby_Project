@@ -1,6 +1,7 @@
 package com.hoppy.app.login.config.security;
 
 import com.hoppy.app.login.oauth.filter.OAuth2AccessTokenAuthenticationFilter;
+import com.hoppy.app.login.oauth.filter.TokenAuthenticationFilter;
 import com.hoppy.app.login.oauth.provider.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final OAuth2AccessTokenAuthenticationFilter oAuth2AccessTokenAuthenticationFilter;
-
-    private final AuthTokenProvider authTokenProvider;
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {

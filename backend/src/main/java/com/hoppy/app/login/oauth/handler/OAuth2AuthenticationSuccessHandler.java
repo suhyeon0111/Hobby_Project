@@ -7,6 +7,8 @@ import com.hoppy.app.login.oauth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.oauth.token.AuthToken;
 import com.hoppy.app.login.oauth.provider.AuthTokenProvider;
 import com.hoppy.app.member.dto.MemberDto;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +33,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         System.out.println("로그인 성공!: " + authentication.getPrincipal());
         OAuth2UserDetails oAuth2User = (OAuth2UserDetails) authentication.getPrincipal();
 
-        AuthToken token = authTokenProvider.createUserAuthToken(oAuth2User.getMemberId());
+//        AuthToken token = authTokenProvider.createUserAuthToken(oAuth2User.getMemberId());
+        AuthToken token = authTokenProvider.createUserAuthToken(oAuth2User.getSocialId());
 
         if(authentication.getAuthorities().stream().anyMatch(s -> s.getAuthority().equals(Role.GUEST.getGrantedAuthority()))) {
             System.out.println("가입되지 않은 유저입니다. 회원가입으로 이동합니다.");
@@ -46,6 +49,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
          */
         MemberDto memberDto = memberDTOService.loadMember(oAuth2User, token.getToken());
 
+        System.out.println("memberDto = " + memberDto);
+        
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         ObjectMapper mapper = new ObjectMapper();
