@@ -18,6 +18,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
@@ -95,6 +97,8 @@ class MeetingRepositoryTest {
         List<Meeting> healthMeetingList = meetingRepository.findAllMeetingByCategoryUsingFetch(Category.HEALTH);
         Assertions.assertThat(healthMeetingList.size()).isEqualTo(3);
 
+        System.out.println("모임 참가자 수 확인하기");
+
         for(Meeting m : healthMeetingList) {
             Assertions.assertThat(m.getParticipants().size()).isEqualTo(2);
         }
@@ -105,5 +109,16 @@ class MeetingRepositoryTest {
         for(Meeting m : LifeMeetingList) {
             Assertions.assertThat(m.getParticipants().size()).isEqualTo(2);
         }
+    }
+
+    @DisplayName("페이지네이션 테스트")
+    @Transactional
+    @Test
+    void paginationTest() {
+
+        PageRequest pageRequest = PageRequest.of(0, 2);
+        Page<Meeting> result = meetingRepository.findAllMeetingByCategoryOrderByIdDesc(Category.HEALTH, pageRequest);
+
+        Assertions.assertThat(result.getContent().size()).isEqualTo(2);
     }
 }
