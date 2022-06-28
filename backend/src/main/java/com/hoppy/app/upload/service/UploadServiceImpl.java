@@ -24,7 +24,7 @@ public class UploadServiceImpl implements UploadService {
     private String secretKey;
 
     @Override
-    public String getPreSignedUrl(String filename) {
+    public String getPreSignedUrl(String filename, String contentType) {
         try {
             AwsCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(
                     AwsBasicCredentials.create(accessKey, secretKey));
@@ -37,7 +37,7 @@ public class UploadServiceImpl implements UploadService {
             PutObjectRequest objectRequest = PutObjectRequest.builder()
                     .bucket("hoppyservice")
                     .key(filename)
-                    .contentType("image/png")
+                    .contentType(contentType)
                     .build();
 
             PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
