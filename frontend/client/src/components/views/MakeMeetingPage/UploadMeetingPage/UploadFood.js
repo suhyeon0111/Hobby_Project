@@ -36,7 +36,7 @@ function UploadFood() {
                             height: '46px',
                             background: '#F0F0F0',
                             borderRadius: '14px',
-                            margin: '36px 20px 0px 11px',
+                            margin: '36px 10px 0px 11px',
                             fontSize: '12px'
                         }}/>
                     <Button
