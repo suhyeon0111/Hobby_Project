@@ -1,4 +1,4 @@
-package com.hoppy.app.login.auth.handler;
+package com.hoppy.app.login.auth.handler.sample;
 
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
@@ -18,17 +18,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+//@AutoConfigureRestDocs
 @TestInstance(Lifecycle.PER_CLASS)
 class OAuth2AuthenticationSuccessHandlerTest {
 
     private Key key;
     private Date expiry;
 
-    @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @Test
     void onAuthenticationSuccess() {
@@ -58,7 +59,7 @@ class OAuth2AuthenticationSuccessHandlerTest {
     @Transactional
     @BeforeAll
     void before() {
-        Member member = memberRepository.save(Member.builder()
+        memberRepository.save(Member.builder()
                 .socialId("1234567890")
                 .socialType(SocialType.KAKAO)
                 .email("test@naver.com")

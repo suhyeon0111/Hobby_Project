@@ -1,4 +1,4 @@
-package com.hoppy.app.login.auth.handler.service;
+package com.hoppy.app.login.auth.handler.sample.service;
 
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;

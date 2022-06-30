@@ -25,18 +25,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
+        System.out.println("TokenAuthenticationFilter.doFilterInternal");
+
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String tokenStr = HeaderUtil.getAccessToken(request);
             AuthToken token = tokenProvider.convertAuthToken(tokenStr);
+            System.out.println("token = " + token);
 
             if(token.validate()) {  // 토큰 유효성 검사
                 Authentication authentication = tokenProvider.getAuthentication(token);
+                System.out.println("authentication = " + authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
             filterChain.doFilter(request, response);
-        } else {
-            System.out.println("There's No Jwt in Request Header.");
         }
     }
 }

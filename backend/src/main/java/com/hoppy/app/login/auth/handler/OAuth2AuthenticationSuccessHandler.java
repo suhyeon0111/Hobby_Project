@@ -1,7 +1,7 @@
 package com.hoppy.app.login.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoppy.app.login.auth.handler.service.MemberDTOService;
+import com.hoppy.app.login.auth.handler.sample.service.MemberDTOService;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.auth.token.AuthToken;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -48,9 +49,22 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        OAuth2UserDetails oAuth2UserDetails = (OAuth2UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("oAuth2UserDetails.getEmail() = " + oAuth2UserDetails.getEmail());
+
         ObjectMapper mapper = new ObjectMapper();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(mapper.writeValueAsString(memberDto));
+
+        printInfo();
+    }
+    
+    // 테스트용 코드
+    @PreAuthorize("isAuthenticated()")
+    public void printInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        OAuth2UserDetails principal = (OAuth2UserDetails) authentication.getPrincipal();
+        System.out.println("principal.getUsername() = " + principal.getUsername());
     }
 }

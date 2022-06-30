@@ -19,7 +19,7 @@ public class LoadUserService {
         setSocialLoadStrategy(socialType);
 
         Map<String, Object> userInfo = socialLoadStrategy.getUserInfo(authentication.getAccessToken());
-        
+
         return OAuth2UserDetails.builder()
                 .socialId(userInfo.get("id").toString())
                 .email(userInfo.get("email").toString())
@@ -27,8 +27,10 @@ public class LoadUserService {
                 .profileUrl(userInfo.get("profile_image").toString())
                 .socialType(socialType)
                 .build();
+        
     }
 
+    
     private void setSocialLoadStrategy(SocialType socialType) {
         if (socialType.getSocialName() == "kakao") {
             this.socialLoadStrategy = new KakaoLoadStrategy();
