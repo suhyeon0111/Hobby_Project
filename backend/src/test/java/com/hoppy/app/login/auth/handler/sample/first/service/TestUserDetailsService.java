@@ -1,6 +1,6 @@
-package com.hoppy.app.login.auth.handler.sample.service;
+package com.hoppy.app.login.auth.handler.sample.first.service;
 
-import com.hoppy.app.login.auth.handler.sample.CustomUser;
+import com.hoppy.app.login.auth.handler.sample.first.CustomUser;
 import com.hoppy.app.member.Role;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

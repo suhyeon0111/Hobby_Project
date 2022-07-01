@@ -1,7 +1,8 @@
 package com.hoppy.app.login.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoppy.app.login.auth.handler.sample.service.MemberDTOService;
+import com.hoppy.app.login.auth.handler.sample.first.service.MemberDTOService;
+import com.hoppy.app.login.auth.service.MessageService;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.auth.token.AuthToken;
@@ -27,6 +28,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final AuthTokenProvider authTokenProvider;
     private final MemberDTOService memberDTOService;
 
+    /**
+     * 테스트 코드 확인용 인스턴스
+     */
+    private final MessageService messageService;
+    
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         System.out.println("로그인 성공!: " + authentication.getPrincipal());
@@ -57,7 +63,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(mapper.writeValueAsString(memberDto));
 
-        printInfo();
+//        printInfo();
+        System.out.println(messageService.getMessage());
     }
     
     // 테스트용 코드

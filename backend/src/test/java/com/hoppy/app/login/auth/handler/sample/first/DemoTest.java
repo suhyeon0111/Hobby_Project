@@ -1,19 +1,13 @@
-package com.hoppy.app.login.auth.handler.sample;
+package com.hoppy.app.login.auth.handler.sample.first;
 
-import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.auth.handler.OAuth2AuthenticationSuccessHandler;
-import com.hoppy.app.login.auth.handler.sample.service.DemoService;
-import com.hoppy.app.login.auth.handler.sample.service.TestUserDetailsService;
+import com.hoppy.app.login.auth.handler.sample.first.service.DemoService;
+import com.hoppy.app.login.auth.handler.sample.first.service.TestUserDetailsService;
 import com.hoppy.app.login.auth.service.LoadUserService;
 import com.hoppy.app.member.Role;
-import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
-import java.util.List;
-import java.util.Optional;
 import javax.transaction.Transactional;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -24,8 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.BeforeTransaction;
 
 @SpringBootTest
 @WithMockUser

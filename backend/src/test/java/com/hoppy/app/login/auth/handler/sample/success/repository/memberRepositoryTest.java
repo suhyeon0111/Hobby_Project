@@ -1,4 +1,4 @@
-package com.hoppy.app.login.auth.handler.sample.repository;
+package com.hoppy.app.login.auth.handler.sample.success.repository;
 
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
@@ -9,12 +9,9 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
 

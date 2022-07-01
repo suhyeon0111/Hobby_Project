@@ -1,4 +1,4 @@
-package com.hoppy.app.login.auth.handler.sample;
+package com.hoppy.app.login.auth.handler.sample.first;
 
 import com.hoppy.app.member.Role;
 import java.lang.annotation.Retention;

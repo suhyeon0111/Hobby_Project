@@ -1,4 +1,4 @@
-package com.hoppy.app.login.auth.handler.sample;
+package com.hoppy.app.login.auth.handler.sample.first;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
