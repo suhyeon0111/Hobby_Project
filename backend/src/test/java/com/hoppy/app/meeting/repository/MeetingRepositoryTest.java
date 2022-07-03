@@ -122,10 +122,10 @@ class MeetingRepositoryTest {
         Assertions.assertThat(result.getContent().size()).isEqualTo(2);
     }
 
-    @DisplayName("findTop100ByCategoryOrderByIdDescUsingFetch 테스트")
+    @DisplayName("infiniteScrollPaging 테스트")
     @Transactional
     @Test
-    void queryTest01() {
+    void infiniteScrollPagingTest() {
 
         List<Meeting> result = meetingRepository.infiniteScrollPaging(Category.HEALTH, PageRequest.of(0, 100), 0L);
 
