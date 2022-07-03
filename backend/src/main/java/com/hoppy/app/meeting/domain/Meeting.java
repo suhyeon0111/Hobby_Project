@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,26 +51,17 @@ public class Meeting {
     @Column(nullable = false)
     private Integer memberLimit;
 
-    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
-    @Default
-    @Exclude
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meetingId")
+    @Builder.Default
+    @ToString.Exclude
     private Set<MemberMeeting> participants = new HashSet<>();
 
-//  batch size를 설정하여 DB 성능 이슈(N + 1)가 발생하는 것을 방지할 수 있다.
-    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
-    @Default
-    @Exclude
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meetingId")
+    @Builder.Default
+    @ToString.Exclude
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
-
-    public void setMyMeetingLikes(Set<MemberMeetingLike> myMeetingLikes) {
-        this.myMeetingLikes = myMeetingLikes;
-    }
-
-    public void setParticipants(Set<MemberMeeting> participants) {
-        this.participants = participants;
-    }
 
     public static Meeting dtoToMeeting(CreateMeetingDto dto) {
         return Meeting.builder()

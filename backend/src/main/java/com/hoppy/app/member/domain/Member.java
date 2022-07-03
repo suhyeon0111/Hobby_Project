@@ -7,21 +7,25 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Member {
 
     @Id
@@ -40,13 +44,15 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
     @Builder.Default
+    @ToString.Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
     @Builder.Default
+    @ToString.Exclude
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
-
-
 }
