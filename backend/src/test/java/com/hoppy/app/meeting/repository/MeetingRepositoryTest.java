@@ -7,6 +7,7 @@ import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.assertj.core.api.Assertions;
@@ -45,39 +46,38 @@ class MeetingRepositoryTest {
         * HEALTH 카테고리 모임 3개
         * LIFE 카테고리 모임 2개
         * */
-        for(int i = 0; i < 5; i++) {
-            Member member1 = Member.builder().build();
-            Member member2 = Member.builder().build();
+        for(int i = 0; i < 20; i++) {
+            Member member1 = memberRepository.save(Member
+                    .builder()
+                    .username("test" + i)
+                    .build());
 
-            memberRepository.save(member1);
-            memberRepository.save(member2);
+            Member member2 = memberRepository.save(Member
+                    .builder()
+                    .username("test" + (i + 1))
+                    .build());
 
             Category meetingCategory;
             if(i % 2 == 0) meetingCategory = Category.HEALTH;
             else meetingCategory = Category.LIFE;
 
-            Meeting meeting = Meeting.builder()
+            Meeting meeting = meetingRepository.save(Meeting.builder()
                     .url("none")
                     .title(i + "번 모임")
                     .content(i + "번 모임 회원들 모여라")
                     .category(meetingCategory)
                     .memberLimit(10)
-                    .build();
+                    .build());
 
-            meetingRepository.save(meeting);
+            MemberMeeting memberMeeting1 = memberMeetingRepository.save(MemberMeeting.builder()
+                    .meetingId(meeting.getId())
+                    .memberId(member1.getId())
+                    .build());
 
-            MemberMeeting memberMeeting1 = MemberMeeting.builder()
-                    .meeting(meeting)
-                    .member(member1)
-                    .build();
-
-            MemberMeeting memberMeeting2 = MemberMeeting.builder()
-                    .meeting(meeting)
-                    .member(member2)
-                    .build();
-
-            memberMeetingRepository.save(memberMeeting1);
-            memberMeetingRepository.save(memberMeeting2);
+            MemberMeeting memberMeeting2 = memberMeetingRepository.save(MemberMeeting.builder()
+                    .meetingId(meeting.getId())
+                    .memberId(member2.getId())
+                    .build());
         }
     }
 
@@ -111,7 +111,7 @@ class MeetingRepositoryTest {
         }
     }
 
-    @DisplayName("페이지네이션 테스트")
+    @DisplayName("No Offset 페이지네이션 테스트")
     @Transactional
     @Test
     void paginationTest() {
@@ -120,5 +120,37 @@ class MeetingRepositoryTest {
         Page<Meeting> result = meetingRepository.findAllMeetingByCategoryOrderByIdDesc(Category.HEALTH, pageRequest);
 
         Assertions.assertThat(result.getContent().size()).isEqualTo(2);
+    }
+
+    @DisplayName("findTop100ByCategoryOrderByIdDescUsingFetch 테스트")
+    @Transactional
+    @Test
+    void queryTest01() {
+
+        List<Meeting> result = meetingRepository.infiniteScrollPaging(Category.HEALTH, PageRequest.of(0, 100), 0L);
+
+        System.out.println("==========result==========");
+        for (Meeting m : result) {
+            System.out.println(m + ", 참여자 " + m.getParticipants().size() + "명");
+
+            /*
+             * 참여자 목록을 조회할 때 참여자 수 만큼 쿼리가 나가는 효율 문제가 있음
+             * 참여자 목록을 한 번에 조회하자.
+             *
+             * 먼저 getParticipants로 모든 참여자의 id를 List로 받아온다.
+             * 그 다음 WHERE IN 을 사용해서 List에 id들을 모두 한 번에 조회하자.
+            * */
+            System.out.println("참여자 id = " + m.getParticipants()
+                    .stream()
+                    .map(MemberMeeting::getMemberId)
+                    .collect(Collectors.toList())
+            );
+
+//            System.out.println("참여자 목록");
+//            for (MemberMeeting meet : m.getParticipants()) {
+//                System.out.println(meet.getMember().getUsername());
+
+//            }
+        }
     }
 }

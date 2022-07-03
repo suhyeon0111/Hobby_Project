@@ -26,13 +26,10 @@ public class MeetingManageServiceImpl implements MeetingManageService {
 
     @Override
     public void createAndSaveMemberMeetingData(Meeting meeting, Member member) {
-
-        MemberMeeting memberMeeting = MemberMeeting.builder()
-                .meeting(meeting)
-                .member(member)
-                .build();
-
-        memberMeetingRepository.save(memberMeeting);
+        memberMeetingRepository.save(MemberMeeting.builder()
+                .meetingId(meeting.getId())
+                .memberId(member.getId())
+                .build());
     }
 
     @Override

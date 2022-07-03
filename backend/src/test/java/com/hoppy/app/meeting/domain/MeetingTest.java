@@ -52,13 +52,13 @@ class MeetingTest {
         meetingRepository.save(meeting);
 
         MemberMeeting memberMeeting = MemberMeeting.builder()
-                .member(member)
-                .meeting(meeting)
+                .memberId(member.getId())
+                .meetingId(meeting.getId())
                 .build();
 
         MemberMeeting memberMeeting1 = MemberMeeting.builder()
-                .member(member1)
-                .meeting(meeting)
+                .memberId(member1.getId())
+                .meetingId(meeting.getId())
                 .build();
 
         memberMeetingRepository.save(memberMeeting);
