@@ -26,6 +26,9 @@ public class LoadUserService {
                 .username(userInfo.get("nickname").toString())
                 .profileUrl(userInfo.get("profile_image").toString())
                 .socialType(socialType)
+                .intro(null)
+                .myMeetings(null)
+                .myMeetingLikes(null)
                 .build();
         
     }

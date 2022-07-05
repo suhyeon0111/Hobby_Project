@@ -7,12 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class MemberDto {
+public class LoginMemberDto {
 
     private String email;
     private String username;
     private String profileUrl;
     private String socialId;
     private String jwt;
-
 }

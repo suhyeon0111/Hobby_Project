@@ -6,6 +6,7 @@ import com.hoppy.app.login.auth.authentication.AccessTokenSocialTypeToken;
 import com.hoppy.app.login.auth.provider.AccessTokenAuthenticationProvider;
 import com.hoppy.app.login.auth.service.LoadUserService;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -80,7 +81,14 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
         map.add("grant_type", "authorization_code");
         map.add("client_id", "146414e0f2cf5ef05dee863aae51615a");
         map.add("code", authCode);
-        map.add("redirect_uri", "http://localhost:8888/login/oauth2/code/kakao");
+        /**
+         * 로컬 테스트용 redirect_uri
+         * http://localhost:3000/login/oauth2/code/kakao"
+         * hoppy 도메인 redirect_uri
+         * https://hoppy.kro.kr/login/oauth2/code/kakao
+         */
+
+        map.add("redirect_uri", "http://localhost:8080/login/oauth2/code/kakao");
 
         HttpEntity<MultiValueMap<String, String>> socialRequest = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -90,7 +98,6 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
 
         Map<String, String> result = new ObjectMapper().readValue(socialResponse.getBody(), Map.class);
         String accessToken = result.get("access_token");
-        String refreshToken = result.get("refresh_token");
 
         return this.getAuthenticationManager().authenticate(new AccessTokenSocialTypeToken(accessToken, socialType));
     }

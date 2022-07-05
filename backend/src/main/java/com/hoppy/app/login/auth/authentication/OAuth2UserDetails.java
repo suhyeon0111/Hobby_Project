@@ -1,10 +1,14 @@
 package com.hoppy.app.login.auth.authentication;
 
 import com.hoppy.app.login.auth.SocialType;
+import com.hoppy.app.member.domain.MemberMeeting;
+import com.hoppy.app.member.domain.MemberMeetingLike;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +30,13 @@ public class OAuth2UserDetails implements UserDetails {
     private Set<GrantedAuthority> authorities;
     private String email;
     private String profileUrl;
+
+    private String intro;
+
+//    private String city;
+    private Set<MemberMeeting> myMeetings = new HashSet<>();
+
+    private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
     public SocialType getSocialType() {
         return socialType;
@@ -49,6 +60,16 @@ public class OAuth2UserDetails implements UserDetails {
 
     public String getProfileUrl() {
         return this.profileUrl;
+    }
+
+    public String getIntro() {return this.intro; }
+
+    public Set<MemberMeeting> getMyMeetings() {
+        return myMeetings;
+    }
+
+    public Set<MemberMeetingLike> getMyMeetingLikes() {
+        return myMeetingLikes;
     }
 
     @Override

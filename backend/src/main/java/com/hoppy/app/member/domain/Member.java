@@ -16,9 +16,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter  // 회원 정보 수정을 위해 추가
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,11 +30,11 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 기존 인스턴스 start
     private String email;
     private String username;
     private String socialId;
     private String profileUrl;
+    private String intro;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;

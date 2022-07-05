@@ -1,13 +1,17 @@
 package com.hoppy.app.login.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+<<<<<<< Updated upstream
 import com.hoppy.app.login.auth.handler.sample.first.service.MemberDTOService;
 import com.hoppy.app.login.auth.service.MessageService;
+=======
+import com.hoppy.app.member.service.MemberDTOService;
+>>>>>>> Stashed changes
 import com.hoppy.app.member.Role;
 import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.auth.token.AuthToken;
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
-import com.hoppy.app.member.dto.MemberDto;
+import com.hoppy.app.member.dto.LoginMemberDto;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +55,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
          * DB에 존재하지 않은 회원일 경우, 카카오를 통해 얻은 유저 정보 그대로 응답.
          * 이후 사용자가 자신의 정보를 바꾸면, socialPK 값으로 구분
          */
-        MemberDto memberDto = memberDTOService.loadMember(oAuth2User, token.getToken());
+
+        LoginMemberDto memberDto = memberDTOService.loginSuccessResponse(oAuth2User, token.getToken());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
