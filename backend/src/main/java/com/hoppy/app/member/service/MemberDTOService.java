@@ -1,9 +1,4 @@
-<<<<<<< Updated upstream:backend/src/main/java/com/hoppy/app/login/auth/handler/sample/first/service/MemberDTOService.java
-package com.hoppy.app.login.auth.handler.sample.first.service;
-=======
 package com.hoppy.app.member.service;
->>>>>>> Stashed changes:backend/src/main/java/com/hoppy/app/member/service/MemberDTOService.java
-
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;

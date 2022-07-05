@@ -1,12 +1,8 @@
 package com.hoppy.app.login.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-<<<<<<< Updated upstream
-import com.hoppy.app.login.auth.handler.sample.first.service.MemberDTOService;
 import com.hoppy.app.login.auth.service.MessageService;
-=======
 import com.hoppy.app.member.service.MemberDTOService;
->>>>>>> Stashed changes
 import com.hoppy.app.member.Role;
 import com.hoppy.app.login.auth.authentication.OAuth2UserDetails;
 import com.hoppy.app.login.auth.token.AuthToken;
@@ -30,6 +26,7 @@ import org.springframework.stereotype.Component;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthTokenProvider authTokenProvider;
+
     private final MemberDTOService memberDTOService;
 
     /**
@@ -60,19 +57,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        OAuth2UserDetails oAuth2UserDetails = (OAuth2UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("oAuth2UserDetails.getEmail() = " + oAuth2UserDetails.getEmail());
-
         ObjectMapper mapper = new ObjectMapper();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(mapper.writeValueAsString(memberDto));
-
-//        printInfo();
-        System.out.println(messageService.getMessage());
     }
-    
-    // 테스트용 코드
+
+    /**
+     * 테스트용 코드
+     */
     @PreAuthorize("isAuthenticated()")
     public void printInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
