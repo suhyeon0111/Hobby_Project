@@ -27,8 +27,6 @@ public class LoadUserService {
                 .profileUrl(userInfo.get("profile_image").toString())
                 .socialType(socialType)
                 .intro(null)
-                .myMeetings(null)
-                .myMeetingLikes(null)
                 .build();
         
     }

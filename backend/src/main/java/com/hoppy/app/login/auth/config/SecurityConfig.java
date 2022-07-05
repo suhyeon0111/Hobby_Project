@@ -22,8 +22,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final OAuth2AccessTokenAuthenticationFilter oAuth2AccessTokenAuthenticationFilter;
 
-//    private final TokenAuthenticationFilter tokenAuthenticationFilter;
-
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
     }
@@ -43,9 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().hasRole("USER")
                 .anyRequest().permitAll()
                 .and()
-//                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(oAuth2AccessTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }

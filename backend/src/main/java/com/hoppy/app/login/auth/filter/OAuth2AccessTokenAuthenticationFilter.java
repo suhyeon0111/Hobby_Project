@@ -88,7 +88,7 @@ public class OAuth2AccessTokenAuthenticationFilter extends AbstractAuthenticatio
          * https://hoppy.kro.kr/login/oauth2/code/kakao
          */
 
-        map.add("redirect_uri", "http://localhost:8080/login/oauth2/code/kakao");
+        map.add("redirect_uri", "http://localhost:8888/login/oauth2/code/kakao");
 
         HttpEntity<MultiValueMap<String, String>> socialRequest = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 

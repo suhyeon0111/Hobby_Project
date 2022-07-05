@@ -33,11 +33,6 @@ public class OAuth2UserDetails implements UserDetails {
 
     private String intro;
 
-//    private String city;
-    private Set<MemberMeeting> myMeetings = new HashSet<>();
-
-    private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
-
     public SocialType getSocialType() {
         return socialType;
     }
@@ -64,13 +59,6 @@ public class OAuth2UserDetails implements UserDetails {
 
     public String getIntro() {return this.intro; }
 
-    public Set<MemberMeeting> getMyMeetings() {
-        return myMeetings;
-    }
-
-    public Set<MemberMeetingLike> getMyMeetingLikes() {
-        return myMeetingLikes;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

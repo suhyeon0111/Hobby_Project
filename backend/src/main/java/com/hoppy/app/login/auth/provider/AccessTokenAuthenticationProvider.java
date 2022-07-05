@@ -49,8 +49,6 @@ public class AccessTokenAuthenticationProvider implements AuthenticationProvider
                         .profileUrl(oAuth2User.getProfileUrl())
                         .role(Role.USER)
                         .intro(oAuth2User.getIntro())
-                        .myMeetingLikes(null)
-                        .myMeetings(null)
                         .username(oAuth2User.getUsername()).build()));
     }
 
