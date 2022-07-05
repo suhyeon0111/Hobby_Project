@@ -8,16 +8,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.service.SocialLoadStrategy;
-import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.member.dto.MemberDto;
+import com.hoppy.app.member.dto.LoginMemberDto;
 import com.hoppy.app.member.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,7 +58,7 @@ public class LoginTest {
                 .profileUrl("www.xxx.com")
                 .build());
 
-        String object = objectMapper.writeValueAsString(MemberDto.builder().socialId("1234")
+        String object = objectMapper.writeValueAsString(LoginMemberDto.builder().socialId("1234")
                 .username("김꽃두레").email("test@naver.com").socialId("1234").profileUrl("www.xxx.com").jwt("123").build());
 
         ResultActions actions = mockMvc.perform(post("/v1/social/signup/kakao")
