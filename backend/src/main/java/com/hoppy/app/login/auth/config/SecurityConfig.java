@@ -44,7 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println("SecurityConfig.configure");
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
         http.csrf().disable();
         http
@@ -73,7 +72,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     protected AuthenticationManager authenticationManager() throws Exception {
-        System.out.println("SecurityConfig.authenticationManager");
         return super.authenticationManager();
     }
 

@@ -1,3 +1,8 @@
+/**
+ * 테스트용 코드
+ * 정상 동작 확인 후 주석 제거하겠음
+ */
+
 //package com.hoppy.app.mypage.controller;
 //
 //import java.security.Principal;

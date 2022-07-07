@@ -13,5 +13,5 @@ public class LoginMemberDto {
     private String username;
     private String profileUrl;
     private String socialId;
-    private String jwt;
+    private String intro;
 }

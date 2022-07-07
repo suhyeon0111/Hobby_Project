@@ -37,9 +37,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         System.out.println("(" + userDetails.getName() + ")" + "님이 로그인 했습니다.");
 
-
-
         String jwt = authTokenProvider.createUserAuthToken(userDetails.getSocialId()).getToken();
+        System.out.println("jwt = " + jwt);
+
         String url = makeRedirectUrl(jwt);
         if(response.isCommitted()) {
             logger.debug("응답이 이미 커밋된 상태입니다. " + url + "로 리다이렉트하도록 바꿀 수 없습니다.");

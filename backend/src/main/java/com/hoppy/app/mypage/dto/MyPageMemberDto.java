@@ -1,4 +1,4 @@
-package com.hoppy.app.member.dto;
+package com.hoppy.app.mypage.dto;
 
 import lombok.Builder;
 import lombok.Getter;

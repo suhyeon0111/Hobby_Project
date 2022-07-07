@@ -21,4 +21,5 @@ public class CheckController {
         System.out.println("principal.getName() = " + principal.getName());
         return principal.getName();
     }
+
 }

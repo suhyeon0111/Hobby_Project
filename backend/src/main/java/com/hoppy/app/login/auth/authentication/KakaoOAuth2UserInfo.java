@@ -6,7 +6,9 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     public KakaoOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
+        System.out.println("attributes = " + attributes);
     }
+
 
     @Override
     public String getSocialId() {
@@ -24,7 +26,8 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public String getEmail() {
-        return (String) attributes.get("account_email");
+        Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
+        return (String) kakao_account.get("email");
     }
 
     @Override
