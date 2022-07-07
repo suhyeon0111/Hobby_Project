@@ -3,11 +3,8 @@ package com.hoppy.app.login.auth.handler.sample.success.service;
 import static org.assertj.core.api.Assertions.*;
 
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
-import com.hoppy.app.login.auth.service.LoadUserService;
-import com.hoppy.app.login.auth.service.SocialLoadStrategy;
 import com.hoppy.app.login.auth.token.AuthToken;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

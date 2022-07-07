@@ -1,6 +1,8 @@
 package com.hoppy.app.login.auth.token;
 
+import com.hoppy.app.member.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +18,7 @@ public class AuthToken {
     private final String token;
     private final Key key;
 
-    private static final String AUTHORITIES_KEYS = "ROLE";
+    private static final String AUTHORITIES_KEYS = "ROLE_";
 
     public AuthToken(String socialId, Date expiry, Key key) {
         this.key = key;
@@ -26,6 +28,7 @@ public class AuthToken {
     private String createAuthToken(String socialId, Date expiry) {
         return Jwts.builder()
                 .setSubject(socialId)
+                .claim(AUTHORITIES_KEYS, Role.USER)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)
                 .compact();
@@ -37,7 +40,7 @@ public class AuthToken {
 
     public Claims getTokenClaims() {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(token).getBody();
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (SecurityException e) {
             log.info("Invalid JWT signature.");
         } catch (MalformedJwtException e) {
@@ -46,6 +49,16 @@ public class AuthToken {
             log.info("Unsupported Jwt token");
         } catch (IllegalArgumentException e) {
             log.info("JWT token compact of handler are invalid");
+        }
+        return null;
+    }
+
+    public Claims getExpiredTokenClaims() {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token.");
+            return e.getClaims();
         }
         return null;
     }

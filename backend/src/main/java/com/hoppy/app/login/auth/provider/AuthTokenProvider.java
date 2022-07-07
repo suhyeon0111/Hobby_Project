@@ -1,5 +1,6 @@
 package com.hoppy.app.login.auth.provider;
 
+import com.hoppy.app.login.auth.exception.TokenValidFailedException;
 import com.hoppy.app.login.auth.token.AuthToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -64,15 +65,12 @@ public class AuthTokenProvider {
                     Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
-
+            
             User principal = new User(claims.getSubject(), "", authorities);
-
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
         } else {
-            System.out.println("ApplicationTokenProvider-getAuthentication Error cause");
-//            throw new TokenValidException();
-            authToken.getTokenClaims();
-            throw new NullPointerException();
+            log.info("Token Valid Failed Exception.");
+            throw new TokenValidFailedException();
         }
     }
 }

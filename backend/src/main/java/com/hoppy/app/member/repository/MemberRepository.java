@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findBySocialTypeAndSocialId(SocialType socialType, String socialId);
+    Optional<Member> findBySocialId(String socialId);
 }

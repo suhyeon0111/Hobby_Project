@@ -33,8 +33,10 @@ public class Member {
     private String email;
     private String username;
     private String socialId;
-    private String profileUrl;
+    private String profileImageUrl;
     private String intro;
+    private String password;
+
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;

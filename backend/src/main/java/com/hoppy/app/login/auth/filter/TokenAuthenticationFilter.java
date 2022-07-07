@@ -2,7 +2,7 @@ package com.hoppy.app.login.auth.filter;
 
 import com.hoppy.app.login.auth.token.AuthToken;
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
-import com.hoppy.app.login.utils.HeaderUtil;
+import com.hoppy.app.login.auth.utils.HeaderUtil;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,17 +25,21 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
-        System.out.println("TokenAuthenticationFilter.doFilterInternal");
-
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String tokenStr = HeaderUtil.getAccessToken(request);
             AuthToken token = tokenProvider.convertAuthToken(tokenStr);
-            System.out.println("token = " + token);
 
-            if(token.validate()) {  // 토큰 유효성 검사
+            /**
+             * 요청 헤더에 담긴 Jwt Token 유효성 검사
+             */
+            if(token.validate()) {  
                 Authentication authentication = tokenProvider.getAuthentication(token);
-                System.out.println("authentication = " + authentication);
+                /**
+                 * 유효한 Token 일 경우, authentication을 SecurityContextHolder에 저장해 애플리케이션 전역에서 꺼내 쓸 수 있음.
+                 */
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                System.out.println("유효하지 않은 토큰입니다.");
             }
 
             filterChain.doFilter(request, response);
