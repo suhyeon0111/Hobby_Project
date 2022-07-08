@@ -93,4 +93,10 @@ public class CustomUserDetails implements OAuth2User, UserDetails, OidcUser {
         return customUserDetails;
     }
 
+    /**
+     * 테스트용 코드
+     */
+    public void printName() {
+        System.out.println("socialId = " + socialId);
+    }
 }

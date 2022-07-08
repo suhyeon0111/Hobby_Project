@@ -9,8 +9,11 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -82,5 +85,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             member.setProfileImageUrl(userInfo.getProfileImageUrl());
         }
         return member;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public String saveMember(Member member) {
+        return memberRepository.save(member).getSocialId();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public void print() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        principal.printName();
     }
 }

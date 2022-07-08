@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/check")
 @RequiredArgsConstructor
-public class CheckController {
+public class DemoController {
 
     /**
      * Test

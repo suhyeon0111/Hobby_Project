@@ -24,6 +24,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Member {
 
     @Id
@@ -52,5 +53,17 @@ public class Member {
     @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
-
+    public Member(Long id, String email, String username, String socialId,
+            String profileImageUrl, String intro, String password,
+            SocialType socialType, Role role) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.socialId = socialId;
+        this.profileImageUrl = profileImageUrl;
+        this.intro = intro;
+        this.password = password;
+        this.socialType = socialType;
+        this.role = role;
+    }
 }

@@ -2,7 +2,7 @@ package com.hoppy.app.login.auth.filter;
 
 import com.hoppy.app.login.auth.token.AuthToken;
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
-import com.hoppy.app.login.auth.utils.HeaderUtil;
+import com.hoppy.app.login.utils.HeaderUtil;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
