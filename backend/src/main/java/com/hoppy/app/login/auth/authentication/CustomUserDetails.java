@@ -25,12 +25,18 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class CustomUserDetails implements OAuth2User, UserDetails, OidcUser {
 
     private final String socialId;
+//    private final String  id;
     private final String password;
     private final SocialType socialType;
     private final Role role;
     private final Collection<GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
+
+//    @Override
+//    public String getName() {
+//        return socialId;
+//    }
 
     @Override
     public String getName() {

@@ -24,16 +24,15 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String socialId;
+//    private Long id;  //  == socialId
 
     private String email;
     private String username;
-    private String socialId;
+//    private String socialId;
     private String profileImageUrl;
     private String intro;
     private String password;
@@ -53,13 +52,12 @@ public class Member {
     @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
-    public Member(Long id, String email, String username, String socialId,
-            String profileImageUrl, String intro, String password,
-            SocialType socialType, Role role) {
-        this.id = id;
+    public Member(String socialId, String email, String username, String profileImageUrl,
+            String intro,
+            String password, SocialType socialType, Role role) {
+        this.socialId = socialId;
         this.email = email;
         this.username = username;
-        this.socialId = socialId;
         this.profileImageUrl = profileImageUrl;
         this.intro = intro;
         this.password = password;
