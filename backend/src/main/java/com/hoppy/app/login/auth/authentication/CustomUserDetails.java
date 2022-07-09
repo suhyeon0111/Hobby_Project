@@ -24,8 +24,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 @RequiredArgsConstructor
 public class CustomUserDetails implements OAuth2User, UserDetails, OidcUser {
 
-    private final String socialId;
-//    private final String  id;
+//    private final String socialId;
+    private final Long id;
     private final String password;
     private final SocialType socialType;
     private final Role role;
@@ -40,12 +40,12 @@ public class CustomUserDetails implements OAuth2User, UserDetails, OidcUser {
 
     @Override
     public String getName() {
-        return socialId;
+        return id.toString();
     }
 
     @Override
     public String getUsername() {
-        return socialId;
+        return id.toString();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class CustomUserDetails implements OAuth2User, UserDetails, OidcUser {
 
     public static CustomUserDetails create(Member member) {
         return new CustomUserDetails(
-                member.getSocialId(),
+                member.getId(),
                 member.getPassword(),
                 member.getSocialType(),
                 Role.USER,
@@ -103,6 +103,6 @@ public class CustomUserDetails implements OAuth2User, UserDetails, OidcUser {
      * 테스트용 코드
      */
     public void printName() {
-        System.out.println("socialId = " + socialId);
+        System.out.println("socialId = " + id.toString());
     }
 }

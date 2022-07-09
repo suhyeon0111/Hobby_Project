@@ -19,7 +19,7 @@ class CustomUserDetailsTest {
     @Test
     CustomUserDetails create(Member member) {
         return new CustomUserDetails(
-                member.getSocialId(),
+                member.getId(),
                 member.getPassword(),
                 member.getSocialType(),
                 Role.USER,

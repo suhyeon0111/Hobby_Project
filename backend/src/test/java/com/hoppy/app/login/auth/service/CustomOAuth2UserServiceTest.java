@@ -68,7 +68,7 @@ public class CustomOAuth2UserServiceTest {
     }
 
     @Test
-    @WithMockCustomUser(username = "choidaihan", password = "secret", role = Role.GUEST, socialType = SocialType.KAKAO)
+    @WithMockCustomUser(username = "2L", password = "secret", role = Role.GUEST, socialType = SocialType.KAKAO)
     void test() {
         customOAuth2UserService.print();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

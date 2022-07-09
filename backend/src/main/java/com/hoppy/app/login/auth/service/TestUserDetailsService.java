@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class TestUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new CustomUserDetails("name", "password", SocialType.KAKAO, Role.USER, Collections.singletonList(new SimpleGrantedAuthority(Role.USER.toString())));
+        return new CustomUserDetails(1234L, "password", SocialType.KAKAO, Role.USER, Collections.singletonList(new SimpleGrantedAuthority(Role.USER.toString())));
     }
 
     @PreAuthorize("isAuthenticated()")

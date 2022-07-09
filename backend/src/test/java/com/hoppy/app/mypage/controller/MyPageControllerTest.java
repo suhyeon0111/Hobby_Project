@@ -66,7 +66,7 @@ class MyPageControllerTest {
      * 성공 케이스
      */
     @Test
-    @WithMockCustomUser(username = "12341234", password = "98765", role = Role.USER, socialType = SocialType.KAKAO)
+    @WithMockCustomUser(username = "1234L", password = "98765", role = Role.USER, socialType = SocialType.KAKAO)
     void showMemberPageSuccess() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String socialId = authentication.getName();
@@ -82,7 +82,7 @@ class MyPageControllerTest {
      * 실패 케이스 (makeVirtualMember()에서 설정한 socialId와 다른 MockCustomUser 선언)
      */
     @Test
-    @WithMockCustomUser(username = "56785678", password = "98765", role = Role.USER, socialType = SocialType.KAKAO)
+    @WithMockCustomUser(username = "5678L", password = "98765", role = Role.USER, socialType = SocialType.KAKAO)
     void showMemberPageFailure() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String socialId = authentication.getName();

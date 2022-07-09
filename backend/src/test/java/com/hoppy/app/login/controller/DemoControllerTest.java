@@ -59,12 +59,12 @@ class DemoControllerTest {
 
     @Test
     @DisplayName("현재 인증된 사용자의 SocialId로 정보 조회")
-    @WithMockCustomUser(username = "56785678", password = "98765", role = Role.USER, socialType = SocialType.KAKAO)
+//    @WithMockCustomUser(username = "1234L", password = "98765", role = Role.USER, socialType = SocialType.KAKAO)
     void login() throws Exception {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+/*        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String socialId = authentication.getName();
-        System.out.println("socialId = " + socialId);
+        System.out.println("socialId = " + socialId);*/
         MemberRepository mr = mock(MemberRepository.class);
 
         Member member = Member.builder()
@@ -79,8 +79,8 @@ class DemoControllerTest {
                 .password("9999")
                 .build();
 
-        when(mr.save(member)).thenReturn(new Member(1L, "email", "name", "7777", "profileUrl",
-                "hello", "9999", SocialType.KAKAO, Role.USER));
+        when(mr.save(member)).thenReturn(new Member(1234L, "email", "name", "profileUrl",
+                "hello", SocialType.KAKAO, Role.USER));
         when(mr.findAll()).thenReturn(Mockito.anyList());
 
         System.out.println("member.getUsername() = " + member.getUsername());  // "마석도"

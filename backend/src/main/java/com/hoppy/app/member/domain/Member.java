@@ -27,12 +27,11 @@ import lombok.Setter;
 public class Member {
 
     @Id
-    private String socialId;
-//    private Long id;  //  == socialId
+    private Long id;  //  == socialId
 
     private String email;
     private String username;
-//    private String socialId;
+    private String socialId;
     private String profileImageUrl;
     private String intro;
     private String password;
@@ -52,15 +51,13 @@ public class Member {
     @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
-    public Member(String socialId, String email, String username, String profileImageUrl,
-            String intro,
-            String password, SocialType socialType, Role role) {
-        this.socialId = socialId;
+    public Member(Long id, String email, String username, String profileImageUrl, String intro,
+            SocialType socialType, Role role) {
+        this.id = id;
         this.email = email;
         this.username = username;
         this.profileImageUrl = profileImageUrl;
         this.intro = intro;
-        this.password = password;
         this.socialType = socialType;
         this.role = role;
     }

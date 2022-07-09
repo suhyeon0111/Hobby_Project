@@ -37,7 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         System.out.println("(" + userDetails.getName() + ")" + "님이 로그인 했습니다.");
 
-        String jwt = authTokenProvider.createUserAuthToken(userDetails.getSocialId()).getToken();
+        String jwt = authTokenProvider.createUserAuthToken(userDetails.getId().toString()).getToken();
         System.out.println("jwt = " + jwt);
 
         String url = makeRedirectUrl(jwt);
