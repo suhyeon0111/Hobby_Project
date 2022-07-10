@@ -48,9 +48,6 @@ dependencies {
 
 	testRuntimeOnly 'com.h2database:h2'
 }
-ext {
-	snippetsDir = file('build/generated-snippets')
-}
 
 ext {
 	snippetsDir = file('build/generated-snippets')

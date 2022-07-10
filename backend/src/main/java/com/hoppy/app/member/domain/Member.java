@@ -16,23 +16,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter  // 회원 정보 수정을 위해 추가
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;  //  == socialId
 
-    // 기존 인스턴스 start
     private String email;
     private String username;
     private String socialId;
-    private String profileUrl;
+    private String profileImageUrl;
+    private String intro;
+    private String password;
+
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
@@ -48,5 +51,14 @@ public class Member {
     @Builder.Default
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
-
+    public Member(Long id, String email, String username, String profileImageUrl, String intro,
+            SocialType socialType, Role role) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.profileImageUrl = profileImageUrl;
+        this.intro = intro;
+        this.socialType = socialType;
+        this.role = role;
+    }
 }
