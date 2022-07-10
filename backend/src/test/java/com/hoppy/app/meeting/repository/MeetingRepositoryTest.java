@@ -127,9 +127,10 @@ class MeetingRepositoryTest {
     @Test
     void infiniteScrollPagingTest() {
 
-        List<Meeting> result = meetingRepository.infiniteScrollPaging(Category.HEALTH, PageRequest.of(0, 100), 0L);
+        List<Meeting> result = meetingRepository.infiniteScrollPagingMeeting(Category.HEALTH, 0L, PageRequest.of(0, 100));
 
         System.out.println("==========result==========");
+        System.out.println("조회된 모임 중 마지막 모임 id = " + result.get(result.size() - 1).getId());
         for (Meeting m : result) {
             System.out.println(m + ", 참여자 " + m.getParticipants().size() + "명");
 
@@ -137,20 +138,22 @@ class MeetingRepositoryTest {
              * 참여자 목록을 조회할 때 참여자 수 만큼 쿼리가 나가는 효율 문제가 있음
              * 참여자 목록을 한 번에 조회하자.
              *
-             * 먼저 getParticipants로 모든 참여자의 id를 List로 받아온다.
-             * 그 다음 WHERE IN 을 사용해서 List에 id들을 모두 한 번에 조회하자.
+             * 먼저 getParticipants를 가공해서 모든 참여자의 id를 List로 받아온다.
+             * 그 다음 WHERE IN 을 사용해서 List에 id들을 한 번에 조회하자.
             * */
-            System.out.println("참여자 id = " + m.getParticipants()
+
+            List<Long> membersIdList = m.getParticipants()
                     .stream()
                     .map(MemberMeeting::getMemberId)
-                    .collect(Collectors.toList())
-            );
+                    .collect(Collectors.toList());
 
-//            System.out.println("참여자 목록");
-//            for (MemberMeeting meet : m.getParticipants()) {
-//                System.out.println(meet.getMember().getUsername());
+            System.out.println("참여자 id = " + membersIdList);
+            List<Member> memberList = memberRepository.infiniteScrollPagingMember(membersIdList, 0L, PageRequest.of(0, 100));
 
-//            }
+            System.out.println("참여자 목록");
+            for (Member member : memberList) {
+                System.out.println(member);
+            }
         }
     }
 }
