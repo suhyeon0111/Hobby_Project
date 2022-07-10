@@ -31,7 +31,7 @@ public class Member {
 
     private String email;
     private String username;
-    private String socialId;
+//    private String socialId; // id와 개념이 통일되었음
     private String profileImageUrl;
     private String intro;
     private String password;

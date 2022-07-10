@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> member = memberRepository.findBySocialId(username);
+        Optional<Member> member = memberRepository.findById(Long.valueOf(username));
         if(member.isEmpty()) {
             throw new UsernameNotFoundException("Can not find username in MemberRepository");
         }

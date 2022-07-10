@@ -1,5 +1,6 @@
 package com.hoppy.app.login.auth.provider;
 
+import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.login.auth.exception.TokenValidFailedException;
 import com.hoppy.app.login.auth.token.AuthToken;
 import io.jsonwebtoken.Claims;
@@ -61,12 +62,17 @@ public class AuthTokenProvider {
 
         if(authToken.validate()) {
             Claims claims = authToken.getTokenClaims();
-            Collection<? extends GrantedAuthority> authorities =
+            Collection<GrantedAuthority> authorities =
                     Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
             
-            User principal = new User(claims.getSubject(), "", authorities);
+            CustomUserDetails principal = CustomUserDetails.builder()
+                    .id(Long.valueOf(claims.getSubject()))
+                    .password("")
+                    .authorities(authorities)
+                    .build();
+
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
         } else {
             log.info("Token Valid Failed Exception.");
