@@ -1,6 +1,9 @@
 package com.hoppy.app.meeting.service;
 
 import com.hoppy.app.meeting.Category;
+import com.hoppy.app.meeting.domain.Meeting;
+import com.hoppy.app.meeting.dto.MeetingDto;
+import java.util.List;
 
 /*
 * 모임 조회 서비스
@@ -10,5 +13,11 @@ import com.hoppy.app.meeting.Category;
 * */
 public interface MeetingInquiryService {
 
-    public void listMeetingByCategory(Category category);
+    public List<Meeting> listMeetingByCategory(Category category, long lastId);
+
+    public long getListsLastMeetingId(List<Meeting> meetingList);
+
+    public String createNextPagingUrl(int categoryNumber, long lastId);
+
+    public List<MeetingDto> meetingListToMeetingDtoList(List<Meeting> meetingList, Long memberId);
 }
