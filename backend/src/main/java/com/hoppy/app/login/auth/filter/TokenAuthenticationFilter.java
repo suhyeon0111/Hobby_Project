@@ -34,9 +34,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
              */
             if(token.validate()) {  
                 Authentication authentication = tokenProvider.getAuthentication(token);
-                /**
-                 * 유효한 Token 일 경우, authentication을 SecurityContextHolder에 저장해 애플리케이션 전역에서 꺼내 쓸 수 있음.
-                 */
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 System.out.println("유효하지 않은 토큰입니다.");

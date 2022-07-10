@@ -64,13 +64,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
-//        Member member = Member.builder()
-//                .socialType(socialType)
-//                .socialId(userInfo.getSocialId())
-//                .email(userInfo.getEmail())
-//                .profileImageUrl(userInfo.getProfileImageUrl())
-//                .username(userInfo.getUsername())
-//                .role(Role.USER).build();
 
         Member member = Member.builder()
                 .socialType(socialType)

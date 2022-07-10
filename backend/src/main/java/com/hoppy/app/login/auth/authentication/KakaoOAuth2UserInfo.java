@@ -6,7 +6,6 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     public KakaoOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
-        System.out.println("attributes = " + attributes);
     }
 
 
@@ -18,7 +17,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     @Override
     public String getUsername() {
         Map<String , Object> properties = (Map<String, Object>) attributes.get("properties");
-        if (properties.isEmpty()) {  // properties == null
+        if (properties.isEmpty()) {
             return null;
         }
         return (String) properties.get("nickname");

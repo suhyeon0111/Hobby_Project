@@ -30,15 +30,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        System.out.println("로그인 성공!: " + authentication.getPrincipal());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        System.out.println("(" + userDetails.getName() + ")" + "님이 로그인 했습니다.");
 
         String jwt = authTokenProvider.createUserAuthToken(userDetails.getId().toString()).getToken();
-        System.out.println("jwt = " + jwt);
 
         String url = makeRedirectUrl(jwt);
         if(response.isCommitted()) {
