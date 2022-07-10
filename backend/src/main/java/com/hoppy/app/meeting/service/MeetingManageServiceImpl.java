@@ -34,12 +34,10 @@ public class MeetingManageServiceImpl implements MeetingManageService {
 
     @Override
     public Meeting createMeeting(CreateMeetingDto dto) throws BusinessException {
-        // 이름 중복 검사
         if(checkTitleDuplicate(dto.getTitle())) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
         }
 
-        // 카테고리 유효성 검사
         if(Category.intToCategory(dto.getCategory()) == Category.ERROR) {
             throw new BusinessException(ErrorCode.CATEGORY_ERROR);
         }
@@ -49,6 +47,6 @@ public class MeetingManageServiceImpl implements MeetingManageService {
 
     @Override
     public boolean checkTitleDuplicate(String title) {
-        return 0 < meetingRepository.countMeetingByTitle(title);
+        return meetingRepository.findMeetingByTitle(title).isPresent();
     }
 }
