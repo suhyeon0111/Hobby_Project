@@ -22,6 +22,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+/*
+
 @SpringBootTest
 //@WithMockUser
 //@RunWith(SpringRunner.class)
@@ -81,3 +83,5 @@ public class CustomOAuth2UserServiceTest {
 //        userDetailsService.print();
 //    }
 }
+
+*/

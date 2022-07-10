@@ -44,18 +44,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
-        http.csrf().disable();
         http
-                    .authorizeRequests()
-                    .antMatchers("/", "/oauth2/**", "/login/**")
-                    .permitAll()
-                    .anyRequest().authenticated()
+                .httpBasic().disable()
+                .csrf().disable()
+                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
                 .and()
-                    .oauth2Login()
-                    .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .userInfoEndpoint()
-                    .userService(oAuth2UserService);
+                .authorizeRequests()
+//                .antMatchers("/oauth2/**", "/login/**").permitAll()
+//                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .oauth2Login()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .userInfoEndpoint()
+                .userService(oAuth2UserService);
+
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

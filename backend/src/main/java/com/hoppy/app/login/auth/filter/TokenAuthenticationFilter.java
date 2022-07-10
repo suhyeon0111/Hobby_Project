@@ -38,8 +38,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             } else {
                 System.out.println("유효하지 않은 토큰입니다.");
             }
-
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 }
