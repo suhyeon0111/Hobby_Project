@@ -502,7 +502,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>GET /api/upload/presigned/{filename}</pre>
+<pre>GET /api/upload/presigned?filename={name}&amp;contentType={type}</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -518,7 +518,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220701T155604Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220701%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=6a6221fe5cab7745f986f22109cfcf6139277c184ef5c9739086a0ad96bec3ef"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220628T163524Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220628%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=31ec53fb7bb8800c58d0c7655ea26bba3a006dc3f16137296df692e2ae6ff211"
   }
 }</code></pre>
 </div>

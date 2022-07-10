@@ -21,8 +21,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-@ExtendWith(SpringExtension.class)
+@SpringBootTest //(webEnvironment = WebEnvironment.MOCK)
+//@ExtendWith(SpringExtension.class)
 @EnableMockMvc
 @AutoConfigureRestDocs
 class UploadControllerTest {
@@ -34,7 +34,7 @@ class UploadControllerTest {
     void getPresignedUrl() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/upload/presigned/test"))
+                        .get("/upload/presigned?filename=test.png&contentType=image/png"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("message", is("URL 발급 완료")))
                 .andDo(document("get-presigned-url",

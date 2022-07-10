@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,10 +21,11 @@ public class UploadController {
     private final UploadService uploadService;
     private final ResponseService responseService;
 
-    @GetMapping("/presigned/{filename}")
-    public ResponseEntity<ResponseDto> getPreSignedURL(@PathVariable("filename") String filename) {
+    @GetMapping("/presigned")
+    public ResponseEntity<ResponseDto> getPreSignedURL(
+            @RequestParam String filename, @RequestParam String contentType) {
 
-        String url = uploadService.getPreSignedUrl(filename);
+        String url = uploadService.getPreSignedUrl(filename, contentType);
 
         return responseService.successResult(
                 SuccessCode.GET_PRESIGNED_URL_SUCCESS,

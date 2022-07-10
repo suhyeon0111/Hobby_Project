@@ -1,7 +1,10 @@
 package com.hoppy.app.login.auth.provider;
 
+import com.hoppy.app.login.auth.authentication.CustomUserDetails;
+import com.hoppy.app.login.auth.exception.TokenValidFailedException;
 import com.hoppy.app.login.auth.token.AuthToken;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Arrays;
@@ -24,7 +27,6 @@ public class AuthTokenProvider {
     @Value("${app.auth.tokenExpiry}")
     private String expiry;
     private final Key key;
-    private String socialId;
 
     private static final String AUTHORITIES_KEY = "ROLE_";
 
@@ -32,13 +34,13 @@ public class AuthTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public AuthToken createToken(String id, String expiry) {
+    public AuthToken createToken(String socialId, String expiry) {
         Date expiryDate = getExpiryDate(expiry);
-        return new AuthToken(id, expiryDate, key);
+        return new AuthToken(socialId, expiryDate, key);
     }
 
-    public AuthToken createUserAuthToken(Long id) {
-        return createToken(id.toString(), expiry);
+    public AuthToken createUserAuthToken(String socialId) {
+        return createToken(socialId, expiry);
     }
 
     public AuthToken convertAuthToken(String token) {
@@ -49,23 +51,32 @@ public class AuthTokenProvider {
         return new Date(System.currentTimeMillis() + Long.parseLong(expiry));
     }
 
+    /**
+     * Jwt decode를 통해 사용자 고유식별 값인 socialId(pk)를 추출
+     */
+    public String getSocialId(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+    }
+
     public Authentication getAuthentication(AuthToken authToken) {
 
         if(authToken.validate()) {
             Claims claims = authToken.getTokenClaims();
-            Collection<? extends GrantedAuthority> authorities =
+            Collection<GrantedAuthority> authorities =
                     Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
-
-            User principal = new User(claims.getSubject(), "", authorities);
+            
+            CustomUserDetails principal = CustomUserDetails.builder()
+                    .id(Long.valueOf(claims.getSubject()))
+                    .password("")
+                    .authorities(authorities)
+                    .build();
 
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
         } else {
-            System.out.println("ApplicationTokenProvider-getAuthentication Error cause");
-//            throw new TokenValidException();
-            authToken.getTokenClaims();
-            throw new NullPointerException();
+            log.info("Token Valid Failed Exception.");
+            throw new TokenValidFailedException();
         }
     }
 }

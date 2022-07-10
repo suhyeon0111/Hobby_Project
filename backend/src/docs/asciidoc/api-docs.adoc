@@ -18,7 +18,7 @@ include::{snippets}/health-check/response-body.adoc[]
 === PresignedURL 발급받기
 .request url
 ----
-GET /api/upload/presigned/{filename}
+GET /api/upload/presigned?filename={name}&contentType={type}
 ----
 .request body
 include::{snippets}/get-presigned-url/request-body.adoc[]

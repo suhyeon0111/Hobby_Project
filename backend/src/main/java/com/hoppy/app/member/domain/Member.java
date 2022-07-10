@@ -18,10 +18,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter  // 회원 정보 수정을 위해 추가
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,14 +30,15 @@ import lombok.ToString;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;  //  == socialId
 
-    // 기존 인스턴스 start
     private String email;
     private String username;
-    private String socialId;
-    private String profileUrl;
+//    private String socialId; // id와 개념이 통일되었음
+    private String profileImageUrl;
+    private String intro;
+    private String password;
+
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
