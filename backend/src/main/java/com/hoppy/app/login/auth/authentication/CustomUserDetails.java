@@ -30,7 +30,7 @@ public class CustomUserDetails implements OAuth2User, UserDetails, OidcUser {
     private final Role role;
     private final Collection<GrantedAuthority> authorities;
     private Map<String, Object> attributes;
-    
+
     @Override
     public String getName() {
         return id.toString();
