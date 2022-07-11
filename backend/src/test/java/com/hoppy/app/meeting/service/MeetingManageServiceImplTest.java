@@ -24,11 +24,10 @@ class MeetingManageServiceImplTest {
     void createMeeting() {
 
         CreateMeetingDto createMeetingDto = CreateMeetingDto.builder()
-                .memberId(1L)
                 .category(1)
                 .content("testContent")
                 .title("testTitle")
-                .filename("test")
+                .url("test")
                 .memberLimit(10)
                 .build();
 

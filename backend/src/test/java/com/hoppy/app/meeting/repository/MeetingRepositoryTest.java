@@ -8,6 +8,7 @@ import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.assertj.core.api.Assertions;
@@ -53,7 +54,7 @@ class MeetingRepositoryTest {
             Member member1 = Member.builder().id((long) i * random.nextInt(100)).build();
             Member member2 = Member.builder().id((long) i * random.nextInt(100)).build();
 
-            Member member2 = memberRepository.save(Member
+            member2 = memberRepository.save(Member
                     .builder()
                     .username("test" + (i + 1))
                     .build());
