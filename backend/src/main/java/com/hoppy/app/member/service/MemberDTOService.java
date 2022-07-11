@@ -1,9 +1,6 @@
 package com.hoppy.app.member.service;
-import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.LoginMemberDto;
-import com.hoppy.app.member.repository.MemberRepository;
-import com.hoppy.app.mypage.service.UpdateMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

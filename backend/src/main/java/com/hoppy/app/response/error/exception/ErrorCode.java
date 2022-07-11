@@ -1,6 +1,10 @@
 package com.hoppy.app.response.error.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode {
@@ -20,6 +24,7 @@ public enum ErrorCode {
     UNSUPPORTED_JWT(403, "J002", "지원하지 않는 JWT 토큰입니다"),
     SIGNATURE_INVALID_JWT(403, "JOO3", "토큰 Signature 오류"),
     JWT_NOT_FOUND(403, "J004", "Jwt 토큰을 찾을 수 없습니다"),
+    IlLEGAL_JWT(403, "J005", "적절하지 못한 Jwt 토큰 형식입니다."),
 
     // s3
     S3_ACCESS_FAIL(500, "S001", "S3 버킷 접근 에러"),
@@ -52,6 +57,13 @@ public enum ErrorCode {
 
     public int getStatus() {
         return this.status;
+    }
+
+    private static final Map<String, String> CODE_MAP = Collections.unmodifiableMap(Stream.of(values()).collect(
+            Collectors.toMap(ErrorCode::getCode, ErrorCode::name)));
+
+    public static ErrorCode of(final String code) {
+        return ErrorCode.valueOf(CODE_MAP.get(code));
     }
 
 }

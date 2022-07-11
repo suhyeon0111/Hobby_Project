@@ -1,6 +1,7 @@
 package com.hoppy.app.login.auth.config;
 
 import com.hoppy.app.login.auth.filter.TokenAuthenticationFilter;
+import com.hoppy.app.login.auth.filter.TokenExceptionFilter;
 import com.hoppy.app.login.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.hoppy.app.login.auth.handler.TokenAccessDeniedHandler;
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
@@ -28,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService userDetailsService;
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
+
+    private final TokenExceptionFilter tokenExceptionFilter;
 
 //    @Autowired
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -60,6 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userService(oAuth2UserService);
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(tokenExceptionFilter, tokenAuthenticationFilter().getClass());
     }
 
     @Bean
@@ -71,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter(authTokenProvider);
     }
+
 
     @Override
     @Bean(BeanIds.AUTHENTICATION_MANAGER)

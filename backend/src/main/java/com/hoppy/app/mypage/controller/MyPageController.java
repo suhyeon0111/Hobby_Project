@@ -6,8 +6,7 @@ import com.hoppy.app.member.dto.LoginMemberDto;
 import com.hoppy.app.mypage.dto.MyPageMemberDto;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberDTOService;
-import com.hoppy.app.mypage.service.UpdateMemberService;
-import java.security.Principal;
+import com.hoppy.app.mypage.service.UpdateMemberServiceImpl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +23,7 @@ public class MyPageController {
 
     private final MemberRepository memberRepository;
     private final MemberDTOService memberDTOService;
-    private final UpdateMemberService updateMemberService;
+    private final UpdateMemberServiceImpl updateMemberServiceImpl;
 
     /**
      * 모든 api 요청 메소드에서 Principal을 인자로 설정해두면, 현재 인증된 사용자 정보를 가져올 수 있음.
@@ -59,7 +58,7 @@ public class MyPageController {
             @RequestParam("intro") String intro
     ) {
         Long memberId = userDetails.getId();
-        Member member = updateMemberService.updateMember(memberId, username, profileImageUrl, intro);
+        Member member = updateMemberServiceImpl.updateMember(memberId, username, profileImageUrl, intro);
         return MyPageMemberDto.builder().username(member.getUsername()).profileUrl(member.getProfileImageUrl()).intro(member.getIntro()).build();
     }
 }
