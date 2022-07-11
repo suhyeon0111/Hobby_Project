@@ -2,7 +2,6 @@ package com.hoppy.app.meeting.domain;
 
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
-import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.domain.MemberMeetingLike;
 import java.util.HashSet;
@@ -18,12 +17,9 @@ import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.ToString.Exclude;
-import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Getter
@@ -66,7 +62,7 @@ public class Meeting {
 
     public static Meeting dtoToMeeting(CreateMeetingDto dto) {
         return Meeting.builder()
-                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
+                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getUrl())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .memberLimit(dto.getMemberLimit())
