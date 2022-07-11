@@ -39,8 +39,6 @@ class MeetingRepositoryTest {
     @Autowired
     EntityManager em;
 
-
-
     @Transactional
     @BeforeAll
     void beforeAll() {
@@ -54,10 +52,8 @@ class MeetingRepositoryTest {
             Member member1 = Member.builder().id((long) i * random.nextInt(100)).build();
             Member member2 = Member.builder().id((long) i * random.nextInt(100)).build();
 
-            member2 = memberRepository.save(Member
-                    .builder()
-                    .username("test" + (i + 1))
-                    .build());
+            memberRepository.save(member1);
+            memberRepository.save(member2);
 
             Category meetingCategory;
             if(i % 2 == 0) meetingCategory = Category.HEALTH;

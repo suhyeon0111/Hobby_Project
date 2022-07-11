@@ -9,42 +9,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoppy.app.login.auth.config.SecurityConfig;
+import com.hoppy.app.login.WithMockCustomUser;
+import com.hoppy.app.login.auth.provider.AuthTokenProvider;
+import com.hoppy.app.login.auth.token.AuthToken;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
-import com.hoppy.app.meeting.service.MeetingInquiryService;
-import com.hoppy.app.meeting.service.MeetingManageService;
-import com.hoppy.app.member.Role;
+import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.domain.MemberMeeting;
+import com.hoppy.app.member.domain.MemberMeetingLike;
+import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
+import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
-import com.hoppy.app.member.service.MemberService;
-import com.hoppy.app.response.dto.ResponseDto;
-import com.hoppy.app.response.service.ResponseService;
-import com.hoppy.app.response.service.SuccessCode;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 @AutoConfigureRestDocs
 @SpringBootTest
@@ -64,22 +57,68 @@ class MeetingControllerTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private MeetingRepository meetingRepository;
+
+    @Autowired
+    private MemberMeetingRepository memberMeetingRepository;
+
+    @Autowired
+    private MemberMeetingLikeRepository memberMeetingLikeRepository;
+
+    @Autowired
+    private AuthTokenProvider authTokenProvider;
+
+    String getToken() {
+        return authTokenProvider.createUserAuthToken("1").getToken();
+    }
+
     @BeforeAll
     void before() {
+        Member member = Member.builder().id(1L).build();
+        memberRepository.save(member);
+
+        for (int i = 0; i < 20; i++) {
+            Meeting meeting = Meeting.builder()
+                    .category(Category.ART)
+                    .title(i + "번 제목")
+                    .content(i + "번 컨텐츠")
+                    .memberLimit(15)
+                    .build();
+
+            meeting = meetingRepository.save(meeting);
+            memberMeetingRepository.save(MemberMeeting.builder()
+                    .meetingId(meeting.getId())
+                    .memberId(member.getId())
+                    .build()
+            );
+
+            if(i % 3 == 0) {
+                memberMeetingLikeRepository.save(MemberMeetingLike.builder()
+                        .meetingId(meeting.getId())
+                        .memberId(member.getId())
+                        .build()
+                );
+            }
+        }
+    }
+
+    @AfterAll
+    void after() {
+        memberRepository.deleteAll();
+        memberMeetingRepository.deleteAll();
+        memberMeetingLikeRepository.deleteAll();
+        meetingRepository.deleteAll();
     }
 
     @Test
     void createMeetingTest() throws Exception {
 
-        Member member = Member.builder().build();
-        member = memberRepository.save(member);
-
         CreateMeetingDto createMeetingDto = CreateMeetingDto.builder()
-                .filename("test")
+                .url("test")
                 .title("testTitle")
                 .content("testContent")
                 .memberLimit(10)
-                .memberId(member.getId())
                 .category(1)
                 .build();
 
@@ -89,6 +128,7 @@ class MeetingControllerTest {
                         .post("/meeting")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .content(content)
+                        .header("Authorization", "Bearer " + getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -101,8 +141,18 @@ class MeetingControllerTest {
     }
 
     @Test
-    void getMeetingListByCategoryWithPagingTest() {
+    void getMeetingListByCategoryWithPagingTest() throws Exception {
 
-
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/meeting?categoryNumber=2")
+                .header("Authorization", "Bearer " + getToken())
+                .accept(MediaType.APPLICATION_JSON)
+            )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(document("meeting-pagination",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 }
