@@ -46,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserInfo userInfo = new KakaoOAuth2UserInfo(user.getAttributes());
         System.out.println("userInfo.getSocialId() = " + userInfo.getSocialId());
-        Optional<Member> savedMember = memberRepository.findBySocialId(userInfo.getSocialId());
+        Optional<Member> savedMember = memberRepository.findById(Long.valueOf(userInfo.getSocialId()));
 
         /**
          * (Note: 새로운 Member 선언 말고 다른 방법 고민할 것)
@@ -90,8 +90,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     @PreAuthorize("isAuthenticated()")
-    public String saveMember(Member member) {
-        return memberRepository.save(member).getSocialId();
+    public Long saveMember(Member member) {
+        return memberRepository.save(member).getId();
     }
 
     @PreAuthorize("isAuthenticated()")

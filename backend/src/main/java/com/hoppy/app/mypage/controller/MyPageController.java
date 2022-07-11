@@ -1,5 +1,6 @@
 package com.hoppy.app.mypage.controller;
 
+import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.LoginMemberDto;
 import com.hoppy.app.mypage.dto.MyPageMemberDto;
@@ -9,6 +10,7 @@ import com.hoppy.app.mypage.service.UpdateMemberService;
 import java.security.Principal;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +35,9 @@ public class MyPageController {
      * 현재 로그인 한 사용자 정보를 반환
      */
     @GetMapping("/show")
-    public LoginMemberDto showMemberPage(Principal principal) {
-        String socialId = principal.getName();
-        Optional<Member> member = memberRepository.findBySocialId(socialId);
+    public LoginMemberDto showMemberPage(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getId();
+        Optional<Member> member = memberRepository.findById(memberId);
         if(member.isPresent()) {
             LoginMemberDto memberDto = memberDTOService.loginSuccessResponse(member.get());
             return memberDto;
@@ -50,9 +52,14 @@ public class MyPageController {
      * 수정된 내용을 응답으로 보냄. (return 타입 void로 설정해도 상관 없을 듯)
      */
     @PutMapping("/update")
-    public MyPageMemberDto updateMember(Principal principal, @RequestParam("username") String username, @RequestParam("profileImageUrl") String profileImageUrl, @RequestParam("intro") String intro) {
-        String socialId = principal.getName();
-        Member member = updateMemberService.updateMember(socialId, username, profileImageUrl, intro);
+    public MyPageMemberDto updateMember(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam("username") String username,
+            @RequestParam("profileImageUrl") String profileImageUrl,
+            @RequestParam("intro") String intro
+    ) {
+        Long memberId = userDetails.getId();
+        Member member = updateMemberService.updateMember(memberId, username, profileImageUrl, intro);
         return MyPageMemberDto.builder().username(member.getUsername()).profileUrl(member.getProfileImageUrl()).intro(member.getIntro()).build();
     }
 }

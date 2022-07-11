@@ -7,6 +7,7 @@ import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
+import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.assertj.core.api.Assertions;
@@ -35,17 +36,20 @@ class MeetingRepositoryTest {
     @Autowired
     EntityManager em;
 
+
+
     @Transactional
     @BeforeAll
     void beforeAll() {
+        Random random = new Random();
         /*
         * 2명의 멤버를 가지는 모임 5개를 생성
         * HEALTH 카테고리 모임 3개
         * LIFE 카테고리 모임 2개
         * */
         for(int i = 0; i < 5; i++) {
-            Member member1 = Member.builder().build();
-            Member member2 = Member.builder().build();
+            Member member1 = Member.builder().id((long) i * random.nextInt(100)).build();
+            Member member2 = Member.builder().id((long) i * random.nextInt(100)).build();
 
             memberRepository.save(member1);
             memberRepository.save(member2);

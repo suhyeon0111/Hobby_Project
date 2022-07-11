@@ -16,7 +16,7 @@ public class MemberDTOService {
      */
     public LoginMemberDto loginSuccessResponse(Member member) {
         return LoginMemberDto.builder()
-                .socialId(member.getSocialId())
+                .id(member.getId())
                 .username(member.getUsername())
                 .email(member.getEmail())
                 .profileUrl(member.getProfileImageUrl())

@@ -9,9 +9,9 @@ import lombok.Setter;
 @Builder
 public class LoginMemberDto {
 
+    private Long id;
     private String email;
     private String username;
     private String profileUrl;
-    private String socialId;
     private String intro;
 }

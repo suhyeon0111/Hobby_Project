@@ -16,21 +16,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 class CustomUserDetailsTest {
 
-    @Test
     CustomUserDetails create(Member member) {
-        return new CustomUserDetails(
-                member.getId(),
-                member.getPassword(),
-                member.getSocialType(),
-                Role.USER,
-                Collections.singletonList(new SimpleGrantedAuthority(Role.USER.toString()))
-        );
+        return CustomUserDetails.builder()
+                .id(member.getId())
+                .password(member.getPassword())
+                .socialType(member.getSocialType())
+                .role(member.getRole())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(Role.USER.toString())))
+                .build();
     }
 
     @Test
     void testCreate() {
+        Long testId = 9876543210L;
+
         Member member = Member.builder()
-                .socialId("9876543210")
+                .id(testId)
                 .password("")
                 .socialType(SocialType.KAKAO)
                 .role(Role.USER).build();
