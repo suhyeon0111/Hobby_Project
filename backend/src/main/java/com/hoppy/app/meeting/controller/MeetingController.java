@@ -1,5 +1,6 @@
 package com.hoppy.app.meeting.controller;
 
+import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,15 +40,13 @@ public class MeetingController {
     private final ResponseService responseService;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> createMeeting(@RequestBody @Valid CreateMeetingDto dto) {
-        Member member = memberService.findMemberById(dto.getMemberId());
+    public ResponseEntity<ResponseDto> createMeeting(
+            @RequestBody @Valid CreateMeetingDto dto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Member member = memberService.findMemberById(userDetails.getId());
         Meeting meeting = meetingManageService.createMeeting(dto);
 
-        /*
-        * 아래에 있는 두개의 save 메서드 호출 순서를 서로 바꾸면
-        * TransientPropertyValueException 이 발생함
-        * 명확한 이유를 알아야할 필요가 있다.
-        * */
         meetingManageService.saveMeeting(meeting);
         meetingManageService.createAndSaveMemberMeetingData(meeting, member);
 
@@ -56,19 +56,18 @@ public class MeetingController {
     @GetMapping
     public ResponseEntity<ResponseDto> getMeetingListByCategoryWithPaging(
             @RequestParam int categoryNumber,
-            @RequestParam long lastId
+            @RequestParam(defaultValue = "0") long lastId,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Category category = Category.intToCategory(categoryNumber);
         if(category == Category.ERROR) {
             throw new BusinessException(ErrorCode.CATEGORY_ERROR);
         }
 
-        Long memberId = 1L; // 유저 아이디
-
         List<Meeting> meetingList = meetingInquiryService.listMeetingByCategory(category, lastId);
         lastId = meetingInquiryService.getListsLastMeetingId(meetingList);
         String nextPagingUrl = meetingInquiryService.createNextPagingUrl(categoryNumber, lastId);
-        List<MeetingDto> meetingDtoList = meetingInquiryService.meetingListToMeetingDtoList(meetingList, memberId);
+        List<MeetingDto> meetingDtoList = meetingInquiryService.meetingListToMeetingDtoList(meetingList, userDetails.getId());
         PagingMeetingDto pagingMeetingDto = PagingMeetingDto.builder()
                 .meetingDtoList(meetingDtoList)
                 .nextPagingUrl(nextPagingUrl)
