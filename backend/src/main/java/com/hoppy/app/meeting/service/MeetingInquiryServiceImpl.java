@@ -29,12 +29,15 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     public long getListsLastMeetingId(List<Meeting> meetingList) {
-        return meetingList.get(meetingList.size() - 1).getId();
+        return meetingList.get(meetingList.size() - 1).getId() - 1;
     }
 
     @Override
     public String createNextPagingUrl(int categoryNumber, long lastId) {
-        return "https://hoppy.kro.kr/api/meeting?categoryNumber=" + categoryNumber + "&lastId=" + lastId;
+        if(lastId >= 0)
+            return "https://hoppy.kro.kr/api/meeting?categoryNumber=" + categoryNumber + "&lastId=" + lastId;
+        else
+            return "end";
     }
 
     @Override
