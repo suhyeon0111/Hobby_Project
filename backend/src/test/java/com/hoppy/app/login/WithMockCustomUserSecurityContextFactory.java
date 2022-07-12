@@ -17,15 +17,12 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
     public SecurityContext createSecurityContext(WithMockCustomUser customUser) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        System.out.println("WithMockCustomUserSecurityContextFactory.createSecurityContext");
-        
         CustomUserDetails userDetails = new CustomUserDetails(
                 Long.parseLong(customUser.id()), customUser.password(), SocialType.KAKAO, Role.USER, Collections.singletonList(new SimpleGrantedAuthority(Role.USER.toString()))
         );
 
 
         System.out.println("userDetails.getName() = " + userDetails.getName());
-        System.out.println("userDetails.getPassword() = " + userDetails.getPassword());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 

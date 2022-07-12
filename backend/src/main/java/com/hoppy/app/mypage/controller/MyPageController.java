@@ -5,7 +5,6 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.LoginMemberDto;
 import com.hoppy.app.mypage.dto.MyPageMemberDto;
 import com.hoppy.app.member.repository.MemberRepository;
-import com.hoppy.app.member.service.MemberDTOService;
 import com.hoppy.app.mypage.service.UpdateMemberServiceImpl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MyPageController {
 
     private final MemberRepository memberRepository;
-    private final MemberDTOService memberDTOService;
     private final UpdateMemberServiceImpl updateMemberServiceImpl;
 
     /**
@@ -38,7 +36,7 @@ public class MyPageController {
         Long memberId = userDetails.getId();
         Optional<Member> member = memberRepository.findById(memberId);
         if(member.isPresent()) {
-            LoginMemberDto memberDto = memberDTOService.loginSuccessResponse(member.get());
+            LoginMemberDto memberDto = LoginMemberDto.of(member.get());
             return memberDto;
         } else {
             System.out.println("존재하지 않는 회원입니다.");

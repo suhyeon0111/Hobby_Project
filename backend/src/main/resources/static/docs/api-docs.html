@@ -460,6 +460,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_모임_생성하기">모임 생성하기</a></li>
 </ul>
 </li>
+<li><a href="#_마이페이지_api">마이페이지 API</a>
+<ul class="sectlevel2">
+<li><a href="#_마이페이지_조회하기">마이페이지 조회하기</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -486,7 +491,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "정상 동작 중",
+  "message" : "�젙�긽 �룞�옉 以�",
   "data" : [ ]
 }</code></pre>
 </div>
@@ -518,7 +523,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220628T163524Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220628%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=31ec53fb7bb8800c58d0c7655ea26bba3a006dc3f16137296df692e2ae6ff211"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220712T101110Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220712%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=eaeb08da331fbb2c802febd40d020e074cac003943a446d0ad1137c8abfbb914"
   }
 }</code></pre>
 </div>
@@ -555,8 +560,40 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "모임 생성 완료",
+  "message" : "紐⑥엫 �깮�꽦 �셿猷�",
   "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_마이페이지_api"><a class="link" href="#_마이페이지_api">마이페이지 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_마이페이지_조회하기"><a class="link" href="#_마이페이지_조회하기">마이페이지 조회하기</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/mypage/show</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "id" : 9999,
+  "email" : "test123@naver.com",
+  "username" : "강해상",
+  "profileUrl" : "https://www.xxx.com//myimage",
+  "intro" : "반갑습니다!"
 }</code></pre>
 </div>
 </div>
@@ -567,7 +604,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-06-29 01:34:57 +0900
+Last updated 2022-07-12 18:50:49 +0900
 </div>
 </div>
 </body>

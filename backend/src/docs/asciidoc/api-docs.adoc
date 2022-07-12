@@ -35,3 +35,14 @@ POST /api/meeting
 include::{snippets}/create-meeting/request-body.adoc[]
 .response body
 include::{snippets}/create-meeting/response-body.adoc[]
+
+== 마이페이지 API
+=== 마이페이지 조회하기
+.request url
+----
+GET /api/mypage/show
+----
+.request body
+include::{snippets}/show-mypage/request-body.adoc[]
+.response body
+include::{snippets}/show-mypage/response-body.adoc[]
