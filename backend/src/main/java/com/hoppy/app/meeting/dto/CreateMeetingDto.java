@@ -16,9 +16,6 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class CreateMeetingDto {
 
-    @NotNull(message = "멤버 id를 전송해주세요")
-    Long memberId;
-
     @NotNull(message = "카테고리를 선택해주세요")
     int category;
 
@@ -33,7 +30,7 @@ public class CreateMeetingDto {
     @NotNull(message = "정원을 입력해주세요")
     @Min(value = 2, message = "최소 인원은 2명 입니다")
     @Max(value = 20, message = "최대 인원은 20명 입니다")
-    Integer memberLimit;
+    int memberLimit;
 
-    String filename;
+    String url;
 }

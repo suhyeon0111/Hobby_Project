@@ -19,6 +19,7 @@ public enum SuccessCode {
     GET_PRESIGNED_URL_SUCCESS("URL 발급 완료", 200),
 
     CREATE_MEETING_SUCCESS("모임 생성 완료", 200),
+    INQUIRY_MEETING_SUCCESS("모임 조회 완료", 200),
     ;
 
     private final String message;

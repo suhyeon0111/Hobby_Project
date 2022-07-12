@@ -3,6 +3,9 @@ package com.hoppy.app.meeting.repository;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,9 +14,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
-//    @Query("select distinct m from Meeting as m join fetch m.participants join fetch m.myMeetingLikes")
-    @Query("select distinct m from Meeting as m left join m.participants left join m.myMeetingLikes where m.category = :category")
+    @Query("select distinct m from Meeting as m left join fetch m.participants left join fetch m.myMeetingLikes where m.category = :category")
     List<Meeting> findAllMeetingByCategoryUsingFetch(@Param("category") Category category);
 
-    Integer countMeetingByTitle(String title);
+    /*
+     * 페이징 기능은 14개씩 데이터를 조회하고 where를 사용해서 no-offset하게 구현한다.
+     * 또한 다음 조회 link를 함께 제공하여 좀 더 restful한 api를 제공한다.
+     * offset은 필요없는 row까지 읽어오고 건너뛰는 과정에서 성능 저하가 발생하지만
+     * where는 필요한 index부터 조회하기 때문에 성능 저하가 발생하지 않는다.
+     *
+     * myMeetingLikes를 fetch해서 가져올 필요가 있을까?
+     * 이렇게 가져오는 이유는 현재 사용자가 해당 모임에 좋아요를 눌렀는지 확인하기 위함이다.
+     * 이렇게 하지말고 해당 유저가 좋아요 누른 모임 목록을 따로 불러와서
+     * 모임에 좋아요를 눌렀는지 확인하는 것이 성능상 이점이 있을 것으로 보인다.
+     * stream과 filter를 사용해보자.
+     * */
+    @Query("select distinct m from Meeting as m left join fetch m.participants where m.category = :category and m.id > :lastId order by m.id desc")
+    List<Meeting> infiniteScrollPagingMeeting(Category category, Long lastId, Pageable pageable);
+
+    Page<Meeting> findAllMeetingByCategoryOrderByIdDesc(Category category, Pageable pageable);
+
+    Optional<Meeting> findMeetingByTitle(String title);
 }

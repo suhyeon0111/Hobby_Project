@@ -35,3 +35,18 @@ POST /api/meeting
 include::{snippets}/create-meeting/request-body.adoc[]
 .response body
 include::{snippets}/create-meeting/response-body.adoc[]
+
+=== 모임 카테고리 조회 (페이징)
+.request url
+----
+최초 조회시
+GET /api/meeting?categoryNumber={카테고리 번호}
+----
+.request header
+include::{snippets}/meeting-pagination/http-request.adoc[]
+.response body
+----
+id : 모임의 id를 나타냄
+liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄
+----
+include::{snippets}/meeting-pagination/response-body.adoc[]
