@@ -78,21 +78,11 @@ class UserProfileControllerTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         Optional<Member> optMember = memberRepository.findById(principal.getId());
-        
+        System.out.println("principal.getId() = " + principal.getId());
+
         MyProfileDto myProfileDto = MyProfileDto.of(optMember.get());
 
         System.out.println("myProfileDto.getProfileUrl() = " + myProfileDto.getProfileUrl());
-
-        SuccessCode responseCode = SuccessCode.SHOW_PROFILE_SUCCESS;
-        ResponseEntity<ResponseDto> responseEntity = new ResponseEntity<>(
-                ResponseDto.commonResponse(responseCode.getStatus(), responseCode.getMessage(),
-                        myProfileDto),
-                HttpStatus.valueOf(responseCode.getStatus()));
-
-        System.out.println("responseEntity.getBody().getData() = " + responseEntity.getBody().getData());
-        
-        Mockito.when(responseService.successResult(Mockito.any(SuccessCode.class)))
-                .thenReturn(responseEntity);
 
         mvc.perform(MockMvcRequestBuilders
                 .get("/myProfile")
@@ -101,23 +91,24 @@ class UserProfileControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 ).andDo(print());
 
-        /*mvc.perform(MockMvcRequestBuilders
-                .get("/myProfile")).andExpect(status().isOk())
-                        .andDo(print());
 
-        mvc.perform(MockMvcRequestBuilders
-                .get("/myProfile")
-                .with(SecurityMockMvcRequestPostProcessors.csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-//                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-        )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("message", is(SuccessCode.SHOW_PROFILE_SUCCESS)))
-                .andDo(document("show-myProfile",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
-                ));*/
+//        mvc.perform(MockMvcRequestBuilders
+//                .get("/myProfile")).andExpect(status().isOk())
+//                        .andDo(print());
+
+//        mvc.perform(MockMvcRequestBuilders
+//                .get("/myProfile")
+//                .with(SecurityMockMvcRequestPostProcessors.csrf())
+//                .contentType(MediaType.APPLICATION_JSON)
+//                                .accept(MediaType.APPLICATION_JSON)
+////                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+//        )
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("message", is(SuccessCode.SHOW_PROFILE_SUCCESS)))
+//                .andDo(document("show-myProfile",
+//                        preprocessRequest(prettyPrint()),
+//                        preprocessResponse(prettyPrint())
+//                ));
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.hoppy.app.mypage.dto.MyPageMemberDto;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.mypage.service.UpdateMemberServiceImpl;
 import com.hoppy.app.response.dto.ResponseDto;
+import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
@@ -44,11 +45,7 @@ public class UserProfileController {
 //            return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
             return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
         } else {
-            ErrorCode errorCode = ErrorCode.MEMBER_NOT_FOUND;
-            return new ResponseEntity<>(
-                    ResponseDto.commonResponse(errorCode.getStatus(), errorCode.getMessage()),
-                    HttpStatus.valueOf(errorCode.getCode())
-            );
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
 
