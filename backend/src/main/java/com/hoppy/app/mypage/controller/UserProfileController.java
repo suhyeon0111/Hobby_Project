@@ -15,6 +15,7 @@ import com.hoppy.app.response.service.SuccessCode;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/api")
 public class UserProfileController {
 
     private final MemberRepository memberRepository;
@@ -36,31 +36,42 @@ public class UserProfileController {
     /**
      * 현재 로그인 한 사용자 정보를 반환
      */
-    @GetMapping("/myProfile")
+
+    /**
+     * 실제 web 테스트 시엔 잘 동작하는데, Test (UserProfileControllerTest.java) 에서 Test에서 응답 Body가 비어있는 현상
+     * MockHttpServletResponse:
+     *            Status = 200
+     *     Error message = null
+     *           Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", X-Content-Type-Options:"nosniff", X-XSS-Protection:"1; mode=block", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     *      Content type = null
+     *              Body =
+     *     Forwarded URL = null
+     *    Redirected URL = null
+     *           Cookies = []
+     */
+/*    @GetMapping("/myProfile")
     public ResponseEntity<ResponseDto> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
         Optional<Member> member = memberRepository.findById(memberId);
         if(member.isPresent()) {
             MyProfileDto myProfileDto = MyProfileDto.of(member.get());
-//            return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
             return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
         } else {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
         }
-    }
+    }*/
 
-//    @GetMapping("/myProfile")
-//    public MyProfileDto showMyProfile1(@AuthenticationPrincipal CustomUserDetails userDetails) {
-//        Long memberId = userDetails.getId();
-//        Optional<Member> member = memberRepository.findById(memberId);
-//        if(member.isPresent()) {
-//            MyProfileDto myProfileDto = MyProfileDto.of(member.get());
-//            return myProfileDto;
-//        } else {
-//            ErrorCode errorCode = ErrorCode.MEMBER_NOT_FOUND;
-//            return null;
-//        }
-//    }
+    @GetMapping("/myprofile")
+    public ResponseEntity<?> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getId();
+        Optional<Member> member = memberRepository.findById(memberId);
+        if(member.isPresent()) {
+            MyProfileDto myProfileDto = MyProfileDto.of(member.get());
+            return ResponseEntity.ok().body(myProfileDto);
+        } else {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+    }
     /**
      * 탈퇴한 회원일 경우 예외 처리 추가
      * Member에 탈퇴 여부를 확인하는 필드 추가 필요
@@ -77,12 +88,7 @@ public class UserProfileController {
             UserProfileDto userProfileDto = UserProfileDto.of(member.get());
             return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
         } else {
-            ErrorCode errorCode = ErrorCode.QUIT_MEMBER;
-            ResponseEntity<ResponseDto> responseEntity = new ResponseEntity<>(
-                    ResponseDto.commonResponse(errorCode.getStatus(), errorCode.getMessage()),
-                    HttpStatus.valueOf(errorCode.getCode())
-            );
-            return responseEntity;
+            throw new BusinessException(ErrorCode.DELETED_MEMBER);
         }
     }
     /**

@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.hoppy.app.EnableMockMvc;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
@@ -22,6 +23,9 @@ import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import javax.print.attribute.standard.Media;
+import javax.transaction.Transactional;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -78,37 +82,21 @@ class UserProfileControllerTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         Optional<Member> optMember = memberRepository.findById(principal.getId());
-        System.out.println("principal.getId() = " + principal.getId());
 
         MyProfileDto myProfileDto = MyProfileDto.of(optMember.get());
 
-        System.out.println("myProfileDto.getProfileUrl() = " + myProfileDto.getProfileUrl());
-
         mvc.perform(MockMvcRequestBuilders
-                .get("/myProfile")
+                .get("/myprofile")
                 .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                ).andDo(print());
-
-
-//        mvc.perform(MockMvcRequestBuilders
-//                .get("/myProfile")).andExpect(status().isOk())
-//                        .andDo(print());
-
-//        mvc.perform(MockMvcRequestBuilders
-//                .get("/myProfile")
-//                .with(SecurityMockMvcRequestPostProcessors.csrf())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                                .accept(MediaType.APPLICATION_JSON)
-////                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-//        )
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("message", is(SuccessCode.SHOW_PROFILE_SUCCESS)))
-//                .andDo(document("show-myProfile",
-//                        preprocessRequest(prettyPrint()),
-//                        preprocessResponse(prettyPrint())
-//                ));
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("username", is(myProfileDto.getUsername())))
+                .andDo(document("show-myProfile",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
     @Test

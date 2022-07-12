@@ -40,9 +40,9 @@ include::{snippets}/create-meeting/response-body.adoc[]
 === 마이페이지 조회하기
 .request url
 ----
-GET /api/mypage/show
+GET /api/mypage
 ----
 .request body
-include::{snippets}/show-mypage/request-body.adoc[]
+include::{snippets}/show-myProfile/request-body.adoc[]
 .response body
-include::{snippets}/show-mypage/response-body.adoc[]
+include::{snippets}/show-myProfile/response-body.adoc[]

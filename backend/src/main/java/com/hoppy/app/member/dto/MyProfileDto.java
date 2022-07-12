@@ -15,7 +15,7 @@ public class MyProfileDto {
     private String profileUrl;
     private String intro;
 
-    private MyProfileDto(Long id, String email, String username, String profileUrl, String intro) {
+    public MyProfileDto(Long id, String email, String username, String profileUrl, String intro) {
         this.id = id;
         this.email = email;
         this.username = username;
