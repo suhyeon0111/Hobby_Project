@@ -458,11 +458,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_모임_api">모임 API</a>
 <ul class="sectlevel2">
 <li><a href="#_모임_생성하기">모임 생성하기</a></li>
-</ul>
-</li>
-<li><a href="#_마이페이지_api">마이페이지 API</a>
-<ul class="sectlevel2">
-<li><a href="#_마이페이지_조회하기">마이페이지 조회하기</a></li>
+<li><a href="#_모임_카테고리_조회_페이징">모임 카테고리 조회 (페이징)</a></li>
 </ul>
 </li>
 </ul>
@@ -491,7 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "�젙�긽 �룞�옉 以�",
+  "message" : "정상 동작 중",
   "data" : [ ]
 }</code></pre>
 </div>
@@ -523,7 +519,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220712T161637Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220712%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=3c10a6705b24ec472d4ac6f3438b71020762aa4f6d647702932c3f3fa257cdc9"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220711T155315Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220711%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=33518e33bee2e3bccfb9c7c7a6bfe64036cbba906036aaa77c9ae4d3daf9bc27"
   }
 }</code></pre>
 </div>
@@ -546,12 +542,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">request body</div>
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "memberId" : 1,
   "category" : 1,
   "title" : "testTitle",
   "content" : "testContent",
   "memberLimit" : 10,
-  "filename" : "test"
+  "url" : "test"
 }</code></pre>
 </div>
 </div>
@@ -560,40 +555,144 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "紐⑥엫 �깮�꽦 �셿猷�",
+  "message" : "모임 생성 완료",
   "data" : [ ]
 }</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_마이페이지_api"><a class="link" href="#_마이페이지_api">마이페이지 API</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_마이페이지_조회하기"><a class="link" href="#_마이페이지_조회하기">마이페이지 조회하기</a></h3>
+<h3 id="_모임_카테고리_조회_페이징"><a class="link" href="#_모임_카테고리_조회_페이징">모임 카테고리 조회 (페이징)</a></h3>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>GET /api/mypage</pre>
+<pre>최초 조회시
+GET /api/meeting?categoryNumber={카테고리 번호}</pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">request body</div>
+<div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code></code></pre>
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting?categoryNumber=2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiUk9MRV8iOiJVU0VSIiwiZXhwIjoxNjU3NTY5MTg4fQ.jUFlRCzcJgvF04uImPnfzvnoXpbb8FWb_xlazMJjZRQ
+Accept: application/json
+Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">response body</div>
 <div class="content">
+<pre>id : 모임의 id를 나타냄
+liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="highlight nowrap"><code>{
-  "id" : 9999,
-  "email" : "test123@naver.com",
-  "username" : "강해상",
-  "profileUrl" : "https://www.xxx.com//myimage",
-  "intro" : "반갑습니다!"
+  "status" : 200,
+  "message" : "모임 조회 완료",
+  "data" : {
+    "meetingDtoList" : [ {
+      "id" : 20,
+      "url" : "none",
+      "title" : "19번 제목",
+      "content" : "19번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 19,
+      "url" : "none",
+      "title" : "18번 제목",
+      "content" : "18번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
+      "id" : 18,
+      "url" : "none",
+      "title" : "17번 제목",
+      "content" : "17번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 17,
+      "url" : "none",
+      "title" : "16번 제목",
+      "content" : "16번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 16,
+      "url" : "none",
+      "title" : "15번 제목",
+      "content" : "15번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
+      "id" : 15,
+      "url" : "none",
+      "title" : "14번 제목",
+      "content" : "14번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 14,
+      "url" : "none",
+      "title" : "13번 제목",
+      "content" : "13번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 13,
+      "url" : "none",
+      "title" : "12번 제목",
+      "content" : "12번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
+      "id" : 12,
+      "url" : "none",
+      "title" : "11번 제목",
+      "content" : "11번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 11,
+      "url" : "none",
+      "title" : "10번 제목",
+      "content" : "10번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 10,
+      "url" : "none",
+      "title" : "9번 제목",
+      "content" : "9번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
+      "id" : 9,
+      "url" : "none",
+      "title" : "8번 제목",
+      "content" : "8번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 8,
+      "url" : "none",
+      "title" : "7번 제목",
+      "content" : "7번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 7,
+      "url" : "none",
+      "title" : "6번 제목",
+      "content" : "6번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    } ],
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=6"
+  }
 }</code></pre>
 </div>
 </div>
@@ -604,7 +703,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-13 01:09:32 +0900
+Last updated 2022-07-12 00:40:55 +0900
 </div>
 </div>
 </body>

@@ -12,19 +12,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Meeting {
 
     @Id
@@ -46,20 +48,21 @@ public class Meeting {
     @Column(nullable = false)
     private Integer memberLimit;
 
-    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meetingId")
     @Builder.Default
+    @ToString.Exclude
     private Set<MemberMeeting> participants = new HashSet<>();
 
-//  batch size를 설정하여 DB 성능 이슈(N + 1)가 발생하는 것을 방지할 수 있다.
-    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meetingId")
     @Builder.Default
+    @ToString.Exclude
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
     public static Meeting dtoToMeeting(CreateMeetingDto dto) {
         return Meeting.builder()
-                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
+                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getUrl())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .memberLimit(dto.getMemberLimit())
