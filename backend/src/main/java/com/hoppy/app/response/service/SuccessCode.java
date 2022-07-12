@@ -20,6 +20,8 @@ public enum SuccessCode {
 
     CREATE_MEETING_SUCCESS("모임 생성 완료", 200),
     INQUIRY_MEETING_SUCCESS("모임 조회 완료", 200),
+
+    SHOW_PROFILE_SUCCESS("유저 프로필 조회 완료", 200)
     ;
 
     private final String message;

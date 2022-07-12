@@ -50,3 +50,15 @@ id : 모임의 id를 나타냄
 liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄
 ----
 include::{snippets}/meeting-pagination/response-body.adoc[]
+
+== 유저 프로필 API
+
+=== 마이 페이지 조회
+.request url
+----
+GET /api/myprofile
+----
+.request body
+include::{snippets}/show-myProfile/request-body.adoc[]
+.response body
+include::{snippets}/show-myProfile/response-body.adoc[]
