@@ -7,8 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-public class LoginMemberDto {
+public class MyProfileDto {
 
     private Long id;
     private String email;
@@ -16,7 +15,7 @@ public class LoginMemberDto {
     private String profileUrl;
     private String intro;
 
-    private LoginMemberDto(Long id, String email, String username, String profileUrl, String intro) {
+    private MyProfileDto(Long id, String email, String username, String profileUrl, String intro) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -24,7 +23,7 @@ public class LoginMemberDto {
         this.intro = intro;
     }
 
-    public static LoginMemberDto of(Member member) {
-        return new LoginMemberDto(member.getId(), member.getEmail(), member.getUsername(), member.getProfileImageUrl(), member.getIntro());
+    public static MyProfileDto of(Member member) {
+        return new MyProfileDto(member.getId(), member.getEmail(), member.getUsername(), member.getProfileImageUrl(), member.getIntro());
     }
 }

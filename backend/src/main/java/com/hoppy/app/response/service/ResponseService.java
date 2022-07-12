@@ -1,5 +1,6 @@
 package com.hoppy.app.response.service;
 
+import com.hoppy.app.member.dto.MyProfileDto;
 import com.hoppy.app.response.dto.ResponseDto;
 import org.springframework.http.ResponseEntity;
 
