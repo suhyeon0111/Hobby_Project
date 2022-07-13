@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagingMeetingDto {
 
-    private List<MeetingDto> meetingDtoList;
+    private List<MeetingDto> meetingList;
 
     private String nextPagingUrl;
 }

@@ -32,6 +32,10 @@ include::{snippets}/get-presigned-url/response-body.adoc[]
 POST /api/meeting
 ----
 .request body
+----
+category : 모임의 카테고리 번호 : 노션 참고
+memberLimit : 최소 2 최대 20 입니다.
+----
 include::{snippets}/create-meeting/request-body.adoc[]
 .response body
 include::{snippets}/create-meeting/response-body.adoc[]
