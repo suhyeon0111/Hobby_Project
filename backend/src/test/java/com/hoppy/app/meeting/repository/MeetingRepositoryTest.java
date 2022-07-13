@@ -20,7 +20,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
@@ -39,18 +38,16 @@ class MeetingRepositoryTest {
     @Autowired
     EntityManager em;
 
-    @Transactional
     @BeforeAll
     void beforeAll() {
-        Random random = new Random();
         /*
         * 2명의 멤버를 가지는 모임 5개를 생성
         * HEALTH 카테고리 모임 3개
         * LIFE 카테고리 모임 2개
         * */
         for(int i = 0; i < 5; i++) {
-            Member member1 = Member.builder().id((long) i * random.nextInt(100)).build();
-            Member member2 = Member.builder().id((long) i * random.nextInt(100)).build();
+            Member member1 = Member.builder().id((long) i + (2 * i)).build();
+            Member member2 = Member.builder().id(member1.getId() + 1).build();
 
             memberRepository.save(member1);
             memberRepository.save(member2);
@@ -60,6 +57,7 @@ class MeetingRepositoryTest {
             else meetingCategory = Category.LIFE;
 
             Meeting meeting = meetingRepository.save(Meeting.builder()
+                    .ownerId(member1.getId())
                     .url("none")
                     .title(i + "번 모임")
                     .content(i + "번 모임 회원들 모여라")
@@ -67,12 +65,12 @@ class MeetingRepositoryTest {
                     .memberLimit(10)
                     .build());
 
-            MemberMeeting memberMeeting1 = memberMeetingRepository.save(MemberMeeting.builder()
+            memberMeetingRepository.save(MemberMeeting.builder()
                     .meetingId(meeting.getId())
                     .memberId(member1.getId())
                     .build());
 
-            MemberMeeting memberMeeting2 = memberMeetingRepository.save(MemberMeeting.builder()
+            memberMeetingRepository.save(MemberMeeting.builder()
                     .meetingId(meeting.getId())
                     .memberId(member2.getId())
                     .build());
@@ -87,39 +85,6 @@ class MeetingRepositoryTest {
         meetingRepository.deleteAll();
     }
 
-    @DisplayName("HEALTH, LIFE 카테고리 모임을 조회하고 멤버의 수를 확인하는 테스트")
-    @Transactional
-    @Test
-    void findAllMeetingUsingFetchTest() {
-
-        List<Meeting> healthMeetingList = meetingRepository.findAllMeetingByCategoryUsingFetch(Category.HEALTH);
-        Assertions.assertThat(healthMeetingList.size()).isEqualTo(3);
-
-        System.out.println("모임 참가자 수 확인하기");
-
-        for(Meeting m : healthMeetingList) {
-            Assertions.assertThat(m.getParticipants().size()).isEqualTo(2);
-        }
-
-        List<Meeting> LifeMeetingList = meetingRepository.findAllMeetingByCategoryUsingFetch(Category.LIFE);
-        Assertions.assertThat(LifeMeetingList.size()).isEqualTo(2);
-
-        for(Meeting m : LifeMeetingList) {
-            Assertions.assertThat(m.getParticipants().size()).isEqualTo(2);
-        }
-    }
-
-    @DisplayName("No Offset 페이지네이션 테스트")
-    @Transactional
-    @Test
-    void paginationTest() {
-
-        PageRequest pageRequest = PageRequest.of(0, 2);
-        Page<Meeting> result = meetingRepository.findAllMeetingByCategoryOrderByIdDesc(Category.HEALTH, pageRequest);
-
-        Assertions.assertThat(result.getContent().size()).isEqualTo(2);
-    }
-
     @DisplayName("infiniteScrollPaging 테스트")
     @Transactional
     @Test
@@ -127,10 +92,9 @@ class MeetingRepositoryTest {
 
         List<Meeting> result = meetingRepository.infiniteScrollPagingMeeting(Category.HEALTH, 0L, PageRequest.of(0, 100));
 
-        System.out.println("==========result==========");
         System.out.println("조회된 모임 중 마지막 모임 id = " + result.get(result.size() - 1).getId());
         for (Meeting m : result) {
-            System.out.println(m + ", 참여자 " + m.getParticipants().size() + "명");
+            Assertions.assertThat(m.getParticipants().size()).isEqualTo(2);
 
             /*
              * 참여자 목록을 조회할 때 참여자 수 만큼 쿼리가 나가는 효율 문제가 있음
@@ -145,7 +109,6 @@ class MeetingRepositoryTest {
                     .map(MemberMeeting::getMemberId)
                     .collect(Collectors.toList());
 
-            System.out.println("참여자 id = " + membersIdList);
             List<Member> memberList = memberRepository.infiniteScrollPagingMember(membersIdList, 0L, PageRequest.of(0, 100));
 
             System.out.println("참여자 목록");

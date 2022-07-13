@@ -45,7 +45,7 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Member member = memberService.findMemberById(userDetails.getId());
-        Meeting meeting = meetingManageService.createMeeting(dto);
+        Meeting meeting = meetingManageService.createMeeting(dto, member.getId());
 
         meetingManageService.saveMeeting(meeting);
         meetingManageService.createAndSaveMemberMeetingData(meeting, member);
@@ -69,7 +69,7 @@ public class MeetingController {
         String nextPagingUrl = meetingInquiryService.createNextPagingUrl(categoryNumber, lastId);
         List<MeetingDto> meetingDtoList = meetingInquiryService.meetingListToMeetingDtoList(meetingList, userDetails.getId());
         PagingMeetingDto pagingMeetingDto = PagingMeetingDto.builder()
-                .meetingDtoList(meetingDtoList)
+                .meetingList(meetingDtoList)
                 .nextPagingUrl(nextPagingUrl)
                 .build();
 
