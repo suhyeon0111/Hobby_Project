@@ -25,9 +25,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import javax.print.attribute.standard.Media;
 import javax.transaction.Transactional;
+import net.minidev.json.parser.JSONParser;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -51,6 +55,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@TestInstance(Lifecycle.PER_CLASS)
 class UserProfileControllerTest {
 
     @Autowired
@@ -59,19 +64,25 @@ class UserProfileControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    private ResponseService responseService;
+//    @MockBean // 모킹하게되면 responseService가 원래 동작대로 동작할 수 없음
+//    private ResponseService responseService;
 
     /**
      * 이미 가입돼있는 가상의 회원
      */
-    @BeforeEach
+    @BeforeAll
     void makeVirtualMember() {
         memberRepository.save(
                 Member.builder()
                         .id(9999L)
-                        .socialType(SocialType.KAKAO).username("강해상").email("test123@naver.com").password("secret-key")
-                        .profileImageUrl("https://www.xxx.com//myimage").role(Role.USER).intro("반갑습니다!").build()
+                        .socialType(SocialType.KAKAO)
+                        .username("강해상")
+                        .email("test123@naver.com")
+                        .password("secret-key")
+                        .profileImageUrl("https://www.xxx.com//myimage")
+                        .role(Role.USER)
+                        .intro("반갑습니다!")
+                        .build()
         );
     }
 
@@ -83,20 +94,19 @@ class UserProfileControllerTest {
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         Optional<Member> optMember = memberRepository.findById(principal.getId());
 
+        Assertions.assertThat(optMember).isPresent();
         MyProfileDto myProfileDto = MyProfileDto.of(optMember.get());
 
-        mvc.perform(MockMvcRequestBuilders
-                .get("/myprofile")
-                .with(SecurityMockMvcRequestPostProcessors.csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-        )
+        mvc.perform(MockMvcRequestBuilders.get("/myprofile")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+                )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("username", is(myProfileDto.getUsername())))
+                .andExpect(jsonPath("$.data.username", is(myProfileDto.getUsername())))
                 .andDo(document("show-myProfile",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
-                ));
+                        preprocessResponse(prettyPrint()))
+                );
     }
 
     @Test
