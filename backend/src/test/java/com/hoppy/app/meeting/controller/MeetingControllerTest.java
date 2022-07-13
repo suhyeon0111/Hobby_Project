@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
-import com.hoppy.app.login.auth.token.AuthToken;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
@@ -75,6 +74,7 @@ class MeetingControllerTest {
 
         for (int i = 0; i < 20; i++) {
             Meeting meeting = Meeting.builder()
+                    .ownerId(member.getId())
                     .category(Category.ART)
                     .title("제목(" + i + ")")
                     .content("컨텐츠(" + i + ")")
