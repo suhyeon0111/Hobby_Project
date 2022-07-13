@@ -34,44 +34,20 @@ public class UserProfileController {
     private final ResponseService responseService;
 
     /**
-     * 현재 로그인 한 사용자 정보를 반환
+     * 현재 로그인 한 사용자의 마이페이지 데이터를 반환
      */
-
-    /**
-     * 실제 web 테스트 시엔 잘 동작하는데, Test (UserProfileControllerTest.java) 에서 Test에서 응답 Body가 비어있는 현상
-     * MockHttpServletResponse:
-     *            Status = 200
-     *     Error message = null
-     *           Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", X-Content-Type-Options:"nosniff", X-XSS-Protection:"1; mode=block", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
-     *      Content type = null
-     *              Body =
-     *     Forwarded URL = null
-     *    Redirected URL = null
-     *           Cookies = []
-     */
-/*    @GetMapping("/myProfile")
+    @GetMapping("/myprofile")
     public ResponseEntity<ResponseDto> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
         Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isPresent()) {
-            MyProfileDto myProfileDto = MyProfileDto.of(member.get());
-            return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
-        } else {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-    }*/
 
-    @GetMapping("/myprofile")
-    public ResponseEntity<?> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        Long memberId = userDetails.getId();
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isPresent()) {
-            MyProfileDto myProfileDto = MyProfileDto.of(member.get());
-            return ResponseEntity.ok().body(myProfileDto);
-        } else {
+        if(member.isEmpty()) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
         }
+        MyProfileDto myProfileDto = MyProfileDto.of(member.get());
+        return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
     }
+
     /**
      * 탈퇴한 회원일 경우 예외 처리 추가
      * Member에 탈퇴 여부를 확인하는 필드 추가 필요
@@ -84,12 +60,11 @@ public class UserProfileController {
          * 탈퇴 여부 필드 추가시 member.isPresent()가 아닌,
          * if(member.isQuitMember())로 변경
          */
-        if(member.isPresent()) {
-            UserProfileDto userProfileDto = UserProfileDto.of(member.get());
-            return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
-        } else {
+        if(member.isEmpty()) {
             throw new BusinessException(ErrorCode.DELETED_MEMBER);
         }
+        UserProfileDto userProfileDto = UserProfileDto.of(member.get());
+        return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
     }
     /**
      * 'PUT' 요청으로 사용자 이름, 프로필 이미지, 소개글을 파라미터로 받아 멤버 정보 수정.
