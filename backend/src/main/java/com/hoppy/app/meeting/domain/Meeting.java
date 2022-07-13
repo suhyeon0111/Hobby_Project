@@ -2,6 +2,7 @@ package com.hoppy.app.meeting.domain;
 
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
+import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.domain.MemberMeetingLike;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +34,9 @@ public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private Long ownerId;
 
     @Builder.Default
     private String url = "none";
@@ -60,8 +65,9 @@ public class Meeting {
     @ToString.Exclude
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
-    public static Meeting dtoToMeeting(CreateMeetingDto dto) {
+    public static Meeting of(CreateMeetingDto dto, Long ownerId) {
         return Meeting.builder()
+                .ownerId(ownerId)
                 .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getUrl())
                 .title(dto.getTitle())
                 .content(dto.getContent())
