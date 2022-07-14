@@ -72,3 +72,13 @@ GET /api/userprofile?id={사용자 id}
 include::{snippets}/show-userProfile/request-body.adoc[]
 .response body
 include::{snippets}/show-userProfile/response-body.adoc[]
+
+=== 프로필 수정
+.request url
+----
+POST /api/update
+----
+.request body
+include::{snippets}/update-user/request-body.adoc[]
+.response body
+include::{snippets}/update-user/response-body.adoc[]

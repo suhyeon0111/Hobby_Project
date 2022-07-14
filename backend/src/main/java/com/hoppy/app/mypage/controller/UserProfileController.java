@@ -20,7 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,18 +69,17 @@ public class UserProfileController {
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
     }
     /**
-     * 'PUT' 요청으로 사용자 이름, 프로필 이미지, 소개글을 파라미터로 받아 멤버 정보 수정.
-     * 수정된 내용을 응답으로 보냄. (return 타입 void로 설정해도 상관 없을 듯)
+     * controller 통해서 member 정보 출력하면 update 된 값으로 잘 출력되는데,
+     * H2 DB 에는 회원 정보가 update가 안됨.
      */
-    @PutMapping("/update")
-    public MyPageMemberDto updateMember(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam("username") String username,
-            @RequestParam("profileImageUrl") String profileImageUrl,
-            @RequestParam("intro") String intro
-    ) {
-        Long memberId = userDetails.getId();
-        Member member = updateMemberServiceImpl.updateMember(memberId, username, profileImageUrl, intro);
-        return MyPageMemberDto.builder().username(member.getUsername()).profileUrl(member.getProfileImageUrl()).intro(member.getIntro()).build();
+    @PostMapping("/update")
+    public ResponseEntity<ResponseDto> updateUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody MyPageMemberDto memberDto) {
+        Member member = updateMemberServiceImpl.updateMember(userDetails.getId(), memberDto);
+        if(member == null) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        MyProfileDto myProfileDto = MyProfileDto.of(member);
+        return responseService.successResult(SuccessCode.UPDATE_SUCCESS, myProfileDto);
     }
 }

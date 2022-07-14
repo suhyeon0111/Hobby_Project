@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.EnableMockMvc;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
@@ -19,6 +20,7 @@ import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.MyProfileDto;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.mypage.dto.MyPageMemberDto;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
@@ -46,6 +48,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -66,6 +69,9 @@ class UserProfileControllerTest {
     
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
 //    @MockBean // 모킹하게되면 responseService가 원래 동작대로 동작할 수 없음
 //    private ResponseService responseService;
@@ -125,6 +131,41 @@ class UserProfileControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.username", is(optMember.get().getUsername())))
                 .andDo(document("show-userProfile",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
+    }
+
+    @Test
+    @WithMockCustomUser(id = "9999")
+    void updateUser() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.parseLong(authentication.getName());
+        Optional<Member> optMember = memberRepository.findById(id);
+
+        assertThat(optMember).isPresent();
+
+        Member exMember = optMember.get();
+
+        MyPageMemberDto memberDto = MyPageMemberDto.builder().username("마석도")
+                        .profileUrl("www.changing-url.com").intro("회원 정보 수정 테스트").build();
+        String content = objectMapper.writeValueAsString(memberDto);
+
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .post("/update")
+                        .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON))
+        )
+                .andDo(print());
+
+        Member updatedMember = memberRepository.findById(id).get();
+
+        assertThat(updatedMember.getProfileImageUrl()).isNotEqualTo(exMember.getProfileImageUrl());
+        assertThat(updatedMember.getUsername()).isNotEqualTo(exMember.getUsername());
+        assertThat(updatedMember.getId()).isEqualTo(exMember.getId());
+
+        result.andExpect(status().isOk())
+                .andDo(document("update-user",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
     }

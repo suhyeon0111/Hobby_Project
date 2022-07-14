@@ -465,6 +465,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_내_프로필_조회">내 프로필 조회</a></li>
 <li><a href="#_사용자_프로필_조회">사용자 프로필 조회</a></li>
+<li><a href="#_프로필_수정">프로필 수정</a></li>
 </ul>
 </li>
 </ul>
@@ -525,7 +526,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220714T120630Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220714%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=b6871761f4ee1b763964dd7612afbfe37556d77b175690b8e79d58c8fa711459"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220714T143529Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220714%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=94620c481d47efa102cd4f4ab1264bef3acfa1a0659bb29847d2a51f68d4486c"
   }
 }</code></pre>
 </div>
@@ -580,7 +581,7 @@ GET /api/meeting?categoryNumber={카테고리 번호}</pre>
 <div class="title">request header</div>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting?categoryNumber=2 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiUk9MRV8iOiJVU0VSIiwiZXhwIjoxNjU3ODE0Nzg2fQ.yz-zpxnzcppHZHP9DuMCZBqeGUXzSZws51CGCFncm5s
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiUk9MRV8iOiJVU0VSIiwiZXhwIjoxNjU3ODIzNzI2fQ.sPgzz8UgH2zQo-XzStp2U3VhoxFYHU1jzqh1xyqH9H4
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -731,9 +732,9 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
   "data" : {
     "id" : 9999,
     "email" : "test123@naver.com",
-    "username" : "강해상",
-    "profileUrl" : "https://www.xxx.com//myimage",
-    "intro" : "반갑습니다!"
+    "username" : "마석도",
+    "profileUrl" : "www.changing-url.com",
+    "intro" : "회원 정보 수정 테스트"
   }
 }</code></pre>
 </div>
@@ -760,9 +761,44 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
   "status" : 200,
   "message" : "유저 프로필 조회 완료",
   "data" : {
-    "username" : "강해상",
-    "profileUrl" : "https://www.xxx.com//myimage",
-    "intro" : "반갑습니다!"
+    "username" : "마석도",
+    "profileUrl" : "www.changing-url.com",
+    "intro" : "회원 정보 수정 테스트"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_프로필_수정"><a class="link" href="#_프로필_수정">프로필 수정</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/update</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "username" : "마석도",
+  "profileUrl" : "www.changing-url.com",
+  "intro" : "회원 정보 수정 테스트"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "회원 정보 수정 성공",
+  "data" : {
+    "id" : 9999,
+    "email" : "test123@naver.com",
+    "username" : "마석도",
+    "profileUrl" : "www.changing-url.com",
+    "intro" : "회원 정보 수정 테스트"
   }
 }</code></pre>
 </div>
@@ -774,7 +810,7 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-14 21:05:45 +0900
+Last updated 2022-07-14 23:35:06 +0900
 </div>
 </div>
 </body>
