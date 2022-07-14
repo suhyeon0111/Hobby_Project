@@ -463,7 +463,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_유저_프로필_api">유저 프로필 API</a>
 <ul class="sectlevel2">
-<li><a href="#_마이_페이지_조회">마이 페이지 조회</a></li>
+<li><a href="#_내_프로필_조회">내 프로필 조회</a></li>
+<li><a href="#_사용자_프로필_조회">사용자 프로필 조회</a></li>
 </ul>
 </li>
 </ul>
@@ -492,7 +493,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "�젙�긽 �룞�옉 以�",
+  "message" : "정상 동작 중",
   "data" : [ ]
 }</code></pre>
 </div>
@@ -524,7 +525,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220712T164441Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220712%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=3c89397bc3b5f2d20b95c3561dc84c06a6e6dcfe9234ff9d2dc0ce87f01a4064"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220714T120630Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220714%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=b6871761f4ee1b763964dd7612afbfe37556d77b175690b8e79d58c8fa711459"
   }
 }</code></pre>
 </div>
@@ -560,7 +561,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "紐⑥엫 �깮�꽦 �셿猷�",
+  "message" : "모임 생성 완료",
   "data" : [ ]
 }</code></pre>
 </div>
@@ -579,7 +580,7 @@ GET /api/meeting?categoryNumber={카테고리 번호}</pre>
 <div class="title">request header</div>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting?categoryNumber=2 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiUk9MRV8iOiJVU0VSIiwiZXhwIjoxNjU3NjU4Njc3fQ.nWlI4nH9z-M7qFNWhSeBOvZR4wS6HSrmf6OuhKJhclk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiUk9MRV8iOiJVU0VSIiwiZXhwIjoxNjU3ODE0Nzg2fQ.yz-zpxnzcppHZHP9DuMCZBqeGUXzSZws51CGCFncm5s
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -595,108 +596,108 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "紐⑥엫 議고쉶 �셿猷�",
+  "message" : "모임 조회 완료",
   "data" : {
     "meetingDtoList" : [ {
+      "id" : 25,
+      "url" : "none",
+      "title" : "19번 제목",
+      "content" : "19번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 24,
+      "url" : "none",
+      "title" : "18번 제목",
+      "content" : "18번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
+      "id" : 23,
+      "url" : "none",
+      "title" : "17번 제목",
+      "content" : "17번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 22,
+      "url" : "none",
+      "title" : "16번 제목",
+      "content" : "16번 컨텐츠",
+      "participants" : 1,
+      "liked" : false
+    }, {
+      "id" : 21,
+      "url" : "none",
+      "title" : "15번 제목",
+      "content" : "15번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
       "id" : 20,
       "url" : "none",
-      "title" : "19踰� �젣紐�",
-      "content" : "19踰� 而⑦뀗痢�",
+      "title" : "14번 제목",
+      "content" : "14번 컨텐츠",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 19,
       "url" : "none",
-      "title" : "18踰� �젣紐�",
-      "content" : "18踰� 而⑦뀗痢�",
-      "participants" : 1,
-      "liked" : true
-    }, {
-      "id" : 18,
-      "url" : "none",
-      "title" : "17踰� �젣紐�",
-      "content" : "17踰� 而⑦뀗痢�",
+      "title" : "13번 제목",
+      "content" : "13번 컨텐츠",
       "participants" : 1,
       "liked" : false
     }, {
+      "id" : 18,
+      "url" : "none",
+      "title" : "12번 제목",
+      "content" : "12번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
       "id" : 17,
       "url" : "none",
-      "title" : "16踰� �젣紐�",
-      "content" : "16踰� 而⑦뀗痢�",
+      "title" : "11번 제목",
+      "content" : "11번 컨텐츠",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 16,
       "url" : "none",
-      "title" : "15踰� �젣紐�",
-      "content" : "15踰� 而⑦뀗痢�",
-      "participants" : 1,
-      "liked" : true
-    }, {
-      "id" : 15,
-      "url" : "none",
-      "title" : "14踰� �젣紐�",
-      "content" : "14踰� 而⑦뀗痢�",
+      "title" : "10번 제목",
+      "content" : "10번 컨텐츠",
       "participants" : 1,
       "liked" : false
     }, {
+      "id" : 15,
+      "url" : "none",
+      "title" : "9번 제목",
+      "content" : "9번 컨텐츠",
+      "participants" : 1,
+      "liked" : true
+    }, {
       "id" : 14,
       "url" : "none",
-      "title" : "13踰� �젣紐�",
-      "content" : "13踰� 而⑦뀗痢�",
+      "title" : "8번 제목",
+      "content" : "8번 컨텐츠",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 13,
       "url" : "none",
-      "title" : "12踰� �젣紐�",
-      "content" : "12踰� 而⑦뀗痢�",
+      "title" : "7번 제목",
+      "content" : "7번 컨텐츠",
       "participants" : 1,
-      "liked" : true
+      "liked" : false
     }, {
       "id" : 12,
       "url" : "none",
-      "title" : "11踰� �젣紐�",
-      "content" : "11踰� 而⑦뀗痢�",
-      "participants" : 1,
-      "liked" : false
-    }, {
-      "id" : 11,
-      "url" : "none",
-      "title" : "10踰� �젣紐�",
-      "content" : "10踰� 而⑦뀗痢�",
-      "participants" : 1,
-      "liked" : false
-    }, {
-      "id" : 10,
-      "url" : "none",
-      "title" : "9踰� �젣紐�",
-      "content" : "9踰� 而⑦뀗痢�",
-      "participants" : 1,
-      "liked" : true
-    }, {
-      "id" : 9,
-      "url" : "none",
-      "title" : "8踰� �젣紐�",
-      "content" : "8踰� 而⑦뀗痢�",
-      "participants" : 1,
-      "liked" : false
-    }, {
-      "id" : 8,
-      "url" : "none",
-      "title" : "7踰� �젣紐�",
-      "content" : "7踰� 而⑦뀗痢�",
-      "participants" : 1,
-      "liked" : false
-    }, {
-      "id" : 7,
-      "url" : "none",
-      "title" : "6踰� �젣紐�",
-      "content" : "6踰� 而⑦뀗痢�",
+      "title" : "6번 제목",
+      "content" : "6번 컨텐츠",
       "participants" : 1,
       "liked" : true
     } ],
-    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=6"
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=11"
   }
 }</code></pre>
 </div>
@@ -708,7 +709,7 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <h2 id="_유저_프로필_api"><a class="link" href="#_유저_프로필_api">유저 프로필 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_마이_페이지_조회"><a class="link" href="#_마이_페이지_조회">마이 페이지 조회</a></h3>
+<h3 id="_내_프로필_조회"><a class="link" href="#_내_프로필_조회">내 프로필 조회</a></h3>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -725,11 +726,44 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div class="title">response body</div>
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "id" : 9999,
-  "email" : "test123@naver.com",
-  "username" : "강해상",
-  "profileUrl" : "https://www.xxx.com//myimage",
-  "intro" : "반갑습니다!"
+  "status" : 200,
+  "message" : "유저 프로필 조회 완료",
+  "data" : {
+    "id" : 9999,
+    "email" : "test123@naver.com",
+    "username" : "강해상",
+    "profileUrl" : "https://www.xxx.com//myimage",
+    "intro" : "반갑습니다!"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_사용자_프로필_조회"><a class="link" href="#_사용자_프로필_조회">사용자 프로필 조회</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/userprofile?id={사용자 id}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "유저 프로필 조회 완료",
+  "data" : {
+    "username" : "강해상",
+    "profileUrl" : "https://www.xxx.com//myimage",
+    "intro" : "반갑습니다!"
+  }
 }</code></pre>
 </div>
 </div>
@@ -740,7 +774,7 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-13 01:43:57 +0900
+Last updated 2022-07-14 21:05:45 +0900
 </div>
 </div>
 </body>

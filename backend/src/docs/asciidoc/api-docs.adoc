@@ -53,7 +53,7 @@ include::{snippets}/meeting-pagination/response-body.adoc[]
 
 == 유저 프로필 API
 
-=== 마이 페이지 조회
+=== 내 프로필 조회
 .request url
 ----
 GET /api/myprofile
@@ -62,3 +62,13 @@ GET /api/myprofile
 include::{snippets}/show-myProfile/request-body.adoc[]
 .response body
 include::{snippets}/show-myProfile/response-body.adoc[]
+
+=== 사용자 프로필 조회
+.request url
+----
+GET /api/userprofile?id={사용자 id}
+----
+.request body
+include::{snippets}/show-userProfile/request-body.adoc[]
+.response body
+include::{snippets}/show-userProfile/response-body.adoc[]

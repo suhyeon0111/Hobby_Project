@@ -1,6 +1,7 @@
 package com.hoppy.app.mypage.controller;
 
 
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -46,6 +47,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 /**
  * 오직 Controller에 대해서만 테스트를 검증할 때는 @WebMvcTest를 사용하면 되지만,
@@ -94,7 +97,7 @@ class UserProfileControllerTest {
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         Optional<Member> optMember = memberRepository.findById(principal.getId());
 
-        Assertions.assertThat(optMember).isPresent();
+        assertThat(optMember).isPresent();
         MyProfileDto myProfileDto = MyProfileDto.of(optMember.get());
 
         mvc.perform(MockMvcRequestBuilders.get("/myprofile")
@@ -111,6 +114,18 @@ class UserProfileControllerTest {
 
     @Test
     void showUserProfile() throws Exception {
-
+        String id = "9999";
+        Optional<Member> optMember = memberRepository.findById(Long.parseLong(id));
+        assertThat(optMember).isPresent();
+        mvc.perform(MockMvcRequestBuilders.get("/userprofile")
+                        .param("id", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.username", is(optMember.get().getUsername())))
+                .andDo(document("show-userProfile",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
     }
 }

@@ -52,7 +52,7 @@ public class UserProfileController {
      * 탈퇴한 회원일 경우 예외 처리 추가
      * Member에 탈퇴 여부를 확인하는 필드 추가 필요
      */
-    @GetMapping("/userProfile")
+    @GetMapping("/userprofile")
     public ResponseEntity<ResponseDto> showUserProfile(@RequestParam("id") String id) {
         Long memberId = Long.parseLong(id);
         Optional<Member> member = memberRepository.findById(memberId);
