@@ -10,7 +10,7 @@ public interface MeetingManageService {
 
     public void createAndSaveMemberMeetingData(Meeting meeting, Member member);
 
-    public Meeting createMeeting(CreateMeetingDto dto);
+    public Meeting createMeeting(CreateMeetingDto dto, Long ownerId);
 
     public boolean checkTitleDuplicate(String name);
 }

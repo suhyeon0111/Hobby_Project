@@ -21,7 +21,6 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
                 Long.parseLong(customUser.id()), customUser.password(), SocialType.KAKAO, Role.USER, Collections.singletonList(new SimpleGrantedAuthority(Role.USER.toString()))
         );
 
-
         System.out.println("userDetails.getName() = " + userDetails.getName());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());

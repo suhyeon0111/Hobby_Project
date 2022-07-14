@@ -33,7 +33,7 @@ public class MeetingManageServiceImpl implements MeetingManageService {
     }
 
     @Override
-    public Meeting createMeeting(CreateMeetingDto dto) throws BusinessException {
+    public Meeting createMeeting(CreateMeetingDto dto, Long ownerId) throws BusinessException {
         if(checkTitleDuplicate(dto.getTitle())) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
         }
@@ -42,7 +42,7 @@ public class MeetingManageServiceImpl implements MeetingManageService {
             throw new BusinessException(ErrorCode.CATEGORY_ERROR);
         }
 
-        return Meeting.dtoToMeeting(dto);
+        return Meeting.of(dto, ownerId);
     }
 
     @Override
