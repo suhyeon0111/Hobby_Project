@@ -42,7 +42,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 @AutoConfigureRestDocs
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(username = "test", roles = "USER")
 @TestInstance(Lifecycle.PER_CLASS)
 class MeetingControllerTest {
 
@@ -63,9 +62,6 @@ class MeetingControllerTest {
 
     @Autowired
     private MemberMeetingLikeRepository memberMeetingLikeRepository;
-
-    @Autowired
-    private AuthTokenProvider authTokenProvider;
 
     @BeforeAll
     void before() {
