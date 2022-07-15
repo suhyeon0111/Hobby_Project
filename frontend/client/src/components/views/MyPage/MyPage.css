@@ -1,0 +1,9 @@
+.ant-tabs-tab-active {
+color: #D3BA9C !important;
+}
+
+.ant-tabs-ink-bar {
+position: absolute;
+background: #D3BA9C;
+pointer-events: none;
+}
