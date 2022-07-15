@@ -16,15 +16,18 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "C004", "서버 에러 : 서버 팀에 문의"),
     INVALID_TYPE_VALUE(400, "C005", "타입 오류입니다"),
     HANDLE_ACCESS_DENIED(403, "C006", "접근이 제한되었습니다"),
-
+    WRONG_REQUEST_HEADER(403, "C007", "요청 헤더의 값이 올바르지 않습니다."),
     // Member
 
     // JWT
     EXPIRED_ACCESS_TOKEN(403, "J001", "access 토큰이 만료되었습니다"),
     UNSUPPORTED_JWT(403, "J002", "지원하지 않는 JWT 토큰입니다"),
     SIGNATURE_INVALID_JWT(403, "JOO3", "토큰 Signature 오류"),
+
     JWT_NOT_FOUND(403, "J004", "Jwt 토큰을 찾을 수 없습니다"),
     IlLEGAL_JWT(403, "J005", "적절하지 못한 Jwt 토큰 형식입니다."),
+    WRONG_TYPE_TOKEN(403, "J006", "Jwt 토큰 구조가 올바르지 않습니다."),
+    UNKNOWN_JWT_ERROR(404, "J007", "JWT 토큰 오류. 서버 팀에 문의"),
 
     // s3
     S3_ACCESS_FAIL(500, "S001", "S3 버킷 접근 에러"),
