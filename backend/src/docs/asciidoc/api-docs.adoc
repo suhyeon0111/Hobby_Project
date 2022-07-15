@@ -86,3 +86,13 @@ POST /api/update
 include::{snippets}/update-user/request-body.adoc[]
 .response body
 include::{snippets}/update-user/response-body.adoc[]
+
+=== 회원 탈퇴
+.request url
+----
+GET /api/delete
+----
+.request body
+include::{snippets}/delete-user/request-body.adoc[]
+.response body
+include::{snippets}/delete-user/response-body.adoc[]

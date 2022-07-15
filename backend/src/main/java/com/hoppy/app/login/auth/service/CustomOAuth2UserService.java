@@ -55,10 +55,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
          */
 
         if(savedMember.isPresent()) {
+            System.out.println("이미 존재하는 멤버입니다. 업데이트합니다.");
+            System.out.println("savedMember.get().getIntro() = " + savedMember.get().getIntro());
             updateMember(savedMember.get(), userInfo);
             return CustomUserDetails.create(savedMember.get(), user.getAttributes());
         } else {
+            System.out.println("새로운 멤버입니다. 가입을 진행합니다.");
             Member member = createMember(userInfo, socialType);
+            System.out.println("member = " + userInfo.getUsername());
             return CustomUserDetails.create(member, user.getAttributes());
         }
     }
@@ -71,9 +75,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .email(userInfo.getEmail())
                 .profileImageUrl(userInfo.getProfileImageUrl())
                 .username(userInfo.getUsername())
-                .role(Role.USER).build();
+                .role(Role.USER).
+                deleted(false).build();
 
-        return memberRepository.saveAndFlush(member);
+        return memberRepository.save(member);
     }
 
     private Member updateMember(Member member, OAuth2UserInfo userInfo) {

@@ -14,6 +14,7 @@ public enum SuccessCode {
     LOGOUT_SUCCESS("로그아웃 성공", 200),
     REISSUE_SUCCESS("토큰 재발급 성공", 200),
     UPDATE_SUCCESS("회원 정보 수정 성공", 200),
+    DELETE_SUCCESS("회원 삭제 성공", 200),
 
     HEALTH_CHECK_SUCCESS("정상 동작 중", 200),
 

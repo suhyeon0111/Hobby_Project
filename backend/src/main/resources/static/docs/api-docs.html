@@ -466,6 +466,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_내_프로필_조회">내 프로필 조회</a></li>
 <li><a href="#_사용자_프로필_조회">사용자 프로필 조회</a></li>
 <li><a href="#_프로필_수정">프로필 수정</a></li>
+<li><a href="#_회원_탈퇴">회원 탈퇴</a></li>
 </ul>
 </li>
 </ul>
@@ -526,7 +527,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220714T144314Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220714%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=461e17075ca08dfc6413f698013a5b390a706449d525ca410194fbae27d25429"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220715T120017Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220715%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=1b7e6bfa6ad3e931b16caf58e04e2c30dd43ac7447c94399358331a74fe77d01"
   }
 }</code></pre>
 </div>
@@ -809,13 +810,38 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_회원_탈퇴"><a class="link" href="#_회원_탈퇴">회원 탈퇴</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/delete</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "회원 삭제 성공",
+  "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-14 23:39:04 +0900
+Last updated 2022-07-15 20:59:26 +0900
 </div>
 </div>
 </body>

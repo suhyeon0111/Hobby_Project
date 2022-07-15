@@ -3,12 +3,6 @@ package com.hoppy.app.login.auth.filter;
 import com.hoppy.app.login.auth.token.AuthToken;
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import com.hoppy.app.login.utils.HeaderUtil;
-import com.hoppy.app.response.error.exception.BusinessException;
-import com.hoppy.app.response.error.exception.ErrorCode;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -42,7 +36,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } else {
-            throw new BusinessException(ErrorCode.WRONG_REQUEST_HEADER);
+            logger.warn("요청 헤더의 값이 올바르지 않습니다.");
+//            throw new BusinessException(ErrorCode.WRONG_REQUEST_HEADER);
         }
         filterChain.doFilter(request, response);
     }
