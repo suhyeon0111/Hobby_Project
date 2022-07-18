@@ -6,7 +6,10 @@ import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.MemberMeetingLike;
 import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
+import com.hoppy.app.response.error.exception.BusinessException;
+import com.hoppy.app.response.error.exception.ErrorCode;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,5 +54,14 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
         return meetingList.stream()
                 .map(M -> MeetingDto.meetingToMeetingDto(M, likeIdList.contains(M.getId())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Meeting getMeetingById(Long id) {
+        Optional<Meeting> meeting = meetingRepository.findById(id);
+        if(meeting.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
+        }
+
     }
 }
