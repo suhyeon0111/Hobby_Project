@@ -20,4 +20,6 @@ public interface MeetingInquiryService {
     public String createNextPagingUrl(int categoryNumber, long lastId);
 
     public List<MeetingDto> meetingListToMeetingDtoList(List<Meeting> meetingList, Long memberId);
+
+    public Meeting getMeetingById(Long id);
 }
