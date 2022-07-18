@@ -53,16 +53,7 @@ jobs:
             ${{ runner.os }}-gradle-
             
       - name: 백엔드 Gradle 테스트
-        run: cd backend && ./gradlew test
-
-      - name: Report
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: Maven Tests
-          path: ./backend/build/reports/tests/test/index.html
-          reporter: java-junit
-          fail-on-error: true
+        run: cd backend && ./gradlew --debug test
 
       - name: 백엔드 Gradle 빌드
         run: cd backend && ./gradlew build -x test
