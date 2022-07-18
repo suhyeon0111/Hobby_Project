@@ -60,7 +60,7 @@ jobs:
         if: always()
         with:
           name: Maven Tests
-          path: file:///home/runner/work/mono-repo/mono-repo/backend/build/reports/tests/test/index.html
+          path: ./backend/build/reports/tests/test/index.html
           reporter: java-junit
           fail-on-error: true
 
