@@ -54,11 +54,15 @@ jobs:
             
       - name: 백엔드 Gradle 테스트
         run: cd backend && ./gradlew test
-      - uses: actions/upload-artifact@v2  # upload test results
-        if: success() || failure()        # run this step even if previous step failed
+
+      - name: Report
+        uses: dorny/test-reporter@v1
+        if: always()
         with:
-          name: test-results
-          path: jest-junit.xml
+          name: Maven Tests
+          path: file:///home/runner/work/mono-repo/mono-repo/backend/build/reports/tests/test/index.html
+          reporter: java-junit
+          fail-on-error: true
 
       - name: 백엔드 Gradle 빌드
         run: cd backend && ./gradlew build -x test
