@@ -23,6 +23,8 @@ import com.hoppy.app.member.domain.MemberMeetingLike;
 import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
+import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -142,6 +144,30 @@ class MeetingControllerTest {
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andDo(document("meeting-pagination",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void getMeetingDetailTest() throws Exception {
+
+        //given
+        List<Meeting> meetingList = meetingRepository.findAll();
+        Assertions.assertThat(meetingList.size()).isGreaterThan(0);
+        Long testMeetingId = meetingList.get(0).getId();
+
+        //when~then
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/meeting/" + testMeetingId)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.liked", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$.data.participantList[0].owner", is(Boolean.TRUE)))
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(document("meeting-detail",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
