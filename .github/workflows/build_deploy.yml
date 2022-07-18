@@ -54,6 +54,11 @@ jobs:
             
       - name: 백엔드 Gradle 테스트
         run: cd backend && ./gradlew test
+      - uses: actions/upload-artifact@v2  # upload test results
+        if: success() || failure()        # run this step even if previous step failed
+        with:
+          name: test-results
+          path: jest-junit.xml
 
       - name: 백엔드 Gradle 빌드
         run: cd backend && ./gradlew build -x test
