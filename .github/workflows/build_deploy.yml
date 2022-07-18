@@ -53,7 +53,7 @@ jobs:
             ${{ runner.os }}-gradle-
             
       - name: 백엔드 Gradle 테스트
-        run: cd backend && ./gradlew --debug test
+        run: cd backend && ./gradlew test
 
       - name: 백엔드 Gradle 빌드
         run: cd backend && ./gradlew build -x test
