@@ -22,6 +22,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Getter
@@ -57,6 +58,7 @@ public class Meeting {
     @JoinColumn(name = "meetingId")
     @Builder.Default
     @ToString.Exclude
+    @BatchSize(size = 20)
     private Set<MemberMeeting> participants = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY)

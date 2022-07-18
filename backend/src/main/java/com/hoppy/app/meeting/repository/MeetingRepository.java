@@ -29,7 +29,8 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
      * 모임에 좋아요를 눌렀는지 확인하는 것이 성능상 이점이 있을 것으로 보인다.
      * stream과 filter를 사용해보자.
      * */
-    @Query("select distinct m from Meeting as m left join fetch m.participants where m.category = :category and m.id > :lastId order by m.id desc")
+    @Query("select distinct m from Meeting as m where m.category = :category and m.id > :lastId order by m.id desc")
+//    @Query("select distinct m from Meeting as m left join fetch m.participants where m.category = :category and m.id > :lastId order by m.id desc")
     List<Meeting> infiniteScrollPagingMeeting(Category category, Long lastId, Pageable pageable);
 
     Page<Meeting> findAllMeetingByCategoryOrderByIdDesc(Category category, Pageable pageable);
