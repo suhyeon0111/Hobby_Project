@@ -459,6 +459,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_모임_생성하기">모임 생성하기</a></li>
 <li><a href="#_모임_카테고리_조회_페이징">모임 카테고리 조회 (페이징)</a></li>
+<li><a href="#_모임_상세조회">모임 상세조회</a></li>
 </ul>
 </li>
 </ul>
@@ -519,7 +520,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220713T075836Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220713%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=f5467593a33434891101a0deac06ef27da7d7f7fee379c6aad317f2e78c9f7ea"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220718T114938Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220718%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=5e84dd14a47101de5cbcaa8b1e4f19a1f99384db0c9fb0f249a946dbf30a26e3"
   }
 }</code></pre>
 </div>
@@ -572,7 +573,7 @@ memberLimit : 최소 2 최대 20 입니다.</pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>최초 조회시
+<pre>최초 조회 시
 GET /api/meeting?categoryNumber={카테고리 번호}</pre>
 </div>
 </div>
@@ -702,13 +703,52 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_모임_상세조회"><a class="link" href="#_모임_상세조회">모임 상세조회</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/meeting/{모임 고유 id}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request header</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/1 HTTP/1.1
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "모임 상세 페이지 조회 완료",
+  "data" : {
+    "id" : 1,
+    "title" : "제목(0)",
+    "content" : "컨텐츠(0)",
+    "url" : "none",
+    "liked" : true,
+    "participantList" : [ {
+      "id" : 1,
+      "url" : null,
+      "name" : null,
+      "owner" : true
+    } ]
+  }
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-13 15:21:33 +0900
+Last updated 2022-07-18 20:49:11 +0900
 </div>
 </div>
 </body>

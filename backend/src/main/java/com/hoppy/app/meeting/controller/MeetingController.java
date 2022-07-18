@@ -4,11 +4,13 @@ import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
+import com.hoppy.app.meeting.dto.MeetingDetailDto;
 import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.dto.PagingMeetingDto;
 import com.hoppy.app.meeting.service.MeetingInquiryService;
 import com.hoppy.app.meeting.service.MeetingManageService;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -16,13 +18,12 @@ import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,5 +75,18 @@ public class MeetingController {
                 .build();
 
         return responseService.successResult(SuccessCode.INQUIRY_MEETING_SUCCESS, pagingMeetingDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDto> getMeetingDetail(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Meeting meeting = meetingInquiryService.getMeetingById(id);
+        List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
+        Boolean liked = meetingInquiryService.checkLiked(meeting.getId(), userDetails.getId());
+        MeetingDetailDto meetingDetailDto = MeetingDetailDto.of(meeting, participantList, liked);
+
+        return responseService.successResult(SuccessCode.INQUIRE_MEETING_DETAIL_SUCCESS, meetingDetailDto);
     }
 }
