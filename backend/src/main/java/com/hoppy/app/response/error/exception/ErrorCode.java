@@ -35,7 +35,7 @@ public enum ErrorCode {
     // Meeting
     TITLE_DUPLICATE(403, "M001", "이미 존재하는 모임 제목입니다"),
     CATEGORY_ERROR(403, "M002", "잘못된 카테고리 번호입니다"),
-    DELETED_MEETING(403, "M003", "삭제된 모임입니다."),
+    MEETING_NOT_FOUND(403, "M003", "존재하지 않는 모임입니다"),
 
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),

@@ -64,3 +64,45 @@ GET /api/meeting/{모임 고유 id}
 include::{snippets}/meeting-detail/http-request.adoc[]
 .response body
 include::{snippets}/meeting-detail/response-body.adoc[]
+
+== 유저 프로필 API
+
+=== 내 프로필 조회
+.request url
+----
+GET /api/myprofile
+----
+.request body
+include::{snippets}/show-myProfile/request-body.adoc[]
+.response body
+include::{snippets}/show-myProfile/response-body.adoc[]
+
+=== 사용자 프로필 조회
+.request url
+----
+GET /api/userprofile?id={사용자 id}
+----
+.request body
+include::{snippets}/show-userProfile/request-body.adoc[]
+.response body
+include::{snippets}/show-userProfile/response-body.adoc[]
+
+=== 프로필 수정
+.request url
+----
+POST /api/update
+----
+.request body
+include::{snippets}/update-user/request-body.adoc[]
+.response body
+include::{snippets}/update-user/response-body.adoc[]
+
+=== 회원 탈퇴
+.request url
+----
+GET /api/delete
+----
+.request body
+include::{snippets}/delete-user/request-body.adoc[]
+.response body
+include::{snippets}/delete-user/response-body.adoc[]

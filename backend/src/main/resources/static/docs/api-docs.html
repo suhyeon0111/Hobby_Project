@@ -462,6 +462,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_모임_상세조회">모임 상세조회</a></li>
 </ul>
 </li>
+<li><a href="#_유저_프로필_api">유저 프로필 API</a>
+<ul class="sectlevel2">
+<li><a href="#_내_프로필_조회">내 프로필 조회</a></li>
+<li><a href="#_사용자_프로필_조회">사용자 프로필 조회</a></li>
+<li><a href="#_프로필_수정">프로필 수정</a></li>
+<li><a href="#_회원_탈퇴">회원 탈퇴</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -488,7 +496,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "정상 동작 중",
+  "message" : "�젙�긽 �룞�옉 以�",
   "data" : [ ]
 }</code></pre>
 </div>
@@ -520,7 +528,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220718T114938Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220718%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=5e84dd14a47101de5cbcaa8b1e4f19a1f99384db0c9fb0f249a946dbf30a26e3"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220719T132857Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220719%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=27b19782c6faefe8524d2c8b262ef5b073a12f5af53455ed35e1dea3b57e7398"
   }
 }</code></pre>
 </div>
@@ -562,7 +570,7 @@ memberLimit : 최소 2 최대 20 입니다.</pre>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "모임 생성 완료",
+  "message" : "紐⑥엫 �깮�꽦 �셿猷�",
   "data" : [ ]
 }</code></pre>
 </div>
@@ -596,104 +604,104 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "모임 조회 완료",
+  "message" : "紐⑥엫 議고쉶 �셿猷�",
   "data" : {
     "meetingList" : [ {
       "id" : 20,
       "url" : "none",
-      "title" : "제목(19)",
-      "content" : "컨텐츠(19)",
+      "title" : "�젣紐�(19)",
+      "content" : "而⑦뀗痢�(19)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 19,
       "url" : "none",
-      "title" : "제목(18)",
-      "content" : "컨텐츠(18)",
+      "title" : "�젣紐�(18)",
+      "content" : "而⑦뀗痢�(18)",
       "participants" : 1,
       "liked" : true
     }, {
       "id" : 18,
       "url" : "none",
-      "title" : "제목(17)",
-      "content" : "컨텐츠(17)",
+      "title" : "�젣紐�(17)",
+      "content" : "而⑦뀗痢�(17)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 17,
       "url" : "none",
-      "title" : "제목(16)",
-      "content" : "컨텐츠(16)",
+      "title" : "�젣紐�(16)",
+      "content" : "而⑦뀗痢�(16)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 16,
       "url" : "none",
-      "title" : "제목(15)",
-      "content" : "컨텐츠(15)",
+      "title" : "�젣紐�(15)",
+      "content" : "而⑦뀗痢�(15)",
       "participants" : 1,
       "liked" : true
     }, {
       "id" : 15,
       "url" : "none",
-      "title" : "제목(14)",
-      "content" : "컨텐츠(14)",
+      "title" : "�젣紐�(14)",
+      "content" : "而⑦뀗痢�(14)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 14,
       "url" : "none",
-      "title" : "제목(13)",
-      "content" : "컨텐츠(13)",
+      "title" : "�젣紐�(13)",
+      "content" : "而⑦뀗痢�(13)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 13,
       "url" : "none",
-      "title" : "제목(12)",
-      "content" : "컨텐츠(12)",
+      "title" : "�젣紐�(12)",
+      "content" : "而⑦뀗痢�(12)",
       "participants" : 1,
       "liked" : true
     }, {
       "id" : 12,
       "url" : "none",
-      "title" : "제목(11)",
-      "content" : "컨텐츠(11)",
+      "title" : "�젣紐�(11)",
+      "content" : "而⑦뀗痢�(11)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 11,
       "url" : "none",
-      "title" : "제목(10)",
-      "content" : "컨텐츠(10)",
+      "title" : "�젣紐�(10)",
+      "content" : "而⑦뀗痢�(10)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 10,
       "url" : "none",
-      "title" : "제목(9)",
-      "content" : "컨텐츠(9)",
+      "title" : "�젣紐�(9)",
+      "content" : "而⑦뀗痢�(9)",
       "participants" : 1,
       "liked" : true
     }, {
       "id" : 9,
       "url" : "none",
-      "title" : "제목(8)",
-      "content" : "컨텐츠(8)",
+      "title" : "�젣紐�(8)",
+      "content" : "而⑦뀗痢�(8)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 8,
       "url" : "none",
-      "title" : "제목(7)",
-      "content" : "컨텐츠(7)",
+      "title" : "�젣紐�(7)",
+      "content" : "而⑦뀗痢�(7)",
       "participants" : 1,
       "liked" : false
     }, {
       "id" : 7,
       "url" : "none",
-      "title" : "제목(6)",
-      "content" : "컨텐츠(6)",
+      "title" : "�젣紐�(6)",
+      "content" : "而⑦뀗痢�(6)",
       "participants" : 1,
       "liked" : true
     } ],
@@ -724,11 +732,11 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "status" : 200,
-  "message" : "모임 상세 페이지 조회 완료",
+  "message" : "紐⑥엫 �긽�꽭 �럹�씠吏� 議고쉶 �셿猷�",
   "data" : {
     "id" : 1,
-    "title" : "제목(0)",
-    "content" : "컨텐츠(0)",
+    "title" : "�젣紐�(0)",
+    "content" : "而⑦뀗痢�(0)",
     "url" : "none",
     "liked" : true,
     "participantList" : [ {
@@ -744,11 +752,136 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_유저_프로필_api"><a class="link" href="#_유저_프로필_api">유저 프로필 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_내_프로필_조회"><a class="link" href="#_내_프로필_조회">내 프로필 조회</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/myprofile</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "유저 프로필 조회 완료",
+  "data" : {
+    "id" : 9999,
+    "email" : "test123@naver.com",
+    "username" : "마석도",
+    "profileUrl" : "www.changing-url.com",
+    "intro" : "회원 정보 수정 테스트"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_사용자_프로필_조회"><a class="link" href="#_사용자_프로필_조회">사용자 프로필 조회</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/userprofile?id={사용자 id}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "유저 프로필 조회 완료",
+  "data" : {
+    "username" : "마석도",
+    "profileUrl" : "www.changing-url.com",
+    "intro" : "회원 정보 수정 테스트"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_프로필_수정"><a class="link" href="#_프로필_수정">프로필 수정</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/update</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "username" : "마석도",
+  "profileUrl" : "www.changing-url.com",
+  "intro" : "회원 정보 수정 테스트"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "회원 정보 수정 성공",
+  "data" : {
+    "id" : 9999,
+    "email" : "test123@naver.com",
+    "username" : "마석도",
+    "profileUrl" : "www.changing-url.com",
+    "intro" : "회원 정보 수정 테스트"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_회원_탈퇴"><a class="link" href="#_회원_탈퇴">회원 탈퇴</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/delete</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "회원 삭제 성공",
+  "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-18 20:49:11 +0900
+Last updated 2022-07-19 22:25:20 +0900
 </div>
 </div>
 </body>
