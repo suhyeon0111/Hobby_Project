@@ -13,6 +13,8 @@ public enum SuccessCode {
     LOGIN_SUCCESS("로그인 성공", 200),
     LOGOUT_SUCCESS("로그아웃 성공", 200),
     REISSUE_SUCCESS("토큰 재발급 성공", 200),
+    UPDATE_SUCCESS("회원 정보 수정 성공", 200),
+    DELETE_SUCCESS("회원 삭제 성공", 200),
 
     HEALTH_CHECK_SUCCESS("정상 동작 중", 200),
 
@@ -21,6 +23,8 @@ public enum SuccessCode {
     CREATE_MEETING_SUCCESS("모임 생성 완료", 200),
     INQUIRY_MEETING_SUCCESS("모임 조회 완료", 200),
     INQUIRE_MEETING_DETAIL_SUCCESS("모임 상세 페이지 조회 완료", 200),
+
+    SHOW_PROFILE_SUCCESS("유저 프로필 조회 완료", 200)
     ;
 
     private final String message;

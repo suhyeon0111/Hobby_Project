@@ -1,32 +1,22 @@
 package com.hoppy.app.login.auth.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
-import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-/*
+
 
 @SpringBootTest
-//@WithMockUser
-//@RunWith(SpringRunner.class)
 @WebAppConfiguration
 public class CustomOAuth2UserServiceTest {
 
@@ -40,48 +30,22 @@ public class CustomOAuth2UserServiceTest {
     @Autowired
     TestUserDetailsService userDetailsService;
 
-    @Test
-    void save() {
-    }
+    
 
-//    @Before
-//    Member setup() {
-//        return Member.builder().username("강해상")
-//                .role(Role.USER).email("test123@naver.com").socialId("333444555").profileImageUrl("www.where.com").socialType(
-//                        SocialType.KAKAO).build();
-//    }
-
-    @Test
-    @WithMockUser
-    public void authenticatedUser() {
-//        Member member = setup();
-//        String socialId = customOAuth2UserService.saveMember(member);
-//        System.out.println(socialId);
-//        System.out.println("member.getUsername() = " + member.getUsername());
-//        System.out.println("member.getSocialId() = " + member.getSocialId());
-//        assertThat(customOAuth2UserService.saveMember(member)).isNotNull();
-//        assertThat(customOAuth2UserService.saveMember(new Member())).isNotNull();
-//        assertThat(customOAuth2UserService.saveMember(new Member())).isNotNull();
-    }
-
-    @Test
+    @BeforeEach
     void setup() {
-        memberRepository.save(Member.builder().socialType(SocialType.KAKAO).socialId("12345").profileImageUrl("www").email("xxx").role(Role.USER).username("cdh").id(1L).build());
+        memberRepository.save(Member.builder().socialType(SocialType.KAKAO).id(1234L)
+                .profileImageUrl("www.test.com").email("demo123@naver.com").role(Role.USER).username("choidaehan").build());
     }
 
     @Test
-    @WithMockCustomUser(username = "2L", password = "secret", role = Role.GUEST, socialType = SocialType.KAKAO)
+    @WithMockCustomUser(id = "123", password = "secret", role = Role.GUEST, socialType = SocialType.KAKAO)
     void test() {
         customOAuth2UserService.print();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        userDetailsService.print();
+        System.out.println("authentication.getName() = " + authentication.getName());
+        Optional<Member> member = memberRepository.findById(1234L);
+        System.out.println("member.get().getEmail() = " + member.get().getEmail());
     }
 
-//    @Test
-//    @WithUserDetails("name")
-//    void test2() {
-//        userDetailsService.print();
-//    }
 }
-
-*/

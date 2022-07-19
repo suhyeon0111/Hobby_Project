@@ -38,6 +38,7 @@ public class Member {
     private String intro;
     private String password;
 
+    private boolean deleted;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;

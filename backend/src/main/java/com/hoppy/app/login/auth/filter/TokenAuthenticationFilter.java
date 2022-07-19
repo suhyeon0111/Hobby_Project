@@ -28,16 +28,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String tokenStr = HeaderUtil.getAccessToken(request);
             AuthToken token = tokenProvider.convertAuthToken(tokenStr);
-
             /**
              * 요청 헤더에 담긴 Jwt Token 유효성 검사
              */
-            if(token.validate()) {  
+            if(token.validate()) {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                System.out.println("유효하지 않은 토큰입니다.");
             }
+        } else {
+            logger.warn("요청 헤더의 값이 올바르지 않습니다.");
+//            throw new BusinessException(ErrorCode.WRONG_REQUEST_HEADER);
         }
         filterChain.doFilter(request, response);
     }
