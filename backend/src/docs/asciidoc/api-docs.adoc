@@ -43,7 +43,7 @@ include::{snippets}/create-meeting/response-body.adoc[]
 === 모임 카테고리 조회 (페이징)
 .request url
 ----
-최초 조회시
+최초 조회 시
 GET /api/meeting?categoryNumber={카테고리 번호}
 ----
 .request header
@@ -55,44 +55,12 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄
 ----
 include::{snippets}/meeting-pagination/response-body.adoc[]
 
-== 유저 프로필 API
-
-=== 내 프로필 조회
+=== 모임 상세조회
 .request url
 ----
-GET /api/myprofile
+GET /api/meeting/{모임 고유 id}
 ----
-.request body
-include::{snippets}/show-myProfile/request-body.adoc[]
+.request header
+include::{snippets}/meeting-detail/http-request.adoc[]
 .response body
-include::{snippets}/show-myProfile/response-body.adoc[]
-
-=== 사용자 프로필 조회
-.request url
-----
-GET /api/userprofile?id={사용자 id}
-----
-.request body
-include::{snippets}/show-userProfile/request-body.adoc[]
-.response body
-include::{snippets}/show-userProfile/response-body.adoc[]
-
-=== 프로필 수정
-.request url
-----
-POST /api/update
-----
-.request body
-include::{snippets}/update-user/request-body.adoc[]
-.response body
-include::{snippets}/update-user/response-body.adoc[]
-
-=== 회원 탈퇴
-.request url
-----
-GET /api/delete
-----
-.request body
-include::{snippets}/delete-user/request-body.adoc[]
-.response body
-include::{snippets}/delete-user/response-body.adoc[]
+include::{snippets}/meeting-detail/response-body.adoc[]
