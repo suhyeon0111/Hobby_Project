@@ -6,7 +6,10 @@ import com.hoppy.app.login.auth.authentication.KakaoOAuth2UserInfo;
 import com.hoppy.app.login.auth.authentication.OAuth2UserInfo;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberRepository;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,19 +58,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
          */
 
         if(savedMember.isPresent()) {
-            System.out.println("이미 존재하는 멤버입니다. 업데이트합니다.");
-            System.out.println("savedMember.get().getIntro() = " + savedMember.get().getIntro());
             updateMember(savedMember.get(), userInfo);
             return CustomUserDetails.create(savedMember.get(), user.getAttributes());
         } else {
-            System.out.println("새로운 멤버입니다. 가입을 진행합니다.");
             Member member = createMember(userInfo, socialType);
-            System.out.println("member = " + userInfo.getUsername());
             return CustomUserDetails.create(member, user.getAttributes());
         }
     }
 
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
+
+        System.out.println("CustomOAuth2UserService.createMember");
 
         Member member = Member.builder()
                 .socialType(socialType)
@@ -75,8 +76,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .email(userInfo.getEmail())
                 .profileImageUrl(userInfo.getProfileImageUrl())
                 .username(userInfo.getUsername())
-                .role(Role.USER).
-                deleted(false).build();
+                .role(Role.USER)
+                .deleted(false)
+                .myMeetings(null)
+                .myMeetingLikes(null)
+                .build();
 
         return memberRepository.save(member);
     }

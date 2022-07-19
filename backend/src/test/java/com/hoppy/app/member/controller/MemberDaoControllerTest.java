@@ -15,6 +15,7 @@ import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
-class UserControllerTest {
+class MemberDaoControllerTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -72,7 +73,7 @@ class UserControllerTest {
         ResultActions result = mvc.perform(MockMvcRequestBuilders.
                         get("/delete")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(new MediaType(MediaType.APPLICATION_JSON))
+                        .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 )
                 .andDo(print());
         Member member = memberRepository.findById(id).get();
