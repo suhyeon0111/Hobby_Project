@@ -53,11 +53,4 @@ public class MemberMeetingController {
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS);
     }
 
-    @GetMapping("/test")
-    public void testMeeting(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        Long id = userDetails.getId();
-        System.out.println("id = " + id);
-        memberMeetingRepoTest.meetingRepoTest(id);
-        System.out.println("MemberMeetingController.testMeeting");
-    }
 }
