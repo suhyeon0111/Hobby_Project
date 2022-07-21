@@ -19,9 +19,11 @@ import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 import org.hibernate.annotations.BatchSize;
 
 @Entity
@@ -42,10 +44,10 @@ public class Meeting {
     @Builder.Default
     private String url = "none";
 
-    @Column(nullable = false) // length 옵션 추가 논의 필요
+    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false) // length 옵션 추가 논의 필요
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)
@@ -56,15 +58,15 @@ public class Meeting {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "meetingId")
-    @Builder.Default
-    @ToString.Exclude
+    @Default
+    @Exclude
     @BatchSize(size = 20)
     private Set<MemberMeeting> participants = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "meetingId")
-    @Builder.Default
-    @ToString.Exclude
+    @Default
+    @Exclude
     private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
 
     public static Meeting of(CreateMeetingDto dto, Long ownerId) {
