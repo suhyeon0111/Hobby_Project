@@ -61,12 +61,6 @@ public class Meeting {
     @BatchSize(size = 20)
     private Set<MemberMeeting> participants = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meetingId")
-    @Builder.Default
-    @ToString.Exclude
-    private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
-
     public static Meeting of(CreateMeetingDto dto, Long ownerId) {
         return Meeting.builder()
                 .ownerId(ownerId)

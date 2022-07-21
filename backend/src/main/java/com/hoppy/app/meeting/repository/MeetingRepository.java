@@ -14,6 +14,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
+//    @Query("select distinct m from Meeting as m left join fetch m.participants left join fetch m.myMeetingLikes where m.category = :category")
+//    List<Meeting> findAllMeetingByCategoryUsingFetch(@Param("category") Category category);
+
     /*
      * 페이징 기능은 14개씩 데이터를 조회하고 where를 사용해서 no-offset하게 구현한다.
      * 또한 다음 조회 link를 함께 제공하여 좀 더 restful한 api를 제공한다.
