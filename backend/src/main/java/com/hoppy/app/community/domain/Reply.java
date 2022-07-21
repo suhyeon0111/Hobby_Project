@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 
 /**
  * @author 태경 2022-07-21
@@ -30,5 +31,6 @@ public class Reply {
     private String content;
 
     @ManyToOne
+    @Exclude
     private Post post;
 }

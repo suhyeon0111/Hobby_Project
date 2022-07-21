@@ -17,6 +17,7 @@ import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 
 /**
  * @author 태경 2022-07-21
@@ -39,9 +40,11 @@ public class Post {
     private String content;
 
     @ManyToOne
+    @Exclude
     private Community community;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @Default
+    @Exclude
     private Set<Reply> replies = new HashSet<>();
 }
