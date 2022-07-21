@@ -6,7 +6,9 @@ import com.hoppy.app.login.auth.authentication.KakaoOAuth2UserInfo;
 import com.hoppy.app.login.auth.authentication.OAuth2UserInfo;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.domain.MemberLike;
 import com.hoppy.app.member.domain.MemberMeeting;
+import com.hoppy.app.member.repository.MemberLikeRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,6 +31,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
 
+    private final MemberLikeRepository memberLikeRepository;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
@@ -48,7 +52,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         SocialType socialType = SocialType.KAKAO;
 
         OAuth2UserInfo userInfo = new KakaoOAuth2UserInfo(user.getAttributes());
-        System.out.println("userInfo.getSocialId() = " + userInfo.getSocialId());
         Optional<Member> savedMember = memberRepository.findById(Long.valueOf(userInfo.getSocialId()));
 
         /**
@@ -68,7 +71,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
 
-        System.out.println("CustomOAuth2UserService.createMember");
+//        System.out.println("CustomOAuth2UserService.createMember");
+
+        MemberLike memberLike = MemberLike.builder().build();
+        memberLike = memberLikeRepository.save(memberLike);
 
         Member member = Member.builder()
                 .socialType(socialType)
@@ -78,8 +84,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .username(userInfo.getUsername())
                 .role(Role.USER)
                 .deleted(false)
-                .myMeetings(null)
-                .myMeetingLikes(null)
+                .memberLike(memberLike)
                 .build();
 
         return memberRepository.save(member);
