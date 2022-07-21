@@ -29,7 +29,5 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     @Query("select distinct m from Meeting as m where m.category = :category and m.id > :lastId order by m.id desc")
     List<Meeting> infiniteScrollPagingMeeting(Category category, Long lastId, Pageable pageable);
 
-    Page<Meeting> findAllMeetingByCategoryOrderByIdDesc(Category category, Pageable pageable);
-
     Optional<Meeting> findMeetingByTitle(String title);
 }
