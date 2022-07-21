@@ -18,8 +18,10 @@ import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.domain.MemberLike;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.domain.MemberMeetingLike;
+import com.hoppy.app.member.repository.MemberLikeRepository;
 import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
@@ -60,6 +62,9 @@ class MeetingControllerTest {
     private MeetingRepository meetingRepository;
 
     @Autowired
+    private MemberLikeRepository memberLikeRepository;
+
+    @Autowired
     private MemberMeetingRepository memberMeetingRepository;
 
     @Autowired
@@ -67,8 +72,11 @@ class MeetingControllerTest {
 
     @BeforeAll
     void before() {
-        Member member = Member.builder().id(1L).build();
-        memberRepository.save(member);
+        MemberLike memberLike = MemberLike.builder().build();
+        memberLike = memberLikeRepository.save(memberLike);
+
+        Member member = Member.builder().id(1L).memberLike(memberLike).build();
+        member = memberRepository.save(member);
 
         for (int i = 0; i < 20; i++) {
             Meeting meeting = Meeting.builder()
@@ -88,8 +96,8 @@ class MeetingControllerTest {
 
             if(i % 3 == 0) {
                 memberMeetingLikeRepository.save(MemberMeetingLike.builder()
+                        .memberLike(memberLike)
                         .meetingId(meeting.getId())
-                        .memberId(member.getId())
                         .build()
                 );
             }
