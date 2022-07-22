@@ -1,5 +1,6 @@
 package com.hoppy.app.member.domain;
 
+import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import java.util.HashSet;
@@ -11,13 +12,16 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 
 @Entity
 @Getter
@@ -33,11 +37,9 @@ public class Member {
 
     private String email;
     private String username;
-//    private String socialId; // id와 개념이 통일되었음
     private String profileImageUrl;
     private String intro;
     private String password;
-
     private boolean deleted;
 
     @Enumerated(EnumType.STRING)
@@ -48,13 +50,10 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
-    @Builder.Default
-    @ToString.Exclude
+    @Default
+    @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
-    @Builder.Default
-    @ToString.Exclude
-    private Set<MemberMeetingLike> myMeetingLikes = new HashSet<>();
+    @OneToOne
+    private LikeManager likeManager;
 }

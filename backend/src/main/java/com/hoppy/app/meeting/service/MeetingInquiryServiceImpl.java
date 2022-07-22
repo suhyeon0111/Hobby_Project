@@ -1,21 +1,21 @@
 package com.hoppy.app.meeting.service;
 
+import com.hoppy.app.like.service.MemberMeetingLikeService;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.member.domain.MemberMeetingLike;
+import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.meeting.dto.ParticipantDto;
-import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
-import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.like.service.MemberLikeService;
+import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
+    private final MemberLikeService memberLikeService;
+    private final MemberMeetingLikeService memberMeetingLikeService;
     private final MeetingRepository meetingRepository;
-    private final MemberMeetingLikeRepository memberMeetingLikeRepository;
 
     @Override
     public List<Meeting> listMeetingByCategory(Category category, long lastId) {
@@ -50,8 +51,10 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     public List<MeetingDto> meetingListToMeetingDtoList(List<Meeting> meetingList, Long memberId) {
-        Map<Long, Boolean> likeIdMap = memberMeetingLikeRepository
-                .findAllByMemberId(memberId)
+        Member member = memberService.findMemberById(memberId);
+        LikeManager likeManager = memberLikeService.getMemberLikeWithMeetingLikes(member);
+
+        Map<Long, Boolean> likeIdMap = likeManager.getMeetingLikes()
                 .stream()
                 .map(MemberMeetingLike::getMeetingId)
                 .collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
@@ -78,7 +81,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
                 .sorted()
                 .collect(Collectors.toList());
 
-        List<Member> memberList = memberRepository.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size()));
+        List<Member> memberList = memberService.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size()));
 
         return memberList
                 .stream()
@@ -88,6 +91,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     public Boolean checkLiked(Long meetingId, Long memberId) {
-        return memberMeetingLikeRepository.findMemberMeetingLikeByMemberIdAndMeetingId(meetingId, memberId).isPresent();
+        Member member = memberService.findMemberById(memberId);
+        return memberMeetingLikeService.findMemberMeetingLikeByLikeManagerAndMeetingId(member.getLikeManager(), meetingId).isPresent();
     }
 }

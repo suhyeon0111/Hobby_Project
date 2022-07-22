@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
-    @Query("select distinct m from Meeting as m left join fetch m.participants left join fetch m.myMeetingLikes where m.category = :category")
-    List<Meeting> findAllMeetingByCategoryUsingFetch(@Param("category") Category category);
+//    @Query("select distinct m from Meeting as m left join fetch m.participants left join fetch m.myMeetingLikes where m.category = :category")
+//    List<Meeting> findAllMeetingByCategoryUsingFetch(@Param("category") Category category);
 
     /*
      * 페이징 기능은 14개씩 데이터를 조회하고 where를 사용해서 no-offset하게 구현한다.
@@ -30,10 +30,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
      * stream과 filter를 사용해보자.
      * */
     @Query("select distinct m from Meeting as m where m.category = :category and m.id > :lastId order by m.id desc")
-//    @Query("select distinct m from Meeting as m left join fetch m.participants where m.category = :category and m.id > :lastId order by m.id desc")
     List<Meeting> infiniteScrollPagingMeeting(Category category, Long lastId, Pageable pageable);
-
-    Page<Meeting> findAllMeetingByCategoryOrderByIdDesc(Category category, Pageable pageable);
 
     Optional<Meeting> findMeetingByTitle(String title);
 }
