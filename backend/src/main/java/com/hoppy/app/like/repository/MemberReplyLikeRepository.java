@@ -1,6 +1,6 @@
-package com.hoppy.app.member.repository;
+package com.hoppy.app.like.repository;
 
-import com.hoppy.app.member.domain.MemberReplyLike;
+import com.hoppy.app.like.domain.MemberReplyLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

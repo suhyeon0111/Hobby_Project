@@ -1,4 +1,4 @@
-package com.hoppy.app.member.domain;
+package com.hoppy.app.like.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +28,7 @@ public class MemberReplyLike {
     private Long id;
 
     @ManyToOne
-    private MemberLike memberLike;
+    private LikeManager likeManager;
 
     private Long postId;
 }
