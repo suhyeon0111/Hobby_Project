@@ -5,8 +5,10 @@ import com.hoppy.app.member.dto.UpdateMemberDto;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +53,12 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
         }
         return optMember.get();
+    }
+
+    @Override
+    public List<Member> infiniteScrollPagingMember(List<Long> memberIdList, Long lastId,
+            PageRequest pageRequest) {
+        return memberRepository.infiniteScrollPagingMember(memberIdList, lastId, pageRequest);
     }
 
 }
