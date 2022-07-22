@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import LeftMenu from './Sections/LeftMenu';
-import RightMenu from './Sections/RightMenu';
-import { Drawer, Button, Icon } from 'antd';
-import './Sections/Navbar.css';
-import LogoImg from './img/logo.png'
-import Bell from './img/Bell.png'
+import React, { useState } from "react";
+import LeftMenu from "./Sections/LeftMenu";
+import RightMenu from "./Sections/RightMenu";
+import { Drawer, Button, Icon } from "antd";
+import "./Sections/Navbar.css";
+import LogoImg from "./img/logo.png";
+import Bell from "./img/Bell.png";
 
 function NavBar() {
   const [visible, setVisible] = useState(false);
@@ -46,22 +46,31 @@ function NavBar() {
           onClose={onClose}
           visible={visible}
         >
-          <div style={{ marginTop: '100px' }}>
-            <img src={LogoImg} style={{ width: '107px', height: '54px', marginLeft: '25%', marginBottom: '30px'}} />
+          <div style={{ marginTop: "100px" }}>
+            <img
+              src={LogoImg}
+              alt="로고이미지"
+              style={{
+                width: "107px",
+                height: "54px",
+                marginLeft: "25%",
+                marginBottom: "30px",
+              }}
+            />
             <RightMenu mode="inline" />
             <hr style={{ width: "80%", backgroundColor: "#D3BA9C" }} />
             <LeftMenu mode="inline" />
           </div>
-          </Drawer>
+        </Drawer>
       </div>
-      <div style={{ float: 'right' }}>
+      <div style={{ float: "right" }}>
         <a href="/notification" className="menu__bell">
-          <img src={Bell} style={{ width: "45px" }} />
+          <img src={Bell} alt="알림" style={{ width: "45px" }} />
         </a>
       </div>
       <div className="menu__logo">
         <a href="/">
-          <img src={LogoImg} style={{ width: "147px" }} />
+          <img src={LogoImg} alt="로고" style={{ width: "147px" }} />
         </a>
       </div>
     </nav>

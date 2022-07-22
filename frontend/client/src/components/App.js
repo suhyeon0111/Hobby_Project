@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
-import { isBrowser, BrowserView, MoblieView } from "react-device-detect";
+import { isBrowser } from "react-device-detect";
 
 import Auth from "../hoc/auth";
 // pages for this product
