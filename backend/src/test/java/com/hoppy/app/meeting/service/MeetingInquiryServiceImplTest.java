@@ -1,14 +1,12 @@
 package com.hoppy.app.meeting.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
+import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

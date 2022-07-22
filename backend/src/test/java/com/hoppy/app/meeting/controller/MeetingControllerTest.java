@@ -11,18 +11,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
-import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.member.domain.MemberLike;
+import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.member.domain.MemberMeetingLike;
-import com.hoppy.app.member.repository.MemberLikeRepository;
-import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
+import com.hoppy.app.like.domain.MemberMeetingLike;
+import com.hoppy.app.like.repository.LikeManagerRepository;
+import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
@@ -37,7 +36,6 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -62,7 +60,7 @@ class MeetingControllerTest {
     private MeetingRepository meetingRepository;
 
     @Autowired
-    private MemberLikeRepository memberLikeRepository;
+    private LikeManagerRepository likeManagerRepository;
 
     @Autowired
     private MemberMeetingRepository memberMeetingRepository;
@@ -72,10 +70,10 @@ class MeetingControllerTest {
 
     @BeforeAll
     void before() {
-        MemberLike memberLike = MemberLike.builder().build();
-        memberLike = memberLikeRepository.save(memberLike);
+        LikeManager likeManager = LikeManager.builder().build();
+        likeManager = likeManagerRepository.save(likeManager);
 
-        Member member = Member.builder().id(1L).memberLike(memberLike).build();
+        Member member = Member.builder().id(1L).likeManager(likeManager).build();
         member = memberRepository.save(member);
 
         for (int i = 0; i < 20; i++) {
@@ -96,7 +94,7 @@ class MeetingControllerTest {
 
             if(i % 3 == 0) {
                 memberMeetingLikeRepository.save(MemberMeetingLike.builder()
-                        .memberLike(memberLike)
+                        .likeManager(likeManager)
                         .meetingId(meeting.getId())
                         .build()
                 );

@@ -1,5 +1,6 @@
 package com.hoppy.app.member.domain;
 
+import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import java.util.HashSet;
@@ -54,5 +55,5 @@ public class Member {
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
     @OneToOne
-    private MemberLike memberLike;
+    private LikeManager likeManager;
 }
