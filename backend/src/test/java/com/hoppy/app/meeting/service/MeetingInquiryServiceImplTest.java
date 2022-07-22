@@ -8,6 +8,7 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.member.service.MemberService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,13 +37,7 @@ class MeetingInquiryServiceImplTest {
     MeetingInquiryServiceImpl meetingInquiryService;
 
     @Mock
-    MeetingRepository meetingRepository;
-
-    @Mock
-    MemberRepository memberRepository;
-
-    @Mock
-    MemberMeetingLikeRepository memberMeetingLikeRepository;
+    MemberService memberService;
 
     @DisplayName("ParticipantDtoList 반환 검증 테스트")
     @Test
@@ -75,7 +70,7 @@ class MeetingInquiryServiceImplTest {
                 .participants(participants)
                 .build();
 
-        Mockito.when(memberRepository.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size())))
+        Mockito.when(memberService.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size())))
                 .thenReturn(memberList);
 
         // when
