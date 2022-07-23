@@ -109,7 +109,7 @@ class MeetingControllerTest {
     void createMeetingTest() throws Exception {
 
         CreateMeetingDto createMeetingDto = CreateMeetingDto.builder()
-                .url("test")
+                .filename("testFile.png")
                 .title("testTitle")
                 .content("testContent")
                 .memberLimit(10)
