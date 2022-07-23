@@ -1,6 +1,7 @@
 package com.hoppy.app.community.domain;
 
-import com.hoppy.app.like.domain.MemberPostLike;
+import com.hoppy.app.like.domain.MemberReReplyLike;
+import com.hoppy.app.like.domain.MemberReplyLike;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ import lombok.ToString;
 import lombok.ToString.Exclude;
 
 /**
- * @author 태경 2022-07-21
+ * @author 태경 2022-07-23
  */
 @Entity
 @Getter
@@ -29,28 +30,21 @@ import lombok.ToString.Exclude;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class Post {
+public class ReReply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String content;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reReply")
+    @Default
+    @Exclude
+    private Set<MemberReReplyLike> likes = new HashSet<>();
 
     @ManyToOne
     @Exclude
-    private Community community;
-
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @Default
-    @Exclude
-    private Set<Reply> replies = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
-    @Default
-    @Exclude
-    private Set<MemberPostLike> likes = new HashSet<>();
+    private Reply reply;
 }
