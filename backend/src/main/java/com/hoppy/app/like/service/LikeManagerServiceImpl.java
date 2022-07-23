@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class MemberLikeServiceImpl implements MemberLikeService {
+public class LikeManagerServiceImpl implements LikeManagerService {
 
     private final LikeManagerRepository likeManagerRepository;
 
