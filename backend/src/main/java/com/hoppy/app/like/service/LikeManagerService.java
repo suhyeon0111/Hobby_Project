@@ -6,7 +6,7 @@ import com.hoppy.app.like.domain.LikeManager;
 /**
  * @author 태경 2022-07-22
  */
-public interface MemberLikeService {
+public interface LikeManagerService {
 
     LikeManager createMemberLike();
 
