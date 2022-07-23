@@ -16,7 +16,9 @@ public enum SuccessCode {
     UPDATE_SUCCESS("회원 정보 수정 성공", 200),
     DELETE_SUCCESS("회원 삭제 성공", 200),
 
+    // health check
     HEALTH_CHECK_SUCCESS("정상 동작 중", 200),
+    PROFILE_CHECK_SUCCESS("프로파일 조회 완료", 200),
 
     GET_PRESIGNED_URL_SUCCESS("URL 발급 완료", 200),
 

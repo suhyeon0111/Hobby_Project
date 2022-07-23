@@ -1,22 +1,20 @@
 package com.hoppy.app.meeting.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.member.repository.MemberMeetingLikeRepository;
+import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.member.service.MemberService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -39,13 +37,7 @@ class MeetingInquiryServiceImplTest {
     MeetingInquiryServiceImpl meetingInquiryService;
 
     @Mock
-    MeetingRepository meetingRepository;
-
-    @Mock
-    MemberRepository memberRepository;
-
-    @Mock
-    MemberMeetingLikeRepository memberMeetingLikeRepository;
+    MemberService memberService;
 
     @DisplayName("ParticipantDtoList 반환 검증 테스트")
     @Test
@@ -78,7 +70,7 @@ class MeetingInquiryServiceImplTest {
                 .participants(participants)
                 .build();
 
-        Mockito.when(memberRepository.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size())))
+        Mockito.when(memberService.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size())))
                 .thenReturn(memberList);
 
         // when
