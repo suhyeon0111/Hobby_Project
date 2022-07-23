@@ -17,7 +17,7 @@ public class LikeManagerServiceImpl implements LikeManagerService {
     private final LikeManagerRepository likeManagerRepository;
 
     @Override
-    public LikeManager createMemberLike() {
+    public LikeManager createLikeManager() {
         return likeManagerRepository.save(LikeManager.builder().build());
     }
 
@@ -26,7 +26,7 @@ public class LikeManagerServiceImpl implements LikeManagerService {
         Optional<LikeManager> optionalMemberLike = likeManagerRepository.findMemberLikeAndMeetingLikesByMember(member);
 
         if(optionalMemberLike.isEmpty()) {
-            LikeManager likeManager = createMemberLike();
+            LikeManager likeManager = createLikeManager();
             member.setLikeManager(likeManager);
             return likeManager;
         }

@@ -8,7 +8,7 @@ import com.hoppy.app.like.domain.LikeManager;
  */
 public interface LikeManagerService {
 
-    LikeManager createMemberLike();
+    LikeManager createLikeManager();
 
     LikeManager getMemberLikeWithMeetingLikes(Member member);
 }

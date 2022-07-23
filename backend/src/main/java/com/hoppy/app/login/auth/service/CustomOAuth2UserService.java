@@ -1,5 +1,6 @@
 package com.hoppy.app.login.auth.service;
 
+import com.hoppy.app.like.service.LikeManagerService;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.login.auth.authentication.KakaoOAuth2UserInfo;
@@ -28,7 +29,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
 
-    private final LikeManagerRepository likeManagerRepository;
+    private final LikeManagerService likeManagerService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -70,8 +71,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 //        System.out.println("CustomOAuth2UserService.createMember");
 
-        LikeManager likeManager = LikeManager.builder().build();
-        likeManager = likeManagerRepository.save(likeManager);
+        LikeManager likeManager = likeManagerService.createLikeManager();
 
         Member member = Member.builder()
                 .socialType(socialType)
