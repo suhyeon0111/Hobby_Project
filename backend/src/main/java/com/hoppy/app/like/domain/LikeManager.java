@@ -52,4 +52,9 @@ public class LikeManager {
     @Default
     @Exclude
     private Set<MemberReplyLike> replyLikes = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "likeManager")
+    @Default
+    @Exclude
+    private Set<MemberReReplyLike> reReplyLikes = new HashSet<>();
 }

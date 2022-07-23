@@ -1,5 +1,6 @@
 package com.hoppy.app.like.domain;
 
+import com.hoppy.app.community.domain.Post;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,5 +31,6 @@ public class MemberPostLike {
     @ManyToOne
     private LikeManager likeManager;
 
-    private Long postId;
+    @ManyToOne
+    private Post post;
 }
