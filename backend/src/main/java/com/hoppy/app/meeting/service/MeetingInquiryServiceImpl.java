@@ -10,7 +10,7 @@ import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.meeting.dto.ParticipantDto;
-import com.hoppy.app.like.service.MemberLikeService;
+import com.hoppy.app.like.service.LikeManagerService;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     private final MemberService memberService;
-    private final MemberLikeService memberLikeService;
+    private final LikeManagerService likeManagerService;
     private final MemberMeetingLikeService memberMeetingLikeService;
     private final MeetingRepository meetingRepository;
 
@@ -52,7 +52,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     @Override
     public List<MeetingDto> meetingListToMeetingDtoList(List<Meeting> meetingList, Long memberId) {
         Member member = memberService.findMemberById(memberId);
-        LikeManager likeManager = memberLikeService.getMemberLikeWithMeetingLikes(member);
+        LikeManager likeManager = likeManagerService.getMemberLikeWithMeetingLikes(member);
 
         Map<Long, Boolean> likeIdMap = likeManager.getMeetingLikes()
                 .stream()
