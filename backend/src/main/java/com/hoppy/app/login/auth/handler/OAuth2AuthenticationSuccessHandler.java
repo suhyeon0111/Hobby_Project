@@ -40,7 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("success handler");
         log.info(jwt);
         response.setHeader("Authorization", "Bearer " + jwt);
-        response.sendRedirect("/health/echo?data=" + jwt);
+        response.sendRedirect("http://localhost:8888");
     }
 
     /**
