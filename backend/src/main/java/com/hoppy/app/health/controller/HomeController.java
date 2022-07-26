@@ -27,8 +27,8 @@ public class HomeController {
     private final ResponseService responseService;
 
     @GetMapping
-    public ResponseEntity<ResponseDto> checkHealth(HttpServletRequest httpServletRequest, @PathVariable("jwt") String jwt) {
-        log.info(jwt);
-        return responseService.successResult(SuccessCode.HEALTH_CHECK_SUCCESS, jwt);
+    public ResponseEntity<ResponseDto> checkHealth(@RequestParam("token") String token) {
+        log.info(token);
+        return responseService.successResult(SuccessCode.HEALTH_CHECK_SUCCESS, token);
     }
 }
