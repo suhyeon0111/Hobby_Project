@@ -37,10 +37,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String jwt = authTokenProvider.createUserAuthToken(userDetails.getId().toString()).getToken();
 
-        log.info("success handler");
-        log.info(jwt);
+        log.info("Authorization Bearer " + jwt);
         response.setHeader("Authorization", "Bearer " + jwt);
-        response.sendRedirect("http://localhost:8888");
+        response.sendRedirect("http://localhost:8888/&jwt=" + jwt);
     }
 
     /**
