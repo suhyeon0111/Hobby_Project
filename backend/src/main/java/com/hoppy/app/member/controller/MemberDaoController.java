@@ -4,12 +4,14 @@ import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.UpdateMemberDto;
 import com.hoppy.app.member.dto.MyProfileDto;
+import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberServiceImpl;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,16 +26,18 @@ public class MemberDaoController {
 
     private final MemberServiceImpl memberService;
     private final ResponseService responseService;
+    private final MemberRepository memberRepository;
 
     @PostMapping("/update")
     public ResponseEntity<ResponseDto> updateUser(
             @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UpdateMemberDto memberDto) {
-        Member member = memberService.updateMemberById(userDetails.getId(), memberDto);
-        if(member == null) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        Optional<Member> optMember = memberRepository.findById(userDetails.getId());
+        if(optMember.isPresent()) {
+            Member member = memberService.updateMemberById(userDetails.getId(), memberDto);
+            MyProfileDto myProfileDto = MyProfileDto.of(member);
+            return responseService.successResult(SuccessCode.UPDATE_SUCCESS, myProfileDto);
         }
-        MyProfileDto myProfileDto = MyProfileDto.of(member);
-        return responseService.successResult(SuccessCode.UPDATE_SUCCESS, myProfileDto);
+        throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
     }
 
     /**

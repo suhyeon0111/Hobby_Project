@@ -36,6 +36,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
+        System.out.println("CustomOAuth2UserService.loadUser");
         OAuth2User user = super.loadUser(userRequest);
 
         try {
@@ -49,6 +50,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User user) {
+        System.out.println("CustomOAuth2UserService.process");
         SocialType socialType = SocialType.KAKAO;
 
         OAuth2UserInfo userInfo = new KakaoOAuth2UserInfo(user.getAttributes());
@@ -71,7 +73,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
 
-//        System.out.println("CustomOAuth2UserService.createMember");
+        System.out.println("CustomOAuth2UserService.createMember");
 
         LikeManager likeManager = LikeManager.builder().build();
         likeManager = likeManagerRepository.save(likeManager);
