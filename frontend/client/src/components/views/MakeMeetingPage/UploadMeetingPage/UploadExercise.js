@@ -50,7 +50,6 @@ function UploadExercise() {
                             textAlign: 'left',
                             fontSize: '12px'
                         }}>모임의 대표 이미지를 첨부해주세요.
-                        {/* https://ant.design/components/upload/ */}
                         <Icon
                         type='paper-clip'
                         style={{

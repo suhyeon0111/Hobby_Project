@@ -2,6 +2,7 @@ import React from "react";
 // import { FaCode } from "react-icons/fa";
 import { Button, Input } from "antd";
 import { BrowerView, MoblieView } from "react-device-detect";
+import Axios from "axios";
 
 import CharacterImg from "./img/character.png";
 import ArtImg from "./img/art.png";
@@ -12,10 +13,22 @@ import HobbyStoryImg from "./img/hobbyStory.png";
 import MusicImg from "./img/music.png";
 import TripImg from "./img/trip.png";
 
-function LandingPage() {
+function LandingPage(props) {
   const { Search } = Input;
 
   const onSearch = (value) => console.log(value);
+  console.log('location', props.location)
+  const param = new URLSearchParams(props.location.search);
+  console.log('jwtToken>>>>>', param.get("token"))
+  const jwtToken = param.get("token");
+
+  if (jwtToken !== undefined) {
+    localStorage.setItem('Authorization', `Bearer ${jwtToken}`);
+    Axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+  } else {
+    localStorage.removeItem('Authorization', `Bearer ${jwtToken}`);
+    delete Axios.defaults.headers.common['Authorization'];
+  }
 
   const hobbyBoxStyle = {
     width: "108px",

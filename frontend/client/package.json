@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://hoppy.kro.kr",
   "dependencies": {
     "antd": "^3.24.1",
     "axios": "^0.19.2",

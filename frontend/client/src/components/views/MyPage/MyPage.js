@@ -1,30 +1,34 @@
 import {Avatar, Button, Icon, Tabs} from 'antd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import './MyPage.css'
+import { getUser } from '../../../_actions/user_actions';
 
-const { TabPane } = Tabs;
+const {TabPane} = Tabs;
 
 function MyPage() {
 
-    const Nickname = () => {
-        return <> 해피 쿼카</>
-    }
+    const dispatch = useDispatch();
+    const [UserInfo, setUserInfo] = useState([])
 
-    const Infomation = () => {
-        return <div
-            style={{
-                textAlign: 'left',
-                margin: '20px 0px 20px 24px'
-            }}>
-            다양한 취미 가지는 걸 좋아해요!<br/>
-            하피를 통해 새로운 취미 친구를 만들고 싶어요 :)
-            <br/>
-            MBTI는 ENFP!
-        </div>
-    }
+    const token = localStorage.getItem('Authorization')
+    console.log('token', token)
+
+    useEffect(() => {
+      dispatch(getUser()).then(response => {
+        console.log('res>>>', response)
+        setUserInfo(response.payload.data)
+      })
+    }, [])
+
+    const Email = UserInfo.email
+    const Id = UserInfo.Id
+    const Intro = UserInfo.intro
+    const ProfileUrl = UserInfo.profileUrl
+    const UserName = UserInfo.username
 
     const onChange = (key) => {
-        console.log(key);
+        // console.log(key);
     };
 
     return (
@@ -47,35 +51,36 @@ function MyPage() {
                             display: 'inline-block',
                             float: 'left'
                         }}>마이페이지</p>
-                    <Button
-                        style={{
-                            display: 'inline-block',
-                            float: 'right',
-                            marginRight: '20px',
-                            width: '70px',
-                            height: '24px',
-                            fontSize: '7px',
-                            textAlign: 'center',
-                            padding: '0px',
-                            borderRadius: '10px',
-                            background: '#D3BA9C'
-                        }}>
-                        프로필 수정
-                    </Button>
+                    <a href='/mypage/edit'>
+                        <Button
+                            style={{
+                                display: 'inline-block',
+                                float: 'right',
+                                marginRight: '20px',
+                                width: '70px',
+                                height: '24px',
+                                fontSize: '7px',
+                                textAlign: 'center',
+                                padding: '0px',
+                                borderRadius: '10px',
+                                background: '#D3BA9C'
+                            }}>
+                            프로필 수정
+                        </Button>
+                    </a>
                 </div>
                 <Avatar
+                    src={ProfileUrl}
                     style={{
                         width: '142px',
                         height: '142px',
                         marginTop: '48px',
                         background: '#A5A5A5'
                     }}
-                    icon={<Icon type = 'user' style = {{fontSize: '100px', padding: '12px'}}/>
-                    }
                 />
                 <p style={{
                         marginTop: '16px'
-                    }}>반가워요 {Nickname()}님!</p>
+                    }}>반가워요 {UserName}님!</p>
                 <p
                     style={{
                         textAlign: 'left',
@@ -86,24 +91,36 @@ function MyPage() {
                 <div
                     style={{
                         wordBreak: 'break-all',
-                        width: '350px',
-                        height: '100%',
-                        margin: '18px 0px 0px 20px',
+                        width: '90%',
+                        height: '117px',
+                        margin: '18px 20px 0px 20px',
                         fontSize: '11px',
                         color: '#464646',
                         border: '0.8px solid #A5A5A5',
                         borderRadius: '10px'
                     }}>
-                    {Infomation()}
+                    <div
+                        style={{
+                            textAlign: 'left',
+                            margin: '20px 0px 20px 24px'
+                        }}>
+                        {Intro}
+                    </div>
                 </div>
                 <div>
                     <p
                         style={{
                             margin: '36px 0px 0px 30px',
-                            fontSize: '14px',
+                            fontSize: '19px',
                             textAlign: 'left'
                         }}>모임</p>
-                    <Tabs defaultActiveKey="1" centered onChange={onChange} style={{ primaryColor: '#D3BA9C'}}>
+                    <Tabs
+                        defaultActiveKey="1"
+                        centered="centered"
+                        onChange={onChange}
+                        style={{
+                            primaryColor: '#D3BA9C'
+                        }}>
                         <TabPane tab="나의 모임" key="1">
                             나의 모임
                         </TabPane>
@@ -115,7 +132,7 @@ function MyPage() {
                 <p
                     style={{
                         margin: '36px 0px 0px 30px',
-                        fontSize: '14px',
+                        fontSize: '19px',
                         textAlign: 'left'
                     }}>취미 스토리</p>
                 <a href='/mypage/mystory'>
