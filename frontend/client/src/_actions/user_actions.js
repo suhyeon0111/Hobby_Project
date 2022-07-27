@@ -6,7 +6,6 @@ import {
     LOGOUT_USER,
     SECESSION_USER,
     GET_USER,
-    EDIT_USER,
 } from './types';
 import { USER_SERVER } from '../components/Config.js';
 
@@ -77,22 +76,6 @@ export function getUser() {
 
     return {
         type: GET_USER,
-        payload: request
-    }
-}
-
-export function editUser(dataToSubmit) {
-    const token = localStorage.getItem('Authorization')
-    
-    const request = axios.post(`https://hoppy.kro.kr/api/update`, dataToSubmit, {
-        headers: {
-            Authorization: token
-        }, withCredentials: false
-    })
-    .then(response => response.data);
-
-    return {
-        type: EDIT_USER,
         payload: request
     }
 }

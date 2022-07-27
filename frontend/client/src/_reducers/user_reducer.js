@@ -20,8 +20,6 @@ export default function(state={},action){
             return {...state }
         case SECESSION_USER:
             return {...state }
-        case GET_USER:
-            return {...AUTH_USER, userData: action.payload }
         default:
             return state;
     }
