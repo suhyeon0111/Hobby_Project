@@ -528,7 +528,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220720T065558Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220720%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=8cf99924a1175e172a8a3f6d926a8d807ed983f66a1c806b826627fb0ee90281"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220723T072255Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220723%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=ba6ce78ca95e967e03af86ce0811d4bdc42522e2c903e457a685f642a08ab46b"
   }
 }</code></pre>
 </div>
@@ -607,105 +607,105 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
   "message" : "모임 조회 완료",
   "data" : {
     "meetingList" : [ {
-      "id" : 20,
+      "id" : 25,
       "url" : "none",
       "title" : "제목(19)",
       "content" : "컨텐츠(19)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 19,
+      "id" : 24,
       "url" : "none",
       "title" : "제목(18)",
       "content" : "컨텐츠(18)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 18,
+      "id" : 23,
       "url" : "none",
       "title" : "제목(17)",
       "content" : "컨텐츠(17)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 17,
+      "id" : 22,
       "url" : "none",
       "title" : "제목(16)",
       "content" : "컨텐츠(16)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 16,
+      "id" : 21,
       "url" : "none",
       "title" : "제목(15)",
       "content" : "컨텐츠(15)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 15,
+      "id" : 20,
       "url" : "none",
       "title" : "제목(14)",
       "content" : "컨텐츠(14)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 14,
+      "id" : 19,
       "url" : "none",
       "title" : "제목(13)",
       "content" : "컨텐츠(13)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 13,
+      "id" : 18,
       "url" : "none",
       "title" : "제목(12)",
       "content" : "컨텐츠(12)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 12,
+      "id" : 17,
       "url" : "none",
       "title" : "제목(11)",
       "content" : "컨텐츠(11)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 11,
+      "id" : 16,
       "url" : "none",
       "title" : "제목(10)",
       "content" : "컨텐츠(10)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 10,
+      "id" : 15,
       "url" : "none",
       "title" : "제목(9)",
       "content" : "컨텐츠(9)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 9,
+      "id" : 14,
       "url" : "none",
       "title" : "제목(8)",
       "content" : "컨텐츠(8)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 8,
+      "id" : 13,
       "url" : "none",
       "title" : "제목(7)",
       "content" : "컨텐츠(7)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 7,
+      "id" : 12,
       "url" : "none",
       "title" : "제목(6)",
       "content" : "컨텐츠(6)",
       "participants" : 1,
       "liked" : true
     } ],
-    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=6"
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=11"
   }
 }</code></pre>
 </div>
@@ -722,7 +722,7 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/1 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/6 HTTP/1.1
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -734,7 +734,7 @@ Host: localhost:8080</code></pre>
   "status" : 200,
   "message" : "모임 상세 페이지 조회 완료",
   "data" : {
-    "id" : 1,
+    "id" : 6,
     "title" : "제목(0)",
     "content" : "컨텐츠(0)",
     "url" : "none",
@@ -881,7 +881,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-20 15:18:55 +0900
+Last updated 2022-07-21 18:18:48 +0900
 </div>
 </div>
 </body>
