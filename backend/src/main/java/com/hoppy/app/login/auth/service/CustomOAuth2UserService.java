@@ -8,8 +8,11 @@ import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.like.repository.LikeManagerRepository;
+import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberRepository;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -73,6 +76,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         LikeManager likeManager = LikeManager.builder().build();
         likeManager = likeManagerRepository.save(likeManager);
 
+//        MemberMeeting memberMeetings = MemberMeeting.builder().build();
+        Set<MemberMeeting> meetings = new HashSet<MemberMeeting>();
+        meetings.add(MemberMeeting.builder().build());
+
         Member member = Member.builder()
                 .socialType(socialType)
                 .id(Long.parseLong(userInfo.getSocialId()))
@@ -82,6 +89,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .role(Role.USER)
                 .deleted(false)
                 .likeManager(likeManager)
+                .myMeetings(meetings)
                 .build();
 
         return memberRepository.save(member);

@@ -5,6 +5,7 @@ import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -48,7 +49,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     @Default
     @Exclude
@@ -56,4 +57,8 @@ public class Member {
 
     @OneToOne
     private LikeManager likeManager;
+
+    public void addMyMeetings(MemberMeeting meeting) {
+        this.myMeetings.add(meeting);
+    }
 }
