@@ -6,6 +6,7 @@ import { getUser } from '../../../_actions/user_actions';
 
 const {TabPane} = Tabs;
 
+
 function MyPage() {
 
     const dispatch = useDispatch();
