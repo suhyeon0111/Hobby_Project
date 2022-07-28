@@ -17,6 +17,7 @@ public class MyProfileDto {
     private String username;
     private String profileUrl;
     private String intro;
+    private boolean deleted;
 
     public static MyProfileDto of(Member member) {
         return MyProfileDto.builder()
@@ -25,6 +26,7 @@ public class MyProfileDto {
                 .username(member.getUsername())
                 .profileUrl(member.getProfileImageUrl())
                 .intro(member.getIntro())
+                .deleted(member.isDeleted())
                 .build();
     }
 }
