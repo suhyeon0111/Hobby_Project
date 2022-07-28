@@ -6,6 +6,8 @@ import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.dto.MeetingDetailDto;
 import com.hoppy.app.meeting.dto.MeetingDto;
+import com.hoppy.app.meeting.dto.MeetingJoinDto;
+import com.hoppy.app.meeting.dto.MeetingWithdrawalDto;
 import com.hoppy.app.meeting.dto.PagingMeetingDto;
 import com.hoppy.app.meeting.service.MeetingInquiryService;
 import com.hoppy.app.meeting.service.MeetingManageService;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,11 +60,12 @@ public class MeetingController {
         return responseService.successResult(SuccessCode.CREATE_MEETING_SUCCESS);
     }
 
-    @GetMapping
+    @PostMapping("/entry")
     public ResponseEntity<ResponseDto> joinMeeting(
-            @RequestParam(value = "join") long meetingId,
+            @RequestBody @Valid MeetingJoinDto meetingJoinDto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        Long meetingId = meetingJoinDto.getMeetingId();
         Meeting meeting = meetingInquiryService.getMeetingById(meetingId);
         meetingInquiryService.checkJoinRequestValid(meeting, userDetails.getId());
         meetingManageService.createAndSaveMemberMeetingData(meeting.getId(), userDetails.getId());
@@ -69,12 +73,12 @@ public class MeetingController {
         return responseService.successResult(SuccessCode.JOIN_MEETING_SUCCESS);
     }
 
-    @GetMapping
+    @DeleteMapping("/withdrawal")
     public ResponseEntity<ResponseDto> withdrawalMeeting(
-            @RequestParam(value = "withdraw") long meetingId,
+            @RequestBody @Valid MeetingWithdrawalDto meetingWithdrawalDto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        meetingManageService.withdrawMeeting(meetingId, userDetails.getId());
+        meetingManageService.withdrawMeeting(meetingWithdrawalDto.getMeetingId(), userDetails.getId());
 
         return responseService.successResult(SuccessCode.WITHDRAW_MEETING_SUCCESS);
     }
