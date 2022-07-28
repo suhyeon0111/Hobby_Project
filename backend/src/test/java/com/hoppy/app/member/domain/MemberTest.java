@@ -21,14 +21,6 @@ class MemberTest {
     @Test
     void addMyMeetings() {
         Member member = Member.builder().id(1234L).build();
-        MemberMeeting meeting = new MemberMeeting();
-        member.addMyMeetings(meeting);
-
-        memberRepository.save(member);
-        memberMeetingRepository.save(meeting);
-
-        member.addMyMeetings(meeting);
-
         System.out.println("member.getMyMeetings() = " + member.getMyMeetings());
     }
 }

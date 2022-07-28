@@ -49,7 +49,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
     @Default
     @Exclude
@@ -57,8 +57,4 @@ public class Member {
 
     @OneToOne
     private LikeManager likeManager;
-
-    public void addMyMeetings(MemberMeeting meeting) {
-        this.myMeetings.add(meeting);
-    }
 }
