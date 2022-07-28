@@ -11,6 +11,7 @@ import com.hoppy.app.meeting.service.MeetingInquiryService;
 import com.hoppy.app.meeting.service.MeetingManageService;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.meeting.dto.ParticipantDto;
+import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -18,10 +19,12 @@ import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import java.util.List;
+import java.util.Set;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,15 +52,37 @@ public class MeetingController {
         Meeting meeting = meetingManageService.createMeeting(dto, member.getId());
 
         meetingManageService.saveMeeting(meeting);
-        meetingManageService.createAndSaveMemberMeetingData(meeting, member);
+        meetingManageService.createAndSaveMemberMeetingData(meeting.getId(), member.getId());
 
         return responseService.successResult(SuccessCode.CREATE_MEETING_SUCCESS);
     }
 
     @GetMapping
+    public ResponseEntity<ResponseDto> joinMeeting(
+            @RequestParam(value = "join") long meetingId,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Meeting meeting = meetingInquiryService.getMeetingById(meetingId);
+        meetingInquiryService.checkJoinRequestValid(meeting, userDetails.getId());
+        meetingManageService.createAndSaveMemberMeetingData(meeting.getId(), userDetails.getId());
+
+        return responseService.successResult(SuccessCode.JOIN_MEETING_SUCCESS);
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto> withdrawalMeeting(
+            @RequestParam(value = "withdraw") long meetingId,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        meetingManageService.withdrawMeeting(meetingId, userDetails.getId());
+
+        return responseService.successResult(SuccessCode.WITHDRAW_MEETING_SUCCESS);
+    }
+
+    @GetMapping
     public ResponseEntity<ResponseDto> getMeetingListByCategoryWithPaging(
             @RequestParam int categoryNumber,
-            @RequestParam(defaultValue = "0") long lastId,
+            @RequestParam(value = "lastId", defaultValue = "0") long lastId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Category category = Category.intToCategory(categoryNumber);
