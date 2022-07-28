@@ -25,10 +25,10 @@ public class MeetingManageServiceImpl implements MeetingManageService {
     }
 
     @Override
-    public void createAndSaveMemberMeetingData(Meeting meeting, Member member) {
+    public void createAndSaveMemberMeetingData(Long meetingId, Long memberId) {
         memberMeetingRepository.save(MemberMeeting.builder()
-                .meetingId(meeting.getId())
-                .memberId(member.getId())
+                .meetingId(meetingId)
+                .memberId(memberId)
                 .build());
     }
 
@@ -48,5 +48,10 @@ public class MeetingManageServiceImpl implements MeetingManageService {
     @Override
     public boolean checkTitleDuplicate(String title) {
         return meetingRepository.findMeetingByTitle(title).isPresent();
+    }
+
+    @Override
+    public void withdrawMeeting(Long meetingId, Long memberId) {
+        memberMeetingRepository.deleteMemberMeetingByMeetingIdAndMemberId(meetingId, memberId);
     }
 }
