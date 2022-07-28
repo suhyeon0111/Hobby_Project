@@ -118,10 +118,9 @@ class MeetingInquiryServiceImplTest {
 
         //when
         BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting, requestMemberId));
-        String message = exception.getMessage();
 
         //then
-        assertEquals(message, ErrorCode.MAX_PARTICIPANTS.getMessage());
+        assertEquals(exception.getMessage(), ErrorCode.MAX_PARTICIPANTS.getMessage());
     }
 
     @DisplayName("모임 가입 요청 ALREADY_JOIN 예외 발생 테스트")
@@ -147,9 +146,8 @@ class MeetingInquiryServiceImplTest {
 
         //when
         BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting, requestMemberId));
-        String message = exception.getMessage();
 
         //then
-        assertEquals(message, ErrorCode.ALREADY_JOIN.getMessage());
+        assertEquals(exception.getMessage(), ErrorCode.ALREADY_JOIN.getMessage());
     }
 }
