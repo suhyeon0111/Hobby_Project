@@ -36,7 +36,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-        System.out.println("CustomOAuth2UserService.loadUser");
         OAuth2User user = super.loadUser(userRequest);
 
         try {
@@ -50,37 +49,29 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User user) {
-        System.out.println("CustomOAuth2UserService.process");
+
         SocialType socialType = SocialType.KAKAO;
 
         OAuth2UserInfo userInfo = new KakaoOAuth2UserInfo(user.getAttributes());
         Optional<Member> savedMember = memberRepository.findById(Long.valueOf(userInfo.getSocialId()));
 
-        /**
-         * (Note: 새로운 Member 선언 말고 다른 방법 고민할 것)
-         * 사용자가 존재할 경우, DB에 존재하는 사용자 정보와 비교해서 달라진 것을 자동으로 Update
-         * 사용자가 존재하지 않을 경우, 카카오 정보를 토대로 DB에 저장.
-         */
-
-        if(savedMember.isPresent()) {
-            updateMember(savedMember.get(), userInfo);
-            return CustomUserDetails.create(savedMember.get(), user.getAttributes());
+        Member member;
+        if (savedMember.isPresent()) {
+            /**
+             * 존재하는 멤버일 경우, 탈퇴여부와 이메일 변경 여부를 확인하고 update 후, db에 저장
+             */
+            member = updateMember(savedMember.get(), userInfo);
+            memberRepository.save(member);
         } else {
-            Member member = createMember(userInfo, socialType);
-            return CustomUserDetails.create(member, user.getAttributes());
+            member = createMember(userInfo, socialType);
         }
+        return CustomUserDetails.create(member, user.getAttributes());
     }
 
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
 
-        System.out.println("CustomOAuth2UserService.createMember");
-
         LikeManager likeManager = LikeManager.builder().build();
         likeManager = likeManagerRepository.save(likeManager);
-
-//        MemberMeeting memberMeetings = MemberMeeting.builder().build();
-        Set<MemberMeeting> meetings = new HashSet<MemberMeeting>();
-        meetings.add(MemberMeeting.builder().build());
 
         Member member = Member.builder()
                 .socialType(socialType)
@@ -91,7 +82,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .role(Role.USER)
                 .deleted(false)
                 .likeManager(likeManager)
-                .myMeetings(meetings)
                 .build();
 
         return memberRepository.save(member);
@@ -99,15 +89,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private Member updateMember(Member member, OAuth2UserInfo userInfo) {
         /**
-         * update(프로필 수정)를 위와 같이 자동으로 처리할지, update 전용 api를 생성해서 요청시에만 수정할지 고민할 필요 있음.
+         * 기존 존재하는 멤버의 이메일이 달라졌을 경우에만 수정 진행.
+         * 실제 마이 프로필 수정은 update API에서 담당
          */
-        if (userInfo.getUsername() != null && !member.getUsername().equals(userInfo.getUsername())) {
-            member.setUsername(userInfo.getUsername());
+        if(userInfo.getEmail() != null && !member.getEmail().equals(userInfo.getEmail())) {
+            member.setEmail(userInfo.getEmail());
         }
-        if(userInfo.getProfileImageUrl() != null && !member.getProfileImageUrl().equals(userInfo.getProfileImageUrl())) {
-            member.setProfileImageUrl(userInfo.getProfileImageUrl());
+        /**
+         * 탈퇴한 회원일 경우, 재가입 처리
+         */
+        if(member.isDeleted()) {
+            member.setDeleted(false);
         }
         return member;
+
     }
 
     @PreAuthorize("isAuthenticated()")

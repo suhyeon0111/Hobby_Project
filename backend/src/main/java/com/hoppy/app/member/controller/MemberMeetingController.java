@@ -45,11 +45,6 @@ public class MemberMeetingController {
     ) {
         Long id = customUserDetails.getId();
         meetingService.joinToMeetingById(id, Long.parseLong(meetingId));
-        /*Set<MemberMeeting> set = new HashSet<>();
-        Iterator<MemberMeeting> iter = set.iterator();
-        while (iter.hasNext()) {
-            System.out.println("iter.next() = " + iter.next().getMeetingId());
-        }*/
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS);
     }
 
