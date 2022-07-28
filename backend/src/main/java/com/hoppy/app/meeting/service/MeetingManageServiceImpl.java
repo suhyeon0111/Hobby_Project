@@ -9,6 +9,7 @@ import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,7 @@ public class MeetingManageServiceImpl implements MeetingManageService {
     }
 
     @Override
+    @Transactional
     public void withdrawMeeting(Long meetingId, Long memberId) {
         memberMeetingRepository.deleteMemberMeetingByMeetingIdAndMemberId(meetingId, memberId);
     }
