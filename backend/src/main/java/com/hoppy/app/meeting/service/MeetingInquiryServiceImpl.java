@@ -16,7 +16,9 @@ import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -93,5 +95,19 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     public Boolean checkLiked(Long meetingId, Long memberId) {
         Member member = memberService.findMemberById(memberId);
         return memberMeetingLikeService.findMemberMeetingLikeByLikeManagerAndMeetingId(member.getLikeManager(), meetingId).isPresent();
+    }
+
+    @Override
+    public void checkJoinRequestValid(Meeting meeting, Long memberId) {
+        Set<MemberMeeting> memberMeetings = meeting.getParticipants();
+        int participantsCount = memberMeetings.size();
+        if(participantsCount + 1 > meeting.getMemberLimit()) {
+            throw new BusinessException(ErrorCode.MAX_PARTICIPANTS);
+        }
+
+        boolean alreadyJoin = memberMeetings.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
+        if(alreadyJoin) {
+            throw new BusinessException(ErrorCode.ALREADY_JOIN);
+        }
     }
 }

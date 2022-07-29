@@ -27,4 +27,6 @@ public interface MeetingInquiryService {
     public List<ParticipantDto> getParticipantDtoList(Meeting meeting);
 
     public Boolean checkLiked(Long meetingId, Long memberId);
+
+    public void checkJoinRequestValid(Meeting meeting, Long memberId);
 }
