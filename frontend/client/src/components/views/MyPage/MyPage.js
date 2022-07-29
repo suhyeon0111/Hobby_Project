@@ -6,7 +6,6 @@ import { getUser } from '../../../_actions/user_actions';
 
 const {TabPane} = Tabs;
 
-
 function MyPage() {
 
     const dispatch = useDispatch();
@@ -76,6 +75,7 @@ function MyPage() {
                         width: '142px',
                         height: '142px',
                         marginTop: '48px',
+                        marginRight: '10px',
                         background: '#A5A5A5'
                     }}
                 />

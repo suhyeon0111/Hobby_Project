@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Menu, Modal, Button } from 'antd';
 import Axios from 'axios';
 
@@ -6,24 +6,32 @@ function LeftMenu(props) {
 
     const [IsModal, setIsModal] = useState(false)
 
+    const token = localStorage.getItem('Authorization')
+
     const showModal = () => {
         setIsModal(true);
     };
 
     const handleOk = () => {
         setIsModal(false);
-        // console.log('ok')
+
+        const headers = {
+          Authorization: token
+        }
+
         Axios
-          .get('/api/delete')
+          .get('https://hoppy.kro.kr/api/delete', {
+            headers,
+            withCredentials: false
+          })
           .then(response => {
             console.log('res>>>', response)
-          if (response.status === 200) {
-            alert('탈퇴 처리 되었습니다.')
-            props
-              .push('/')
-          } else {
-            alert('탈퇴 처리가 되지 않았습니다. 다시 시도해주세요.')
-          }
+            if (response.data.status === 200) {
+              alert('탈퇴가 완료되었습니다.')
+              window.location.href = "http://localhost:8888"
+            } else {
+              alert('탈퇴 처리를 실패했습니다. 다시 시도해주세요.')
+            }
         })
     };
 

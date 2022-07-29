@@ -11,7 +11,7 @@ import Footer from "./views/Footer/Footer";
 import NotificationPage from "./views/NotificationPage/NotificationPage";
 
 // import LoginPage from "./views/LoginPage/LoginPage.js";
-import RegisterPage from "./views/RegisterPage/RegisterPage.js";
+// import RegisterPage from "./views/RegisterPage/RegisterPage.js";
 import AuthRedirectHandler from "./views/LoginPage/KakaoLogin/AuthRedirectHandler";
 import KakaoLoginPage from "./views/LoginPage/KakaoLogin/KakaoLoginPage";
 
@@ -59,7 +59,7 @@ function App() {
 
           <Route exact path="/login" component={(KakaoLoginPage)} />
           <Route exact path="/login/oauth2/code/kakao" component={(AuthRedirectHandler)} />
-          <Route exact path="/register" component={(RegisterPage)} />
+          {/* <Route exact path="/register" component={(RegisterPage)} /> */}
 
           <Route exact path="/notification" component={(NotificationPage)} />
 

@@ -11,13 +11,10 @@ function EditMyPage(props) {
     const [EditUser, setEditUser] = useState([])
 
     const token = localStorage.getItem('Authorization')
-    // console.log('token', token)
 
     //placeholder 내용 집어넣기
-
     useEffect(() => {
         dispatch(getUser()).then(response => {
-            // console.log('res>>>', response)
             setEditUser(response.payload.data)
         })
     }, [])
@@ -29,9 +26,10 @@ function EditMyPage(props) {
     //edit form 제작
 
     const [EditUserName, setEditUserName] = useState("");
-    const [EditProfileUrl, setEditProfileUrl] = useState()
+    const [EditProfileUrl, setEditProfileUrl] = useState("")
     const [EditIntro, setEditIntro] = useState("")
     const [File, setFile] = useState([])
+    //파일 업로더 생성
     const fileInput = useRef(null)
 
     //입력 가능하게 event handler 제작
@@ -49,28 +47,68 @@ function EditMyPage(props) {
 
     const onChange = (event) => {
         if(event.target.files[0]) {
+            //업로딩이 되면
+            const targetFile = event.target.files[0];
+            const name = (event.target.files[0].name) + (event.target.files[0].lastModified)
+            const type = event.target.files[0].type
+            const headers = {
+                Authorization: token
+            }
+            
+            Axios
+                .get(`https://hoppy.kro.kr/api/upload/presigned?filename=${name}&contentType=${type}`, {
+                    headers,
+                    withCredentials: false
+                })
+                .then(response => {
+                    if(response.data.status === 200) {
+                        setFile(response.data.data.url)
+                    }
+                    const req = new Request(response.data.data.url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': type,
+                        },
+                        body: targetFile
+                    });
+                    return fetch(req);
+                })
+                .then(response => {
+                    console.log('res>>>>>', response)
+                    if(response.status === 200) {
+                        const url = new URL(response.url)
+                        setEditProfileUrl(url.origin + url.pathname)
+                        alert("사진 업로드에 성공했습니다.")
+                    } else {
+                        alert("사진 업로드에 실패했습니다.")
+                    }
+                })
             setFile(event.target.files[0])
-        } else {
-            setEditProfileUrl()
+        }
+        else {
+            //업로드를 취소하면
+            Intro()
             return
         }
+
+        console.log('ff', EditProfileUrl)
         //프로필 사진 나타내기
         const reader = new FileReader();
         reader.onload = () => {
+            console.log('reader.readyState', reader)
             if(reader.readyState === 2) {
-                setEditProfileUrl(reader.result)
+                setFile(reader.result)
             }
         }
         reader.readAsDataURL(event.target.files[0])
     }
 
     //form 입력 완료 후 전송 값
-
     const submitHandler = (event) => {
         //페이지 리프레시 방지
         event.preventDefault();
         //state 값이 하나라도 수정되어야 리턴되도록 지정
-        if (!EditUserName && !EditIntro && !EditProfileUrl) {
+        if (!EditUserName && !EditIntro && !File) {
             return alert("수정된 사항이 없습니다.")
         }
 
@@ -304,6 +342,7 @@ function EditMyPage(props) {
                             width: '142px',
                             height: '142px',
                             marginTop: '48px',
+                            marginRight: '20px',
                             background: '#A5A5A5'
                         }}/>
                      <input 
