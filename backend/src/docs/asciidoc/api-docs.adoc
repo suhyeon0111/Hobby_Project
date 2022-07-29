@@ -3,9 +3,132 @@
 :toclevels: 4
 :sectlinks:
 
-== Health
-=== Health check
-.request
-include::{snippets}/health-check/http-request.adoc[]
-.response
-include::{snippets}/health-check/http-response.adoc[]
+== 점검 API
+=== 서버 상태 확인하기
+.request url
+----
+GET /api/health
+----
+.request body
+include::{snippets}/health-check/request-body.adoc[]
+.response body
+include::{snippets}/health-check/response-body.adoc[]
+
+== 업로드 API
+=== PresignedURL 발급받기
+.request url
+----
+GET /api/upload/presigned?filename={name}&contentType={type}
+----
+.request body
+include::{snippets}/get-presigned-url/request-body.adoc[]
+.response body
+include::{snippets}/get-presigned-url/response-body.adoc[]
+
+== 모임 API
+=== 모임 생성하기
+.request url
+----
+POST /api/meeting
+----
+.request body
+----
+category: 모임의 카테고리 번호 : 노션 참고
+memberLimit: 최소 2 최대 20 입니다.
+----
+include::{snippets}/create-meeting/request-body.adoc[]
+.response body
+include::{snippets}/create-meeting/response-body.adoc[]
+
+=== 모임 참가하기
+.request url
+----
+POST /api/meeting/entry
+----
+.request body
+----
+meetingId: 모임 id
+----
+include::{snippets}/meeting-join/request-body.adoc[]
+.response body
+include::{snippets}/meeting-join/response-body.adoc[]
+
+=== 모임 탈퇴하기
+.request url
+----
+DELETE /api/meeting/withdrawal
+----
+.request body
+----
+meetingId: 모임 id
+----
+include::{snippets}/meeting-withdraw/request-body.adoc[]
+.response body
+include::{snippets}/meeting-withdraw/response-body.adoc[]
+
+=== 모임 카테고리 조회 (페이징)
+.request url
+----
+최초 조회 시
+GET /api/meeting?categoryNumber={카테고리 번호}
+----
+.request header
+include::{snippets}/meeting-pagination/http-request.adoc[]
+.response body
+----
+id: 모임의 id를 나타냄
+liked: 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄
+----
+include::{snippets}/meeting-pagination/response-body.adoc[]
+
+=== 모임 상세조회
+.request url
+----
+GET /api/meeting/{모임 고유 id}
+----
+.request header
+include::{snippets}/meeting-detail/http-request.adoc[]
+.response body
+include::{snippets}/meeting-detail/response-body.adoc[]
+
+== 유저 프로필 API
+
+=== 내 프로필 조회
+.request url
+----
+GET /api/myprofile
+----
+.request body
+include::{snippets}/show-myProfile/request-body.adoc[]
+.response body
+include::{snippets}/show-myProfile/response-body.adoc[]
+
+=== 사용자 프로필 조회
+.request url
+----
+GET /api/userprofile?id={사용자 id}
+----
+.request body
+include::{snippets}/show-userProfile/request-body.adoc[]
+.response body
+include::{snippets}/show-userProfile/response-body.adoc[]
+
+=== 프로필 수정
+.request url
+----
+POST /api/update
+----
+.request body
+include::{snippets}/update-user/request-body.adoc[]
+.response body
+include::{snippets}/update-user/response-body.adoc[]
+
+=== 회원 탈퇴
+.request url
+----
+GET /api/delete
+----
+.request body
+include::{snippets}/delete-user/request-body.adoc[]
+.response body
+include::{snippets}/delete-user/response-body.adoc[]
