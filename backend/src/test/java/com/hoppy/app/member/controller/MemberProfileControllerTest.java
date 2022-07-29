@@ -1,4 +1,4 @@
-package com.hoppy.app.member.mypage.controller;
+package com.hoppy.app.member.controller;
 
 
 import static org.assertj.core.api.Assertions.*;

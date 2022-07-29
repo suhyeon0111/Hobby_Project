@@ -1,6 +1,9 @@
 package com.hoppy.app.member.dto;
 
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.domain.MemberMeeting;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,14 +22,14 @@ public class UserProfileDto {
     private String username;
     private String profileUrl;
     private String intro;
-
-    public UserProfileDto(String username, String profileUrl, String intro) {
-        this.username = username;
-        this.profileUrl = profileUrl;
-        this.intro = intro;
-    }
+    private Set<MemberMeeting> userMeetings = new HashSet<>();
 
     public static UserProfileDto of(Member member) {
-        return new UserProfileDto(member.getUsername(), member.getProfileImageUrl(), member.getIntro());
+        return UserProfileDto.builder()
+                .username(member.getUsername())
+                .profileUrl(member.getProfileImageUrl())
+                .intro(member.getIntro())
+                .userMeetings(member.getMyMeetings())
+                .build();
     }
 }
