@@ -82,12 +82,12 @@ class MemberProfileControllerTest {
                 .build();
         memberRepository.save(member);
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 1; i <= 10; i++) {
             Category category;
             if(i % 2 == 0) category = Category.HEALTH;
             else category = Category.LIFE;
             Meeting meeting = meetingRepository.save(Meeting.builder().ownerId(member.getId()).url("https://test" + i + ".com")
-                    .title(i+1 + "번 모임").content("Welcome to meeting No." + i+1).category(category).memberLimit(i+10).build());
+                    .title(i + "번 모임").content("Welcome to meeting No." + i).category(category).memberLimit(i+9).build());
             if(i % 3 == 0) {
                 memberMeetingRepository.save(MemberMeeting.builder().memberId(member.getId()).meetingId(meeting.getId()).build());
             }
@@ -128,6 +128,7 @@ class MemberProfileControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 )
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.username", is(optMember.get().getUsername())))
                 .andDo(document("show-userProfile",
