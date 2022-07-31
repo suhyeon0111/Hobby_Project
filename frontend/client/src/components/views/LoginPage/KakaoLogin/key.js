@@ -1,0 +1,1 @@
+export const KAKAO_AUTH_URL = 'https://hoppy.kro.kr/oauth2/authorization/kakao';

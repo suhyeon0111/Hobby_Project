@@ -1,4 +1,4 @@
-= Spring REST Docs [Hoppy API DOCS]
+= Spring REST Docs [Hoppy]
 :toc: left
 :toclevels: 4
 :sectlinks:

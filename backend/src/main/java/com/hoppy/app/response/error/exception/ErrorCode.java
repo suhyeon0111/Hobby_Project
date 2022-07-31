@@ -72,5 +72,4 @@ public enum ErrorCode {
     public static ErrorCode of(final String code) {
         return ErrorCode.valueOf(CODE_MAP.get(code));
     }
-
 }
