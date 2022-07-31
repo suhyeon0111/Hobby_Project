@@ -66,9 +66,7 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Long meetingId = meetingJoinDto.getMeetingId();
-        Meeting meeting = meetingInquiryService.getMeetingById(meetingId);
-        meetingInquiryService.checkJoinRequestValid(meeting, userDetails.getId());
-        meetingManageService.createAndSaveMemberMeetingData(meeting.getId(), userDetails.getId());
+        meetingInquiryService.checkJoinRequestValid(meetingId, userDetails.getId());
 
         return responseService.successResult(SuccessCode.JOIN_MEETING_SUCCESS);
     }
