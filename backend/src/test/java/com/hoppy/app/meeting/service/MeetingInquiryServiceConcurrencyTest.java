@@ -29,7 +29,6 @@ import org.springframework.test.context.ActiveProfiles;
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 class MeetingInquiryServiceConcurrencyTest {
 
     @Autowired

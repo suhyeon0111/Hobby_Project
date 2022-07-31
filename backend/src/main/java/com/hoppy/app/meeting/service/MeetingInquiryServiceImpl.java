@@ -11,6 +11,7 @@ import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.like.service.LikeManagerService;
+import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
@@ -20,11 +21,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
@@ -32,6 +36,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     private final LikeManagerService likeManagerService;
     private final MemberMeetingLikeService memberMeetingLikeService;
     private final MeetingRepository meetingRepository;
+    private final MemberMeetingRepository memberMeetingRepository;
 
     @Override
     public List<Meeting> listMeetingByCategory(Category category, long lastId) {
@@ -98,16 +103,29 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public void checkJoinRequestValid(Meeting meeting, Long memberId) {
-        Set<MemberMeeting> memberMeetings = meeting.getParticipants();
-        int participantsCount = memberMeetings.size();
-        if(participantsCount + 1 > meeting.getMemberLimit()) {
+    @Transactional
+    public void checkJoinRequestValid(Long meetingId, Long memberId) {
+        Optional<Meeting> optionalMeeting = meetingRepository.findMeetingByIdWithLock(meetingId);
+        if(optionalMeeting.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
+        }
+
+        Meeting meeting = optionalMeeting.get();
+        if(meeting.isFull()) {
             throw new BusinessException(ErrorCode.MAX_PARTICIPANTS);
         }
+
+        Set<MemberMeeting> memberMeetings = meeting.getParticipants();
 
         boolean alreadyJoin = memberMeetings.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(alreadyJoin) {
             throw new BusinessException(ErrorCode.ALREADY_JOIN);
+        }
+
+        memberMeetingRepository.save(MemberMeeting.of(memberId, meetingId));
+        if(memberMeetings.size() + 1 == meeting.getMemberLimit()) {
+            log.info("[모임의 full flag를 true로 설정]");
+            meeting.setFullFlag(true);
         }
     }
 }

@@ -4,9 +4,10 @@ import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
+import javax.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,7 +31,11 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
      * stream과 filter를 사용해보자.
      * */
     @Query("select distinct m from Meeting as m where m.category = :category and m.id > :lastId order by m.id desc")
-    List<Meeting> infiniteScrollPagingMeeting(Category category, Long lastId, Pageable pageable);
+    List<Meeting> infiniteScrollPagingMeeting(@Param("category") Category category, @Param("lastId") Long lastId, Pageable pageable);
 
     Optional<Meeting> findMeetingByTitle(String title);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select m from Meeting as m where m.id = :id")
+    Optional<Meeting> findMeetingByIdWithLock(@Param("id") Long id);
 }
