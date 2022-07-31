@@ -115,15 +115,15 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
             throw new BusinessException(ErrorCode.MAX_PARTICIPANTS);
         }
 
-        Set<MemberMeeting> memberMeetings = meeting.getParticipants();
+        Set<MemberMeeting> participants = meeting.getParticipants();
 
-        boolean alreadyJoin = memberMeetings.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
+        boolean alreadyJoin = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(alreadyJoin) {
             throw new BusinessException(ErrorCode.ALREADY_JOIN);
         }
 
         memberMeetingRepository.save(MemberMeeting.of(memberId, meetingId));
-        if(memberMeetings.size() + 1 == meeting.getMemberLimit()) {
+        if(participants.size() + 1 == meeting.getMemberLimit()) {
             log.info("[모임의 full flag를 true로 설정]");
             meeting.setFullFlag(true);
         }
