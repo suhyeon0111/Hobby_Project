@@ -28,5 +28,5 @@ public interface MeetingInquiryService {
 
     public Boolean checkLiked(Long meetingId, Long memberId);
 
-    public void checkJoinRequestValid(Meeting meeting, Long memberId);
+    public void checkJoinRequestValid(Long meetingId, Long memberId);
 }
