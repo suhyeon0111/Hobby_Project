@@ -38,6 +38,7 @@ public enum ErrorCode {
     MEETING_NOT_FOUND(403, "M003", "존재하지 않는 모임입니다"),
     MAX_PARTICIPANTS(403, "M004", "모임 인원 초과입니다"),
     ALREADY_JOIN(403, "M005", "이미 가입한 멤버입니다"),
+    NOT_JOINED(403, "M006", "모임에 가입한 적 없는 멤버입니다"),
 
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
