@@ -28,6 +28,9 @@ public enum SuccessCode {
     JOIN_MEETING_SUCCESS("모임 참가 완료", 200),
     WITHDRAW_MEETING_SUCCESS("모임 탈퇴 완료", 200),
 
+    // Story
+    UPLOAD_STORY_SUCCESS("스토리 업로드 완료", 200),
+
     SHOW_PROFILE_SUCCESS("유저 프로필 조회 완료", 200)
     ;
 
