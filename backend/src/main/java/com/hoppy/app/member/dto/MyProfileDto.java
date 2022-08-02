@@ -2,6 +2,7 @@ package com.hoppy.app.member.dto;
 
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
+import com.hoppy.app.story.domain.story.Story;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class MyProfileDto {
     private String intro;
     private boolean deleted;
     private Set<MemberMeeting> myMeetings = new HashSet<>();
-    private Set<Long> meetingsToLong = new HashSet<>();
+    private Set<Story> myStories = new HashSet<>();
 
     public static MyProfileDto of(Member member) {
 
@@ -35,6 +36,7 @@ public class MyProfileDto {
                 .intro(member.getIntro())
                 .deleted(member.isDeleted())
                 .myMeetings(member.getMyMeetings())
+                .myStories(member.getMyStories())
                 .build();
     }
 
