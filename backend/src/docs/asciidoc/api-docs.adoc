@@ -1,4 +1,4 @@
-= Spring REST Docs [Hoppy API DOCS]
+= Spring REST Docs [Hoppy]
 :toc: left
 :toclevels: 4
 :sectlinks:
@@ -33,12 +33,38 @@ POST /api/meeting
 ----
 .request body
 ----
-category : 모임의 카테고리 번호 : 노션 참고
-memberLimit : 최소 2 최대 20 입니다.
+category: 모임의 카테고리 번호 : 노션 참고
+memberLimit: 최소 2 최대 20 입니다.
 ----
 include::{snippets}/create-meeting/request-body.adoc[]
 .response body
 include::{snippets}/create-meeting/response-body.adoc[]
+
+=== 모임 참가하기
+.request url
+----
+POST /api/meeting/entry
+----
+.request body
+----
+meetingId: 모임 id
+----
+include::{snippets}/meeting-join/request-body.adoc[]
+.response body
+include::{snippets}/meeting-join/response-body.adoc[]
+
+=== 모임 탈퇴하기
+.request url
+----
+DELETE /api/meeting/withdrawal
+----
+.request body
+----
+meetingId: 모임 id
+----
+include::{snippets}/meeting-withdraw/request-body.adoc[]
+.response body
+include::{snippets}/meeting-withdraw/response-body.adoc[]
 
 === 모임 카테고리 조회 (페이징)
 .request url
@@ -50,8 +76,8 @@ GET /api/meeting?categoryNumber={카테고리 번호}
 include::{snippets}/meeting-pagination/http-request.adoc[]
 .response body
 ----
-id : 모임의 id를 나타냄
-liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄
+id: 모임의 id를 나타냄
+liked: 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄
 ----
 include::{snippets}/meeting-pagination/response-body.adoc[]
 

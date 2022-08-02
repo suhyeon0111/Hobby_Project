@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.ToString.Exclude;
 import org.hibernate.annotations.BatchSize;
@@ -48,10 +51,16 @@ public class Meeting {
     private String content;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @Column(nullable = false)
     private Integer memberLimit;
+
+    @Column
+    @Setter
+    @Builder.Default
+    private Boolean fullFlag = false;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "meetingId")
@@ -69,5 +78,9 @@ public class Meeting {
                 .memberLimit(dto.getMemberLimit())
                 .category(Category.intToCategory(dto.getCategory()))
                 .build();
+    }
+
+    public Boolean isFull() {
+        return this.fullFlag;
     }
 }

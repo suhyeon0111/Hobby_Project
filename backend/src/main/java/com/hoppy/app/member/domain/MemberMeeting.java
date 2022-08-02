@@ -29,4 +29,11 @@ public class MemberMeeting {
     private Long memberId;
 
     private Long meetingId;
+
+    public static MemberMeeting of(Long memberId, Long meetingId) {
+        return MemberMeeting.builder()
+                .memberId(memberId)
+                .meetingId(meetingId)
+                .build();
+    }
 }

@@ -45,19 +45,7 @@ public class MemberMeetingController {
     ) {
         Long id = customUserDetails.getId();
         meetingService.joinToMeetingById(id, Long.parseLong(meetingId));
-        /*Set<MemberMeeting> set = new HashSet<>();
-        Iterator<MemberMeeting> iter = set.iterator();
-        while (iter.hasNext()) {
-            System.out.println("iter.next() = " + iter.next().getMeetingId());
-        }*/
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS);
     }
 
-    @GetMapping("/test")
-    public void testMeeting(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        Long id = userDetails.getId();
-        System.out.println("id = " + id);
-        memberMeetingRepoTest.meetingRepoTest(id);
-        System.out.println("MemberMeetingController.testMeeting");
-    }
 }

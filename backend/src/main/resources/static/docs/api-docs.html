@@ -458,6 +458,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_모임_api">모임 API</a>
 <ul class="sectlevel2">
 <li><a href="#_모임_생성하기">모임 생성하기</a></li>
+<li><a href="#_모임_참가하기">모임 참가하기</a></li>
+<li><a href="#_모임_탈퇴하기">모임 탈퇴하기</a></li>
 <li><a href="#_모임_카테고리_조회_페이징">모임 카테고리 조회 (페이징)</a></li>
 <li><a href="#_모임_상세조회">모임 상세조회</a></li>
 </ul>
@@ -528,7 +530,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220720T065558Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220720%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=8cf99924a1175e172a8a3f6d926a8d807ed983f66a1c806b826627fb0ee90281"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220728T192609Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220728%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=c46b6e11e3f601a1590c730a141511bece0294bce788efe6fe0e31e3e5e2607d"
   }
 }</code></pre>
 </div>
@@ -550,8 +552,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">request body</div>
 <div class="content">
-<pre>category : 모임의 카테고리 번호 : 노션 참고
-memberLimit : 최소 2 최대 20 입니다.</pre>
+<pre>category: 모임의 카테고리 번호 : 노션 참고
+memberLimit: 최소 2 최대 20 입니다.</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -577,6 +579,70 @@ memberLimit : 최소 2 최대 20 입니다.</pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_모임_참가하기"><a class="link" href="#_모임_참가하기">모임 참가하기</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/meeting/entry</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre>meetingId: 모임 id</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "meetingId" : 82
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "모임 참가 완료",
+  "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_모임_탈퇴하기"><a class="link" href="#_모임_탈퇴하기">모임 탈퇴하기</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>DELETE /api/meeting/withdrawal</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre>meetingId: 모임 id</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "meetingId" : 83
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "모임 탈퇴 완료",
+  "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_모임_카테고리_조회_페이징"><a class="link" href="#_모임_카테고리_조회_페이징">모임 카테고리 조회 (페이징)</a></h3>
 <div class="listingblock">
 <div class="title">request url</div>
@@ -596,8 +662,8 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">response body</div>
 <div class="content">
-<pre>id : 모임의 id를 나타냄
-liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
+<pre>id: 모임의 id를 나타냄
+liked: 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -722,7 +788,7 @@ liked : 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/1 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/21 HTTP/1.1
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -734,7 +800,7 @@ Host: localhost:8080</code></pre>
   "status" : 200,
   "message" : "모임 상세 페이지 조회 완료",
   "data" : {
-    "id" : 1,
+    "id" : 21,
     "title" : "제목(0)",
     "content" : "컨텐츠(0)",
     "url" : "none",
@@ -780,7 +846,8 @@ Host: localhost:8080</code></pre>
     "email" : "test123@naver.com",
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
-    "intro" : "회원 정보 수정 테스트"
+    "intro" : "회원 정보 수정 테스트",
+    "deleted" : false
   }
 }</code></pre>
 </div>
@@ -844,7 +911,8 @@ Host: localhost:8080</code></pre>
     "email" : "test123@naver.com",
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
-    "intro" : "회원 정보 수정 테스트"
+    "intro" : "회원 정보 수정 테스트",
+    "deleted" : false
   }
 }</code></pre>
 </div>
@@ -881,7 +949,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-20 15:18:55 +0900
+Last updated 2022-07-29 04:24:33 +0900
 </div>
 </div>
 </body>

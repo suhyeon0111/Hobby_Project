@@ -35,9 +35,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String jwt = authTokenProvider.createUserAuthToken(userDetails.getId().toString()).getToken();
+        String token = authTokenProvider.createUserAuthToken(userDetails.getId().toString()).getToken();
 
-        response.setHeader("Authorization", "Bearer " + jwt);
+        log.info("Authorization Bearer " + token);
+        response.setHeader("Authorization", "Bearer " + token);
+        response.sendRedirect("http://localhost:8888/?token=" + token);
     }
 
     /**
