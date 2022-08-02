@@ -124,7 +124,6 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
         memberMeetingRepository.save(MemberMeeting.of(memberId, meetingId));
         if(participants.size() + 1 == meeting.getMemberLimit()) {
-            log.info("[모임의 full flag를 true로 설정]");
             meeting.setFullFlag(true);
         }
     }
