@@ -3,9 +3,9 @@ package com.hoppy.app.member.domain;
 import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
+import com.hoppy.app.story.domain.story.Story;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -54,6 +54,11 @@ public class Member {
     @Default
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
+    @Default
+    private Set<Story> myStories = new HashSet<>();
 
     @OneToOne
     private LikeManager likeManager;
