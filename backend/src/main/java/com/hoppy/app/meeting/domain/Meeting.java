@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 
@@ -51,6 +52,11 @@ public class Meeting {
     @Column(nullable = false)
     private Integer memberLimit;
 
+    @Column
+    @Setter
+    @Builder.Default
+    private Boolean fullFlag = false;
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "meetingId")
     @Builder.Default
@@ -67,5 +73,9 @@ public class Meeting {
                 .memberLimit(dto.getMemberLimit())
                 .category(Category.intToCategory(dto.getCategory()))
                 .build();
+    }
+
+    public Boolean isFull() {
+        return this.fullFlag;
     }
 }

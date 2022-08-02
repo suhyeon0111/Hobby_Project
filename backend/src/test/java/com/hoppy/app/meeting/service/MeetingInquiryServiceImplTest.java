@@ -2,6 +2,7 @@ package com.hoppy.app.meeting.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static reactor.core.publisher.Mono.when;
 
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
@@ -45,6 +47,9 @@ class MeetingInquiryServiceImplTest {
 
     @Mock
     MemberService memberService;
+
+    @Mock
+    MeetingRepository meetingRepository;
 
     @DisplayName("ParticipantDtoList 반환 검증 테스트")
     @Test
@@ -96,31 +101,23 @@ class MeetingInquiryServiceImplTest {
     void checkJoinRequestValidFailTest1() {
 
         //given
-        Set<MemberMeeting> participants = new HashSet<>();
-        for(int i = 0; i < 5; i++) {
-            long memberId = i * 10L;
-            Member member = Member.builder().id(memberId).build();
-            participants.add(MemberMeeting.builder()
-                    .memberId(memberId)
-                    .meetingId(0L)
-                    .build()
-            );
-        }
         Meeting meeting = Meeting.builder()
                 .ownerId(1L)
                 .title("test")
                 .content("test")
                 .memberLimit(5)
                 .category(Category.HEALTH)
-                .participants(participants)
+                .fullFlag(true)
                 .build();
+
         long requestMemberId = 0L;
 
         //when
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting, requestMemberId));
+        Mockito.when(meetingRepository.findMeetingByIdWithLock(meeting.getId())).thenReturn(Optional.of(meeting));
+        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting.getId(), requestMemberId));
 
         //then
-        assertEquals(exception.getMessage(), ErrorCode.MAX_PARTICIPANTS.getMessage());
+        assertEquals(ErrorCode.MAX_PARTICIPANTS.getMessage(), exception.getMessage());
     }
 
     @DisplayName("모임 가입 요청 ALREADY_JOIN 예외 발생 테스트")
@@ -145,9 +142,10 @@ class MeetingInquiryServiceImplTest {
                 .build();
 
         //when
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting, requestMemberId));
+        Mockito.when(meetingRepository.findMeetingByIdWithLock(meeting.getId())).thenReturn(Optional.of(meeting));
+        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting.getId(), requestMemberId));
 
         //then
-        assertEquals(exception.getMessage(), ErrorCode.ALREADY_JOIN.getMessage());
+        assertEquals(ErrorCode.ALREADY_JOIN.getMessage(), exception.getMessage());
     }
 }
