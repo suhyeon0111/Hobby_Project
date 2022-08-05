@@ -4,7 +4,6 @@ import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
-import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -24,11 +23,13 @@ public class MeetingManageServiceImpl implements MeetingManageService {
     private final MemberMeetingRepository memberMeetingRepository;
 
     @Override
+    @Transactional
     public void saveMeeting(Meeting meeting) {
         meetingRepository.save(meeting);
     }
 
     @Override
+    @Transactional
     public void createAndSaveMemberMeetingData(Long meetingId, Long memberId) {
         memberMeetingRepository.save(MemberMeeting.builder()
                 .meetingId(meetingId)
@@ -45,7 +46,6 @@ public class MeetingManageServiceImpl implements MeetingManageService {
         if(Category.intToCategory(dto.getCategory()) == Category.ERROR) {
             throw new BusinessException(ErrorCode.CATEGORY_ERROR);
         }
-
         return Meeting.of(dto, ownerId);
     }
 
