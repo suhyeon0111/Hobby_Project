@@ -1,5 +1,6 @@
 package com.hoppy.app.meeting.domain;
 
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.member.domain.MemberMeeting;
@@ -18,7 +19,6 @@ import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,8 +41,9 @@ public class Meeting {
     @Column(nullable = false)
     private Long ownerId;
 
+    @Column(nullable = false)
     @Builder.Default
-    private String url = "none";
+    private String url = "default-url";
 
     @Column(nullable = false)
     private String title;
@@ -64,10 +65,16 @@ public class Meeting {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "meetingId")
-    @Default
+    @Builder.Default
     @Exclude
     @BatchSize(size = 20)
     private Set<MemberMeeting> participants = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meeting")
+    @Builder.Default
+    @Exclude
+    Set<Post> posts = new HashSet<>();
 
     public static Meeting of(CreateMeetingDto dto, Long ownerId) {
         return Meeting.builder()

@@ -1,6 +1,7 @@
 package com.hoppy.app.community.domain;
 
 import com.hoppy.app.like.domain.MemberPostLike;
+import com.hoppy.app.meeting.domain.Meeting;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -40,9 +41,9 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Exclude
-    private Community community;
+    private Meeting meeting;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @Default
