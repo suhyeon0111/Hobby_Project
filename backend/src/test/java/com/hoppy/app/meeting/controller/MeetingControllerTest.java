@@ -82,15 +82,15 @@ class MeetingControllerTest {
         member = memberRepository.save(member);
 
         for (int i = 0; i < 20; i++) {
-            Meeting meeting = Meeting.builder()
+            Meeting meeting = meetingRepository.save(Meeting.builder()
                     .ownerId(member.getId())
                     .category(Category.ART)
-                    .title("제목(" + i + ")")
-                    .content("컨텐츠(" + i + ")")
+                    .title("제목(" + (i + 1) + ")")
+                    .content("컨텐츠(" + (i + 1) + ")")
                     .memberLimit(15)
-                    .build();
+                    .build()
+            );
 
-            meeting = meetingRepository.save(meeting);
             memberMeetingRepository.save(MemberMeeting.builder()
                     .meetingId(meeting.getId())
                     .memberId(member.getId())
