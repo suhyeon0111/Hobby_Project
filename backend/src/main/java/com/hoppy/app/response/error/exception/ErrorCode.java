@@ -40,6 +40,9 @@ public enum ErrorCode {
     ALREADY_JOIN(403, "M005", "이미 가입한 멤버입니다"),
     NOT_JOINED(403, "M006", "모임에 가입한 적 없는 멤버입니다"),
 
+    // Community
+    COMMUNITY_NOT_FOUND(500, "C001", "커뮤니티가 존재하지 않습니다. 관리자에게 문의"),
+
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
     DELETED_MEMBER(403, "MM002", "탈퇴한 멤버입니다.")
