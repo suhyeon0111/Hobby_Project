@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Spring REST Docs [Hoppy API DOCS]</title>
+<title>Spring REST Docs [Hoppy]</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,7 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Spring REST Docs [Hoppy API DOCS]</h1>
+<h1>Spring REST Docs [Hoppy]</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
@@ -470,6 +470,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_사용자_프로필_조회">사용자 프로필 조회</a></li>
 <li><a href="#_프로필_수정">프로필 수정</a></li>
 <li><a href="#_회원_탈퇴">회원 탈퇴</a></li>
+</ul>
+</li>
+<li><a href="#_스토리_api">스토리 API</a>
+<ul class="sectlevel2">
+<li><a href="#_스토리_업로드">스토리 업로드</a></li>
+<li><a href="#_스토리_수정">스토리 수정</a></li>
+<li><a href="#_스토리_삭제">스토리 삭제</a></li>
 </ul>
 </li>
 </ul>
@@ -530,7 +537,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220728T192609Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220728%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=c46b6e11e3f601a1590c730a141511bece0294bce788efe6fe0e31e3e5e2607d"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220806T092059Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220806%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=6e05fcc1ce46689ae54efc790e6ccac87c0ff08f811d11d66e8f62124e1f08eb"
   }
 }</code></pre>
 </div>
@@ -595,7 +602,7 @@ memberLimit: 최소 2 최대 20 입니다.</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "meetingId" : 82
+  "meetingId" : 97
 }</code></pre>
 </div>
 </div>
@@ -627,7 +634,7 @@ memberLimit: 최소 2 최대 20 입니다.</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "meetingId" : 83
+  "meetingId" : 98
 }</code></pre>
 </div>
 </div>
@@ -673,105 +680,105 @@ liked: 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
   "message" : "모임 조회 완료",
   "data" : {
     "meetingList" : [ {
-      "id" : 20,
+      "id" : 35,
       "url" : "none",
       "title" : "제목(19)",
       "content" : "컨텐츠(19)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 19,
+      "id" : 34,
       "url" : "none",
       "title" : "제목(18)",
       "content" : "컨텐츠(18)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 18,
+      "id" : 33,
       "url" : "none",
       "title" : "제목(17)",
       "content" : "컨텐츠(17)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 17,
+      "id" : 32,
       "url" : "none",
       "title" : "제목(16)",
       "content" : "컨텐츠(16)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 16,
+      "id" : 31,
       "url" : "none",
       "title" : "제목(15)",
       "content" : "컨텐츠(15)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 15,
+      "id" : 30,
       "url" : "none",
       "title" : "제목(14)",
       "content" : "컨텐츠(14)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 14,
+      "id" : 29,
       "url" : "none",
       "title" : "제목(13)",
       "content" : "컨텐츠(13)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 13,
+      "id" : 28,
       "url" : "none",
       "title" : "제목(12)",
       "content" : "컨텐츠(12)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 12,
+      "id" : 27,
       "url" : "none",
       "title" : "제목(11)",
       "content" : "컨텐츠(11)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 11,
+      "id" : 26,
       "url" : "none",
       "title" : "제목(10)",
       "content" : "컨텐츠(10)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 10,
+      "id" : 25,
       "url" : "none",
       "title" : "제목(9)",
       "content" : "컨텐츠(9)",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 9,
+      "id" : 24,
       "url" : "none",
       "title" : "제목(8)",
       "content" : "컨텐츠(8)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 8,
+      "id" : 23,
       "url" : "none",
       "title" : "제목(7)",
       "content" : "컨텐츠(7)",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 7,
+      "id" : 22,
       "url" : "none",
       "title" : "제목(6)",
       "content" : "컨텐츠(6)",
       "participants" : 1,
       "liked" : true
     } ],
-    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=6"
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=21"
   }
 }</code></pre>
 </div>
@@ -788,7 +795,7 @@ liked: 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/21 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/36 HTTP/1.1
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -800,7 +807,7 @@ Host: localhost:8080</code></pre>
   "status" : 200,
   "message" : "모임 상세 페이지 조회 완료",
   "data" : {
-    "id" : 21,
+    "id" : 36,
     "title" : "제목(0)",
     "content" : "컨텐츠(0)",
     "url" : "none",
@@ -847,7 +854,21 @@ Host: localhost:8080</code></pre>
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
-    "deleted" : false
+    "deleted" : false,
+    "myMeetings" : [ {
+      "id" : 11,
+      "memberId" : 9999,
+      "meetingId" : 8
+    }, {
+      "id" : 12,
+      "memberId" : 9999,
+      "meetingId" : 11
+    }, {
+      "id" : 13,
+      "memberId" : 9999,
+      "meetingId" : 14
+    } ],
+    "myStories" : [ ]
   }
 }</code></pre>
 </div>
@@ -876,7 +897,21 @@ Host: localhost:8080</code></pre>
   "data" : {
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
-    "intro" : "회원 정보 수정 테스트"
+    "intro" : "회원 정보 수정 테스트",
+    "userMeetings" : [ {
+      "id" : 11,
+      "memberId" : 9999,
+      "meetingId" : 8
+    }, {
+      "id" : 13,
+      "memberId" : 9999,
+      "meetingId" : 14
+    }, {
+      "id" : 12,
+      "memberId" : 9999,
+      "meetingId" : 11
+    } ],
+    "userStories" : [ ]
   }
 }</code></pre>
 </div>
@@ -912,7 +947,21 @@ Host: localhost:8080</code></pre>
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
-    "deleted" : false
+    "deleted" : false,
+    "myMeetings" : [ {
+      "id" : 12,
+      "memberId" : 9999,
+      "meetingId" : 11
+    }, {
+      "id" : 11,
+      "memberId" : 9999,
+      "meetingId" : 8
+    }, {
+      "id" : 13,
+      "memberId" : 9999,
+      "meetingId" : 14
+    } ],
+    "myStories" : [ ]
   }
 }</code></pre>
 </div>
@@ -945,11 +994,119 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_스토리_api"><a class="link" href="#_스토리_api">스토리 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_스토리_업로드"><a class="link" href="#_스토리_업로드">스토리 업로드</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/story/upload</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "title" : "Story Upload Test",
+  "content" : "This is Test code",
+  "filename" : "example.jpg"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "스토리 업로드 완료",
+  "data" : {
+    "createdDate" : "2022-08-06T18:20:57.372502",
+    "modifiedDate" : "2022-08-06T18:20:57.372502",
+    "id" : 17,
+    "title" : "Story Upload Test",
+    "username" : "최대한",
+    "content" : "This is Test code",
+    "filePath" : null,
+    "memberId" : 8669,
+    "deleted" : false
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_스토리_수정"><a class="link" href="#_스토리_수정">스토리 수정</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/story/update?id={storyId}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "title" : "Update Story Test",
+  "content" : "This is updated story",
+  "filename" : "test_success.wav"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "스토리 업로드 완료",
+  "data" : {
+    "createdDate" : "2022-08-06T18:20:57.188234",
+    "modifiedDate" : "2022-08-06T18:20:57.287461",
+    "id" : 3,
+    "title" : "Update Story Test",
+    "username" : "CHOI",
+    "content" : "This is updated story",
+    "filePath" : "test_success.wav",
+    "memberId" : null,
+    "deleted" : false
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_스토리_삭제"><a class="link" href="#_스토리_삭제">스토리 삭제</a></h3>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>GET /api/story/delete?id={storyId}</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "status" : 200,
+  "message" : "스토리 삭제 완료",
+  "data" : [ ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-29 04:24:33 +0900
+Last updated 2022-08-06 17:04:04 +0900
 </div>
 </div>
 </body>
