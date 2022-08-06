@@ -1,5 +1,9 @@
 package com.hoppy.app.meeting.controller;
 
+import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.dto.PagingPostDto;
+import com.hoppy.app.community.dto.PostDto;
+import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
@@ -13,7 +17,6 @@ import com.hoppy.app.meeting.service.MeetingInquiryService;
 import com.hoppy.app.meeting.service.MeetingManageService;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.meeting.dto.ParticipantDto;
-import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -21,7 +24,7 @@ import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,6 +46,7 @@ public class MeetingController {
     private final MeetingInquiryService meetingInquiryService;
     private final MeetingManageService meetingManageService;
     private final MemberService memberService;
+    private final PostService postService;
     private final ResponseService responseService;
 
     @PostMapping
@@ -87,6 +90,9 @@ public class MeetingController {
             @RequestParam(value = "lastId", defaultValue = "0") long lastId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if(lastId == 0L) {
+            lastId = Long.MAX_VALUE;
+        }
         Category category = Category.intToCategory(categoryNumber);
         if(category == Category.ERROR) {
             throw new BusinessException(ErrorCode.CATEGORY_ERROR);
@@ -96,10 +102,7 @@ public class MeetingController {
         lastId = meetingInquiryService.getListsLastMeetingId(meetingList);
         String nextPagingUrl = meetingInquiryService.createNextPagingUrl(categoryNumber, lastId);
         List<MeetingDto> meetingDtoList = meetingInquiryService.meetingListToMeetingDtoList(meetingList, userDetails.getId());
-        PagingMeetingDto pagingMeetingDto = PagingMeetingDto.builder()
-                .meetingList(meetingDtoList)
-                .nextPagingUrl(nextPagingUrl)
-                .build();
+        PagingMeetingDto pagingMeetingDto = PagingMeetingDto.of(meetingDtoList, nextPagingUrl);
 
         return responseService.successResult(SuccessCode.INQUIRY_MEETING_SUCCESS, pagingMeetingDto);
     }
@@ -111,9 +114,35 @@ public class MeetingController {
     ) {
         Meeting meeting = meetingInquiryService.getMeetingById(id);
         List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
-        Boolean liked = meetingInquiryService.checkLiked(meeting.getId(), userDetails.getId());
+        meetingManageService.checkJoinedMember(participantList, userDetails.getId());
+        boolean liked = meetingInquiryService.checkLiked(meeting.getId(), userDetails.getId());
+
         MeetingDetailDto meetingDetailDto = MeetingDetailDto.of(meeting, participantList, liked);
 
         return responseService.successResult(SuccessCode.INQUIRE_MEETING_DETAIL_SUCCESS, meetingDetailDto);
+    }
+
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<ResponseDto> getPostsWithPaging(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "lastId", defaultValue = "0") long lastId,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Meeting meeting = meetingInquiryService.getMeetingById(id);
+        List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
+        meetingManageService.checkJoinedMember(participantList, userDetails.getId());
+
+        if(lastId == 0L) {
+            lastId = Long.MAX_VALUE;
+        }
+        List<Post> posts = postService.listPostByMeetingWithPaging(meeting, lastId);
+        lastId = postService.getListsLastPostId(posts);
+        String nextPagingUrl = postService.createNextPagingUrl(id, lastId);
+        List<PostDto> postDtos = postService.postListToPostDtoList(posts, userDetails.getId());
+        PagingPostDto pagingPostDto = new PagingPostDto(postDtos, nextPagingUrl);
+
+        // TODO: 22.08.06. 이곳에 사용된 모든 로직은 성능 테스트가 필요함
+
+        return responseService.successResult(SuccessCode.INQUIRY_COMMUNITY_POSTS_SUCCESS, pagingPostDto);
     }
 }
