@@ -9,4 +9,8 @@ public interface StoryManageService {
     public void saveStory(Story story);
 
     public Story uploadStory(UploadStoryDto dto, Member member);
+
+    public Story updateStory(UploadStoryDto dto, Long storyId);
+
+    public void deleteStory(Long storyId);
 }
