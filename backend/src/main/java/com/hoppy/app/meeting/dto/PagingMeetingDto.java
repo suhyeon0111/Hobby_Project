@@ -19,4 +19,11 @@ public class PagingMeetingDto {
     private List<MeetingDto> meetingList;
 
     private String nextPagingUrl;
+
+    public static PagingMeetingDto of(List<MeetingDto> meetingList, String nextPagingUrl) {
+        return PagingMeetingDto.builder()
+                .meetingList(meetingList)
+                .nextPagingUrl(nextPagingUrl)
+                .build();
+    }
 }
