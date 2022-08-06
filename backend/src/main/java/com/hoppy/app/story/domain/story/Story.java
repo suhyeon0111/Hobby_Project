@@ -13,9 +13,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,6 +41,8 @@ public class Story extends BaseTimeEntity {
     @Column(name="memberId")
     private Long memberId;
 
+    private boolean deleted;
+
     /**
      * 파일 업로드 기능 추가 필요
      */
@@ -49,6 +53,7 @@ public class Story extends BaseTimeEntity {
                 .memberId(member.getId())
                 .title(dto.getTitle())
                 .content(dto.getContent())
+                .deleted(false)
                 .build();
     }
 }
