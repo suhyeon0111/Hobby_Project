@@ -3,11 +3,14 @@ package com.hoppy.app.meeting.service;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
+import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
+import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +38,14 @@ public class MeetingManageServiceImpl implements MeetingManageService {
                 .meetingId(meetingId)
                 .memberId(memberId)
                 .build());
+    }
+
+    @Override
+    public void checkJoinedMember(List<ParticipantDto> participantList, Long memberId) {
+        boolean joined = participantList.stream().anyMatch(P -> Objects.equals(P.getId(), memberId));
+        if(!joined) {
+            throw new BusinessException(ErrorCode.NOT_JOINED);
+        }
     }
 
     @Override
