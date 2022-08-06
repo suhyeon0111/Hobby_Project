@@ -8,10 +8,11 @@ import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select distinct m from Member as m where m.id > :lastId and m.id in :membersId order by m.id desc")
-    List<Member> infiniteScrollPagingMember(List<Long> membersId, Long lastId, Pageable pageable);
+    List<Member> infiniteScrollPagingMember(@Param("membersId") List<Long> membersId, @Param("lastId") Long lastId, Pageable pageable);
 }
