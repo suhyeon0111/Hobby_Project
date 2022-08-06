@@ -39,7 +39,7 @@ public class StoryController {
         Story story = storyManageService.uploadStory(dto, member);
 
         storyManageService.saveStory(story);
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS);
+        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, story);
     }
 
     @PostMapping("/update")
