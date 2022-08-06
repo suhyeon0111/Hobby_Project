@@ -55,6 +55,6 @@ public class Member {
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private LikeManager likeManager;
 }

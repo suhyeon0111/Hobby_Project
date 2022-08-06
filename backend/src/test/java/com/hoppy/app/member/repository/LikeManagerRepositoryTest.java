@@ -40,7 +40,7 @@ class LikeManagerRepositoryTest {
         Optional<Member> optionalMember = memberRepository.findById(1L);
         Assertions.assertThat(optionalMember.isPresent()).isTrue();
 
-        Optional<LikeManager> memberLike = likeManagerRepository.findMemberLikeAndMeetingLikesByMember(optionalMember.get());
+        Optional<LikeManager> memberLike = likeManagerRepository.findLikeManagerWithMeetingLikesByMember(optionalMember.get());
         Assertions.assertThat(memberLike.isPresent()).isTrue();
     }
 }
