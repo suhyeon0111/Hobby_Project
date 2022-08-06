@@ -31,6 +31,5 @@ public class MemberPostLike {
     @ManyToOne
     private LikeManager likeManager;
 
-    @ManyToOne
-    private Post post;
+    private Long postId;
 }

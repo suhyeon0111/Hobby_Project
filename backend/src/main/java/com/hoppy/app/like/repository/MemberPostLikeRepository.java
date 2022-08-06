@@ -1,6 +1,8 @@
 package com.hoppy.app.like.repository;
 
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.like.domain.MemberPostLike;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,4 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MemberPostLikeRepository extends JpaRepository<MemberPostLike, Long> {
 
+    List<MemberPostLike> findAllByPostId(Long postId);
 }
