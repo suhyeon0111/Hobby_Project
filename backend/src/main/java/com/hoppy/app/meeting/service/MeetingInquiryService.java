@@ -6,12 +6,6 @@ import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.dto.ParticipantDto;
 import java.util.List;
 
-/*
-* 모임 조회 서비스
-* 1. 카테고리에 속하는 모임 조회
-* 2. 제목 검색 결과에 해당하는 모임 조회
-* 3. ...
-* */
 public interface MeetingInquiryService {
 
     public List<Meeting> pagingMeetingList(Category category, long lastId);
