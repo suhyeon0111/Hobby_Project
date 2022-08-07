@@ -16,6 +16,7 @@ import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.nio.charset.StandardCharsets;
@@ -73,7 +74,7 @@ class StoryControllerTest {
                             .title(i+"th Story")
                             .content("This is " + i + "th Story")
                             .filePath(i+".jpg")
-                            .username("CHOI").build()
+                            .member(member).build()
             );
         }
     }
@@ -100,6 +101,7 @@ class StoryControllerTest {
     }
 
     @Test
+    @WithMockCustomUser(id = "8669")
     void updateStory() throws Exception {
         String storyId = "3";
         Optional<Story> optStory = storyRepository.findById(Long.parseLong(storyId));
@@ -118,6 +120,7 @@ class StoryControllerTest {
                 .andDo(document("update-story",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
+        Optional<Story> newStory = storyRepository.findById(Long.parseLong(storyId));
     }
 
     @Test
