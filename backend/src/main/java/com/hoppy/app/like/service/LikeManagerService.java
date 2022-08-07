@@ -12,9 +12,9 @@ public interface LikeManagerService {
 
     public LikeManager createLikeManager();
 
-    public LikeManager getMemberMeetingLikes(Member member);
+    public LikeManager getMeetingLikes(Member member);
 
-    public LikeManager getMemberPostLikes(Member member);
+    public LikeManager getPostLikes(Member member);
 
-    public CountDto getPostsLikeCount(Long postId);
+    public CountDto getLikeCount(Long postId);
 }

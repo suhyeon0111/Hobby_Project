@@ -28,8 +28,6 @@ import org.springframework.data.domain.PageRequest;
 @DataJpaTest
 class PostRepositoryTest {
 
-    // TODO: 2022.08.06. Post 서비스 테스트 코드 작성이 필요함
-
     @Autowired
     PostRepository postRepository;
 

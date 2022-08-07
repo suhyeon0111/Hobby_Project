@@ -5,16 +5,13 @@ import com.hoppy.app.community.dto.CountDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.repository.PostRepository;
 import com.hoppy.app.like.domain.LikeManager;
-import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.service.LikeManagerService;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberService;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -51,14 +48,14 @@ public class PostServiceImpl implements PostService {
         // TODO: 2022.08.06. 쿼리 성능 검증이 필요함 -tae
         // 사용자가 "좋아요"를 눌렀는지 확인하기 위한 likeIdMap 생성
         Member member = memberService.findMemberById(memberId);
-        LikeManager likeManager = likeManagerService.getMemberPostLikes(member);
+        LikeManager likeManager = likeManagerService.getPostLikes(member);
         Map<Long, Boolean> likedMap = likeManager.getPostLikes()
                 .stream()
                 .map(MemberPostLike::getPostId)
                 .collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
 
         Map<Long, Integer> likeCountMap = posts.stream()
-                .map(P -> likeManagerService.getPostsLikeCount(P.getId()))
+                .map(P -> likeManagerService.getLikeCount(P.getId()))
                 .collect(Collectors.toMap(CountDto::getId, CountDto::getCount));
 
         Map<Long, Integer> replyCountMap = posts.stream()

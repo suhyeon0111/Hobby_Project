@@ -59,7 +59,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     @Override
     public List<MeetingDto> listToDtoList(List<Meeting> meetingList, Long memberId) {
         Member member = memberService.findMemberById(memberId);
-        LikeManager likeManager = likeManagerService.getMemberMeetingLikes(member);
+        LikeManager likeManager = likeManagerService.getMeetingLikes(member);
 
         Map<Long, Boolean> likedMap = likeManager.getMeetingLikes()
                 .stream()

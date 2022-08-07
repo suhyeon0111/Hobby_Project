@@ -26,7 +26,7 @@ public class LikeManagerServiceImpl implements LikeManagerService {
     }
 
     @Override
-    public LikeManager getMemberMeetingLikes(Member member) {
+    public LikeManager getMeetingLikes(Member member) {
         Optional<LikeManager> optionalMemberLike = likeManagerRepository.findLikeManagerWithMeetingLikesByMember(member);
 
         if(optionalMemberLike.isEmpty()) {
@@ -38,7 +38,7 @@ public class LikeManagerServiceImpl implements LikeManagerService {
     }
 
     @Override
-    public LikeManager getMemberPostLikes(Member member) {
+    public LikeManager getPostLikes(Member member) {
         Optional<LikeManager> optionalLikeManager = likeManagerRepository.findLikeManagerWithPostLikesByMember(member);
 
         if(optionalLikeManager.isEmpty()) {
@@ -50,7 +50,7 @@ public class LikeManagerServiceImpl implements LikeManagerService {
     }
 
     @Override
-    public CountDto getPostsLikeCount(Long postId) {
+    public CountDto getLikeCount(Long postId) {
         return CountDto.of(postId, memberPostLikeRepository.findAllByPostId(postId).size());
     }
 
