@@ -52,7 +52,7 @@ class StoryRepositoryTest {
                 .title("title")
                 .content("This is BaseTimeEntity Test")
                 .username("ChoiMax")
-                .memberId(8669L)
+//                .memberId(8669L)
                 .build());
         List<Story> storyList = storyRepository.findAll();
 

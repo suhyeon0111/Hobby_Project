@@ -25,6 +25,8 @@ import com.hoppy.app.member.dto.MyProfileDto;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.dto.UpdateMemberDto;
+import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.repository.StoryRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
@@ -63,6 +65,9 @@ class MemberProfileControllerTest {
     MemberMeetingRepository memberMeetingRepository;
 
     @Autowired
+    StoryRepository storyRepository;
+
+    @Autowired
     private MockMvc mvc;
 
     @Autowired
@@ -92,6 +97,17 @@ class MemberProfileControllerTest {
                 memberMeetingRepository.save(MemberMeeting.builder().memberId(member.getId()).meetingId(meeting.getId()).build());
             }
         }
+
+//        for(int i = 1; i <= 5; i++) {
+//            storyRepository.save(
+//                    Story.builder()
+//                            .member(member)
+//                            .title(i+"th Story")
+//                            .content("This is " + i + "th Story")
+//                            .filePath(i+".jpg")
+//                            .username("CHOI").build()
+//            );
+//        }
     }
 
     @Test
