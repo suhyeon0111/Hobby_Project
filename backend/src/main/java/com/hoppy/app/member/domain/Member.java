@@ -56,9 +56,7 @@ public class Member {
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
-//    @OneToMany(fetch = FetchType.LAZY)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
-//    @JoinColumn(name = "member")
     @Default
     @Exclude
     private Set<Story> stories = new HashSet<>();

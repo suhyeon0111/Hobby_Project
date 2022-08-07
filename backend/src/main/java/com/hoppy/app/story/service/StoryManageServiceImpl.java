@@ -18,7 +18,6 @@ public class StoryManageServiceImpl implements StoryManageService {
 
     @Override
     public void saveStory(Story story, Member member) {
-//        story.setMember(member);
         storyRepository.save(story);
     }
 

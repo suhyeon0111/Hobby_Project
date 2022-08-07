@@ -46,8 +46,6 @@ public class Story extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Exclude
-//    @JsonIgnore
-//    @JoinColumn(name = "memberId")
     private Member member;
 
     private boolean deleted;
