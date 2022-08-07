@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     private final int PAGING_COUNT = 8;
@@ -37,7 +39,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public String createNextPagingUrl(long meetingId, long lastId) {
-        return "https://hoppy.kro.kr/api/meeting/" + meetingId + "/posts?lastId=" + lastId;
+        return "https://hoppy.kro.kr/api/meeting/posts?meetingId=" + meetingId + "&lastId=" + lastId;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
 
         return posts.stream()
-                .map(P -> PostDto.postToPostDto(P, likedMap.get(P.getId()), likeService.getPostLikeCount(P.getId())))
+                .map(P -> PostDto.postToPostDto(P, likedMap.containsKey(P.getId()), likeService.getPostLikeCount(P.getId())))
                 .collect(Collectors.toList());
     }
 }

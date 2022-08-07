@@ -52,6 +52,7 @@ public class Post {
     @Exclude
     private Meeting meeting;
 
+    // TODO: 댓글도 페이징 적용이 필요합니다 -tae
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @BatchSize(size = 100)
     @Default

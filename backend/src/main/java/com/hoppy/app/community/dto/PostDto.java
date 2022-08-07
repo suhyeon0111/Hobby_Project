@@ -15,9 +15,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostDto {
 
-    private String memberProfileUrl;
+    private long id;
 
-    private String memberName;
+    private String ownerProfileUrl;
+
+    private String ownerName;
 
     private String title;
 
@@ -31,8 +33,9 @@ public class PostDto {
 
     public static PostDto postToPostDto(Post post, boolean liked, int likeCount) {
         return PostDto.builder()
-                .memberProfileUrl(post.getOwner().getProfileImageUrl())
-                .memberName(post.getOwner().getUsername())
+                .id(post.getId())
+                .ownerProfileUrl(post.getOwner().getProfileImageUrl())
+                .ownerName(post.getOwner().getUsername())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .liked(liked)
