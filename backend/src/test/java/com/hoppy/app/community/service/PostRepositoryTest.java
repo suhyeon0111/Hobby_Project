@@ -26,7 +26,7 @@ import org.springframework.data.domain.PageRequest;
  * @author 태경 2022-08-06
  */
 @DataJpaTest
-class PostServiceImplTest {
+class PostRepositoryTest {
 
     // TODO: 2022.08.06. Post 서비스 테스트 코드 작성이 필요함
 
