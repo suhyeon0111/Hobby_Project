@@ -44,7 +44,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public long getListsLastMeetingId(List<Meeting> meetingList) {
+    public long getLastId(List<Meeting> meetingList) {
         return meetingList.get(meetingList.size() - 1).getId() - 1;
     }
 

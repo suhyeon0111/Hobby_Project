@@ -16,7 +16,7 @@ public interface MeetingInquiryService {
 
     public List<Meeting> listMeetingByCategory(Category category, long lastId);
 
-    public long getListsLastMeetingId(List<Meeting> meetingList);
+    public long getLastId(List<Meeting> meetingList);
 
     public String createNextPagingUrl(int categoryNumber, long lastId);
 
