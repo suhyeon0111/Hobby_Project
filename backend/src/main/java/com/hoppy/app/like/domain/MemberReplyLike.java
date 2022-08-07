@@ -28,9 +28,6 @@ public class MemberReplyLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private LikeManager likeManager;
-
-    @ManyToOne
-    private Reply reply;
+    private Long memberId;
+    private Long replyId;
 }

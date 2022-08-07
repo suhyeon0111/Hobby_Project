@@ -28,8 +28,6 @@ public class MemberPostLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private LikeManager likeManager;
-
+    private Long memberId;
     private Long postId;
 }

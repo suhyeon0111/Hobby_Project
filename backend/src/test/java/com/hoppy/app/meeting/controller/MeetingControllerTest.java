@@ -19,20 +19,15 @@ import com.hoppy.app.meeting.dto.MeetingWithdrawalDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.like.domain.MemberMeetingLike;
-import com.hoppy.app.like.repository.LikeManagerRepository;
 import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -65,9 +60,6 @@ class MeetingControllerTest {
     private MeetingRepository meetingRepository;
 
     @Autowired
-    private LikeManagerRepository likeManagerRepository;
-
-    @Autowired
     private MemberMeetingRepository memberMeetingRepository;
 
     @Autowired
@@ -75,10 +67,8 @@ class MeetingControllerTest {
 
     @BeforeEach
     void before() {
-        LikeManager likeManager = LikeManager.builder().build();
-        likeManager = likeManagerRepository.save(likeManager);
-
-        Member member = Member.builder().id(1L).likeManager(likeManager).build();
+        final long MEMBER_ID = 1L;
+        Member member = Member.builder().id(MEMBER_ID).build();
         member = memberRepository.save(member);
 
         for (int i = 0; i < 20; i++) {
@@ -99,7 +89,7 @@ class MeetingControllerTest {
 
             if(i % 3 == 0) {
                 memberMeetingLikeRepository.save(MemberMeetingLike.builder()
-                        .likeManager(likeManager)
+                        .memberId(member.getId())
                         .meetingId(meeting.getId())
                         .build()
                 );

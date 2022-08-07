@@ -39,11 +39,6 @@ public class ReReply {
     @Column(nullable = false)
     private String content;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reReply")
-    @Default
-    @Exclude
-    private Set<MemberReReplyLike> likes = new HashSet<>();
-
     @ManyToOne
     @Exclude
     private Reply reply;

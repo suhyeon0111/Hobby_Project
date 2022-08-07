@@ -1,19 +1,13 @@
 package com.hoppy.app.login.auth.service;
 
-import com.hoppy.app.like.service.LikeManagerService;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.login.auth.authentication.KakaoOAuth2UserInfo;
 import com.hoppy.app.login.auth.authentication.OAuth2UserInfo;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.like.domain.LikeManager;
-import com.hoppy.app.like.repository.LikeManagerRepository;
-import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberRepository;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -31,8 +25,6 @@ import org.springframework.stereotype.Service;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
-
-    private final LikeManagerRepository likeManagerRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -70,23 +62,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
-        Member member = memberRepository.save(
+        return memberRepository.save(
                 Member.builder()
-                .socialType(socialType)
-                .id(Long.parseLong(userInfo.getSocialId()))
-                .email(userInfo.getEmail())
-                .profileImageUrl(userInfo.getProfileImageUrl())
-                .username(userInfo.getUsername())
-                .role(Role.USER)
-                .deleted(false)
-                .build()
+                        .socialType(socialType)
+                        .id(Long.parseLong(userInfo.getSocialId()))
+                        .email(userInfo.getEmail())
+                        .profileImageUrl(userInfo.getProfileImageUrl())
+                        .username(userInfo.getUsername())
+                        .role(Role.USER)
+                        .deleted(false)
+                        .build()
         );
-        likeManagerRepository.save(
-                LikeManager.builder()
-                .member(member)
-                .build()
-        );
-        return member;
     }
 
     private Member updateMember(Member member, OAuth2UserInfo userInfo) {

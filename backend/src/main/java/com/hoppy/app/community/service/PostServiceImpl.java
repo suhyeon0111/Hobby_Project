@@ -1,17 +1,14 @@
 package com.hoppy.app.community.service;
 
 import com.hoppy.app.community.domain.Post;
-import com.hoppy.app.community.dto.CountDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.repository.PostRepository;
-import com.hoppy.app.like.domain.MemberPostLike;
-import com.hoppy.app.like.service.LikeManagerService;
+import com.hoppy.app.like.service.LikeService;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.service.MemberService;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -24,13 +21,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
+    private final int PAGING_COUNT = 8;
     private final PostRepository postRepository;
-    private final MemberService memberService;
-    private final LikeManagerService likeManagerService;
+    private final LikeService likeService;
 
     @Override
     public List<Post> pagingPostList(Meeting meeting, long lastId) {
-        return postRepository.infiniteScrollPagingPost(meeting, lastId, PageRequest.of(0, 8));
+        return postRepository.infiniteScrollPagingPost(meeting, lastId, PageRequest.of(0, PAGING_COUNT));
     }
 
     @Override
@@ -45,24 +42,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> listToDtoList(List<Post> posts, long memberId) {
-        // TODO: 2022.08.06. 메서드 성능 검증이 필요함 -tae
-        // 사용자가 "좋아요"를 눌렀는지 확인하기 위한 likedMap 생성
-        Member member = memberService.findById(memberId);
-        Set<MemberPostLike> postLikes = likeManagerService.getPostLikes(member);
+        List<Long> postLikes = likeService.getPostLikes(memberId);
+        // 현재 사용자가 "좋아요"를 누른 likedMap 생성
         Map<Long, Boolean> likedMap = postLikes.stream()
-                .map(MemberPostLike::getPostId)
                 .collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
 
-        Map<Long, Integer> likeCountMap = posts.stream()
-                .map(P -> likeManagerService.getLikeCount(P.getId()))
-                .collect(Collectors.toMap(CountDto::getId, CountDto::getCount));
-
-        Map<Long, Integer> replyCountMap = posts.stream()
-                .map(P -> CountDto.of(P.getId(), P.getReplies().size()))
-                .collect(Collectors.toMap(CountDto::getId, CountDto::getCount));
-
         return posts.stream()
-                .map(P -> PostDto.postToPostDto(P, likedMap.get(P.getId()), likeCountMap.get(P.getId()), replyCountMap.get(P.getId())))
+                .map(P -> PostDto.postToPostDto(P, likedMap.get(P.getId()), likeService.getPostLikeCount(P.getId())))
                 .collect(Collectors.toList());
     }
 }

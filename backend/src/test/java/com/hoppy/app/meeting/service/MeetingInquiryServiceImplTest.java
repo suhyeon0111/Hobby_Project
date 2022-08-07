@@ -105,16 +105,18 @@ class MeetingInquiryServiceImplTest {
                 .ownerId(1L)
                 .title("test")
                 .content("test")
-                .memberLimit(5)
+                .memberLimit(0)
                 .category(Category.HEALTH)
                 .fullFlag(true)
                 .build();
 
-        final var REQUEST_MEMBER_ID = 0L;
+        final var REQUEST_MEMBER_ID = 1111L;
+        final var REQUEST_MEETING_ID = 2222L;
+
+        Mockito.when(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).thenReturn(Optional.of(meeting));
 
         //when
-        Mockito.when(meetingRepository.findMeetingByIdWithLock(meeting.getId())).thenReturn(Optional.of(meeting));
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting.getId(), REQUEST_MEMBER_ID));
+        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID, REQUEST_MEMBER_ID));
 
         //then
         assertEquals(ErrorCode.MAX_PARTICIPANTS.getMessage(), exception.getMessage());
@@ -126,10 +128,11 @@ class MeetingInquiryServiceImplTest {
 
         //given
         Set<MemberMeeting> participants = new HashSet<>();
-        final var REQUEST_MEMBER_ID = 0L;
+        final var REQUEST_MEMBER_ID = 1111L;
+        final var REQUEST_MEETING_ID = 2222L;
         participants.add(MemberMeeting.builder()
                 .memberId(REQUEST_MEMBER_ID)
-                .meetingId(0L)
+                .meetingId(1L)
                 .build()
         );
         Meeting meeting = Meeting.builder()
@@ -141,9 +144,10 @@ class MeetingInquiryServiceImplTest {
                 .participants(participants)
                 .build();
 
+        Mockito.when(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).thenReturn(Optional.of(meeting));
+
         //when
-        Mockito.when(meetingRepository.findMeetingByIdWithLock(meeting.getId())).thenReturn(Optional.of(meeting));
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting.getId(), REQUEST_MEMBER_ID));
+        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID, REQUEST_MEMBER_ID));
 
         //then
         assertEquals(ErrorCode.ALREADY_JOIN.getMessage(), exception.getMessage());

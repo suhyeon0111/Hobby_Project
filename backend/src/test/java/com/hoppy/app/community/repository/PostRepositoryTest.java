@@ -1,80 +1,79 @@
 package com.hoppy.app.community.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.repository.PostRepository;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.repository.MeetingRepository;
-import java.util.List;
-import javax.transaction.Transactional;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.repository.MemberRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 
 /**
- * @author 태경 2022-08-03
+ * @author 태경 2022-08-06
  */
 @DataJpaTest
-@TestInstance(Lifecycle.PER_CLASS)
 class PostRepositoryTest {
 
     @Autowired
     PostRepository postRepository;
 
     @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
     MeetingRepository meetingRepository;
 
-    @BeforeAll
-    void beforeAll() {
-
-    }
-
-    @Transactional
-    @AfterAll
-    void after() {
-        meetingRepository.deleteAll();
+    @AfterEach
+    void afterEach() {
         postRepository.deleteAll();
+        memberRepository.deleteAll();
+        meetingRepository.deleteAll();
     }
 
+    @DisplayName("커뮤니티 게시물 페이지네이션 테스트")
     @Test
-    void infiniteScrollPagingPost() {
+    void pagingPostListTest() {
         // given
-        /*
-        * 관계를 맺기 위한 모임 생성
-        * */
-        Meeting meeting = meetingRepository.save(Meeting.builder()
-                .ownerId(0L)
-                .url("none")
-                .title("테스트 모임")
-                .content("테스트 모임")
-                .category(Category.HEALTH)
-                .memberLimit(10)
-                .build()
+        Member member = memberRepository.save(
+                Member.builder()
+                        .id(1L)
+                        .username("test-name")
+                        .build()
         );
-
-        /*
-         * 20개의 게시물을 생성한다.
-         * */
-        for(int i = 0; i < 20; i++) {
-            postRepository.save(Post.builder()
-                    .title(i + ": title")
-                    .content(i + ": content")
-                    .meeting(meeting)
-                    .build()
+        Meeting meeting = meetingRepository.save(
+                Meeting.builder()
+                        .ownerId(member.getId())
+                        .title("test-title")
+                        .content("test-content")
+                        .category(Category.LIFE)
+                        .memberLimit(10)
+                        .build()
+        );
+        final int POST_COUNT = 10;
+        for(int i = 0; i < POST_COUNT; i++) {
+            postRepository.save(
+                    Post.builder()
+                            .title((i + 1) + "-title")
+                            .content((i + 1) + "-content")
+                            .owner(member)
+                            .meeting(meeting)
+                            .build()
             );
         }
 
         // when
-        List<Post> posts = postRepository.infiniteScrollPagingPost(meeting, Long.MAX_VALUE, PageRequest.of(0, 8));
+        final int PAGING_SIZE = 8;
+        var posts = postRepository.infiniteScrollPagingPost(meeting, Long.MAX_VALUE, PageRequest.of(0, PAGING_SIZE));
 
         // then
-        Assertions.assertThat(posts.size()).isEqualTo(8);
+        assertThat(posts.size()).isEqualTo(PAGING_SIZE);
     }
 }

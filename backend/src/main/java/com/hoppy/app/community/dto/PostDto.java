@@ -29,7 +29,7 @@ public class PostDto {
 
     private int replyCount;
 
-    public static PostDto postToPostDto(Post post, boolean liked, int likeCount, int replyCount) {
+    public static PostDto postToPostDto(Post post, boolean liked, int likeCount) {
         return PostDto.builder()
                 .memberProfileUrl(post.getOwner().getProfileImageUrl())
                 .memberName(post.getOwner().getUsername())
@@ -37,7 +37,7 @@ public class PostDto {
                 .content(post.getContent())
                 .liked(liked)
                 .likeCount(likeCount)
-                .replyCount(replyCount)
+                .replyCount(post.getReplies().size())
                 .build();
     }
 }

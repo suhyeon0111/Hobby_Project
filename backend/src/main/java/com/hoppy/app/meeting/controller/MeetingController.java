@@ -4,6 +4,7 @@ import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.dto.PagingPostDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.service.PostService;
+import com.hoppy.app.like.service.LikeService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
@@ -46,6 +47,7 @@ public class MeetingController {
     private final MeetingManageService meetingManageService;
     private final MemberService memberService;
     private final PostService postService;
+    private final LikeService likeService;
     private final ResponseService responseService;
 
     @PostMapping
@@ -94,7 +96,7 @@ public class MeetingController {
         }
         Category category = Category.intToCategory(categoryNumber);
         if(category == Category.ERROR) {
-            throw new BusinessException(ErrorCode.CATEGORY_ERROR);
+            throw new BusinessException(ErrorCode.BAD_CATEGORY);
         }
 
         List<Meeting> meetingList = meetingInquiryService.pagingMeetingList(category, lastId);
@@ -108,13 +110,13 @@ public class MeetingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto> getMeetingDetail(
-            @PathVariable("id") Long id,
+            @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Meeting meeting = meetingInquiryService.getMeetingById(id);
         List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
         meetingManageService.checkJoinedMember(participantList, userDetails.getId());
-        boolean liked = meetingInquiryService.checkLiked(meeting.getId(), userDetails.getId());
+        boolean liked = likeService.checkMeetingLiked(userDetails.getId(), meeting.getId());
 
         MeetingDetailDto meetingDetailDto = MeetingDetailDto.of(meeting, participantList, liked);
 
@@ -123,7 +125,7 @@ public class MeetingController {
 
     @GetMapping("/{id}/posts")
     public ResponseEntity<ResponseDto> getPostsWithPaging(
-            @PathVariable("id") Long id,
+            @PathVariable("id") long id,
             @RequestParam(value = "lastId", defaultValue = "0") long lastId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
