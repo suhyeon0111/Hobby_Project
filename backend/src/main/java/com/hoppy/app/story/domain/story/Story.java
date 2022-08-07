@@ -38,8 +38,6 @@ public class Story extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    private String username;
-
     @Column(nullable = false)
     private String content;
 
@@ -57,7 +55,6 @@ public class Story extends BaseTimeEntity {
     public static Story of(UploadStoryDto dto, Member member) {
         return Story.builder()
                 .member(member)
-                .username(member.getUsername())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .deleted(false)
