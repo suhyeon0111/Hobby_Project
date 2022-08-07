@@ -70,11 +70,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
-
-        LikeManager likeManager = LikeManager.builder().build();
-        likeManager = likeManagerRepository.save(likeManager);
-
-        Member member = Member.builder()
+        Member member = memberRepository.save(
+                Member.builder()
                 .socialType(socialType)
                 .id(Long.parseLong(userInfo.getSocialId()))
                 .email(userInfo.getEmail())
@@ -82,10 +79,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .username(userInfo.getUsername())
                 .role(Role.USER)
                 .deleted(false)
-                .likeManager(likeManager)
-                .build();
-
-        return memberRepository.save(member);
+                .build()
+        );
+        likeManagerRepository.save(
+                LikeManager.builder()
+                .member(member)
+                .build()
+        );
+        return member;
     }
 
     private Member updateMember(Member member, OAuth2UserInfo userInfo) {

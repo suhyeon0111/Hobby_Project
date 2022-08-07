@@ -34,7 +34,7 @@ public class LikeManager {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "likeManager")
+    @OneToOne(fetch = FetchType.EAGER)
     @Exclude
     private Member member;
 
