@@ -32,7 +32,7 @@ public class PostServiceImpl implements PostService {
     private final LikeManagerService likeManagerService;
 
     @Override
-    public List<Post> listPostByMeetingWithPaging(Meeting meeting, long lastId) {
+    public List<Post> getPostsWithPaging(Meeting meeting, long lastId) {
         return postRepository.infiniteScrollPagingPost(meeting, lastId, PageRequest.of(0, 8));
     }
 

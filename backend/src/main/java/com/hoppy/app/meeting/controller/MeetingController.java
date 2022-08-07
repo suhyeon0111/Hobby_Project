@@ -134,7 +134,7 @@ public class MeetingController {
         if(lastId == 0L) {
             lastId = Long.MAX_VALUE;
         }
-        List<Post> posts = postService.listPostByMeetingWithPaging(meeting, lastId);
+        List<Post> posts = postService.getPostsWithPaging(meeting, lastId);
         lastId = postService.getLastId(posts);
         String nextPagingUrl = postService.createNextPagingUrl(id, lastId);
         List<PostDto> postDtos = postService.postListToPostDtoList(posts, userDetails.getId());
