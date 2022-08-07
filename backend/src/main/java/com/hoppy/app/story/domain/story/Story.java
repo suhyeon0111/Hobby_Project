@@ -19,6 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.ToString.Exclude;
 
 @Entity
@@ -27,6 +28,7 @@ import lombok.ToString.Exclude;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Story extends BaseTimeEntity {
 
     @Id
@@ -45,6 +47,7 @@ public class Story extends BaseTimeEntity {
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Exclude
 //    @JsonIgnore
 //    @JoinColumn(name = "memberId")
     private Member member;
@@ -53,6 +56,7 @@ public class Story extends BaseTimeEntity {
 
     public static Story of(UploadStoryDto dto, Member member) {
         return Story.builder()
+                .member(member)
                 .username(member.getUsername())
                 .title(dto.getTitle())
                 .content(dto.getContent())
