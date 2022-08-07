@@ -39,13 +39,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @Exclude
     private Member owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
