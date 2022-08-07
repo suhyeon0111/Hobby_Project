@@ -45,7 +45,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> listToDtoList(List<Post> posts, long memberId) {
-        // TODO: 2022.08.06. 쿼리 성능 검증이 필요함 -tae
+        // TODO: 2022.08.06. 메서드 성능 검증이 필요함 -tae
         // 사용자가 "좋아요"를 눌렀는지 확인하기 위한 likeIdMap 생성
         Member member = memberService.findMemberById(memberId);
         LikeManager likeManager = likeManagerService.getPostLikes(member);

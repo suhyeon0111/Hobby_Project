@@ -140,8 +140,6 @@ public class MeetingController {
         List<PostDto> postDtos = postService.listToDtoList(posts, userDetails.getId());
         PagingPostDto pagingPostDto = new PagingPostDto(postDtos, nextPagingUrl);
 
-        // TODO: 22.08.06. 이곳에 사용된 모든 로직은 성능 테스트가 필요함
-
         return responseService.successResult(SuccessCode.INQUIRY_COMMUNITY_POSTS_SUCCESS, pagingPostDto);
     }
 }
