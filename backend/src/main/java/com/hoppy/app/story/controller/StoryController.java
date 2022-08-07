@@ -38,8 +38,7 @@ public class StoryController {
             CustomUserDetails userDetails) {
         Member member = memberService.findMemberById(userDetails.getId());
         Story story = storyManageService.uploadStory(dto, member);
-
-        storyManageService.saveStory(story);
+        storyManageService.saveStory(story, member);
         return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, story);
     }
 

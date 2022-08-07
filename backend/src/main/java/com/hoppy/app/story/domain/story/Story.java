@@ -1,19 +1,25 @@
 package com.hoppy.app.story.domain.story;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.domain.BaseTimeEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString.Exclude;
 
 @Entity
 @Getter
@@ -38,19 +44,16 @@ public class Story extends BaseTimeEntity {
     @Column
     private String filePath;
 
-    @Column(name="memberId")
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    @JoinColumn(name = "memberId")
+    private Member member;
 
     private boolean deleted;
-
-    /**
-     * 파일 업로드 기능 추가 필요
-     */
 
     public static Story of(UploadStoryDto dto, Member member) {
         return Story.builder()
                 .username(member.getUsername())
-                .memberId(member.getId())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .deleted(false)

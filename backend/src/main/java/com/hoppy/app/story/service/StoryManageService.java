@@ -6,7 +6,7 @@ import com.hoppy.app.story.dto.UploadStoryDto;
 
 public interface StoryManageService {
 
-    public void saveStory(Story story);
+    public void saveStory(Story story, Member member);
 
     public Story uploadStory(UploadStoryDto dto, Member member);
 

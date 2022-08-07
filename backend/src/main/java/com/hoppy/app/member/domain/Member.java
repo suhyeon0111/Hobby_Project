@@ -1,5 +1,6 @@
 package com.hoppy.app.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
@@ -55,8 +56,7 @@ public class Member {
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     @Default
     private Set<Story> stories = new HashSet<>();
 
