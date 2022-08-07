@@ -7,6 +7,7 @@ import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.service.StoryManageService;
 import java.util.Optional;
@@ -34,18 +35,20 @@ public class StoryController {
     private final ResponseService responseService;
 
     @PostMapping("/upload")
-    public ResponseEntity<ResponseDto> uploadStory(@RequestBody @Valid UploadStoryDto dto, @AuthenticationPrincipal
-            CustomUserDetails userDetails) {
+    public ResponseEntity<ResponseDto> uploadStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto) {
         Member member = memberService.findMemberById(userDetails.getId());
         Story story = storyManageService.uploadStory(dto, member);
         storyManageService.saveStory(story, member);
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, story);
+        StoryDetailDto storyDetailDto = StoryDetailDto.of(story, member);
+        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDetailDto);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<ResponseDto> updateStory(@RequestBody @Valid UploadStoryDto dto, @RequestParam("id") String id) {
+    public ResponseEntity<ResponseDto> updateStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto, @RequestParam("id") String id) {
         Story story = storyManageService.updateStory(dto, Long.parseLong(id));
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, story);
+        Member member = memberService.findMemberById(userDetails.getId());
+        StoryDetailDto storyDetailDto = StoryDetailDto.of(story, member);
+        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDetailDto);
     }
 
     @DeleteMapping("/delete")
