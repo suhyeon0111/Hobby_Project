@@ -53,7 +53,7 @@ public class MeetingController {
             @RequestBody @Valid CreateMeetingDto dto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Member member = memberService.findMemberById(userDetails.getId());
+        Member member = memberService.findById(userDetails.getId());
         Meeting meeting = meetingManageService.createMeeting(dto, member.getId());
 
         meetingManageService.saveMeeting(meeting);

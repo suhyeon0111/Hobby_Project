@@ -10,20 +10,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * @author 태경 2022-08-07
  */
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class PostServiceImplTest {
 
-    @InjectMocks
+//    @InjectMocks
+    @Autowired
     PostService postService;
 
-    @Mock
+//    @Mock
+    @Autowired
     MemberService memberService;
 
-    @Mock
+//    @Mock
+    @Autowired
     LikeManagerService likeManagerService;
 
     @Test

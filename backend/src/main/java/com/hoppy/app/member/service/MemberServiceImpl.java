@@ -18,7 +18,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Member findMemberById(Long id) {
+    public Member findById(Long id) {
         Optional<Member> optMember = memberRepository.findById(id);
 
         if(optMember.isEmpty())
@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMemberById(Long memberId, UpdateMemberDto memberDto) {
+    public Member updateById(Long memberId, UpdateMemberDto memberDto) {
         Optional<Member> member = memberRepository.findById(memberId);
         member.ifPresent(selectMember -> {
             selectMember.setUsername(memberDto.getUsername());
@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member deleteMemberById(Long id) {
+    public Member deleteById(Long id) {
         Optional<Member> optMember = memberRepository.findById(id);
         if(optMember.isPresent()) {
             if(optMember.get().isDeleted()) {

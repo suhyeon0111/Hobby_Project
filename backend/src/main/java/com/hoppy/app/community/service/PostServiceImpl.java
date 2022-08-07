@@ -4,7 +4,6 @@ import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.dto.CountDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.repository.PostRepository;
-import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.service.LikeManagerService;
 import com.hoppy.app.meeting.domain.Meeting;
@@ -48,7 +47,7 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> listToDtoList(List<Post> posts, long memberId) {
         // TODO: 2022.08.06. 메서드 성능 검증이 필요함 -tae
         // 사용자가 "좋아요"를 눌렀는지 확인하기 위한 likedMap 생성
-        Member member = memberService.findMemberById(memberId);
+        Member member = memberService.findById(memberId);
         Set<MemberPostLike> postLikes = likeManagerService.getPostLikes(member);
         Map<Long, Boolean> likedMap = postLikes.stream()
                 .map(MemberPostLike::getPostId)

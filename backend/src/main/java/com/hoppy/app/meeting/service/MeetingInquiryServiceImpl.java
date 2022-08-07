@@ -6,7 +6,6 @@ import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.meeting.dto.ParticipantDto;
@@ -58,7 +57,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     public List<MeetingDto> listToDtoList(List<Meeting> meetingList, Long memberId) {
-        Member member = memberService.findMemberById(memberId);
+        Member member = memberService.findById(memberId);
         Set<MemberMeetingLike> meetingLikes = likeManagerService.getMeetingLikes(member);
 
         Map<Long, Boolean> likedMap = meetingLikes.stream()
@@ -97,7 +96,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     public Boolean checkLiked(Long meetingId, Long memberId) {
-        Member member = memberService.findMemberById(memberId);
+        Member member = memberService.findById(memberId);
         return memberMeetingLikeService.findMemberMeetingLikeByLikeManagerAndMeetingId(member.getLikeManager(), meetingId).isPresent();
     }
 
