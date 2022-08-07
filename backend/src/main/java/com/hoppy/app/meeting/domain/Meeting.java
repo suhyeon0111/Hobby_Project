@@ -70,8 +70,7 @@ public class Meeting {
     @BatchSize(size = 20)
     private Set<MemberMeeting> participants = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "meeting")
     @Builder.Default
     @Exclude
     Set<Post> posts = new HashSet<>();
