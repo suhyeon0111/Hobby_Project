@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface PostService {
 
-    List<Post> getPostsWithPaging(Meeting meeting, long lastId);
+    List<Post> pagingPostList(Meeting meeting, long lastId);
 
     long getLastId(List<Post> posts);
 

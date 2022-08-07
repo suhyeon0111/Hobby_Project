@@ -39,7 +39,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     private final MemberMeetingRepository memberMeetingRepository;
 
     @Override
-    public List<Meeting> getMeetingListByCategory(Category category, long lastId) {
+    public List<Meeting> pagingMeetingList(Category category, long lastId) {
         return meetingRepository.infiniteScrollPagingMeeting(category, lastId, PageRequest.of(0, 14));
     }
 
