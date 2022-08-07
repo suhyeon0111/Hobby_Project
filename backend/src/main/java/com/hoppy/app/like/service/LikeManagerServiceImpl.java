@@ -1,11 +1,15 @@
 package com.hoppy.app.like.service;
 
 import com.hoppy.app.community.dto.CountDto;
+import com.hoppy.app.like.domain.MemberMeetingLike;
+import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.repository.MemberPostLikeRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.like.repository.LikeManagerRepository;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -26,27 +30,27 @@ public class LikeManagerServiceImpl implements LikeManagerService {
     }
 
     @Override
-    public LikeManager getMeetingLikes(Member member) {
-        Optional<LikeManager> optionalMemberLike = likeManagerRepository.findLikeManagerWithMeetingLikesByMember(member);
+    public Set<MemberMeetingLike> getMeetingLikes(Member member) {
+        Optional<LikeManager> optionalLikeManager = likeManagerRepository.findLikeManagerWithMeetingLikesByMember(member);
 
-        if(optionalMemberLike.isEmpty()) {
+        if(optionalLikeManager.isEmpty()) {
             LikeManager likeManager = createLikeManager();
             member.setLikeManager(likeManager);
-            return likeManager;
+            return new HashSet<>();
         }
-        return optionalMemberLike.get();
+        return optionalLikeManager.get().getMeetingLikes();
     }
 
     @Override
-    public LikeManager getPostLikes(Member member) {
+    public Set<MemberPostLike> getPostLikes(Member member) {
         Optional<LikeManager> optionalLikeManager = likeManagerRepository.findLikeManagerWithPostLikesByMember(member);
 
         if(optionalLikeManager.isEmpty()) {
             LikeManager likeManager = createLikeManager();
             member.setLikeManager(likeManager);
-            return likeManager;
+            return new HashSet<>();
         }
-        return optionalLikeManager.get();
+        return optionalLikeManager.get().getPostLikes();
     }
 
     @Override
