@@ -16,5 +16,5 @@ public interface PostService {
 
     String createNextPagingUrl(long meetingId, long lastId);
 
-    List<PostDto> postListToPostDtoList(List<Post> posts, long memberId);
+    List<PostDto> listToDtoList(List<Post> posts, long memberId);
 }

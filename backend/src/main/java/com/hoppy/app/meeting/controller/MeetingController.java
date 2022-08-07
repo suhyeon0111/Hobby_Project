@@ -137,7 +137,7 @@ public class MeetingController {
         List<Post> posts = postService.getPostsWithPaging(meeting, lastId);
         lastId = postService.getLastId(posts);
         String nextPagingUrl = postService.createNextPagingUrl(id, lastId);
-        List<PostDto> postDtos = postService.postListToPostDtoList(posts, userDetails.getId());
+        List<PostDto> postDtos = postService.listToDtoList(posts, userDetails.getId());
         PagingPostDto pagingPostDto = new PagingPostDto(postDtos, nextPagingUrl);
 
         // TODO: 22.08.06. 이곳에 사용된 모든 로직은 성능 테스트가 필요함
