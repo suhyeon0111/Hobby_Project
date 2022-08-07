@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public long getListsLastPostId(List<Post> posts) {
+    public long getLastId(List<Post> posts) {
         return posts.get(posts.size() - 1).getId() - 1;
     }
 

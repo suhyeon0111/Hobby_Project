@@ -12,7 +12,7 @@ public interface PostService {
 
     List<Post> listPostByMeetingWithPaging(Meeting meeting, long lastId);
 
-    long getListsLastPostId(List<Post> posts);
+    long getLastId(List<Post> posts);
 
     String createNextPagingUrl(long meetingId, long lastId);
 

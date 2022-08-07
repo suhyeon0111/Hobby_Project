@@ -76,6 +76,10 @@ public class Meeting {
     @Exclude
     Set<Post> posts = new HashSet<>();
 
+    public Boolean isFull() {
+        return this.fullFlag;
+    }
+
     public static Meeting of(CreateMeetingDto dto, Long ownerId) {
         return Meeting.builder()
                 .ownerId(ownerId)
@@ -85,9 +89,5 @@ public class Meeting {
                 .memberLimit(dto.getMemberLimit())
                 .category(Category.intToCategory(dto.getCategory()))
                 .build();
-    }
-
-    public Boolean isFull() {
-        return this.fullFlag;
     }
 }

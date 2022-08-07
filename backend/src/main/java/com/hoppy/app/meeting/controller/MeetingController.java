@@ -24,7 +24,6 @@ import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -136,7 +135,7 @@ public class MeetingController {
             lastId = Long.MAX_VALUE;
         }
         List<Post> posts = postService.listPostByMeetingWithPaging(meeting, lastId);
-        lastId = postService.getListsLastPostId(posts);
+        lastId = postService.getLastId(posts);
         String nextPagingUrl = postService.createNextPagingUrl(id, lastId);
         List<PostDto> postDtos = postService.postListToPostDtoList(posts, userDetails.getId());
         PagingPostDto pagingPostDto = new PagingPostDto(postDtos, nextPagingUrl);
