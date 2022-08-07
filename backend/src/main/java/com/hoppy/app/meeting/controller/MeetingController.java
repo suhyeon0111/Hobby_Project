@@ -123,13 +123,14 @@ public class MeetingController {
         return responseService.successResult(SuccessCode.INQUIRE_MEETING_DETAIL_SUCCESS, meetingDetailDto);
     }
 
-    @GetMapping("/{id}/posts")
+    @GetMapping("/posts")
     public ResponseEntity<ResponseDto> getPostsWithPaging(
-            @PathVariable("id") long id,
+//            @PathVariable("id") long id,
+            @RequestParam(value = "meetingId", defaultValue = "0") long meetingId,
             @RequestParam(value = "lastId", defaultValue = "0") long lastId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Meeting meeting = meetingInquiryService.getMeetingById(id);
+        Meeting meeting = meetingInquiryService.getMeetingById(meetingId);
         List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
         meetingManageService.checkJoinedMember(participantList, userDetails.getId());
 
@@ -138,9 +139,9 @@ public class MeetingController {
         }
         List<Post> posts = postService.pagingPostList(meeting, lastId);
         lastId = postService.getLastId(posts);
-        String nextPagingUrl = postService.createNextPagingUrl(id, lastId);
+        String nextPagingUrl = postService.createNextPagingUrl(meetingId, lastId);
         List<PostDto> postDtos = postService.listToDtoList(posts, userDetails.getId());
-        PagingPostDto pagingPostDto = new PagingPostDto(postDtos, nextPagingUrl);
+        PagingPostDto pagingPostDto = PagingPostDto.of(postDtos, nextPagingUrl);
 
         return responseService.successResult(SuccessCode.INQUIRY_COMMUNITY_POSTS_SUCCESS, pagingPostDto);
     }
