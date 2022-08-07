@@ -124,7 +124,7 @@ class StoryControllerTest {
         assertThat(optStory.get().isDeleted()).isFalse();
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .get("/story/delete")
+                .delete("/story/delete")
                 .param("id", storyId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))

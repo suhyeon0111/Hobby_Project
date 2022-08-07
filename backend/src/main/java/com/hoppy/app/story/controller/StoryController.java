@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +49,7 @@ public class StoryController {
         return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, story);
     }
 
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteStory(@RequestParam("id") String id) {
         storyManageService.deleteStory(Long.parseLong(id));
         return responseService.successResult(SuccessCode.DELETE_STORY_SUCCESS);
