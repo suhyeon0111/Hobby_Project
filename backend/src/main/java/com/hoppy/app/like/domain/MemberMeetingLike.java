@@ -22,8 +22,6 @@ public class MemberMeetingLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private LikeManager likeManager;
-
+    private Long memberId;
     private Long meetingId;
 }

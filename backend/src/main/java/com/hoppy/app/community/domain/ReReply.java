@@ -1,15 +1,17 @@
-package com.hoppy.app.like.domain;
+package com.hoppy.app.community.domain;
 
-import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.like.domain.MemberReReplyLike;
+import com.hoppy.app.like.domain.MemberReplyLike;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +22,7 @@ import lombok.ToString;
 import lombok.ToString.Exclude;
 
 /**
- * @author 태경 2022-07-22
+ * @author 태경 2022-07-23
  */
 @Entity
 @Getter
@@ -28,28 +30,16 @@ import lombok.ToString.Exclude;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class LikeManager {
+public class ReReply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "likeManager")
-    @Exclude
-    private Member member;
+    @Column(nullable = false)
+    private String content;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "likeManager")
-    @Default
+    @ManyToOne
     @Exclude
-    private Set<MemberMeetingLike> meetingLikes = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "likeManager")
-    @Default
-    @Exclude
-    private Set<MemberPostLike> postLikes = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "likeManager")
-    @Default
-    @Exclude
-    private Set<MemberReplyLike> replyLikes = new HashSet<>();
+    private Reply reply;
 }

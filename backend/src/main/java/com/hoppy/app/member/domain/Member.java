@@ -1,11 +1,9 @@
 package com.hoppy.app.member.domain;
 
-import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,7 +24,7 @@ import lombok.ToString.Exclude;
 
 @Entity
 @Getter
-@Setter  // 회원 정보 수정을 위해 추가
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,7 +52,4 @@ public class Member {
     @Default
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
-
-    @OneToOne
-    private LikeManager likeManager;
 }

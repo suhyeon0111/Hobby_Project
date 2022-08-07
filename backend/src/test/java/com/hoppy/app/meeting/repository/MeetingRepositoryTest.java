@@ -19,60 +19,32 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
-@SpringBootTest
+@DataJpaTest
 @TestInstance(Lifecycle.PER_CLASS)
 class MeetingRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
     MeetingRepository meetingRepository;
-
-    @Autowired
-    MemberMeetingRepository memberMeetingRepository;
-
-    @Autowired
-    EntityManager em;
 
     @BeforeAll
     void beforeAll() {
         /*
-        * 2명의 멤버를 가지는 모임 5개를 생성
-        * HEALTH 카테고리 모임 3개
-        * LIFE 카테고리 모임 2개
+        * 20개의 모임을 생성한다
+        * HEALTH 카테고리 모임은 0과 짝수번째에 생성되며 총 10개가 생성된다.
+        * 그 외에는 LIFE 카테고리 모임이 생성된다.
         * */
-        for(int i = 0; i < 5; i++) {
-            Member member1 = Member.builder().id((long) i + (2 * i)).build();
-            Member member2 = Member.builder().id(member1.getId() + 1).build();
-
-            memberRepository.save(member1);
-            memberRepository.save(member2);
-
-            Category meetingCategory;
-            if(i % 2 == 0) meetingCategory = Category.HEALTH;
-            else meetingCategory = Category.LIFE;
-
-            Meeting meeting = meetingRepository.save(Meeting.builder()
-                    .ownerId(member1.getId())
+        for(int i = 0; i < 20; i++) {
+            meetingRepository.save(Meeting.builder()
+                    .ownerId(0L)
                     .url("none")
                     .title(i + "번 모임")
                     .content(i + "번 모임 회원들 모여라")
-                    .category(meetingCategory)
+                    .category((i % 2 == 0 ? Category.HEALTH : Category.LIFE))
                     .memberLimit(10)
-                    .build());
-
-            memberMeetingRepository.save(MemberMeeting.builder()
-                    .meetingId(meeting.getId())
-                    .memberId(member1.getId())
-                    .build());
-
-            memberMeetingRepository.save(MemberMeeting.builder()
-                    .meetingId(meeting.getId())
-                    .memberId(member2.getId())
                     .build());
         }
     }
@@ -80,8 +52,6 @@ class MeetingRepositoryTest {
     @Transactional
     @AfterAll
     void after() {
-        memberMeetingRepository.deleteAll();
-        memberRepository.deleteAll();
         meetingRepository.deleteAll();
     }
 
@@ -89,32 +59,11 @@ class MeetingRepositoryTest {
     @Transactional
     @Test
     void infiniteScrollPagingTest() {
-
-        List<Meeting> result = meetingRepository.infiniteScrollPagingMeeting(Category.HEALTH, 0L, PageRequest.of(0, 100));
-
-        System.out.println("조회된 모임 중 마지막 모임 id = " + result.get(result.size() - 1).getId());
-        for (Meeting m : result) {
-            Assertions.assertThat(m.getParticipants().size()).isEqualTo(2);
-
-            /*
-             * 참여자 목록을 조회할 때 참여자 수 만큼 쿼리가 나가는 효율 문제가 있음
-             * 참여자 목록을 한 번에 조회하자.
-             *
-             * 먼저 getParticipants를 가공해서 모든 참여자의 id를 List로 받아온다.
-             * 그 다음 WHERE IN 을 사용해서 List에 id들을 한 번에 조회하자.
-            * */
-
-            List<Long> membersIdList = m.getParticipants()
-                    .stream()
-                    .map(MemberMeeting::getMemberId)
-                    .collect(Collectors.toList());
-
-            List<Member> memberList = memberRepository.infiniteScrollPagingMember(membersIdList, 0L, PageRequest.of(0, 100));
-
-            System.out.println("참여자 목록");
-            for (Member member : memberList) {
-                System.out.println(member);
-            }
-        }
+        /*
+        * 무한 스크롤 페이지네이션 요청은 기본적으로 14개씩 요청되지만
+        * 현재 HEALTH 모임이 10개 밖에 없으므로 응답 결과 모임의 개수는 10개이다.
+        * */
+        List<Meeting> result = meetingRepository.infiniteScrollPagingMeeting(Category.HEALTH, Long.MAX_VALUE, PageRequest.of(0, 14));
+        Assertions.assertThat(result.size()).isEqualTo(10);
     }
 }

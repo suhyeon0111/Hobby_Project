@@ -55,7 +55,7 @@ class MeetingInquiryServiceImplTest {
     @Test
     void getParticipantDtoList() {
         // given
-        Long ownerId = 5L;
+        final var OWNER_ID = 5L;
         Meeting meeting;
         Set<MemberMeeting> participants = new HashSet<>();
         List<Long> memberIdList = new ArrayList<>();
@@ -74,7 +74,7 @@ class MeetingInquiryServiceImplTest {
                     .build());
         }
         meeting = Meeting.builder()
-                .ownerId(ownerId)
+                .ownerId(OWNER_ID)
                 .title("test")
                 .content("test")
                 .memberLimit(15)
@@ -93,7 +93,7 @@ class MeetingInquiryServiceImplTest {
 
         participantList = participantList.stream().filter(ParticipantDto::getOwner).collect(Collectors.toList());
         Assertions.assertThat(participantList.size()).isEqualTo(1);
-        Assertions.assertThat(participantList.get(0).getId()).isEqualTo(ownerId);
+        Assertions.assertThat(participantList.get(0).getId()).isEqualTo(OWNER_ID);
     }
 
     @DisplayName("모임 가입 요청 MAX_PARTICIPANTS 예외 발생 테스트")
@@ -105,16 +105,18 @@ class MeetingInquiryServiceImplTest {
                 .ownerId(1L)
                 .title("test")
                 .content("test")
-                .memberLimit(5)
+                .memberLimit(0)
                 .category(Category.HEALTH)
                 .fullFlag(true)
                 .build();
 
-        long requestMemberId = 0L;
+        final var REQUEST_MEMBER_ID = 1111L;
+        final var REQUEST_MEETING_ID = 2222L;
+
+        Mockito.when(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).thenReturn(Optional.of(meeting));
 
         //when
-        Mockito.when(meetingRepository.findMeetingByIdWithLock(meeting.getId())).thenReturn(Optional.of(meeting));
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting.getId(), requestMemberId));
+        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID, REQUEST_MEMBER_ID));
 
         //then
         assertEquals(ErrorCode.MAX_PARTICIPANTS.getMessage(), exception.getMessage());
@@ -126,10 +128,11 @@ class MeetingInquiryServiceImplTest {
 
         //given
         Set<MemberMeeting> participants = new HashSet<>();
-        long requestMemberId = 0L;
+        final var REQUEST_MEMBER_ID = 1111L;
+        final var REQUEST_MEETING_ID = 2222L;
         participants.add(MemberMeeting.builder()
-                .memberId(requestMemberId)
-                .meetingId(0L)
+                .memberId(REQUEST_MEMBER_ID)
+                .meetingId(1L)
                 .build()
         );
         Meeting meeting = Meeting.builder()
@@ -141,9 +144,10 @@ class MeetingInquiryServiceImplTest {
                 .participants(participants)
                 .build();
 
+        Mockito.when(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).thenReturn(Optional.of(meeting));
+
         //when
-        Mockito.when(meetingRepository.findMeetingByIdWithLock(meeting.getId())).thenReturn(Optional.of(meeting));
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(meeting.getId(), requestMemberId));
+        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID, REQUEST_MEMBER_ID));
 
         //then
         assertEquals(ErrorCode.ALREADY_JOIN.getMessage(), exception.getMessage());

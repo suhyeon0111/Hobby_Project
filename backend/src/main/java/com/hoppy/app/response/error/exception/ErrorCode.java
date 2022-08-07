@@ -17,7 +17,6 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE(400, "C005", "타입 오류입니다"),
     HANDLE_ACCESS_DENIED(403, "C006", "접근이 제한되었습니다"),
     WRONG_REQUEST_HEADER(403, "C007", "요청 헤더의 값이 올바르지 않습니다."),
-    // Member
 
     // JWT
     EXPIRED_ACCESS_TOKEN(403, "J001", "access 토큰이 만료되었습니다"),
@@ -34,11 +33,11 @@ public enum ErrorCode {
 
     // Meeting
     TITLE_DUPLICATE(403, "M001", "이미 존재하는 모임 제목입니다"),
-    CATEGORY_ERROR(403, "M002", "잘못된 카테고리 번호입니다"),
+    BAD_CATEGORY(403, "M002", "잘못된 카테고리 번호입니다"),
     MEETING_NOT_FOUND(403, "M003", "존재하지 않는 모임입니다"),
     MAX_PARTICIPANTS(403, "M004", "모임 인원 초과입니다"),
     ALREADY_JOIN(403, "M005", "이미 가입한 멤버입니다"),
-    NOT_JOINED(403, "M006", "모임에 가입한 적 없는 멤버입니다"),
+    NOT_JOINED(403, "M006", "모임에 가입해주세요"),
 
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
