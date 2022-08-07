@@ -58,7 +58,7 @@ public class Member {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
     @Default
-    private Set<Story> myStories = new HashSet<>();
+    private Set<Story> stories = new HashSet<>();
 
     @OneToOne
     private LikeManager likeManager;
