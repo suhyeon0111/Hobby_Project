@@ -97,7 +97,7 @@ public class MeetingController {
             throw new BusinessException(ErrorCode.CATEGORY_ERROR);
         }
 
-        List<Meeting> meetingList = meetingInquiryService.listMeetingByCategory(category, lastId);
+        List<Meeting> meetingList = meetingInquiryService.getMeetingByCategory(category, lastId);
         lastId = meetingInquiryService.getLastId(meetingList);
         String nextPagingUrl = meetingInquiryService.createNextPagingUrl(categoryNumber, lastId);
         List<MeetingDto> meetingDtoList = meetingInquiryService.listToDtoList(meetingList, userDetails.getId());

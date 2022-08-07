@@ -14,7 +14,7 @@ import java.util.List;
 * */
 public interface MeetingInquiryService {
 
-    public List<Meeting> listMeetingByCategory(Category category, long lastId);
+    public List<Meeting> getMeetingByCategory(Category category, long lastId);
 
     public long getLastId(List<Meeting> meetingList);
 
