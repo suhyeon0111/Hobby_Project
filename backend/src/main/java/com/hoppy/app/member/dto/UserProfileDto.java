@@ -32,7 +32,7 @@ public class UserProfileDto {
                 .profileUrl(member.getProfileImageUrl())
                 .intro(member.getIntro())
                 .userMeetings(member.getMyMeetings())
-                .userStories(member.getMyStories())
+                .userStories(member.getStories())
                 .build();
     }
 }

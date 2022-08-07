@@ -36,7 +36,7 @@ public class MyProfileDto {
                 .intro(member.getIntro())
                 .deleted(member.isDeleted())
                 .myMeetings(member.getMyMeetings())
-                .myStories(member.getMyStories())
+                .myStories(member.getStories())
                 .build();
     }
 
