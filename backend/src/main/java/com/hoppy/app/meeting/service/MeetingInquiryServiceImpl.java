@@ -57,7 +57,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public List<MeetingDto> meetingListToMeetingDtoList(List<Meeting> meetingList, Long memberId) {
+    public List<MeetingDto> listToDtoList(List<Meeting> meetingList, Long memberId) {
         Member member = memberService.findMemberById(memberId);
         LikeManager likeManager = likeManagerService.getMemberMeetingLikes(member);
 

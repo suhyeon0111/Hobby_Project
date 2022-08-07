@@ -100,7 +100,7 @@ public class MeetingController {
         List<Meeting> meetingList = meetingInquiryService.listMeetingByCategory(category, lastId);
         lastId = meetingInquiryService.getListsLastMeetingId(meetingList);
         String nextPagingUrl = meetingInquiryService.createNextPagingUrl(categoryNumber, lastId);
-        List<MeetingDto> meetingDtoList = meetingInquiryService.meetingListToMeetingDtoList(meetingList, userDetails.getId());
+        List<MeetingDto> meetingDtoList = meetingInquiryService.listToDtoList(meetingList, userDetails.getId());
         PagingMeetingDto pagingMeetingDto = PagingMeetingDto.of(meetingDtoList, nextPagingUrl);
 
         return responseService.successResult(SuccessCode.INQUIRY_MEETING_SUCCESS, pagingMeetingDto);
