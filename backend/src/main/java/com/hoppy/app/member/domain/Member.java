@@ -2,6 +2,7 @@ package com.hoppy.app.member.domain;
 
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
+import com.hoppy.app.story.domain.story.Story;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -52,4 +53,9 @@ public class Member {
     @Default
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    @Default
+    @Exclude
+    private Set<Story> stories = new HashSet<>();
 }

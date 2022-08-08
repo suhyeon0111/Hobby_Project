@@ -27,11 +27,6 @@ public class CustomOAuth2UserServiceTest {
     @Autowired
     MemberRepository memberRepository;
 
-    @Autowired
-    TestUserDetailsService userDetailsService;
-
-    
-
     @BeforeEach
     void setup() {
         memberRepository.save(Member.builder().socialType(SocialType.KAKAO).id(1234L)

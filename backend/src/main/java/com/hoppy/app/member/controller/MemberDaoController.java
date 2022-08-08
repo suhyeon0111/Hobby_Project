@@ -11,6 +11,9 @@ import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
+import com.hoppy.app.story.dto.StoryDetailDto;
+import com.hoppy.app.story.service.StoryManageService;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,7 @@ public class MemberDaoController {
     private final MemberServiceImpl memberService;
     private final ResponseService responseService;
     private final MemberRepository memberRepository;
+    private final StoryManageService storyManageService;
 
     @PostMapping("/update")
     public ResponseEntity<ResponseDto> updateUser(
@@ -34,7 +38,8 @@ public class MemberDaoController {
         Optional<Member> optMember = memberRepository.findById(userDetails.getId());
         if(optMember.isPresent()) {
             Member member = memberService.updateById(userDetails.getId(), memberDto);
-            MyProfileDto myProfileDto = MyProfileDto.of(member);
+            List<StoryDetailDto> storyDetails = storyManageService.showStoriesInProfile(member);
+            MyProfileDto myProfileDto = MyProfileDto.of(member, storyDetails);
             return responseService.successResult(SuccessCode.UPDATE_SUCCESS, myProfileDto);
         }
         throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);

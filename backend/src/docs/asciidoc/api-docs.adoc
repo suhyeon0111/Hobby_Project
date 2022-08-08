@@ -143,3 +143,35 @@ GET /api/delete
 include::{snippets}/delete-user/request-body.adoc[]
 .response body
 include::{snippets}/delete-user/response-body.adoc[]
+
+== 스토리 API
+
+=== 스토리 업로드
+.request url
+----
+POST /api/story/upload
+----
+.request body
+include::{snippets}/upload-story/request-body.adoc[]
+.response body
+include::{snippets}/upload-story/response-body.adoc[]
+
+=== 스토리 수정
+.request url
+----
+POST /api/story/update?id={storyId}
+----
+.request body
+include::{snippets}/update-story/request-body.adoc[]
+.response body
+include::{snippets}/update-story/response-body.adoc[]
+
+=== 스토리 삭제
+.request url
+----
+GET /api/story/delete?id={storyId}
+----
+.request body
+include::{snippets}/delete-story/request-body.adoc[]
+.response body
+include::{snippets}/delete-story/response-body.adoc[]

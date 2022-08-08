@@ -41,7 +41,9 @@ public enum ErrorCode {
 
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
-    DELETED_MEMBER(403, "MM002", "탈퇴한 멤버입니다.")
+    DELETED_MEMBER(403, "MM002", "탈퇴한 멤버입니다."),
+    // Story
+    STORY_NOT_FOUND(403, "SS001", "존재하지 않는 스토리입니다.")
     ;
     private final String code;
     private final String message;
