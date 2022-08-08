@@ -20,6 +20,7 @@ import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
@@ -28,6 +29,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,6 +45,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
+@TestInstance(Lifecycle.PER_CLASS)
 class StoryControllerTest {
 
     @Autowired
@@ -113,15 +117,16 @@ class StoryControllerTest {
     @Test
     @WithMockCustomUser(id = "8669")
     void updateStory() throws Exception {
-        String storyId = "10";
-        Optional<Story> optStory = storyRepository.findById(Long.parseLong(storyId));
+        List<Story> stories = storyRepository.findAll();
+        Long storyId = stories.get(0).getId();
+        Optional<Story> optStory = storyRepository.findById(storyId);
         assertThat(optStory.isPresent()).isTrue();
         assertThat(optStory.get().isDeleted()).isFalse();
         UploadStoryDto dto = UploadStoryDto.builder().title("Update Story Test").content("This is updated story").filename("test_success.wav").build();
         String content = objectMapper.writeValueAsString(dto);
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .post("/story/update")
-                .param("id", storyId)
+                .param("id", String.valueOf(storyId))
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
@@ -130,26 +135,24 @@ class StoryControllerTest {
                 .andDo(document("update-story",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
-        Optional<Story> newStory = storyRepository.findById(Long.parseLong(storyId));
     }
 
     @Test
     void deleteStory() throws Exception {
-        String storyId = "5";
-        Optional<Story> optStory = storyRepository.findById(Long.parseLong(storyId));
+        List<Story> stories = storyRepository.findAll();
+        Long storyId = stories.get(0).getId();
+        Optional<Story> optStory = storyRepository.findById(storyId);
         assertThat(optStory.isPresent()).isTrue();
-        assertThat(optStory.get().isDeleted()).isFalse();
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .delete("/story/delete")
-                .param("id", storyId)
+                .param("id", String.valueOf(storyId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
         ).andDo(print());
 
-        Story story = storyRepository.findById(Long.parseLong(storyId)).get();
-        assertThat(story.isDeleted()).isTrue();
-
+        Optional<Story> deletedStory = storyRepository.findById(storyId);
+        assertThat(deletedStory.isEmpty()).isTrue();
         result.andExpect(status().isOk())
                 .andDo(document("delete-story",
                         preprocessRequest(prettyPrint()),

@@ -29,6 +29,7 @@ import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -100,25 +101,27 @@ class MemberProfileControllerTest {
             }
         }
 
-//        for(int i = 1; i <= 5; i++) {
-//            storyRepository.save(
-//                    Story.builder()
-//                            .member(member)
-//                            .title(i+"th Story")
-//                            .content("This is " + i + "th Story")
-//                            .filePath(i+".jpg")
-//                            .username("CHOI").build()
-//            );
-//        }
+        for(int i = 1; i <= 5; i++) {
+            storyRepository.save(
+                    Story.builder()
+                            .member(member)
+                            .title(i+"th Story")
+                            .content("This is " + i + "th Story")
+                            .filePath(i+".jpg")
+                            .build()
+            );
+        }
     }
 
     @AfterAll
     void afterAll() {
         memberMeetingRepository.deleteAll();
+        storyRepository.deleteAll();
         memberRepository.deleteAll();
     }
 
     @Test
+//    @Transactional
     @WithMockCustomUser(id = "9999", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void showMyProfile() throws Exception {
         
@@ -127,7 +130,6 @@ class MemberProfileControllerTest {
         Optional<Member> optMember = memberRepository.findById(principal.getId());
 
         assertThat(optMember).isPresent();
-        MyProfileDto myProfileDto = MyProfileDto.of(optMember.get());
 
         mvc.perform(MockMvcRequestBuilders.get("/myprofile")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +137,7 @@ class MemberProfileControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.username", is(myProfileDto.getUsername())))
+                .andExpect(jsonPath("$.data.username", is(optMember.get().getUsername())))
                 .andDo(document("show-myProfile",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()))
