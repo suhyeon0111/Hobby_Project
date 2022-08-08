@@ -36,7 +36,7 @@ public class StoryController {
 
     @PostMapping("/upload")
     public ResponseEntity<ResponseDto> uploadStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto) {
-        Member member = memberService.findMemberById(userDetails.getId());
+        Member member = memberService.findById(userDetails.getId());
         Story story = storyManageService.uploadStory(dto, member);
         storyManageService.saveStory(story, member);
         StoryDetailDto storyDetailDto = StoryDetailDto.of(story, member);
@@ -46,7 +46,7 @@ public class StoryController {
     @PostMapping("/update")
     public ResponseEntity<ResponseDto> updateStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto, @RequestParam("id") String id) {
         Story story = storyManageService.updateStory(dto, Long.parseLong(id));
-        Member member = memberService.findMemberById(userDetails.getId());
+        Member member = memberService.findById(userDetails.getId());
         StoryDetailDto storyDetailDto = StoryDetailDto.of(story, member);
         return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDetailDto);
     }

@@ -25,8 +25,8 @@ public class StoryDetailDto {
 
     public static StoryDetailDto of(Story story, Member member) {
         return StoryDetailDto.builder()
-                .id(story.getId()).
-                title(story.getTitle())
+                .id(story.getId())
+                .title(story.getTitle())
                 .content(story.getContent())
                 .memberId(member.getId())
                 .username(member.getUsername())
