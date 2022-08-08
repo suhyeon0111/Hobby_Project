@@ -9,6 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.repository.PostRepository;
+import com.hoppy.app.like.domain.MemberPostLike;
+import com.hoppy.app.like.repository.MemberPostLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.meeting.Category;
@@ -19,20 +23,17 @@ import com.hoppy.app.meeting.dto.MeetingWithdrawalDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.like.domain.MemberMeetingLike;
-import com.hoppy.app.like.repository.LikeManagerRepository;
 import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -50,6 +51,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_METHOD)
+@DisplayName("모임 컨트롤러 테스트")
 class MeetingControllerTest {
 
     @Autowired
@@ -65,32 +67,37 @@ class MeetingControllerTest {
     private MeetingRepository meetingRepository;
 
     @Autowired
-    private LikeManagerRepository likeManagerRepository;
-
-    @Autowired
     private MemberMeetingRepository memberMeetingRepository;
 
     @Autowired
     private MemberMeetingLikeRepository memberMeetingLikeRepository;
 
+    @Autowired
+    private MemberPostLikeRepository memberPostLikeRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
     @BeforeEach
     void before() {
-        LikeManager likeManager = LikeManager.builder().build();
-        likeManager = likeManagerRepository.save(likeManager);
-
-        Member member = Member.builder().id(1L).likeManager(likeManager).build();
+        final long MEMBER_ID = 1L;
+        Member member = Member.builder()
+                .username("tae-kyoung")
+                .profileImageUrl("profile-url")
+                .id(MEMBER_ID)
+                .build();
         member = memberRepository.save(member);
 
         for (int i = 0; i < 20; i++) {
-            Meeting meeting = Meeting.builder()
+            Meeting meeting = meetingRepository.save(Meeting.builder()
                     .ownerId(member.getId())
                     .category(Category.ART)
-                    .title("제목(" + i + ")")
-                    .content("컨텐츠(" + i + ")")
+                    .title((i + 1) + "-title")
+                    .content((i + 1) + "-content")
                     .memberLimit(15)
-                    .build();
+                    .build()
+            );
 
-            meeting = meetingRepository.save(meeting);
             memberMeetingRepository.save(MemberMeeting.builder()
                     .meetingId(meeting.getId())
                     .memberId(member.getId())
@@ -99,7 +106,7 @@ class MeetingControllerTest {
 
             if(i % 3 == 0) {
                 memberMeetingLikeRepository.save(MemberMeetingLike.builder()
-                        .likeManager(likeManager)
+                        .memberId(member.getId())
                         .meetingId(meeting.getId())
                         .build()
                 );
@@ -109,12 +116,15 @@ class MeetingControllerTest {
 
     @AfterEach
     void after() {
-        memberRepository.deleteAll();
-        memberMeetingRepository.deleteAll();
         memberMeetingLikeRepository.deleteAll();
+        memberPostLikeRepository.deleteAll();
+        memberMeetingRepository.deleteAll();
+        postRepository.deleteAll();
+        memberRepository.deleteAll();
         meetingRepository.deleteAll();
     }
 
+    @DisplayName("모임 생성 테스트")
     @Test
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void createMeetingTest() throws Exception {
@@ -144,6 +154,7 @@ class MeetingControllerTest {
                 ));
     }
 
+    @DisplayName("카테고리의 모임 페이징 테스트")
     @Test
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void getMeetingListByCategoryWithPagingTest() throws Exception {
@@ -160,10 +171,10 @@ class MeetingControllerTest {
                 ));
     }
 
+    @DisplayName("모임 상세 조회 테스트")
     @Test
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void getMeetingDetailTest() throws Exception {
-
         //given
         List<Meeting> meetingList = meetingRepository.findAll();
         Assertions.assertThat(meetingList.size()).isGreaterThan(0);
@@ -183,10 +194,10 @@ class MeetingControllerTest {
                 ));
     }
 
+    @DisplayName("모임 가입 테스트")
     @Test
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void meetingJoinTest() throws Exception {
-
         //given
         Meeting meeting = Meeting.builder()
                 .ownerId(1L)
@@ -219,10 +230,10 @@ class MeetingControllerTest {
                 ));
     }
 
+    @DisplayName("모임 탈퇴 테스트")
     @Test
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void meetingWithdrawTest() throws Exception {
-
         //given
         List<Meeting> meetingList = meetingRepository.findAll();
         Meeting meeting = meetingList.get(0);
@@ -244,6 +255,65 @@ class MeetingControllerTest {
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andDo(document("meeting-withdraw",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @DisplayName("커뮤니티 게시글 페이징 테스트")
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void getPostsWithPagingTest() throws Exception {
+        // given
+        Optional<Member> optionalMember = memberRepository.findById(1L);
+        assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
+
+        Member owner = optionalMember.get();
+        Meeting meeting = meetingRepository.save(Meeting.builder()
+                .ownerId(owner.getId())
+                .category(Category.ART)
+                .title("post-paging-test-title")
+                .content("post-paging-test-content")
+                .memberLimit(15)
+                .build()
+        );
+        memberMeetingRepository.save(MemberMeeting.builder()
+                .meetingId(meeting.getId())
+                .memberId(owner.getId())
+                .build()
+        );
+
+        final int POST_COUNT = 20;
+        for(int i = 0; i < POST_COUNT; i++) {
+            Post post = postRepository.save(
+                    Post.builder()
+                            .title((i + 1) + "-title")
+                            .content((i + 1) + "-content")
+                            .owner(owner)
+                            .meeting(meeting)
+                            .build()
+            );
+
+            if(i % 2 == 0) {
+                memberPostLikeRepository.save(
+                        MemberPostLike.builder()
+                                .memberId(owner.getId())
+                                .postId(post.getId())
+                                .build()
+                );
+            }
+        }
+
+        var requestUrl = "/meeting/posts" + "?meetingId=" + meeting.getId();
+        System.out.println(requestUrl);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(requestUrl)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(document("post-pagination",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));

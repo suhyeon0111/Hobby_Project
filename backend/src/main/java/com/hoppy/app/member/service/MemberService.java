@@ -7,11 +7,11 @@ import org.springframework.data.domain.PageRequest;
 
 public interface MemberService {
 
-    public Member findMemberById(Long id);
+    public Member findById(Long id);
 
-    public Member updateMemberById(Long memberId, UpdateMemberDto memberDto);
+    public Member updateById(Long memberId, UpdateMemberDto memberDto);
 
-    public Member deleteMemberById(Long id);
+    public Member deleteById(Long id);
 
     public List<Member> infiniteScrollPagingMember(List<Long> memberIdList, Long lastId, PageRequest pageRequest);
 }

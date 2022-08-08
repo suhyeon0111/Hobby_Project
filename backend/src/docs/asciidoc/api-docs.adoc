@@ -91,6 +91,17 @@ include::{snippets}/meeting-detail/http-request.adoc[]
 .response body
 include::{snippets}/meeting-detail/response-body.adoc[]
 
+=== 모임 내 게시물 조회 (페이징)
+.request url
+----
+최초 조회 시
+GET /api/meeting/posts?meetingId={id}
+----
+.request header
+include::{snippets}/post-pagination/http-request.adoc[]
+.response body
+include::{snippets}/post-pagination/response-body.adoc[]
+
 == 유저 프로필 API
 
 === 내 프로필 조회

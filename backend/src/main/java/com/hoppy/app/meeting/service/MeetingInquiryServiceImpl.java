@@ -1,16 +1,13 @@
 package com.hoppy.app.meeting.service;
 
-import com.hoppy.app.like.service.MemberMeetingLikeService;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.meeting.dto.ParticipantDto;
-import com.hoppy.app.like.service.LikeManagerService;
+import com.hoppy.app.like.service.LikeService;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -33,18 +30,17 @@ import org.springframework.stereotype.Service;
 public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     private final MemberService memberService;
-    private final LikeManagerService likeManagerService;
-    private final MemberMeetingLikeService memberMeetingLikeService;
+    private final LikeService likeService;
     private final MeetingRepository meetingRepository;
     private final MemberMeetingRepository memberMeetingRepository;
 
     @Override
-    public List<Meeting> listMeetingByCategory(Category category, long lastId) {
+    public List<Meeting> pagingMeetingList(Category category, long lastId) {
         return meetingRepository.infiniteScrollPagingMeeting(category, lastId, PageRequest.of(0, 14));
     }
 
     @Override
-    public long getListsLastMeetingId(List<Meeting> meetingList) {
+    public long getLastId(List<Meeting> meetingList) {
         return meetingList.get(meetingList.size() - 1).getId() - 1;
     }
 
@@ -57,17 +53,14 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public List<MeetingDto> meetingListToMeetingDtoList(List<Meeting> meetingList, Long memberId) {
-        Member member = memberService.findMemberById(memberId);
-        LikeManager likeManager = likeManagerService.getMemberLikeWithMeetingLikes(member);
+    public List<MeetingDto> listToDtoList(List<Meeting> meetingList, Long memberId) {
+        List<Long> meetingLikes = likeService.getMeetingLikes(memberId);
 
-        Map<Long, Boolean> likeIdMap = likeManager.getMeetingLikes()
-                .stream()
-                .map(MemberMeetingLike::getMeetingId)
+        Map<Long, Boolean> likedMap = meetingLikes.stream()
                 .collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
 
         return meetingList.stream()
-                .map(M -> MeetingDto.meetingToMeetingDto(M, likeIdMap.containsKey(M.getId())))
+                .map(M -> MeetingDto.meetingToMeetingDto(M, likedMap.containsKey(M.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -94,12 +87,6 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
                 .stream()
                 .map(M -> ParticipantDto.memberToParticipantDto(M, meeting.getOwnerId()))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Boolean checkLiked(Long meetingId, Long memberId) {
-        Member member = memberService.findMemberById(memberId);
-        return memberMeetingLikeService.findMemberMeetingLikeByLikeManagerAndMeetingId(member.getLikeManager(), meetingId).isPresent();
     }
 
     @Override

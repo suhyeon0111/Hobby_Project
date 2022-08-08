@@ -1,10 +1,7 @@
 package com.hoppy.app.member.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.hoppy.app.like.domain.LikeManager;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
-import com.hoppy.app.story.domain.story.Story;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -27,7 +24,7 @@ import lombok.ToString.Exclude;
 
 @Entity
 @Getter
-@Setter  // 회원 정보 수정을 위해 추가
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -55,12 +52,4 @@ public class Member {
     @Default
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
-    @Default
-    @Exclude
-    private Set<Story> stories = new HashSet<>();
-
-    @OneToOne
-    private LikeManager likeManager;
 }

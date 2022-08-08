@@ -33,7 +33,7 @@ public class MemberDaoController {
             @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UpdateMemberDto memberDto) {
         Optional<Member> optMember = memberRepository.findById(userDetails.getId());
         if(optMember.isPresent()) {
-            Member member = memberService.updateMemberById(userDetails.getId(), memberDto);
+            Member member = memberService.updateById(userDetails.getId(), memberDto);
             MyProfileDto myProfileDto = MyProfileDto.of(member);
             return responseService.successResult(SuccessCode.UPDATE_SUCCESS, myProfileDto);
         }
@@ -47,7 +47,7 @@ public class MemberDaoController {
     @GetMapping("/delete")
     public ResponseEntity<ResponseDto> deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long memberId = customUserDetails.getId();
-        memberService.deleteMemberById(memberId);
+        memberService.deleteById(memberId);
         return responseService.successResult(SuccessCode.DELETE_SUCCESS);
     }
 }

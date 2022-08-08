@@ -20,6 +20,7 @@ public enum SuccessCode {
     HEALTH_CHECK_SUCCESS("정상 동작 중", 200),
     PROFILE_CHECK_SUCCESS("프로파일 조회 완료", 200),
 
+    // meeting
     GET_PRESIGNED_URL_SUCCESS("URL 발급 완료", 200),
 
     CREATE_MEETING_SUCCESS("모임 생성 완료", 200),
@@ -27,11 +28,9 @@ public enum SuccessCode {
     INQUIRE_MEETING_DETAIL_SUCCESS("모임 상세 페이지 조회 완료", 200),
     JOIN_MEETING_SUCCESS("모임 참가 완료", 200),
     WITHDRAW_MEETING_SUCCESS("모임 탈퇴 완료", 200),
+    INQUIRY_COMMUNITY_POSTS_SUCCESS("커뮤니티 게시물 조회 완료", 200),
 
-    // Story
-    UPLOAD_STORY_SUCCESS("스토리 업로드 완료", 200),
-    DELETE_STORY_SUCCESS("스토리 삭제 완료", 200),
-
+    // member
     SHOW_PROFILE_SUCCESS("유저 프로필 조회 완료", 200)
     ;
 

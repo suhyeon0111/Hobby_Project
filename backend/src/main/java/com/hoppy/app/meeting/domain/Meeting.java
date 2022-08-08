@@ -1,5 +1,6 @@
 package com.hoppy.app.meeting.domain;
 
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.member.domain.MemberMeeting;
@@ -22,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 import org.hibernate.annotations.BatchSize;
 
 @Entity
@@ -39,13 +41,14 @@ public class Meeting {
     @Column(nullable = false)
     private Long ownerId;
 
+    @Column(nullable = false)
     @Builder.Default
-    private String url = "none";
+    private String url = "default-url";
 
-    @Column(nullable = false) // length 옵션 추가 논의 필요
+    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false) // length 옵션 추가 논의 필요
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)
@@ -63,9 +66,18 @@ public class Meeting {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "meetingId")
     @Builder.Default
-    @ToString.Exclude
+    @Exclude
     @BatchSize(size = 20)
     private Set<MemberMeeting> participants = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "meeting")
+    @Builder.Default
+    @Exclude
+    Set<Post> posts = new HashSet<>();
+
+    public Boolean isFull() {
+        return this.fullFlag;
+    }
 
     public static Meeting of(CreateMeetingDto dto, Long ownerId) {
         return Meeting.builder()
@@ -76,9 +88,5 @@ public class Meeting {
                 .memberLimit(dto.getMemberLimit())
                 .category(Category.intToCategory(dto.getCategory()))
                 .build();
-    }
-
-    public Boolean isFull() {
-        return this.fullFlag;
     }
 }
