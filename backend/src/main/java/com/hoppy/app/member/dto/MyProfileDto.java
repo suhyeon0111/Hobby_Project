@@ -3,7 +3,9 @@ package com.hoppy.app.member.dto;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.dto.StoryDetailDto;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -24,9 +26,10 @@ public class MyProfileDto {
     private String intro;
     private boolean deleted;
     private Set<MemberMeeting> myMeetings = new HashSet<>();
-    private Set<Story> myStories = new HashSet<>();
+    private List<StoryDetailDto> myStories;
 
-    public static MyProfileDto of(Member member) {
+
+    public static MyProfileDto of(Member member, List<StoryDetailDto> storyDetails) {
 
         return MyProfileDto.builder()
                 .id(member.getId())
@@ -36,12 +39,8 @@ public class MyProfileDto {
                 .intro(member.getIntro())
                 .deleted(member.isDeleted())
                 .myMeetings(member.getMyMeetings())
-                .myStories(member.getStories())
+                .myStories(storyDetails)
                 .build();
-    }
-
-    public Set<Long> extractMeetingId(Set<MemberMeeting> meetings) {
-        return meetings.stream().map(MemberMeeting::getMeetingId).collect(Collectors.toSet());
     }
 
 }
