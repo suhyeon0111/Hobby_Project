@@ -10,6 +10,7 @@ import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,11 @@ class StoryRepositoryTest {
         );
     }
 
-    @After
-    public void cleanup() {
+
+    @AfterEach
+    public void afterEach() {
         storyRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test

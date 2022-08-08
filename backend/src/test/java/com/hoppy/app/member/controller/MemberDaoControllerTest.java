@@ -18,6 +18,7 @@ import com.hoppy.app.member.repository.MemberRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,11 @@ class MemberDaoControllerTest {
                         .intro("잘부탁드립니다.")
                         .build()
         );
+    }
+
+    @AfterEach
+    void afterEach() {
+        memberRepository.deleteAll();
     }
 
     @Test

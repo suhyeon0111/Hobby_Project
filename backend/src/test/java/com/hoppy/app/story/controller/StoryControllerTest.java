@@ -22,6 +22,9 @@ import com.hoppy.app.story.repository.StoryRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
+import org.junit.After;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,12 +74,19 @@ class StoryControllerTest {
         for(int i = 1; i <= 5; i++) {
             storyRepository.save(
                     Story.builder()
+                            .member(member)
                             .title(i+"th Story")
                             .content("This is " + i + "th Story")
                             .filePath(i+".jpg")
                             .member(member).build()
             );
         }
+    }
+
+    @AfterEach
+    void afterEach() {
+        storyRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test
@@ -103,7 +113,7 @@ class StoryControllerTest {
     @Test
     @WithMockCustomUser(id = "8669")
     void updateStory() throws Exception {
-        String storyId = "3";
+        String storyId = "10";
         Optional<Story> optStory = storyRepository.findById(Long.parseLong(storyId));
         assertThat(optStory.isPresent()).isTrue();
         assertThat(optStory.get().isDeleted()).isFalse();
@@ -125,7 +135,7 @@ class StoryControllerTest {
 
     @Test
     void deleteStory() throws Exception {
-        String storyId = "4";
+        String storyId = "5";
         Optional<Story> optStory = storyRepository.findById(Long.parseLong(storyId));
         assertThat(optStory.isPresent()).isTrue();
         assertThat(optStory.get().isDeleted()).isFalse();

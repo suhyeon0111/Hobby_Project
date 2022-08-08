@@ -29,6 +29,8 @@ import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -108,6 +110,12 @@ class MemberProfileControllerTest {
 //                            .username("CHOI").build()
 //            );
 //        }
+    }
+
+    @AfterAll
+    void afterAll() {
+        memberMeetingRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test
