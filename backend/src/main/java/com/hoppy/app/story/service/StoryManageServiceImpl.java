@@ -4,9 +4,12 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +47,16 @@ public class StoryManageServiceImpl implements StoryManageService {
     @Override
     public void deleteStory(Long storyId) {
         Optional<Story> optStory = storyRepository.findById(storyId);
-        if(optStory.isEmpty() || optStory.get().isDeleted()) {
+        if(optStory.isEmpty()) {
             throw new BusinessException(ErrorCode.STORY_NOT_FOUND);
         }
-        optStory.get().setDeleted(true);
-        storyRepository.save(optStory.get());
+        storyRepository.deleteById(storyId);
+    }
+
+    @Override
+    public List<StoryDetailDto> showStoriesInProfile(Member member) {
+        List<Story> stories = storyRepository.findTop3ByMemberIdOrderByIdDesc(member.getId());
+        return stories.stream().map(story -> StoryDetailDto.of(story, member)).collect(
+                Collectors.toList());
     }
 }
