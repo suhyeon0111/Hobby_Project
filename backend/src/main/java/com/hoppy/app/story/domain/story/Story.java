@@ -55,6 +55,7 @@ public class Story extends BaseTimeEntity {
                 .member(member)
                 .title(dto.getTitle())
                 .content(dto.getContent())
+                .filePath("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
                 .deleted(false)
                 .build();
     }
