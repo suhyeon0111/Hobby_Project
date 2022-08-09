@@ -39,6 +39,9 @@ public enum ErrorCode {
     ALREADY_JOIN(403, "M005", "이미 가입한 멤버입니다"),
     NOT_JOINED(403, "M006", "모임에 가입해주세요"),
 
+    // Post
+    POST_NOT_FOUND(403, "P001", "존재하지 않는 게시물입니다"),
+
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
     DELETED_MEMBER(403, "MM002", "탈퇴한 멤버입니다.")
