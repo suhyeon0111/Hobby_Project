@@ -1,5 +1,6 @@
 package com.hoppy.app.member.dto;
 
+import com.hoppy.app.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,4 +22,11 @@ public class UpdateMemberDto {
     private String profileUrl;
     private String intro;
 
+    public static UpdateMemberDto of(Member member) {
+        return UpdateMemberDto.builder()
+                .username(member.getUsername())
+                .profileUrl(member.getProfileImageUrl())
+                .intro(member.getIntro())
+                .build();
+    }
 }
