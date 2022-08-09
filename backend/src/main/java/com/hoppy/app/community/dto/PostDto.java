@@ -14,7 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDto {
-
+    /*
+    * 커뮤니티 게시물 목록 조회 시 사용되는 Dto 입니다. -tae
+    * */
     private long id;
 
     private String ownerProfileUrl;
@@ -34,8 +36,8 @@ public class PostDto {
     public static PostDto postToPostDto(Post post, boolean liked, int likeCount) {
         return PostDto.builder()
                 .id(post.getId())
-                .ownerProfileUrl(post.getOwner().getProfileImageUrl())
-                .ownerName(post.getOwner().getUsername())
+                .ownerProfileUrl(post.getAuthor().getProfileImageUrl())
+                .ownerName(post.getAuthor().getUsername())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .liked(liked)
