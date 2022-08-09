@@ -58,7 +58,7 @@ class LikeServiceImplTest {
                     Post.builder()
                             .title((i + 1) + "-title")
                             .content((i + 1) + "-content")
-                            .owner(member)
+                            .author(member)
                             .build()
             );
             if((i + 1) % 2 == 0) {
