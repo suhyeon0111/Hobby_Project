@@ -43,9 +43,20 @@ public class MemberProfileController {
         if(member.isEmpty()) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
         }
-        List<StoryDetailDto> storyDetails = storyManageService.showStoriesInProfile(member.get());
-        MyProfileDto myProfileDto = MyProfileDto.of(member.get(), storyDetails);
+
+        MyProfileDto myProfileDto = MyProfileDto.of(member.get());
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
+    }
+
+    @GetMapping("/myprofile/story")
+    private ResponseEntity<ResponseDto> showMyStories(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getId();
+        Optional<Member> member = memberRepository.findById(memberId);
+        if(member.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        List<StoryDetailDto> storyDetails = storyManageService.showMyStoriesInProfile(member.get());
+        return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, storyDetails);
     }
 
     @GetMapping("/userprofile")
