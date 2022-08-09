@@ -1,5 +1,6 @@
 package com.hoppy.app.member.dto;
 
+import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.story.domain.story.Story;
@@ -26,10 +27,9 @@ public class MyProfileDto {
     private String intro;
     private boolean deleted;
     private Set<MemberMeeting> myMeetings = new HashSet<>();
-    private List<StoryDetailDto> myStories;
 
 
-    public static MyProfileDto of(Member member, List<StoryDetailDto> storyDetails) {
+    public static MyProfileDto of(Member member) {
 
         return MyProfileDto.builder()
                 .id(member.getId())
@@ -39,7 +39,6 @@ public class MyProfileDto {
                 .intro(member.getIntro())
                 .deleted(member.isDeleted())
                 .myMeetings(member.getMyMeetings())
-                .myStories(storyDetails)
                 .build();
     }
 

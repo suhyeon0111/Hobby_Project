@@ -1,5 +1,6 @@
 package com.hoppy.app.member.domain;
 
+import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.story.domain.story.Story;
