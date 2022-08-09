@@ -27,15 +27,13 @@ public class UserProfileDto {
     private String profileUrl;
     private String intro;
     private Set<MemberMeeting> userMeetings = new HashSet<>();
-    private List<StoryDetailDto> userStories;
 
-    public static UserProfileDto of(Member member, List<StoryDetailDto> storyDetails) {
+    public static UserProfileDto of(Member member) {
         return UserProfileDto.builder()
                 .username(member.getUsername())
                 .profileUrl(member.getProfileImageUrl())
                 .intro(member.getIntro())
                 .userMeetings(member.getMyMeetings())
-                .userStories(storyDetails)
                 .build();
     }
 }

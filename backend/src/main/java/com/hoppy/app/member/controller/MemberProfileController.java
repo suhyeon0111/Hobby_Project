@@ -40,7 +40,6 @@ public class MemberProfileController {
     public ResponseEntity<ResponseDto> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
         Optional<Member> member = memberRepository.findById(memberId);
-
         if(member.isEmpty()) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
         }
@@ -56,8 +55,7 @@ public class MemberProfileController {
         if(member.isEmpty() || member.get().isDeleted()) {
             throw new BusinessException(ErrorCode.DELETED_MEMBER);
         }
-        List<StoryDetailDto> storyDetails = storyManageService.showStoriesInProfile(member.get());
-        UserProfileDto userProfileDto = UserProfileDto.of(member.get(), storyDetails);
+        UserProfileDto userProfileDto = UserProfileDto.of(member.get());
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
     }
 }
