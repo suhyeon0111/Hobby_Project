@@ -1,8 +1,10 @@
 package com.hoppy.app.meeting.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static reactor.core.publisher.Mono.when;
+import static org.mockito.BDDMockito.given;
 
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
@@ -28,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -61,7 +64,7 @@ class MeetingInquiryServiceImplTest {
         List<Long> memberIdList = new ArrayList<>();
         List<Member> memberList = new ArrayList<>();
 
-        for(int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             participants.add(MemberMeeting.builder()
                     .memberId((long) i)
                     .meetingId(1L)
@@ -82,18 +85,20 @@ class MeetingInquiryServiceImplTest {
                 .participants(participants)
                 .build();
 
-        Mockito.when(memberService.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size())))
-                .thenReturn(memberList);
+        given(memberService.infiniteScrollPagingMember(memberIdList, 0L,
+                PageRequest.of(0, memberIdList.size())))
+                .willReturn(memberList);
 
         // when
         List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
 
         // then
-        Assertions.assertThat(participantList.size()).isEqualTo(memberList.size());
+        assertThat(participantList.size()).isEqualTo(memberList.size());
 
-        participantList = participantList.stream().filter(ParticipantDto::getOwner).collect(Collectors.toList());
-        Assertions.assertThat(participantList.size()).isEqualTo(1);
-        Assertions.assertThat(participantList.get(0).getId()).isEqualTo(OWNER_ID);
+        participantList = participantList.stream().filter(ParticipantDto::getOwner)
+                .collect(Collectors.toList());
+        assertThat(participantList.size()).isEqualTo(1);
+        assertThat(participantList.get(0).getId()).isEqualTo(OWNER_ID);
     }
 
     @DisplayName("모임 가입 요청 MAX_PARTICIPANTS 예외 발생 테스트")
@@ -113,10 +118,13 @@ class MeetingInquiryServiceImplTest {
         final var REQUEST_MEMBER_ID = 1111L;
         final var REQUEST_MEETING_ID = 2222L;
 
-        Mockito.when(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).thenReturn(Optional.of(meeting));
+        given(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).willReturn(
+                Optional.of(meeting));
 
         //when
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID, REQUEST_MEMBER_ID));
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID,
+                        REQUEST_MEMBER_ID));
 
         //then
         assertEquals(ErrorCode.MAX_PARTICIPANTS.getMessage(), exception.getMessage());
@@ -144,12 +152,34 @@ class MeetingInquiryServiceImplTest {
                 .participants(participants)
                 .build();
 
-        Mockito.when(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).thenReturn(Optional.of(meeting));
+        given(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).willReturn(
+                Optional.of(meeting));
 
         //when
-        BusinessException exception = assertThrows(BusinessException.class, () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID, REQUEST_MEMBER_ID));
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID,
+                        REQUEST_MEMBER_ID));
 
         //then
         assertEquals(ErrorCode.ALREADY_JOIN.getMessage(), exception.getMessage());
+    }
+
+    @DisplayName("모임 가입 요청 MEETING_NOT_FOUND 예외 발생 테스트")
+    @Test
+    void checkJoinRequestValidFailTest3() {
+
+        //given
+        final var REQUEST_MEMBER_ID = 1111L;
+        final var REQUEST_MEETING_ID = 2222L;
+        given(meetingRepository.findMeetingByIdWithLock(REQUEST_MEETING_ID)).willReturn(
+                Optional.empty());
+
+        //when
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> meetingInquiryService.checkJoinRequestValid(REQUEST_MEETING_ID,
+                        REQUEST_MEMBER_ID));
+
+        //then
+        assertEquals(ErrorCode.MEETING_NOT_FOUND.getMessage(), exception.getMessage());
     }
 }
