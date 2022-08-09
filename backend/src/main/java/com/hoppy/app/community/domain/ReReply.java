@@ -2,6 +2,7 @@ package com.hoppy.app.community.domain;
 
 import com.hoppy.app.like.domain.MemberReReplyLike;
 import com.hoppy.app.like.domain.MemberReplyLike;
+import com.hoppy.app.member.domain.Member;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +40,10 @@ public class ReReply {
 
     @Column(nullable = false)
     private String content;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @Exclude
+    private Member author;
 
     @ManyToOne
     @Exclude

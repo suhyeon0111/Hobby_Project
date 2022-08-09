@@ -268,9 +268,9 @@ class MeetingControllerTest {
         Optional<Member> optionalMember = memberRepository.findById(1L);
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
 
-        Member owner = optionalMember.get();
+        Member author = optionalMember.get();
         Meeting meeting = meetingRepository.save(Meeting.builder()
-                .ownerId(owner.getId())
+                .ownerId(author.getId())
                 .category(Category.ART)
                 .title("post-paging-test-title")
                 .content("post-paging-test-content")
@@ -279,7 +279,7 @@ class MeetingControllerTest {
         );
         memberMeetingRepository.save(MemberMeeting.builder()
                 .meetingId(meeting.getId())
-                .memberId(owner.getId())
+                .memberId(author.getId())
                 .build()
         );
 
@@ -289,7 +289,7 @@ class MeetingControllerTest {
                     Post.builder()
                             .title((i + 1) + "-title")
                             .content((i + 1) + "-content")
-                            .owner(owner)
+                            .author(author)
                             .meeting(meeting)
                             .build()
             );
@@ -297,7 +297,7 @@ class MeetingControllerTest {
             if(i % 2 == 0) {
                 memberPostLikeRepository.save(
                         MemberPostLike.builder()
-                                .memberId(owner.getId())
+                                .memberId(author.getId())
                                 .postId(post.getId())
                                 .build()
                 );
