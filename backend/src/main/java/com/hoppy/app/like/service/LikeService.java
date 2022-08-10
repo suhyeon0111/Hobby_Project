@@ -9,13 +9,21 @@ import java.util.List;
  */
 public interface LikeService {
 
-    public List<Long> getMeetingLikes(Long memberId);
+    public List<Long> getMeetingLikes(long memberId);
 
-    public List<Long> getPostLikes(Long memberId);
+    public List<Long> getPostLikes(long memberId);
 
-    public int getPostLikeCount(Long postId);
+    public List<Long> getReplyLikes(long memberId);
 
-    public Boolean checkMeetingLiked(Long memberId, Long meetingId);
+    public List<Long> getReReplyLikes(long memeberId);
 
-    public Boolean checkPostLiked(Long memberId, Long postId);
+    public int getPostLikeCount(long postId);
+
+    public int getReplyLikeCount(long replyId);
+
+    public int getReReplyLikeCount(long reReplyId);
+
+    public boolean checkMeetingLiked(long memberId, long meetingId);
+
+    public boolean checkPostLiked(long memberId, long postId);
 }
