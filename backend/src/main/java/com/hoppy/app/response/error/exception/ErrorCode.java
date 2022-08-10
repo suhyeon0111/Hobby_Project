@@ -41,6 +41,7 @@ public enum ErrorCode {
 
     // Post
     POST_NOT_FOUND(403, "P001", "존재하지 않는 게시물입니다"),
+    NO_MORE_POST(403, "P002", "더 이상 조회할 게시물이 없습니다"),
 
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
