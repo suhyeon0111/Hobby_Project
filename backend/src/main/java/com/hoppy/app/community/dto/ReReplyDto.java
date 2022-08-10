@@ -1,6 +1,6 @@
 package com.hoppy.app.community.dto;
 
-import com.hoppy.app.community.domain.Reply;
+import com.hoppy.app.community.domain.ReReply;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ReplyDto {
+public class ReReplyDto {
 
     private String ownerProfileUrl;
 
@@ -30,13 +30,11 @@ public class ReplyDto {
 
     private int likeCount;
 
-    private List<ReReplyDto> replies;
-
-    public static ReplyDto of(Reply reply) {
-        return ReplyDto.builder()
-                .ownerProfileUrl(reply.getAuthor().getProfileImageUrl())
-                .ownerName(reply.getAuthor().getUsername())
-                .content(reply.getContent())
+    public static ReReplyDto of(ReReply reReply) {
+        return ReReplyDto.builder()
+                .ownerProfileUrl(reReply.getAuthor().getProfileImageUrl())
+                .ownerName(reReply.getAuthor().getUsername())
+                .content(reReply.getContent())
                 .build();
     }
 }

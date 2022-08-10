@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author 태경 2022-08-05
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PostDto {
     /*
     * 커뮤니티 게시물 목록 조회 시 사용되는 Dto 입니다. -tae
@@ -33,7 +35,7 @@ public class PostDto {
 
     private int replyCount;
 
-    public static PostDto postToPostDto(Post post, boolean liked, int likeCount) {
+    public static PostDto postToPostDto(Post post, boolean liked, int likeCount, int replyCount) {
         return PostDto.builder()
                 .id(post.getId())
                 .ownerProfileUrl(post.getAuthor().getProfileImageUrl())
@@ -42,7 +44,7 @@ public class PostDto {
                 .content(post.getContent())
                 .liked(liked)
                 .likeCount(likeCount)
-                .replyCount(post.getReplies().size())
+                .replyCount(replyCount)
                 .build();
     }
 }
