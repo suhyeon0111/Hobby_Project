@@ -12,8 +12,6 @@ public interface MeetingManageService {
 
     public void createAndSaveMemberMeetingData(Long meetingId, Long memberId);
 
-    public void checkJoinedMember(List<ParticipantDto> participantList, Long memberId);
-
     public Meeting createMeeting(CreateMeetingDto dto, Long ownerId);
 
     public boolean checkTitleDuplicate(String name);

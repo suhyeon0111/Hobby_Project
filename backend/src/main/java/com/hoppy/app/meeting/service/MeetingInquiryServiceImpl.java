@@ -40,8 +40,27 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
+    public void checkJoinedMember(List<ParticipantDto> participants, Long memberId) {
+        boolean joined = participants.stream().anyMatch(P -> Objects.equals(P.getId(), memberId));
+        if(!joined) {
+            throw new BusinessException(ErrorCode.NOT_JOINED);
+        }
+    }
+
+    @Override
     public long getLastId(List<Meeting> meetingList) {
         return meetingList.get(meetingList.size() - 1).getId() - 1;
+    }
+
+    @Override
+    public long validCheckLastId(long lastId) {
+        if(lastId == 0) {
+            return Long.MAX_VALUE;
+        }
+        else if(lastId < 0) {
+            throw new BusinessException(ErrorCode.NO_MORE_POST);
+        }
+        return lastId;
     }
 
     @Override
@@ -65,7 +84,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public Meeting getMeetingById(Long id) {
+    public Meeting getById(Long id) {
         Optional<Meeting> meeting = meetingRepository.findById(id);
         if(meeting.isEmpty()) {
             throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
@@ -74,7 +93,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public List<ParticipantDto> getParticipantDtoList(Meeting meeting) {
+    public List<ParticipantDto> getParticipants(Meeting meeting) {
         List<Long> memberIdList = meeting.getParticipants()
                 .stream()
                 .map(MemberMeeting::getMemberId)
@@ -103,7 +122,6 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
         }
 
         Set<MemberMeeting> participants = meeting.getParticipants();
-
         boolean alreadyJoin = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(alreadyJoin) {
             throw new BusinessException(ErrorCode.ALREADY_JOIN);

@@ -10,15 +10,19 @@ public interface MeetingInquiryService {
 
     public List<Meeting> pagingMeetingList(Category category, long lastId);
 
+    public void checkJoinedMember(List<ParticipantDto> participants, Long memberId);
+
     public long getLastId(List<Meeting> meetingList);
+
+    public long validCheckLastId(long lastId);
 
     public String createNextPagingUrl(int categoryNumber, long lastId);
 
     public List<MeetingDto> listToDtoList(List<Meeting> meetingList, Long memberId);
 
-    public Meeting getMeetingById(Long id);
+    public Meeting getById(Long id);
 
-    public List<ParticipantDto> getParticipantDtoList(Meeting meeting);
+    public List<ParticipantDto> getParticipants(Meeting meeting);
 
     public void checkJoinRequestValid(Long meetingId, Long memberId);
 }

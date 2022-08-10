@@ -40,14 +40,6 @@ public class MeetingManageServiceImpl implements MeetingManageService {
     }
 
     @Override
-    public void checkJoinedMember(List<ParticipantDto> participantList, Long memberId) {
-        boolean joined = participantList.stream().anyMatch(P -> Objects.equals(P.getId(), memberId));
-        if(!joined) {
-            throw new BusinessException(ErrorCode.NOT_JOINED);
-        }
-    }
-
-    @Override
     public Meeting createMeeting(CreateMeetingDto dto, Long ownerId) throws BusinessException {
         if(checkTitleDuplicate(dto.getTitle())) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
