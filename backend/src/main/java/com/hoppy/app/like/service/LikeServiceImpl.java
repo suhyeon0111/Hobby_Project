@@ -1,5 +1,6 @@
 package com.hoppy.app.like.service;
 
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.dto.CountDto;
 import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.like.domain.MemberPostLike;
@@ -34,28 +35,28 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public List<Long> getMeetingLikes(long memberId) {
         return memberMeetingLikeRepository.findAllByMemberId(memberId).stream()
-                .map(MemberMeetingLike::getMeetingId)
+                .map(M -> M.getMeeting().getId())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Long> getPostLikes(long memberId) {
         return memberPostLikeRepository.findAllByMemberId(memberId).stream()
-                .map(MemberPostLike::getPostId)
+                .map(M -> M.getPost().getId())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Long> getReplyLikes(long memberId) {
         return memberReplyLikeRepository.findAllByMemberId(memberId).stream()
-                .map(MemberReplyLike::getReplyId)
+                .map(M -> M.getReply().getId())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Long> getReReplyLikes(long memberId) {
         return memberReReplyLikeRepository.findAllByMemberId(memberId).stream()
-                .map(MemberReReplyLike::getReReplyId)
+                .map(M -> M.getReReply().getId())
                 .collect(Collectors.toList());
     }
 

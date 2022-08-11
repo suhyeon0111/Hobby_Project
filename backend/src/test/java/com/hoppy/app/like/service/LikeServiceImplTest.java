@@ -64,8 +64,8 @@ class LikeServiceImplTest {
             if((i + 1) % 2 == 0) {
                 memberPostLikeRepository.save(
                         MemberPostLike.builder()
-                                .memberId(member.getId())
-                                .postId(post.getId())
+                                .member(member)
+                                .post(post)
                                 .build()
                 );
             }

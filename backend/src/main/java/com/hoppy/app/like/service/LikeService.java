@@ -1,5 +1,6 @@
 package com.hoppy.app.like.service;
 
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.dto.CountDto;
 import com.hoppy.app.member.domain.Member;
 import java.util.List;

@@ -99,15 +99,15 @@ class MeetingControllerTest {
             );
 
             memberMeetingRepository.save(MemberMeeting.builder()
-                    .meetingId(meeting.getId())
-                    .memberId(member.getId())
+                    .meeting(meeting)
+                    .member(member)
                     .build()
             );
 
             if(i % 3 == 0) {
                 memberMeetingLikeRepository.save(MemberMeetingLike.builder()
-                        .memberId(member.getId())
-                        .meetingId(meeting.getId())
+                        .meeting(meeting)
+                        .member(member)
                         .build()
                 );
             }
@@ -278,8 +278,8 @@ class MeetingControllerTest {
                 .build()
         );
         memberMeetingRepository.save(MemberMeeting.builder()
-                .meetingId(meeting.getId())
-                .memberId(author.getId())
+                .meeting(meeting)
+                .member(author)
                 .build()
         );
 
@@ -297,8 +297,8 @@ class MeetingControllerTest {
             if(i % 2 == 0) {
                 memberPostLikeRepository.save(
                         MemberPostLike.builder()
-                                .memberId(author.getId())
-                                .postId(post.getId())
+                                .member(author)
+                                .post(post)
                                 .build()
                 );
             }

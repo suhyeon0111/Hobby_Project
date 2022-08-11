@@ -47,8 +47,8 @@ class MemberMeetingRepositoryTest {
 
         MemberMeeting memberMeeting = memberMeetingRepository.save(
                 MemberMeeting.builder()
-                        .memberId(member.getId())
-                        .meetingId(meeting.getId())
+                        .member(member)
+                        .meeting(meeting)
                         .build()
         );
 

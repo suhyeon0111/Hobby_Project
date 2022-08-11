@@ -116,20 +116,23 @@ class PostServiceSpringBootTest {
             if(i % 2 == 0) continue;
             memberPostLikeRepository.save(
                     MemberPostLike.builder()
-                            .memberId(TEST_MEMBER_ID)
-                            .postId(post.getId())
+                            .member(member)
+                            .post(post)
                             .build()
             );
         }
 
         // when
-        List<PostDto> postDtoList = postService.pagingPostListV1(meeting, Long.MAX_VALUE, TEST_MEMBER_ID);
+        List<PostDto> postDtoList = postService.pagingPostListV2(meeting, Long.MAX_VALUE, TEST_MEMBER_ID);
 
         /*
         * 발생 쿼리
-        * 1) 최초 Post 페이징 쿼리: 1
-        * 2) 댓글, 대댓글 조회 쿼리: 2~4 (JPA 내부 최적화에 따름)
-        * 3) 좋아요 개수 조회 쿼리: 8 (count 필드를 사용해서 최적화를 시도해보자)
+        * - 최초 Post 페이징 쿼리: 1
+        * - 멤버 조회 쿼리: 1
+        * - 댓글, 대댓글 조회 쿼리: 2~4 (JPA 내부 최적화에 따름)
+        * - 게시물 좋아요 조회 쿼리: 8
+        *
+        * TODO: count 필드를 사용해서 좋아요 개수 조회의 최적화를 시도해보자 -tae
         * */
 
         // then
@@ -188,8 +191,8 @@ class PostServiceSpringBootTest {
         }
         memberPostLikeRepository.save(
                 MemberPostLike.builder()
-                        .memberId(TEST_MEMBER_ID)
-                        .postId(post.getId())
+                        .member(member)
+                        .post(post)
                         .build()
         );
 
@@ -206,8 +209,7 @@ class PostServiceSpringBootTest {
         * 6) 각 대댓글에 좋아요 눌렀는지 확인 쿼리
         * 7) 각 대댓글의 좋아요 수 조회 쿼리
         *
-        * 좋아요 눌렀는지 여부 확인과 좋아요 수 조회하는 쿼리가
-        * 매우 비효율적임
+        * TODO: 좋아요 눌렀는지 여부 확인과 좋아요 수 조회하는 쿼리가 매우 비효율적임. 개선이 필요함 -tae
         * */
 
         // then
