@@ -22,6 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.ToString.Exclude;
+import org.hibernate.annotations.BatchSize;
 
 /**
  * @author 태경 2022-07-23
@@ -48,4 +49,10 @@ public class ReReply {
     @ManyToOne
     @Exclude
     private Reply reply;
+
+    @OneToMany(mappedBy = "reReply", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberReReplyLike> likes = new HashSet<>();
 }

@@ -1,5 +1,6 @@
 package com.hoppy.app.community.domain;
 
+import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.domain.MemberReplyLike;
 import com.hoppy.app.member.domain.Member;
 import java.util.HashSet;
@@ -55,4 +56,10 @@ public class Reply {
     @Default
     @Exclude
     private Set<ReReply> reReplies = new HashSet<>();
+
+    @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberReplyLike> likes = new HashSet<>();
 }

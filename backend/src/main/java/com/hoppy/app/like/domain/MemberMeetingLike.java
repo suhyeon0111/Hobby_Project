@@ -1,5 +1,7 @@
 package com.hoppy.app.like.domain;
 
+import com.hoppy.app.meeting.domain.Meeting;
+import com.hoppy.app.member.domain.Member;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,9 @@ public class MemberMeetingLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long memberId;
-    private Long meetingId;
+    @ManyToOne
+    private Member member;
+
+    @ManyToOne
+    private Meeting meeting;
 }
