@@ -14,10 +14,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
-
-//    @Query("select distinct m from Meeting as m join fetch m.participants join fetch m.myMeetingLikes where m.category = :category")
-//    List<Meeting> findAllMeetingByCategoryUsingFetch(@Param("category") Category category);
-
     /*
      * 페이징 기능은 14개씩 데이터를 조회하고 where를 사용해서 no-offset하게 구현한다.
      * 또한 다음 조회 link를 함께 제공하여 좀 더 restful한 api를 제공한다.
@@ -30,14 +26,17 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
      * 모임에 좋아요를 눌렀는지 확인하는 것이 성능상 이점이 있을 것으로 보인다.
      * stream과 filter를 사용해보자.
      * */
-    @Query("select distinct m from Meeting as m where m.category = :category and m.id < :lastId order by m.id desc")
+    @Query("select m from Meeting as m where m.category = :category and m.id < :lastId order by m.id desc")
     List<Meeting> infiniteScrollPaging(@Param("category") Category category, @Param("lastId") Long lastId, Pageable pageable);
 
     Optional<Meeting> findByTitle(String title);
 
+    /*
+    * FOR UPDATE is not allowed in DISTINCT or grouped select
+    * */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select distinct m from Meeting m join fetch m.participants where m.id = :id")
-    Optional<Meeting> findWithParticipantsByIdUsingLock(@Param("id") Long id);
+    @Query("select m from Meeting m where m.id = :id")
+    Optional<Meeting> findByIdUsingLock(@Param("id") Long id);
 
     @Query("select distinct m from Meeting m join fetch m.participants where m.id = :id")
     Optional<Meeting> findWithParticipantsById(@Param("id") Long id);
