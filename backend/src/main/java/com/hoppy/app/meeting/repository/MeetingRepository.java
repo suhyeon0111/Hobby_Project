@@ -31,11 +31,14 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
      * stream과 filter를 사용해보자.
      * */
     @Query("select distinct m from Meeting as m where m.category = :category and m.id < :lastId order by m.id desc")
-    List<Meeting> infiniteScrollPagingMeeting(@Param("category") Category category, @Param("lastId") Long lastId, Pageable pageable);
+    List<Meeting> infiniteScrollPaging(@Param("category") Category category, @Param("lastId") Long lastId, Pageable pageable);
 
-    Optional<Meeting> findMeetingByTitle(String title);
+    Optional<Meeting> findByTitle(String title);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select m from Meeting as m where m.id = :id")
-    Optional<Meeting> findMeetingByIdWithLock(@Param("id") Long id);
+    @Query("select distinct m from Meeting m join fetch m.participants where m.id = :id")
+    Optional<Meeting> findWithParticipantsByIdUsingLock(@Param("id") Long id);
+
+    @Query("select distinct m from Meeting m join fetch m.participants where m.id = :id")
+    Optional<Meeting> findWithParticipantsById(@Param("id") Long id);
 }
