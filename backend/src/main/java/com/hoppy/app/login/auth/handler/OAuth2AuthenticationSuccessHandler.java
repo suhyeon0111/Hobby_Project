@@ -32,15 +32,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         log.info("Authorization Bearer " + token);
         response.setHeader("Authorization", "Bearer " + token);
-        response.sendRedirect("http://localhost:8888/?token=" + token);
+        response.sendRedirect("http://localhost:8888/login/auth/kakao?token=" + token);
     }
-
-    /**
-     * 로그인 성공 시 아래 url로 jwt를 추가하여 redirect
-     * redirect Url 은 front-end 측으로 맞춰야함. 현재는 내 로컬 (localhost:8888)로 설정
-     */
-    private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString("http://localhost:8888/oauth2/redirect/" + token).build().toString();
-    }
-
 }
