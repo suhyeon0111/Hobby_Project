@@ -1,7 +1,8 @@
 package com.hoppy.app.like.repository;
 
+import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.like.domain.MemberReReplyLike;
-import com.hoppy.app.like.domain.MemberReplyLike;
+import com.hoppy.app.member.domain.Member;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MemberReReplyLikeRepository extends JpaRepository<MemberReReplyLike, Long> {
 
-    List<MemberReReplyLike> findAllByMemberId(Long memberId);
+    List<MemberReReplyLike> findAllByMember(Member member);
 
-    int countAllByReReplyId(Long reReplyId);
+    int countAllByReReply(ReReply reReply);
 }

@@ -13,8 +13,6 @@ public interface PostService {
 
     public Post findById(long id);
 
-    public List<PostDto> pagingPostListV1(Meeting meeting, long lastId, long memberId);
-
     public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId);
 
     public long getLastId(List<PostDto> posts);
@@ -23,5 +21,5 @@ public interface PostService {
 
     public String createNextPagingUrl(long meetingId, long lastId);
 
-    public PostDetailDto getPostDetailV1(long postId, long memberId);
+    public PostDetailDto getPostDetailV2(long postId, long memberId);
 }

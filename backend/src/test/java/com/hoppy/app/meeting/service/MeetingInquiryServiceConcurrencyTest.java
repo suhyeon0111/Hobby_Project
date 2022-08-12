@@ -94,7 +94,7 @@ class MeetingInquiryServiceConcurrencyTest {
         countDownLatch.await();
 
         //then
-        List<MemberMeeting> memberMeetings = memberMeetingRepository.findALlByMeetingId(meeting.getId());
+        List<MemberMeeting> memberMeetings = memberMeetingRepository.findALlByMeeting(meeting);
         long memberMeetingCount = memberMeetings.size();
 
         assertThat(memberMeetingCount).isEqualTo(MAXIMUM_PEOPLE);

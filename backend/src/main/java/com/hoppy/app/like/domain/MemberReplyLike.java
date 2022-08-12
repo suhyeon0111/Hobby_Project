@@ -34,4 +34,12 @@ public class MemberReplyLike {
 
     @ManyToOne
     private Reply reply;
+
+    public Long getMemberId() {
+        return member.getId();
+    }
+
+    public Long getReplyId() {
+        return reply.getId();
+    }
 }

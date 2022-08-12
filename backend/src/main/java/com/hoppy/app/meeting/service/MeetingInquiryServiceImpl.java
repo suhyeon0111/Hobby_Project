@@ -7,7 +7,6 @@ import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.meeting.dto.ParticipantDto;
-import com.hoppy.app.like.service.LikeService;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Service;
 public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     private final MemberService memberService;
-    private final LikeService likeService;
     private final MeetingRepository meetingRepository;
     private final MemberMeetingRepository memberMeetingRepository;
 
@@ -81,7 +79,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     public List<MeetingDto> listToDtoList(List<Meeting> meetingList, long memberId) {
-        List<Long> meetingLikes = likeService.getMeetingLikes(memberId);
+        List<Long> meetingLikes = memberService.getMeetingLikes(memberId);
 
         Map<Long, Boolean> likedMap = meetingLikes.stream()
                 .collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));

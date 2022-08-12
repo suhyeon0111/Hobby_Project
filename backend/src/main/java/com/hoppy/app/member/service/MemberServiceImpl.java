@@ -7,6 +7,8 @@ import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,29 +20,46 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Member findById(Long id) {
+    public Member findById(long id) {
         Optional<Member> optMember = memberRepository.findById(id);
-
-        if(optMember.isEmpty())
+        if(optMember.isEmpty()) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-
+        }
         return optMember.get();
     }
 
     @Override
-    public Member updateById(Long memberId, UpdateMemberDto memberDto) {
-        Optional<Member> member = memberRepository.findById(memberId);
-        member.ifPresent(selectMember -> {
-            selectMember.setUsername(memberDto.getUsername());
-            selectMember.setIntro(memberDto.getIntro());
-            selectMember.setProfileImageUrl(memberDto.getProfileUrl());
-            memberRepository.save(selectMember);
-        });
-        return member.get();
+    public Member findByIdWithPostLikes(long id) {
+        Optional<Member> optMember = memberRepository.findByIdWithPostLikes(id);
+        if(optMember.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        return optMember.get();
     }
 
     @Override
-    public Member deleteById(Long id) {
+    @Transactional
+    public Member updateById(long memberId, UpdateMemberDto memberDto) {
+        Optional<Member> optMember = memberRepository.findById(memberId);
+        if(optMember.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        Member member = optMember.get();
+
+        member.setUsername(memberDto.getUsername());
+        member.setIntro(memberDto.getIntro());
+        member.setProfileImageUrl(memberDto.getProfileUrl());
+
+        /*
+        * 22.08.13 -tae
+        * isPresent check 누락되어 수정하였음
+        * jpa dirty checking 으로 업데이트
+        * */
+        return member;
+    }
+
+    @Override
+    public Member deleteById(long id) {
         Optional<Member> optMember = memberRepository.findById(id);
         if(optMember.isPresent()) {
             if(optMember.get().isDeleted()) {
@@ -56,9 +75,30 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> infiniteScrollPagingMember(List<Long> memberIdList, Long lastId,
+    public List<Member> infiniteScrollPagingMember(List<Long> memberIdList, long lastId,
             PageRequest pageRequest) {
         return memberRepository.infiniteScrollPagingMember(memberIdList, lastId, pageRequest);
+    }
+
+    @Override
+    public List<Long> getMeetingLikes(long memberId) {
+        Optional<Member> opt = memberRepository.findByIdWithMeetingLikes(memberId);
+        if(opt.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        return opt.get().getMeetingLikes().stream()
+                .map(M -> M.getMeeting().getId())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkMeetingLiked(long memberId, long meetingId) {
+        Optional<Member> opt = memberRepository.findByIdWithMeetingLikes(memberId);
+        if(opt.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        return opt.get().getMeetingLikes().stream()
+                .anyMatch(M -> M.getMeetingId() == meetingId);
     }
 
 }

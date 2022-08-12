@@ -29,4 +29,12 @@ public class MemberMeetingLike {
 
     @ManyToOne
     private Meeting meeting;
+
+    public Long getMemberId() {
+        return member.getId();
+    }
+
+    public Long getMeetingId() {
+        return meeting.getId();
+    }
 }

@@ -34,4 +34,12 @@ public class MemberPostLike {
 
     @ManyToOne
     private Post post;
+
+    public Long getMemberId() {
+        return member.getId();
+    }
+
+    public Long getPostId() {
+        return post.getId();
+    }
 }

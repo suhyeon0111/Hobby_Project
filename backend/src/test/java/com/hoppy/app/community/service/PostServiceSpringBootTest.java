@@ -197,7 +197,8 @@ class PostServiceSpringBootTest {
         );
 
         // when
-        PostDetailDto postDetailDto = postService.getPostDetailV1(post.getId(), TEST_MEMBER_ID);
+        // PostDetailDto postDetailDto = postService.getPostDetailV1(post.getId(), TEST_MEMBER_ID);
+        PostDetailDto postDetailDto = postService.getPostDetailV2(post.getId(), TEST_MEMBER_ID);
 
         /*
         * 발생 쿼리

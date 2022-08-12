@@ -3,7 +3,6 @@ package com.hoppy.app.meeting.controller;
 import com.hoppy.app.community.dto.PagingPostDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.service.PostService;
-import com.hoppy.app.like.service.LikeService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
@@ -44,7 +43,6 @@ public class MeetingController {
     private final MeetingManageService meetingManageService;
     private final MemberService memberService;
     private final PostService postService;
-    private final LikeService likeService;
     private final ResponseService responseService;
 
     @PostMapping
@@ -106,11 +104,11 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Meeting meeting = meetingInquiryService.getById(id);
-        List<ParticipantDto> participants = meetingInquiryService.getParticipantDtoList(meeting);
-        meetingInquiryService.checkJoinedMemberV2(participants, userDetails.getId());
+        List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
+        meetingInquiryService.checkJoinedMemberV2(participantList, userDetails.getId());
 
-        boolean liked = likeService.checkMeetingLiked(userDetails.getId(), meeting.getId());
-        MeetingDetailDto meetingDetailDto = MeetingDetailDto.of(meeting, participants, liked);
+        boolean liked = memberService.checkMeetingLiked(userDetails.getId(), meeting.getId());
+        MeetingDetailDto meetingDetailDto = MeetingDetailDto.of(meeting, participantList, liked);
 
         return responseService.successResult(SuccessCode.INQUIRE_MEETING_DETAIL_SUCCESS, meetingDetailDto);
     }
@@ -126,7 +124,7 @@ public class MeetingController {
         List<Member> participantList = meetingInquiryService.getParticipantList(meeting);
         meetingInquiryService.checkJoinedMemberV1(participantList, userDetails.getId());
 
-        List<PostDto> postDtoList = postService.pagingPostListV1(meeting, lastId, userDetails.getId());
+        List<PostDto> postDtoList = postService.pagingPostListV2(meeting, lastId, userDetails.getId());
         long lastPostId = postService.getLastId(postDtoList);
         String nextPagingUrl = postService.createNextPagingUrl(meetingId, lastPostId);
         PagingPostDto pagingPostDto = PagingPostDto.of(postDtoList, nextPagingUrl);

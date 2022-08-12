@@ -7,6 +7,7 @@ import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
+import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import java.util.Objects;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class MeetingManageServiceImpl implements MeetingManageService {
 
     private final MeetingRepository meetingRepository;
+    private final MemberRepository memberRepository;
     private final MemberMeetingRepository memberMeetingRepository;
 
     @Override
@@ -64,6 +66,12 @@ public class MeetingManageServiceImpl implements MeetingManageService {
         }
         Meeting meeting = optionalMeeting.get();
 
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if(optionalMember.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        Member member = optionalMember.get();
+
         Set<MemberMeeting> participants = meeting.getParticipants();
         boolean joined = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(!joined) {
@@ -73,6 +81,6 @@ public class MeetingManageServiceImpl implements MeetingManageService {
         if(meeting.isFull()) {
             meeting.setFullFlag(false);
         }
-        memberMeetingRepository.deleteMemberMeetingByMeetingIdAndMemberId(meetingId, memberId);
+        memberMeetingRepository.deleteMemberMeetingByMeetingAndMember(meeting, member);
     }
 }

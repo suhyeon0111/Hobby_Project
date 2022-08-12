@@ -53,7 +53,7 @@ class MemberMeetingRepositoryTest {
         );
 
         //when
-        memberMeetingRepository.deleteMemberMeetingByMeetingIdAndMemberId(meeting.getId(), member.getId());
+        memberMeetingRepository.deleteMemberMeetingByMeetingAndMember(meeting, member);
 
         //then
         Optional<Meeting> meetingOptional = meetingRepository.findById(meeting.getId());

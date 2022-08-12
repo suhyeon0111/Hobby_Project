@@ -1,32 +1,31 @@
 package com.hoppy.app.community.service;
 
 import com.hoppy.app.community.domain.Post;
-import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.dto.ReReplyDto;
 import com.hoppy.app.community.dto.ReplyDto;
 import com.hoppy.app.community.repository.PostRepository;
-import com.hoppy.app.like.domain.MemberPostLike;
-import com.hoppy.app.like.service.LikeService;
+import com.hoppy.app.like.domain.MemberReReplyLike;
+import com.hoppy.app.like.domain.MemberReplyLike;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 /**
@@ -39,8 +38,7 @@ public class PostServiceImpl implements PostService {
 
     private final int PAGING_COUNT = 8;
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
-    private final LikeService likeService;
+    private final MemberService memberService;
 
     @Override
     public Post findById(long id) {
@@ -51,42 +49,6 @@ public class PostServiceImpl implements PostService {
         return optionalPost.get();
     }
 
-    /*
-     * @deprecated Replaced by {@link pagingPostListV2()}, deprecated for slow performance.
-     */
-    @Override
-    @Transactional
-    @Deprecated
-    public List<PostDto> pagingPostListV1(Meeting meeting, long lastId, long memberId) {
-
-        List<Post> posts = postRepository.infiniteScrollPagingPost(meeting, lastId, PageRequest.of(0, PAGING_COUNT));
-        if(posts.isEmpty()) {
-            throw new BusinessException(ErrorCode.NO_MORE_POST);
-        }
-        Map<Long, Integer> repliesCountMap = new HashMap<>();
-        for(var p : posts) {
-            int sum = p.getReplies().size();
-
-            for(var r : p.getReplies()) {
-                sum += r.getReReplies().size();
-            }
-            repliesCountMap.put(p.getId(), sum);
-        }
-
-        List<Long> postLikes = likeService.getPostLikes(memberId);
-        Map<Long, Boolean> likedMap = postLikes.stream()
-                .collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
-
-        return posts.stream()
-                .map(P -> PostDto.postToPostDto(
-                        P,
-                        likedMap.containsKey(P.getId()),
-                        likeService.getPostLikeCount(P.getId()),
-                        repliesCountMap.get(P.getId()))
-                )
-                .collect(Collectors.toList());
-    }
-
     @Override
     @Transactional
     public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId) {
@@ -95,11 +57,8 @@ public class PostServiceImpl implements PostService {
         if(posts.isEmpty()) {
             throw new BusinessException(ErrorCode.NO_MORE_POST);
         }
-        Optional<Member> optMember = memberRepository.findByIdWithPostLikes(memberId);
-        if(optMember.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        Member member = optMember.get();
+
+        Member member = memberService.findByIdWithPostLikes(memberId);
         Map<Long, Integer> repliesCountMap = new HashMap<>();
         Map<Long, Integer> likesCountMap = new HashMap<>();
         for(var p : posts) {
@@ -149,30 +108,29 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostDetailDto getPostDetailV1(long postId, long memberId) {
+    public PostDetailDto getPostDetailV2(long postId, long memberId) {
         Optional<Post> optPost = postRepository.getPostDetail(postId);
         if(optPost.isEmpty()) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
-
         Post post = optPost.get();
+        Member member = memberService.findByIdWithPostLikes(memberId);
 
-        int postLikeCount = likeService.getPostLikeCount(postId);
-        boolean postLiked = likeService.checkPostLiked(memberId, postId);
+        int postLikeCount = post.getLikes().size();
+        boolean postLiked = member.getPostLikes().stream().anyMatch(L -> L.getPost().getId() == postId);
 
-        Map<Long, Boolean> replyLikedMap = likeService.getReplyLikes(memberId)
-                .stream().collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
+        Map<Long, Boolean> replyLikedMap = member.getReplyLikes()
+                .stream().collect(Collectors.toMap(MemberReplyLike::getReplyId, M -> Boolean.TRUE));
+
+        Map<Long, Boolean> reReplyLikedMap = member.getReReplyLikes()
+                .stream().collect(Collectors.toMap(MemberReReplyLike::getReReplyId, M -> Boolean.TRUE));
+
         Map<Long, Integer> replyLikeCountMap = post.getReplies()
-                .stream().collect(Collectors.toMap(Reply::getId, R -> likeService.getReplyLikeCount(R.getId())));
+                .stream().collect(Collectors.toMap(Reply::getId, R -> R.getLikes().size()));
 
-        Map<Long, Boolean> reReplyLikedMap = likeService.getReReplyLikes(memberId)
-                .stream().collect(Collectors.toMap(L -> L, L -> Boolean.TRUE));
-        Map<Long, Integer> reReplyLikeCountMap = new HashMap<>();
-        for(var r : post.getReplies()) {
-            for(var rr : r.getReReplies()) {
-                reReplyLikeCountMap.put(rr.getId(), likeService.getReReplyLikeCount(rr.getId()));
-            }
-        }
+        Map<Long, Integer> reReplyLikeCountMap = post.getReplies().stream()
+                .map(R -> Pair.of(R.getId(), R.getReReplies().stream().mapToInt(RR -> RR.getLikes().size()).sum()))
+                .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 
         int replyCountSum = 0;
         List<ReplyDto> replyDtoList = new ArrayList<>();

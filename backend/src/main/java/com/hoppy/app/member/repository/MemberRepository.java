@@ -18,4 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select distinct m from Member m join fetch m.postLikes where m.id = :id")
     Optional<Member> findByIdWithPostLikes(@Param("id") Long id);
+
+    @Query("select distinct m from Member m join fetch m.meetingLikes where m.id = :id")
+    Optional<Member> findByIdWithMeetingLikes(@Param("id") Long id);
 }
