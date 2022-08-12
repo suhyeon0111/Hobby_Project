@@ -12,8 +12,7 @@ import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.dto.MeetingJoinDto;
 import com.hoppy.app.meeting.dto.MeetingWithdrawalDto;
 import com.hoppy.app.meeting.dto.PagingMeetingDto;
-import com.hoppy.app.meeting.service.MeetingInquiryService;
-import com.hoppy.app.meeting.service.MeetingManageService;
+import com.hoppy.app.meeting.service.MeetingService;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.member.service.MemberService;
@@ -39,8 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/meeting")
 public class MeetingController {
 
-    private final MeetingInquiryService meetingInquiryService;
-    private final MeetingManageService meetingManageService;
+    private final MeetingService meetingService;
     private final MemberService memberService;
     private final PostService postService;
     private final ResponseService responseService;
@@ -51,10 +49,8 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Member member = memberService.findById(userDetails.getId());
-        Meeting meeting = meetingManageService.createMeeting(dto, member.getId());
-
-        meetingManageService.saveMeeting(meeting);
-        meetingManageService.createAndSaveMemberMeetingData(meeting, member);
+        Meeting meeting = meetingService.createMeeting(dto, member.getId());
+        meetingService.createAndSaveMemberMeetingData(meeting, member);
 
         return responseService.successResult(SuccessCode.CREATE_MEETING_SUCCESS);
     }
@@ -65,7 +61,7 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Long meetingId = meetingJoinDto.getMeetingId();
-        meetingInquiryService.checkJoinRequestValid(meetingId, userDetails.getId());
+        meetingService.checkJoinRequestValid(meetingId, userDetails.getId());
 
         return responseService.successResult(SuccessCode.JOIN_MEETING_SUCCESS);
     }
@@ -75,7 +71,7 @@ public class MeetingController {
             @RequestBody @Valid MeetingWithdrawalDto meetingWithdrawalDto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        meetingManageService.withdrawMeeting(meetingWithdrawalDto.getMeetingId(), userDetails.getId());
+        meetingService.withdrawMeeting(meetingWithdrawalDto.getMeetingId(), userDetails.getId());
 
         return responseService.successResult(SuccessCode.WITHDRAW_MEETING_SUCCESS);
     }
@@ -86,13 +82,13 @@ public class MeetingController {
             @RequestParam(value = "lastId", defaultValue = "0") long lastId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        lastId = meetingInquiryService.validCheckLastId(lastId);
+        lastId = meetingService.checkLastIdValid(lastId);
         Category category = Category.intToCategory(categoryNumber);
 
-        List<Meeting> meetingList = meetingInquiryService.pagingMeetingList(category, lastId);
-        lastId = meetingInquiryService.getLastId(meetingList);
-        String nextPagingUrl = meetingInquiryService.createNextPagingUrl(categoryNumber, lastId);
-        List<MeetingDto> meetingDtoList = meetingInquiryService.listToDtoList(meetingList, userDetails.getId());
+        List<Meeting> meetingList = meetingService.pagingMeetingList(category, lastId);
+        lastId = meetingService.getLastId(meetingList);
+        String nextPagingUrl = meetingService.createNextPagingUrl(categoryNumber, lastId);
+        List<MeetingDto> meetingDtoList = meetingService.listToDtoList(meetingList, userDetails.getId());
         PagingMeetingDto pagingMeetingDto = PagingMeetingDto.of(meetingDtoList, nextPagingUrl);
 
         return responseService.successResult(SuccessCode.INQUIRY_MEETING_SUCCESS, pagingMeetingDto);
@@ -103,9 +99,9 @@ public class MeetingController {
             @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Meeting meeting = meetingInquiryService.getById(id);
-        List<ParticipantDto> participantList = meetingInquiryService.getParticipantDtoList(meeting);
-        meetingInquiryService.checkJoinedMemberV2(participantList, userDetails.getId());
+        Meeting meeting = meetingService.getById(id);
+        List<ParticipantDto> participantList = meetingService.getParticipantDtoList(meeting);
+        meetingService.checkJoinedMemberV2(participantList, userDetails.getId());
 
         boolean liked = memberService.checkMeetingLiked(userDetails.getId(), meeting.getId());
         MeetingDetailDto meetingDetailDto = MeetingDetailDto.of(meeting, participantList, liked);
@@ -120,9 +116,9 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         lastId = postService.validCheckLastId(lastId);
-        Meeting meeting = meetingInquiryService.getById(meetingId);
-        List<Member> participantList = meetingInquiryService.getParticipantList(meeting);
-        meetingInquiryService.checkJoinedMemberV1(participantList, userDetails.getId());
+        Meeting meeting = meetingService.getById(meetingId);
+        List<Member> participantList = meetingService.getParticipantList(meeting);
+        meetingService.checkJoinedMemberV1(participantList, userDetails.getId());
 
         List<PostDto> postDtoList = postService.pagingPostListV2(meeting, lastId, userDetails.getId());
         long lastPostId = postService.getLastId(postDtoList);

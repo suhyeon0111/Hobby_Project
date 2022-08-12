@@ -21,8 +21,6 @@ import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,12 +31,10 @@ import org.springframework.data.domain.PageRequest;
  * @author 태경 2022-07-18
  */
 @ExtendWith(MockitoExtension.class)
-//@TestInstance(Lifecycle.PER_CLASS)
-@TestInstance(Lifecycle.PER_METHOD) // default
-class MeetingInquiryServiceImplTest {
+class MeetingServiceImplTest {
 
     @InjectMocks
-    MeetingInquiryServiceImpl meetingInquiryService;
+    MeetingServiceImpl meetingInquiryService;
 
     @Mock
     MemberService memberService;
@@ -103,7 +99,7 @@ class MeetingInquiryServiceImplTest {
         final var REQUEST_MEMBER_ID = 1111L;
         final var REQUEST_MEETING_ID = 2222L;
 
-        given(meetingRepository.findWithParticipantsByIdUsingLock(REQUEST_MEETING_ID)).willReturn(
+        given(meetingRepository.findByIdUsingLock(REQUEST_MEETING_ID)).willReturn(
                 Optional.of(meeting));
 
         //when
@@ -139,7 +135,7 @@ class MeetingInquiryServiceImplTest {
                         .build()
         );
 
-        given(meetingRepository.findWithParticipantsByIdUsingLock(REQUEST_MEETING_ID)).willReturn(
+        given(meetingRepository.findByIdUsingLock(REQUEST_MEETING_ID)).willReturn(
                 Optional.of(meeting));
 
         //when
@@ -156,7 +152,7 @@ class MeetingInquiryServiceImplTest {
         //given
         final var REQUEST_MEMBER_ID = 1111L;
         final var REQUEST_MEETING_ID = 2222L;
-        given(meetingRepository.findWithParticipantsByIdUsingLock(REQUEST_MEETING_ID)).willReturn(
+        given(meetingRepository.findByIdUsingLock(REQUEST_MEETING_ID)).willReturn(
                 Optional.empty());
 
         //when

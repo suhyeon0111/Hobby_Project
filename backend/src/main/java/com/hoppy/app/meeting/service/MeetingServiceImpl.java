@@ -2,6 +2,7 @@ package com.hoppy.app.meeting.service;
 
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
+import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
@@ -26,11 +27,66 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MeetingInquiryServiceImpl implements MeetingInquiryService {
+public class MeetingServiceImpl implements MeetingService {
 
     private final MemberService memberService;
     private final MeetingRepository meetingRepository;
     private final MemberMeetingRepository memberMeetingRepository;
+
+    @Override
+    @Transactional
+    public void createAndSaveMemberMeetingData(Meeting meeting, Member member) {
+        memberMeetingRepository.save(MemberMeeting.builder()
+                .meeting(meeting)
+                .member(member)
+                .build());
+    }
+
+    @Override
+    @Transactional
+    public Meeting createMeeting(CreateMeetingDto dto, Long ownerId) throws BusinessException {
+        if(checkTitleDuplicate(dto.getTitle())) {
+            throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
+        }
+
+        if(Category.intToCategory(dto.getCategory()) == Category.ERROR) {
+            throw new BusinessException(ErrorCode.BAD_CATEGORY);
+        }
+        return meetingRepository.save(Meeting.of(dto, ownerId));
+    }
+
+    @Override
+    public boolean checkTitleDuplicate(String title) {
+        return meetingRepository.findByTitle(title).isPresent();
+    }
+
+    @Override
+    @Transactional
+    public void withdrawMeeting(Long meetingId, Long memberId) {
+        /*
+        * [error] FOR UPDATE is not allowed in DISTINCT or grouped select
+            - 베타적 락을 걸기 위해 update for 문과 fetch join & distinct 문을 함께 사용하다가 해당 에러를 만났음
+            - 이는 업데이트를 위해서 다수 테이블과 행에 락을 걸어야 하는 행위이므로 허용되지 않는 쿼리문인 것으로 보임
+            - 따라서 단일 Entity만 조회한 후 Batch size로 N + 1 문제가 발생하지 않도록 컬렉션 조인을 수행하였음
+        * */
+        Optional<Meeting> optionalMeeting = meetingRepository.findByIdUsingLock(meetingId);
+        if(optionalMeeting.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
+        }
+        Meeting meeting = optionalMeeting.get();
+        Member member = memberService.findById(memberId);
+
+        Set<MemberMeeting> participants = meeting.getParticipants();
+        boolean joined = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
+        if(!joined) {
+            throw new BusinessException(ErrorCode.NOT_JOINED);
+        }
+
+        if(meeting.isFull()) {
+            meeting.setFullFlag(false);
+        }
+        memberMeetingRepository.deleteMemberMeetingByMeetingAndMember(meeting, member);
+    }
 
     @Override
     public List<Meeting> pagingMeetingList(Category category, long lastId) {
@@ -59,7 +115,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public long validCheckLastId(long lastId) {
+    public long checkLastIdValid(long lastId) {
         if(lastId == 0) {
             return Long.MAX_VALUE;
         }
@@ -129,7 +185,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     @Override
     @Transactional
     public void checkJoinRequestValid(long meetingId, long memberId) {
-        Optional<Meeting> optionalMeeting = meetingRepository.findWithParticipantsByIdUsingLock(meetingId);
+        Optional<Meeting> optionalMeeting = meetingRepository.findByIdUsingLock(meetingId);
         if(optionalMeeting.isEmpty()) {
             throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
         }

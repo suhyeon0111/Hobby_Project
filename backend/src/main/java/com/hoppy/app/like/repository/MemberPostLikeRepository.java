@@ -12,10 +12,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MemberPostLikeRepository extends JpaRepository<MemberPostLike, Long> {
 
-    Optional<MemberPostLike> findByMemberAndPost(Member member, Post post);
-    List<MemberPostLike> findAllByMember(Member member);
-
-    List<MemberPostLike> findAllByMemberId(Long memberId);
-
-    int countAllByPostId(Long postId);
 }
