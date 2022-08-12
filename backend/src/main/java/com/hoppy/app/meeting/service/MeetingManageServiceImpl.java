@@ -3,13 +3,12 @@ package com.hoppy.app.meeting.service;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
-import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
+import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -32,10 +31,10 @@ public class MeetingManageServiceImpl implements MeetingManageService {
 
     @Override
     @Transactional
-    public void createAndSaveMemberMeetingData(Long meetingId, Long memberId) {
+    public void createAndSaveMemberMeetingData(Meeting meeting, Member member) {
         memberMeetingRepository.save(MemberMeeting.builder()
-                .meetingId(meetingId)
-                .memberId(memberId)
+                .meeting(meeting)
+                .member(member)
                 .build());
     }
 
@@ -53,20 +52,19 @@ public class MeetingManageServiceImpl implements MeetingManageService {
 
     @Override
     public boolean checkTitleDuplicate(String title) {
-        return meetingRepository.findMeetingByTitle(title).isPresent();
+        return meetingRepository.findByTitle(title).isPresent();
     }
 
     @Override
     @Transactional
     public void withdrawMeeting(Long meetingId, Long memberId) {
-        Optional<Meeting> optionalMeeting = meetingRepository.findMeetingByIdWithLock(meetingId);
+        Optional<Meeting> optionalMeeting = meetingRepository.findWithParticipantsByIdUsingLock(meetingId);
         if(optionalMeeting.isEmpty()) {
             throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
         }
-
         Meeting meeting = optionalMeeting.get();
-        Set<MemberMeeting> participants = meeting.getParticipants();
 
+        Set<MemberMeeting> participants = meeting.getParticipants();
         boolean joined = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(!joined) {
             throw new BusinessException(ErrorCode.NOT_JOINED);

@@ -15,6 +15,8 @@ public interface PostService {
 
     public List<PostDto> pagingPostListV1(Meeting meeting, long lastId, long memberId);
 
+    public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId);
+
     public long getLastId(List<PostDto> posts);
 
     public long validCheckLastId(long lastId);

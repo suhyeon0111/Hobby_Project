@@ -8,8 +8,11 @@ import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.dto.ReReplyDto;
 import com.hoppy.app.community.dto.ReplyDto;
 import com.hoppy.app.community.repository.PostRepository;
+import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.service.LikeService;
 import com.hoppy.app.meeting.domain.Meeting;
+import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class PostServiceImpl implements PostService {
 
     private final int PAGING_COUNT = 8;
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
     private final LikeService likeService;
 
     @Override
@@ -47,8 +51,12 @@ public class PostServiceImpl implements PostService {
         return optionalPost.get();
     }
 
+    /*
+     * @deprecated Replaced by {@link pagingPostListV2()}, deprecated for slow performance.
+     */
     @Override
     @Transactional
+    @Deprecated
     public List<PostDto> pagingPostListV1(Meeting meeting, long lastId, long memberId) {
 
         List<Post> posts = postRepository.infiniteScrollPagingPost(meeting, lastId, PageRequest.of(0, PAGING_COUNT));
@@ -74,6 +82,43 @@ public class PostServiceImpl implements PostService {
                         P,
                         likedMap.containsKey(P.getId()),
                         likeService.getPostLikeCount(P.getId()),
+                        repliesCountMap.get(P.getId()))
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId) {
+
+        List<Post> posts = postRepository.infiniteScrollPagingPost(meeting, lastId, PageRequest.of(0, PAGING_COUNT));
+        if(posts.isEmpty()) {
+            throw new BusinessException(ErrorCode.NO_MORE_POST);
+        }
+        Optional<Member> optMember = memberRepository.findByIdWithPostLikes(memberId);
+        if(optMember.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        Member member = optMember.get();
+        Map<Long, Integer> repliesCountMap = new HashMap<>();
+        Map<Long, Integer> likesCountMap = new HashMap<>();
+        for(var p : posts) {
+            int sum = p.getReplies().size();
+            for(var r : p.getReplies()) {
+                sum += r.getReReplies().size();
+            }
+            repliesCountMap.put(p.getId(), sum);
+            likesCountMap.put(p.getId(), p.getLikes().size());
+        }
+
+        Map<Long, Boolean> likedMap = member.getPostLikes().stream()
+                .collect(Collectors.toMap(M -> M.getPost().getId(), L -> Boolean.TRUE));
+
+        return posts.stream()
+                .map(P -> PostDto.postToPostDto(
+                        P,
+                        likedMap.containsKey(P.getId()),
+                        likesCountMap.get(P.getId()),
                         repliesCountMap.get(P.getId()))
                 )
                 .collect(Collectors.toList());

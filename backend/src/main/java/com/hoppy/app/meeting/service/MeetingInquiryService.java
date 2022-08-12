@@ -4,13 +4,16 @@ import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.dto.ParticipantDto;
+import com.hoppy.app.member.domain.Member;
 import java.util.List;
 
 public interface MeetingInquiryService {
 
     public List<Meeting> pagingMeetingList(Category category, long lastId);
 
-    public void checkJoinedMember(List<ParticipantDto> participants, Long memberId);
+    public void checkJoinedMemberV1(List<Member> participants, long memberId);
+
+    public void checkJoinedMemberV2(List<ParticipantDto> participants, long memberId);
 
     public long getLastId(List<Meeting> meetingList);
 
@@ -18,11 +21,15 @@ public interface MeetingInquiryService {
 
     public String createNextPagingUrl(int categoryNumber, long lastId);
 
-    public List<MeetingDto> listToDtoList(List<Meeting> meetingList, Long memberId);
+    public List<MeetingDto> listToDtoList(List<Meeting> meetingList, long memberId);
 
-    public Meeting getById(Long id);
+    public Meeting getById(long id);
 
-    public List<ParticipantDto> getParticipants(Meeting meeting);
+    public Meeting getByIdWithParticipants(long id);
 
-    public void checkJoinRequestValid(Long meetingId, Long memberId);
+    public List<Member> getParticipantList(Meeting meeting);
+
+    public List<ParticipantDto> getParticipantDtoList(Meeting meeting);
+
+    public void checkJoinRequestValid(long meetingId, long memberId);
 }

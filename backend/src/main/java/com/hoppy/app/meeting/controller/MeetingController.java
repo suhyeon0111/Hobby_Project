@@ -56,7 +56,7 @@ public class MeetingController {
         Meeting meeting = meetingManageService.createMeeting(dto, member.getId());
 
         meetingManageService.saveMeeting(meeting);
-        meetingManageService.createAndSaveMemberMeetingData(meeting.getId(), member.getId());
+        meetingManageService.createAndSaveMemberMeetingData(meeting, member);
 
         return responseService.successResult(SuccessCode.CREATE_MEETING_SUCCESS);
     }
@@ -106,8 +106,8 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Meeting meeting = meetingInquiryService.getById(id);
-        List<ParticipantDto> participants = meetingInquiryService.getParticipants(meeting);
-        meetingInquiryService.checkJoinedMember(participants, userDetails.getId());
+        List<ParticipantDto> participants = meetingInquiryService.getParticipantDtoList(meeting);
+        meetingInquiryService.checkJoinedMemberV2(participants, userDetails.getId());
 
         boolean liked = likeService.checkMeetingLiked(userDetails.getId(), meeting.getId());
         MeetingDetailDto meetingDetailDto = MeetingDetailDto.of(meeting, participants, liked);
@@ -123,8 +123,8 @@ public class MeetingController {
     ) {
         lastId = postService.validCheckLastId(lastId);
         Meeting meeting = meetingInquiryService.getById(meetingId);
-        List<ParticipantDto> participants = meetingInquiryService.getParticipants(meeting);
-        meetingInquiryService.checkJoinedMember(participants, userDetails.getId());
+        List<Member> participantList = meetingInquiryService.getParticipantList(meeting);
+        meetingInquiryService.checkJoinedMemberV1(participantList, userDetails.getId());
 
         List<PostDto> postDtoList = postService.pagingPostListV1(meeting, lastId, userDetails.getId());
         long lastPostId = postService.getLastId(postDtoList);

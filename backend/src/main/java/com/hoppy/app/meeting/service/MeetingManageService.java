@@ -10,7 +10,7 @@ public interface MeetingManageService {
 
     public void saveMeeting(Meeting meeting);
 
-    public void createAndSaveMemberMeetingData(Long meetingId, Long memberId);
+    public void createAndSaveMemberMeetingData(Meeting meeting, Member member);
 
     public Meeting createMeeting(CreateMeetingDto dto, Long ownerId);
 

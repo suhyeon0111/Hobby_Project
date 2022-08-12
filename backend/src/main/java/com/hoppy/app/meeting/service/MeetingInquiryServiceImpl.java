@@ -36,11 +36,19 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     public List<Meeting> pagingMeetingList(Category category, long lastId) {
-        return meetingRepository.infiniteScrollPagingMeeting(category, lastId, PageRequest.of(0, 14));
+        return meetingRepository.infiniteScrollPaging(category, lastId, PageRequest.of(0, 14));
     }
 
     @Override
-    public void checkJoinedMember(List<ParticipantDto> participants, Long memberId) {
+    public void checkJoinedMemberV1(List<Member> participants, long memberId) {
+        boolean joined = participants.stream().anyMatch(P -> Objects.equals(P.getId(), memberId));
+        if(!joined) {
+            throw new BusinessException(ErrorCode.NOT_JOINED);
+        }
+    }
+
+    @Override
+    public void checkJoinedMemberV2(List<ParticipantDto> participants, long memberId) {
         boolean joined = participants.stream().anyMatch(P -> Objects.equals(P.getId(), memberId));
         if(!joined) {
             throw new BusinessException(ErrorCode.NOT_JOINED);
@@ -72,7 +80,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public List<MeetingDto> listToDtoList(List<Meeting> meetingList, Long memberId) {
+    public List<MeetingDto> listToDtoList(List<Meeting> meetingList, long memberId) {
         List<Long> meetingLikes = likeService.getMeetingLikes(memberId);
 
         Map<Long, Boolean> likedMap = meetingLikes.stream()
@@ -84,7 +92,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public Meeting getById(Long id) {
+    public Meeting getById(long id) {
         Optional<Meeting> meeting = meetingRepository.findById(id);
         if(meeting.isEmpty()) {
             throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
@@ -93,16 +101,28 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
     }
 
     @Override
-    public List<ParticipantDto> getParticipants(Meeting meeting) {
+    public Meeting getByIdWithParticipants(long id) {
+        Optional<Meeting> meeting = meetingRepository.findWithParticipantsById(id);
+        if(meeting.isEmpty()) {
+            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
+        }
+        return meeting.get();
+    }
+
+    @Override
+    public List<Member> getParticipantList(Meeting meeting) {
         List<Long> memberIdList = meeting.getParticipants()
                 .stream()
-                .map(MemberMeeting::getMemberId)
+                .map(M -> M.getMember().getId())
                 .sorted()
                 .collect(Collectors.toList());
 
-        List<Member> memberList = memberService.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size()));
+        return memberService.infiniteScrollPagingMember(memberIdList, 0L, PageRequest.of(0, memberIdList.size()));
+    }
 
-        return memberList
+    @Override
+    public List<ParticipantDto> getParticipantDtoList(Meeting meeting) {
+        return getParticipantList(meeting)
                 .stream()
                 .map(M -> ParticipantDto.memberToParticipantDto(M, meeting.getOwnerId()))
                 .collect(Collectors.toList());
@@ -110,16 +130,16 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
 
     @Override
     @Transactional
-    public void checkJoinRequestValid(Long meetingId, Long memberId) {
-        Optional<Meeting> optionalMeeting = meetingRepository.findMeetingByIdWithLock(meetingId);
+    public void checkJoinRequestValid(long meetingId, long memberId) {
+        Optional<Meeting> optionalMeeting = meetingRepository.findWithParticipantsByIdUsingLock(meetingId);
         if(optionalMeeting.isEmpty()) {
             throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
         }
-
         Meeting meeting = optionalMeeting.get();
         if(meeting.isFull()) {
             throw new BusinessException(ErrorCode.MAX_PARTICIPANTS);
         }
+        Member member = memberService.findById(memberId);
 
         Set<MemberMeeting> participants = meeting.getParticipants();
         boolean alreadyJoin = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
@@ -127,7 +147,7 @@ public class MeetingInquiryServiceImpl implements MeetingInquiryService {
             throw new BusinessException(ErrorCode.ALREADY_JOIN);
         }
 
-        memberMeetingRepository.save(MemberMeeting.of(memberId, meetingId));
+        memberMeetingRepository.save(MemberMeeting.of(member, meeting));
         if(participants.size() + 1 == meeting.getMemberLimit()) {
             meeting.setFullFlag(true);
         }
