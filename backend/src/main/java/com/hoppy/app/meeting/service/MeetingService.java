@@ -11,8 +11,8 @@ import java.util.List;
 public interface MeetingService {
 
     public void createAndSaveMemberMeetingData(Meeting meeting, Member member);
-    public Meeting createMeeting(CreateMeetingDto dto, Long ownerId);
     public boolean checkTitleDuplicate(String name);
+    public Meeting createMeeting(CreateMeetingDto dto, Long ownerId);
     public Meeting getById(long id);
     public Meeting getByIdWithParticipants(long id);
 
