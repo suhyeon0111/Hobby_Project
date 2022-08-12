@@ -1,50 +1,25 @@
-import Axios from 'axios'
 import React from 'react'
-
-Axios.defaults.withCredentials = true;
+import Axios from 'axios';
 
 function AuthRedirectHandler(props) {
 
-    // console.log('props', props)
-    const logKey = props.location.search
-    // console.log(logKey)
-    const splitLogKey = logKey.split('=')
-    // console.log(splitLogKey[1])
-    let certificationCode = splitLogKey[1].slice(0, -6)
-    console.log(certificationCode)
+  console.log('location', props.location)
+  const param = new URLSearchParams(props.location.search);
+  console.log('jwtToken>>>>>', param.get("token"))
+  const jwtToken = param.get("token");
 
-    const loginSuccess = () => {
-      if (certificationCode === undefined) {
-          console.log('로그인에 실패했습니다.')
-          delete Axios.defaults.headers.common['Authorization'];
-          return <React.Fragment>
-            <p>로그인 실패 ㅠ</p>
-            </React.Fragment>
-      } else {
-          console.log('로그인에 성공하였습니다.')
-          // const jwtToken = "najdadaskdjapdwanalkcasljdaidwiCBAUAYabcaoCAYOAWKDQKsGOG"
-          
-          // fetch('/login/oauth2/code/kakao')
-          //   .then(response => {
-          //     console.log('res', response)
-          //     if(response.status === 200) {
-          //       localStorage.setItem('Authorization', `Bearer ${jwtToken}`);
-          //     }
-          //   })
-          
-          // Axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
-
-            props.history.push('/')
-          return <React.Fragment>
-            <p>로그인 성공! {certificationCode}</p>
-            </React.Fragment>
-      }
-    }
+  
+  if (jwtToken !== undefined) {
+    localStorage.setItem('Authorization', `Bearer ${jwtToken}`);
+    Axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+    props.history.push('/')
+  } else {
+    localStorage.removeItem('Authorization', `Bearer ${jwtToken}`);
+    delete Axios.defaults.headers.common['Authorization'];
+  }
 
   return (
-    <div style={{width: "100%"}}>
-      {loginSuccess()}
-    </div>
+    <div>AuthRedirectHandler</div>
   )
 }
 

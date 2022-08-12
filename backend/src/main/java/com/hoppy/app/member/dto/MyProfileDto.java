@@ -1,6 +1,13 @@
 package com.hoppy.app.member.dto;
 
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.domain.MemberMeeting;
+import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.dto.StoryDetailDto;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +25,12 @@ public class MyProfileDto {
     private String profileUrl;
     private String intro;
     private boolean deleted;
+    private Set<MemberMeeting> myMeetings = new HashSet<>();
+    private List<StoryDetailDto> myStories;
 
-    public static MyProfileDto of(Member member) {
+
+    public static MyProfileDto of(Member member, List<StoryDetailDto> storyDetails) {
+
         return MyProfileDto.builder()
                 .id(member.getId())
                 .email(member.getEmail())
@@ -27,6 +38,9 @@ public class MyProfileDto {
                 .profileUrl(member.getProfileImageUrl())
                 .intro(member.getIntro())
                 .deleted(member.isDeleted())
+                .myMeetings(member.getMyMeetings())
+                .myStories(storyDetails)
                 .build();
     }
+
 }

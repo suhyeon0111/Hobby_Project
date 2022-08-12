@@ -2,6 +2,7 @@ package com.hoppy.app.member.service;
 
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.UpdateMemberDto;
+import com.hoppy.app.story.dto.StoryDetailDto;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 

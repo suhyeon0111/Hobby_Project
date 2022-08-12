@@ -11,6 +11,11 @@ import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
+import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.dto.StoryDetailDto;
+import com.hoppy.app.story.repository.StoryRepository;
+import com.hoppy.app.story.service.StoryManageService;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +30,8 @@ public class MemberProfileController {
 
     private final MemberRepository memberRepository;
     private final ResponseService responseService;
+    private final StoryRepository storyRepository;
+    private final StoryManageService storyManageService;
 
     /**
      * 현재 로그인 한 사용자의 마이페이지 데이터를 반환
@@ -37,26 +44,20 @@ public class MemberProfileController {
         if(member.isEmpty()) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
         }
-        MyProfileDto myProfileDto = MyProfileDto.of(member.get());
+        List<StoryDetailDto> storyDetails = storyManageService.showStoriesInProfile(member.get());
+        MyProfileDto myProfileDto = MyProfileDto.of(member.get(), storyDetails);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
     }
 
-    /**
-     * 탈퇴한 회원일 경우 예외 처리 추가
-     * Member에 탈퇴 여부를 확인하는 필드 추가 필요
-     */
     @GetMapping("/userprofile")
     public ResponseEntity<ResponseDto> showUserProfile(@RequestParam("id") String id) {
         Long memberId = Long.parseLong(id);
         Optional<Member> member = memberRepository.findById(memberId);
-        /**
-         * 탈퇴 여부 필드 추가시 member.isPresent()가 아닌,
-         * if(member.isQuitMember())로 변경
-         */
-        if(member.isEmpty()) {
+        if(member.isEmpty() || member.get().isDeleted()) {
             throw new BusinessException(ErrorCode.DELETED_MEMBER);
         }
-        UserProfileDto userProfileDto = UserProfileDto.of(member.get());
+        List<StoryDetailDto> storyDetails = storyManageService.showStoriesInProfile(member.get());
+        UserProfileDto userProfileDto = UserProfileDto.of(member.get(), storyDetails);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
     }
 }

@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
-import { isBrowser, BrowserView, MoblieView } from "react-device-detect";
+import { isBrowser } from "react-device-detect";
 
 // import Auth from "../hoc/auth";
 // pages for this product
@@ -10,8 +10,6 @@ import NavBar from "./views/NavBar/NavBar";
 import Footer from "./views/Footer/Footer";
 import NotificationPage from "./views/NotificationPage/NotificationPage";
 
-// import LoginPage from "./views/LoginPage/LoginPage.js";
-// import RegisterPage from "./views/RegisterPage/RegisterPage.js";
 import AuthRedirectHandler from "./views/LoginPage/KakaoLogin/AuthRedirectHandler";
 import KakaoLoginPage from "./views/LoginPage/KakaoLogin/KakaoLoginPage";
 
@@ -27,8 +25,9 @@ import MusicMeetingPage from "./views/MusicMeetingPage/MusicMeetingPage";
 import TripMeetingPage from "./views/TripMeetingPage/TripMeetingPage";
 
 import HobbyStoryPage from "./views/HobbyStoryPage/HobbyStoryPage";
-import MakeMeetingPage from "./views/MakeMeetingPage/MakeMeetingPage";
+import MakeStoryPage from "./views/MakeStoryPage/MakeStoryPage"
 
+import MakeMeetingPage from "./views/MakeMeetingPage/MakeMeetingPage";
 import UploadExercise from "./views/MakeMeetingPage/UploadMeetingPage/UploadExercise";
 import UploadArt from "./views/MakeMeetingPage/UploadMeetingPage/UploadArt";
 import UploadDaily from "./views/MakeMeetingPage/UploadMeetingPage/UploadDaily";
@@ -58,8 +57,7 @@ function App() {
           <Route exact path="/" component={(LandingPage)} />
 
           <Route exact path="/login" component={(KakaoLoginPage)} />
-          <Route exact path="/login/oauth2/code/kakao" component={(AuthRedirectHandler)} />
-          {/* <Route exact path="/register" component={(RegisterPage)} /> */}
+          <Route exact path="/login/auth/kakao" component={(AuthRedirectHandler)} />
 
           <Route exact path="/notification" component={(NotificationPage)} />
 
@@ -87,7 +85,8 @@ function App() {
           <Route exact path="/makeMeeting/trip" component={(UploadTrip)} />
 
           {/* 스토리 */}
-          <Route exact path="/hobbyStory" component={(HobbyStoryPage)} />
+          <Route exact path="/hobbystory" component={(HobbyStoryPage)} />
+          <Route exact path="/hobbystory/upload" component={(MakeStoryPage)} />
         </Switch>
       </div>
       <Footer />

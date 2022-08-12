@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -34,9 +35,8 @@ import static org.hamcrest.core.Is.is;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 
 @AutoConfigureRestDocs
-@WebMvcTest(value = HealthController.class,
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.hoppy.app.login.auth.*")})
-@WithMockUser(username = "test", roles = "USER")
+@SpringBootTest
+@AutoConfigureMockMvc
 class HealthControllerTest {
 
     @Autowired

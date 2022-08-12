@@ -13,22 +13,12 @@ import HobbyStoryImg from "./img/hobbyStory.png";
 import MusicImg from "./img/music.png";
 import TripImg from "./img/trip.png";
 
-function LandingPage(props) {
+function LandingPage() {
   const { Search } = Input;
-
   const onSearch = (value) => console.log(value);
-  console.log('location', props.location)
-  const param = new URLSearchParams(props.location.search);
-  console.log('jwtToken>>>>>', param.get("token"))
-  const jwtToken = param.get("token");
 
-  if (jwtToken !== undefined) {
-    localStorage.setItem('Authorization', `Bearer ${jwtToken}`);
-    Axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
-  } else {
-    localStorage.removeItem('Authorization', `Bearer ${jwtToken}`);
-    delete Axios.defaults.headers.common['Authorization'];
-  }
+  const token = localStorage.getItem('Authorization')
+  console.log('token is >>>', token)
 
   const hobbyBoxStyle = {
     width: "108px",
@@ -86,13 +76,13 @@ function LandingPage(props) {
         >
           <div style={hobbyBoxStyle}>
             운동
-            <img src={ExerciseImg} style={hobbyImageStyle} />
+            <img src={ExerciseImg} alt='운동' style={hobbyImageStyle} />
           </div>
         </a>
         <a href="/artMeeting" style={{ textDecoration: "none", color: "#000" }}>
           <div style={hobbyBoxStyle}>
             공예
-            <img src={ArtImg} style={hobbyImageStyle} />
+            <img src={ArtImg} alt='공예' style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -101,7 +91,7 @@ function LandingPage(props) {
         >
           <div style={hobbyBoxStyle}>
             음악
-            <img src={MusicImg} style={hobbyImageStyle} />
+            <img src={MusicImg} alt='음악' style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -110,7 +100,7 @@ function LandingPage(props) {
         >
           <div style={hobbyBoxStyle}>
             일상
-            <img src={DailyImg} style={hobbyImageStyle} />
+            <img src={DailyImg} alt='일상' style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -119,7 +109,7 @@ function LandingPage(props) {
         >
           <div style={hobbyBoxStyle}>
             음식
-            <img src={FoodImg} style={hobbyImageStyle} />
+            <img src={FoodImg} alt='음식' style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -128,7 +118,7 @@ function LandingPage(props) {
         >
           <div style={hobbyBoxStyle}>
             여행
-            <img src={TripImg} style={hobbyImageStyle} />
+            <img src={TripImg} alt='여행' style={hobbyImageStyle} />
           </div>
         </a>
 
@@ -183,6 +173,7 @@ function LandingPage(props) {
           </div>
           <img
             src={CharacterImg}
+            alt='쿼카'
             style={{
               width: "126px",
               height: "131px",
@@ -227,7 +218,7 @@ function LandingPage(props) {
               일상을 기록하는
             </p>
             <Button
-              href="/hobbyStory"
+              href="/hobbystory"
               style={{
                 width: "128px",
                 height: "38px",
@@ -242,6 +233,7 @@ function LandingPage(props) {
           </div>
           <img
             src={HobbyStoryImg}
+            alt='Hoppy'
             style={{
               width: "126px",
               height: "131px",
