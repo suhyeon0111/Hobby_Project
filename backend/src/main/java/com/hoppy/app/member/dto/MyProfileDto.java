@@ -25,8 +25,10 @@ public class MyProfileDto {
     private String profileUrl;
     private String intro;
     private boolean deleted;
-    private Set<MemberMeeting> myMeetings = new HashSet<>();
     private List<StoryDetailDto> myStories;
+
+    @Builder.Default
+    private Set<MemberMeeting> myMeetings = new HashSet<>();
 
 
     public static MyProfileDto of(Member member, List<StoryDetailDto> storyDetails) {
