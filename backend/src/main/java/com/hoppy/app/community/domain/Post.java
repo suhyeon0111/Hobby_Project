@@ -45,19 +45,23 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    private Member owner;
+    @OneToOne(fetch = FetchType.LAZY)
+    @Exclude
+    private Member author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Exclude
     private Meeting meeting;
 
-    // TODO: 댓글도 페이징 적용이 필요합니다
-    // TODO: 좋아요 및 댓글 개수를 어떻게 표시할 것인지에 대한 논의가 필요합니다
-    // TODO: 댓글 로딩 전략에 대한 고민이 필요합니다
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @BatchSize(size = 100)
     @Default
     @Exclude
     private Set<Reply> replies = new HashSet<>();
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberPostLike> likes = new HashSet<>();
 }

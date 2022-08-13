@@ -1,6 +1,8 @@
 package com.hoppy.app.meeting;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hoppy.app.response.error.exception.BusinessException;
+import com.hoppy.app.response.error.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -27,6 +29,6 @@ public enum Category {
                 return c;
             }
         }
-        return ERROR;
+        throw new BusinessException(ErrorCode.BAD_CATEGORY);
     }
 }

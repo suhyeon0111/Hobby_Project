@@ -99,15 +99,15 @@ class MeetingControllerTest {
             );
 
             memberMeetingRepository.save(MemberMeeting.builder()
-                    .meetingId(meeting.getId())
-                    .memberId(member.getId())
+                    .meeting(meeting)
+                    .member(member)
                     .build()
             );
 
             if(i % 3 == 0) {
                 memberMeetingLikeRepository.save(MemberMeetingLike.builder()
-                        .memberId(member.getId())
-                        .meetingId(meeting.getId())
+                        .meeting(meeting)
+                        .member(member)
                         .build()
                 );
             }
@@ -268,9 +268,9 @@ class MeetingControllerTest {
         Optional<Member> optionalMember = memberRepository.findById(1L);
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
 
-        Member owner = optionalMember.get();
+        Member author = optionalMember.get();
         Meeting meeting = meetingRepository.save(Meeting.builder()
-                .ownerId(owner.getId())
+                .ownerId(author.getId())
                 .category(Category.ART)
                 .title("post-paging-test-title")
                 .content("post-paging-test-content")
@@ -278,8 +278,8 @@ class MeetingControllerTest {
                 .build()
         );
         memberMeetingRepository.save(MemberMeeting.builder()
-                .meetingId(meeting.getId())
-                .memberId(owner.getId())
+                .meeting(meeting)
+                .member(author)
                 .build()
         );
 
@@ -289,7 +289,7 @@ class MeetingControllerTest {
                     Post.builder()
                             .title((i + 1) + "-title")
                             .content((i + 1) + "-content")
-                            .owner(owner)
+                            .author(author)
                             .meeting(meeting)
                             .build()
             );
@@ -297,8 +297,8 @@ class MeetingControllerTest {
             if(i % 2 == 0) {
                 memberPostLikeRepository.save(
                         MemberPostLike.builder()
-                                .memberId(owner.getId())
-                                .postId(post.getId())
+                                .member(author)
+                                .post(post)
                                 .build()
                 );
             }

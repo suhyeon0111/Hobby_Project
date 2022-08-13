@@ -12,8 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hoppy.app.like.domain.MemberMeetingLike;
-import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
@@ -23,6 +21,7 @@ import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
+import com.hoppy.app.member.dto.MyProfileDto;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.dto.UpdateMemberDto;
@@ -30,7 +29,9 @@ import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -70,13 +71,10 @@ class MemberProfileControllerTest {
     StoryRepository storyRepository;
 
     @Autowired
-    MemberMeetingLikeRepository memberMeetingLikeRepository;
-    @Autowired
     private MockMvc mvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-
 
 //    @MockBean // 모킹하게되면 responseService가 원래 동작대로 동작할 수 없음
 //    private ResponseService responseService;
@@ -96,23 +94,13 @@ class MemberProfileControllerTest {
             Category category;
             if(i % 2 == 0) category = Category.HEALTH;
             else category = Category.LIFE;
-            Meeting meeting = meetingRepository.save(
-                    Meeting.builder()
-                            .ownerId(member.getId())
-                            .url("https://test" + i + ".com")
-                            .title(i + "번 모임")
-                            .content("Welcome to meeting No." + i)
-                            .category(category)
-                            .memberLimit(i+9)
-                            .build()
-            );
-
+            Meeting meeting = meetingRepository.save(Meeting.builder().ownerId(member.getId()).url("https://test" + i + ".com")
+                    .title(i + "번 모임").content("Welcome to meeting No." + i).category(category).memberLimit(i+9).build());
             if(i % 3 == 0) {
-                memberMeetingRepository.save(
-                        MemberMeeting.builder()
-                                .memberId(member.getId())
-                                .meetingId(meeting.getId())
-                                .build()
+                memberMeetingRepository.save(MemberMeeting.builder()
+                        .member(member)
+                        .meeting(meeting)
+                        .build()
                 );
             }
         }
@@ -137,6 +125,7 @@ class MemberProfileControllerTest {
     }
 
     @Test
+//    @Transactional
     @WithMockCustomUser(id = "9999", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void showMyProfile() throws Exception {
         
@@ -160,26 +149,6 @@ class MemberProfileControllerTest {
     }
 
     @Test
-    @WithMockCustomUser(id = "9999")
-    void showMyStoriesInProfile() throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long memberId = Long.parseLong(authentication.getName());
-        Optional<Member> optMember = memberRepository.findById(memberId);
-        assertThat(optMember).isPresent();
-        ResultActions result = mvc.perform(
-                MockMvcRequestBuilders
-                        .get("/myprofile/story")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-                )
-                .andDo(print());
-        result.andExpect(status().isOk())
-                .andDo(document("myprofile-story",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())));
-    }
-
-    @Test
     void showUserProfile() throws Exception {
         String id = "9999";
         Optional<Member> optMember = memberRepository.findById(Long.parseLong(id));
@@ -196,6 +165,7 @@ class MemberProfileControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
     }
+
     @Test
     @WithMockCustomUser(id = "9999")
     void updateUser() throws Exception {
