@@ -2,14 +2,7 @@ package com.hoppy.app.meeting.repository;
 
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
-import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.member.repository.MemberMeetingRepository;
-import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
@@ -20,7 +13,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
 @DataJpaTest
@@ -63,7 +55,7 @@ class MeetingRepositoryTest {
         * 무한 스크롤 페이지네이션 요청은 기본적으로 14개씩 요청되지만
         * 현재 HEALTH 모임이 10개 밖에 없으므로 응답 결과 모임의 개수는 10개이다.
         * */
-        List<Meeting> result = meetingRepository.infiniteScrollPagingMeeting(Category.HEALTH, Long.MAX_VALUE, PageRequest.of(0, 14));
+        List<Meeting> result = meetingRepository.infiniteScrollPaging(Category.HEALTH, Long.MAX_VALUE, PageRequest.of(0, 14));
         Assertions.assertThat(result.size()).isEqualTo(10);
     }
 }

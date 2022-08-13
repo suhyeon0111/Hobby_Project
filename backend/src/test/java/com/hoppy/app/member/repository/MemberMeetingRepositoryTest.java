@@ -47,13 +47,13 @@ class MemberMeetingRepositoryTest {
 
         MemberMeeting memberMeeting = memberMeetingRepository.save(
                 MemberMeeting.builder()
-                        .memberId(member.getId())
-                        .meetingId(meeting.getId())
+                        .member(member)
+                        .meeting(meeting)
                         .build()
         );
 
         //when
-        memberMeetingRepository.deleteMemberMeetingByMeetingIdAndMemberId(meeting.getId(), member.getId());
+        memberMeetingRepository.deleteMemberMeetingByMeetingAndMember(meeting, member);
 
         //then
         Optional<Meeting> meetingOptional = meetingRepository.findById(meeting.getId());
