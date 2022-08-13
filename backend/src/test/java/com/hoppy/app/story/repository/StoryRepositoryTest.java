@@ -70,7 +70,7 @@ class StoryRepositoryTest {
     void sortingWithQueryMethod() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName());
-        List<Story> stories = storyRepository.findTop3ByMemberIdOrderByIdDesc(memberId);
+        List<Story> stories = storyRepository.findByMemberIdOrderByIdDesc(memberId);
         stories.forEach(story -> {
             System.out.println("story = " + story);
         });
