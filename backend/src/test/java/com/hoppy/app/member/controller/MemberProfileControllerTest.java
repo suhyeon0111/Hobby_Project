@@ -97,7 +97,11 @@ class MemberProfileControllerTest {
             Meeting meeting = meetingRepository.save(Meeting.builder().ownerId(member.getId()).url("https://test" + i + ".com")
                     .title(i + "번 모임").content("Welcome to meeting No." + i).category(category).memberLimit(i+9).build());
             if(i % 3 == 0) {
-                memberMeetingRepository.save(MemberMeeting.builder().memberId(member.getId()).meetingId(meeting.getId()).build());
+                memberMeetingRepository.save(MemberMeeting.builder()
+                        .member(member)
+                        .meeting(meeting)
+                        .build()
+                );
             }
         }
 

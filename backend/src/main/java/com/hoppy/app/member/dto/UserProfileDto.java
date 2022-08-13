@@ -26,8 +26,10 @@ public class UserProfileDto {
     private String username;
     private String profileUrl;
     private String intro;
-    private Set<MemberMeeting> userMeetings = new HashSet<>();
     private List<StoryDetailDto> userStories;
+
+    @Builder.Default
+    private Set<MemberMeeting> userMeetings = new HashSet<>();
 
     public static UserProfileDto of(Member member, List<StoryDetailDto> storyDetails) {
         return UserProfileDto.builder()
