@@ -102,6 +102,28 @@ include::{snippets}/post-pagination/http-request.adoc[]
 .response body
 include::{snippets}/post-pagination/response-body.adoc[]
 
+== 게시물 API
+=== 게시물 조회하기
+.request url
+----
+GET /api/post/{postId}
+----
+.request header
+include::{snippets}/post-detail/http-request.adoc[]
+.response body
+include::{snippets}/post-detail/response-body.adoc[]
+=== 게시물 좋아요 요청
+.request url
+----
+GET /api/post/like/{postId}
+----
+.request header
+include::{snippets}/post-like-request/http-request.adoc[]
+.response header
+----
+response body는 없습니다
+----
+include::{snippets}/post-like-request/http-response.adoc[]
 == 유저 프로필 API
 
 === 내 프로필 조회

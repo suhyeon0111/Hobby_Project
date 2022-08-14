@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,16 +25,23 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
+@Table(
+    uniqueConstraints={
+        @UniqueConstraint(
+            columnNames={"member_id", "post_id"}
+        )
+    }
+)
 public class MemberPostLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Post post;
 
     public Long getMemberId() {
@@ -41,5 +50,12 @@ public class MemberPostLike {
 
     public Long getPostId() {
         return post.getId();
+    }
+
+    public static MemberPostLike of(Member member, Post post) {
+        return MemberPostLike.builder()
+                .member(member)
+                .post(post)
+                .build();
     }
 }

@@ -27,6 +27,7 @@ public class MemberDaoController {
     private final ResponseService responseService;
     private final MemberRepository memberRepository;
 
+    // TODO: 주소 변경 부탁합니다. 다른 곳에서도 update 써야되용. PUT /profile 이런식으로 부탁..
     @PostMapping("/update")
     public ResponseEntity<ResponseDto> updateUser(
             @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UpdateMemberDto memberDto) {
@@ -43,6 +44,7 @@ public class MemberDaoController {
      * 회원 탈퇴 로직은 추후 회원의 재가입을 고려해 DB table 'deleted' 부분을 true 로 변경함으로써
      * 탈퇴한 회원을 식별
      */
+    // TODO: 주소 변경 부탁합니다. 다른 곳에서도 update 써야되용. DELETE /member 이런식으로 부탁..
     @GetMapping("/delete")
     public ResponseEntity<ResponseDto> deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long memberId = customUserDetails.getId();
