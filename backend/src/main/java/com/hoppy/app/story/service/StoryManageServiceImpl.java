@@ -54,8 +54,8 @@ public class StoryManageServiceImpl implements StoryManageService {
     }
 
     @Override
-    public List<StoryDetailDto> showStoriesInProfile(Member member) {
-        List<Story> stories = storyRepository.findTop3ByMemberIdOrderByIdDesc(member.getId());
+    public List<StoryDetailDto> showMyStoriesInProfile(Member member) {
+        List<Story> stories = storyRepository.findByMemberIdOrderByIdDesc(member.getId());
         return stories.stream().map(story -> StoryDetailDto.of(story, member)).collect(
                 Collectors.toList());
     }

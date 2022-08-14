@@ -118,6 +118,16 @@ include::{snippets}/show-myProfile/request-body.adoc[]
 .response body
 include::{snippets}/show-myProfile/response-body.adoc[]
 
+=== 내 스토리 조회 (마이프로필)
+.request url
+----
+GET /api/myprofile/story
+----
+.request body
+include::{snippets}/myprofile-story/request-body.adoc[]
+.response body
+include::{snippets}/myprofile-story/response-body.adoc[]
+
 === 사용자 프로필 조회
 .request url
 ----

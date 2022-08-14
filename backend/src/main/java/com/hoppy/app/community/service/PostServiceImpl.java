@@ -1,6 +1,7 @@
 package com.hoppy.app.community.service;
 
 import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.dto.PostDto;
@@ -144,19 +145,17 @@ public class PostServiceImpl implements PostService {
 
         for(var reply : post.getReplies()) {
             replyCountSum++;
-            long replyId = reply.getId();
 
             ReplyDto replyDto = ReplyDto.of(reply);
-            replyDto.setLiked(replyLikedMap.containsKey(replyId));
+            replyDto.setLiked(replyLikedMap.containsKey(reply.getId()));
             replyDto.setLikeCount(reply.getLikes().size());
 
             List<ReReplyDto> reReplyDtoList = new ArrayList<>();
             for(var reReply : reply.getReReplies()) {
                 replyCountSum++;
-                long reReplyId = reReply.getId();
 
                 ReReplyDto reReplyDto = ReReplyDto.of(reReply);
-                reReplyDto.setLiked(reReplyLikedMap.containsKey(reReplyId));
+                reReplyDto.setLiked(reReplyLikedMap.containsKey(reReply.getId()));
                 reReplyDto.setLikeCount(reReply.getLikes().size());
                 reReplyDtoList.add(reReplyDto);
             }

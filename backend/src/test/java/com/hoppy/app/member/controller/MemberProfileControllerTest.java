@@ -149,6 +149,26 @@ class MemberProfileControllerTest {
     }
 
     @Test
+    @WithMockCustomUser(id = "9999")
+    void showMyStoriesInProfile() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+        Optional<Member> optMember = memberRepository.findById(memberId);
+        assertThat(optMember).isPresent();
+        ResultActions result = mvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/myprofile/story")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+                )
+                .andDo(print());
+        result.andExpect(status().isOk())
+                .andDo(document("myprofile-story",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
+    }
+
+    @Test
     void showUserProfile() throws Exception {
         String id = "9999";
         Optional<Member> optMember = memberRepository.findById(Long.parseLong(id));
