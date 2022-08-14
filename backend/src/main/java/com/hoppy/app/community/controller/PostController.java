@@ -1,10 +1,12 @@
 package com.hoppy.app.community.controller;
 
 import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
+import com.hoppy.app.response.service.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,8 +32,7 @@ public class PostController {
             @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        // TODO: API 작성 및 테스트 코드 작성 필요
-        Post post = postService.findById(id);
-        return null;
+        PostDetailDto dto = postService.getPostDetailV2(id, userDetails.getId());
+        return responseService.successResult(SuccessCode.GET_POST_DETAIL_SUCCESS, dto);
     }
 }

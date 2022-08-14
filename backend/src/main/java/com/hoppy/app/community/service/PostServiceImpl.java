@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author 태경 2022-08-03
@@ -107,7 +107,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public PostDetailDto getPostDetailV2(long postId, long memberId) {
         Optional<Post> optPost = postRepository.getPostDetail(postId);
         if(optPost.isEmpty()) {
@@ -116,21 +116,14 @@ public class PostServiceImpl implements PostService {
         Post post = optPost.get();
         Member member = memberService.findByIdWithPostLikes(memberId);
 
-        int postLikeCount = post.getLikes().size();
         boolean postLiked = member.getPostLikes().stream().anyMatch(L -> L.getPost().getId() == postId);
+        int postLikeCount = post.getLikes().size();
 
         Map<Long, Boolean> replyLikedMap = member.getReplyLikes()
                 .stream().collect(Collectors.toMap(MemberReplyLike::getReplyId, M -> Boolean.TRUE));
 
         Map<Long, Boolean> reReplyLikedMap = member.getReReplyLikes()
                 .stream().collect(Collectors.toMap(MemberReReplyLike::getReReplyId, M -> Boolean.TRUE));
-
-        Map<Long, Integer> replyLikeCountMap = post.getReplies()
-                .stream().collect(Collectors.toMap(Reply::getId, R -> R.getLikes().size()));
-
-        Map<Long, Integer> reReplyLikeCountMap = post.getReplies().stream()
-                .map(R -> Pair.of(R.getId(), R.getReReplies().stream().mapToInt(RR -> RR.getLikes().size()).sum()))
-                .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 
         int replyCountSum = 0;
         List<ReplyDto> replyDtoList = new ArrayList<>();
@@ -141,7 +134,7 @@ public class PostServiceImpl implements PostService {
 
             ReplyDto replyDto = ReplyDto.of(reply);
             replyDto.setLiked(replyLikedMap.containsKey(replyId));
-            replyDto.setLikeCount(replyLikeCountMap.getOrDefault(replyId, 0));
+            replyDto.setLikeCount(reply.getLikes().size());
 
             List<ReReplyDto> reReplyDtoList = new ArrayList<>();
             for(var reReply : reply.getReReplies()) {
@@ -150,7 +143,7 @@ public class PostServiceImpl implements PostService {
 
                 ReReplyDto reReplyDto = ReReplyDto.of(reReply);
                 reReplyDto.setLiked(reReplyLikedMap.containsKey(reReplyId));
-                reReplyDto.setLikeCount(reReplyLikeCountMap.getOrDefault(reReplyId, 0));
+                reReplyDto.setLikeCount(reReply.getLikes().size());
                 reReplyDtoList.add(reReplyDto);
             }
             replyDto.setReplies(reReplyDtoList);
