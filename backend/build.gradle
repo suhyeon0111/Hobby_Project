@@ -50,6 +50,11 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDirectory = file('build/customJacocoReportDir')
+}
+
 ext {
 	snippetsDir = file('build/generated-snippets')
 }
@@ -68,27 +73,24 @@ jacocoTestReport {
 	}
 }
 
-jacoco {
-	toolVersion = "0.8.8"
-	reportsDirectory = file('build/customJacocoReportDir')
-}
-
 asciidoctor {
 	dependsOn 'jacocoTestReport'
 	sourceDir 'src/docs/asciidoc'
-
 	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
 }
 
-asciidoctor.doFirst {
+task deleteRemainDocument {
+	dependsOn 'asciidoctor'
 	delete file('src/main/resources/static/docs')
 }
 
-task copyDocument(type: Copy) {
-	dependsOn 'asciidoctor'
-	from "build/docs/asciidoc/"
-	into "src/main/resources/static/docs"
+task copyDocument {
+	dependsOn 'deleteRemainDocument'
+	copy {
+		from "build/docs/asciidoc/"
+		into "src/main/resources/static/docs"
+	}
 }
 
 build {
