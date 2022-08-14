@@ -539,7 +539,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220809T142657Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220809%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=f6355bc535400edc318ca37720bf022d9a2f6c666d6e54503a4645b022e28e9a"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220814T090301Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220814%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=7d5c38ee263be95453158339112db08c4178c9116f0df2376f5c04bf8470c5fc"
   }
 }</code></pre>
 </div>
@@ -850,7 +850,7 @@ Host: localhost:8080</code></pre>
   "message" : "커뮤니티 게시물 조회 완료",
   "data" : {
     "postList" : [ {
-      "id" : 30,
+      "id" : 20,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "20-title",
@@ -859,7 +859,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 29,
+      "id" : 19,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "19-title",
@@ -868,7 +868,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 28,
+      "id" : 18,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "18-title",
@@ -877,7 +877,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 27,
+      "id" : 17,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "17-title",
@@ -886,7 +886,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 26,
+      "id" : 16,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "16-title",
@@ -895,7 +895,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 25,
+      "id" : 15,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "15-title",
@@ -904,7 +904,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 24,
+      "id" : 14,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "14-title",
@@ -913,7 +913,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 23,
+      "id" : 13,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "13-title",
@@ -922,7 +922,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     } ],
-    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting/posts?meetingId=51&amp;lastId=22"
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting/posts?meetingId=51&amp;lastId=12"
   }
 }</code></pre>
 </div>
@@ -960,19 +960,7 @@ Host: localhost:8080</code></pre>
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
     "deleted" : false,
-    "myMeetings" : [ {
-      "id" : 3,
-      "memberId" : 9999,
-      "meetingId" : 9
-    }, {
-      "id" : 2,
-      "memberId" : 9999,
-      "meetingId" : 6
-    }, {
-      "id" : 1,
-      "memberId" : 9999,
-      "meetingId" : 3
-    } ]
+    "myMeetingsId" : [ 3, 6, 9 ]
   }
 }</code></pre>
 </div>
@@ -1004,40 +992,40 @@ Host: localhost:8080</code></pre>
     "content" : "This is 5th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-09T23:26:45.553681",
-    "modifiedDate" : "2022-08-09T23:26:45.553681"
+    "createdDate" : "2022-08-14T18:02:45.561302",
+    "modifiedDate" : "2022-08-14T18:02:45.561302"
   }, {
     "id" : 4,
     "title" : "4th Story",
     "content" : "This is 4th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-09T23:26:45.546854",
-    "modifiedDate" : "2022-08-09T23:26:45.546854"
+    "createdDate" : "2022-08-14T18:02:45.555842",
+    "modifiedDate" : "2022-08-14T18:02:45.555842"
   }, {
     "id" : 3,
     "title" : "3th Story",
     "content" : "This is 3th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-09T23:26:45.531898",
-    "modifiedDate" : "2022-08-09T23:26:45.531898"
+    "createdDate" : "2022-08-14T18:02:45.541118",
+    "modifiedDate" : "2022-08-14T18:02:45.541118"
   }, {
     "id" : 2,
     "title" : "2th Story",
     "content" : "This is 2th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-09T23:26:45.503403",
-    "modifiedDate" : "2022-08-09T23:26:45.503403"
+    "createdDate" : "2022-08-14T18:02:45.533829",
+    "modifiedDate" : "2022-08-14T18:02:45.533829"
   }, {
     "id" : 1,
     "title" : "1th Story",
     "content" : "This is 1th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-09T23:26:45.373595",
-    "modifiedDate" : "2022-08-09T23:26:45.373595"
+    "createdDate" : "2022-08-14T18:02:45.475227",
+    "modifiedDate" : "2022-08-14T18:02:45.475227"
   } ]
 }</code></pre>
 </div>
@@ -1067,19 +1055,7 @@ Host: localhost:8080</code></pre>
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
-    "userMeetings" : [ {
-      "id" : 2,
-      "memberId" : 9999,
-      "meetingId" : 6
-    }, {
-      "id" : 3,
-      "memberId" : 9999,
-      "meetingId" : 9
-    }, {
-      "id" : 1,
-      "memberId" : 9999,
-      "meetingId" : 3
-    } ]
+    "meetingsId" : [ 6, 3, 9 ]
   }
 }</code></pre>
 </div>
@@ -1178,8 +1154,8 @@ Host: localhost:8080</code></pre>
     "content" : "This is Test code",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-09T23:26:55.267406",
-    "modifiedDate" : "2022-08-09T23:26:55.267406"
+    "createdDate" : "2022-08-14T18:02:59.406583",
+    "modifiedDate" : "2022-08-14T18:02:59.406583"
   }
 }</code></pre>
 </div>
@@ -1215,8 +1191,8 @@ Host: localhost:8080</code></pre>
     "content" : "This is updated story",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-09T23:26:55.106415",
-    "modifiedDate" : "2022-08-09T23:26:55.158261"
+    "createdDate" : "2022-08-14T18:02:59.303058",
+    "modifiedDate" : "2022-08-14T18:02:59.342454"
   }
 }</code></pre>
 </div>
