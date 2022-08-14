@@ -1,6 +1,7 @@
 package com.hoppy.app.community.service;
 
 import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.dto.PostDto;
@@ -125,32 +126,23 @@ public class PostServiceImpl implements PostService {
         Map<Long, Boolean> reReplyLikedMap = member.getReReplyLikes()
                 .stream().collect(Collectors.toMap(MemberReReplyLike::getReReplyId, M -> Boolean.TRUE));
 
-        Map<Long, Integer> replyLikeCountMap = post.getReplies()
-                .stream().collect(Collectors.toMap(Reply::getId, R -> R.getLikes().size()));
-
-        Map<Long, Integer> reReplyLikeCountMap = post.getReplies().stream()
-                .map(R -> Pair.of(R.getId(), R.getReReplies().stream().mapToInt(RR -> RR.getLikes().size()).sum()))
-                .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
-
         int replyCountSum = 0;
         List<ReplyDto> replyDtoList = new ArrayList<>();
 
         for(var reply : post.getReplies()) {
             replyCountSum++;
-            long replyId = reply.getId();
 
             ReplyDto replyDto = ReplyDto.of(reply);
-            replyDto.setLiked(replyLikedMap.containsKey(replyId));
-            replyDto.setLikeCount(replyLikeCountMap.getOrDefault(replyId, 0));
+            replyDto.setLiked(replyLikedMap.containsKey(reply.getId()));
+            replyDto.setLikeCount(reply.getLikes().size());
 
             List<ReReplyDto> reReplyDtoList = new ArrayList<>();
             for(var reReply : reply.getReReplies()) {
                 replyCountSum++;
-                long reReplyId = reReply.getId();
 
                 ReReplyDto reReplyDto = ReReplyDto.of(reReply);
-                reReplyDto.setLiked(reReplyLikedMap.containsKey(reReplyId));
-                reReplyDto.setLikeCount(reReplyLikeCountMap.getOrDefault(reReplyId, 0));
+                reReplyDto.setLiked(reReplyLikedMap.containsKey(reReply.getId()));
+                reReplyDto.setLikeCount(reReply.getLikes().size());
                 reReplyDtoList.add(reReplyDto);
             }
             replyDto.setReplies(reReplyDtoList);
