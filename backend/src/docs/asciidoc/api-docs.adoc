@@ -102,6 +102,10 @@ include::{snippets}/post-pagination/http-request.adoc[]
 .response body
 include::{snippets}/post-pagination/response-body.adoc[]
 
+== 게시물 API
+=== 게시물 조회하기
+=== 게시물 좋아요 요청
+
 == 유저 프로필 API
 
 === 내 프로필 조회

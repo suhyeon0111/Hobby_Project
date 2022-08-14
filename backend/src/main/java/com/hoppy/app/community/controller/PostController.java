@@ -35,4 +35,13 @@ public class PostController {
         PostDetailDto dto = postService.getPostDetailV2(id, userDetails.getId());
         return responseService.successResult(SuccessCode.GET_POST_DETAIL_SUCCESS, dto);
     }
+
+    @GetMapping("/like/{id}")
+    public ResponseEntity<ResponseDto> likePost(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        postService.likePost(userDetails.getId(), id);
+        return responseService.ok();
+    }
 }

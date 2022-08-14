@@ -148,11 +148,41 @@ class PostControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("message", is("게시물 조회 완료")))
-                .andExpect(jsonPath("$.data.id", is(1)))
                 .andExpect(jsonPath("$.data.ownerName", is("testName")))
                 .andExpect(jsonPath("$.data.ownerProfileUrl", is("testProfileUrl")))
                 .andExpect(jsonPath("$.data.replyCount", is(REPLY_COUNT + (REPLY_COUNT * RE_REPLY_COUNT))))
-                .andDo(document("create-meeting",
+                .andDo(document("post-detail",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
+    void likePostTest() throws Exception {
+        // given
+        Member member = memberRepository.save(
+                Member.builder()
+                        .id(TEST_MEMBER_ID)
+                        .username("test-name")
+                        .profileImageUrl("test-url")
+                        .build()
+        );
+        Post post = postRepository.save(
+                Post.builder()
+                        .title("test-title")
+                        .content("test-content")
+                        .build()
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/post/like/" + post.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("post-like-request",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))

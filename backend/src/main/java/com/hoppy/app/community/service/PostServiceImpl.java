@@ -7,8 +7,10 @@ import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.dto.ReReplyDto;
 import com.hoppy.app.community.dto.ReplyDto;
 import com.hoppy.app.community.repository.PostRepository;
+import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.domain.MemberReReplyLike;
 import com.hoppy.app.like.domain.MemberReplyLike;
+import com.hoppy.app.like.repository.MemberPostLikeRepository;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
@@ -38,6 +40,7 @@ public class PostServiceImpl implements PostService {
 
     private final int PAGING_COUNT = 8;
     private final PostRepository postRepository;
+    private final MemberPostLikeRepository memberPostLikeRepository;
     private final MemberService memberService;
 
     @Override
@@ -51,6 +54,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
+    public void likePost(long memberId, long postId) {
+        Optional<MemberPostLike> opt = memberPostLikeRepository.findByMemberIdAndPostId(memberId, postId);
+        if(opt.isPresent()) return;
+
+        Member member = memberService.findById(memberId);
+        Post post = findById(postId);
+        memberPostLikeRepository.save(MemberPostLike.of(member, post));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId) {
 
         List<Post> posts = postRepository.infiniteScrollPagingPost(meeting, lastId, PageRequest.of(0, PAGING_COUNT));
