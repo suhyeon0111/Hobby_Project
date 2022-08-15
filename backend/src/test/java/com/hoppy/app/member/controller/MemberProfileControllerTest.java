@@ -135,7 +135,7 @@ class MemberProfileControllerTest {
 
         assertThat(optMember).isPresent();
 
-        mvc.perform(MockMvcRequestBuilders.get("/myprofile")
+        mvc.perform(MockMvcRequestBuilders.get("/profile")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 )
@@ -157,7 +157,7 @@ class MemberProfileControllerTest {
         assertThat(optMember).isPresent();
         ResultActions result = mvc.perform(
                         MockMvcRequestBuilders
-                                .get("/myprofile/story")
+                                .get("/profile/story")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 )
@@ -173,7 +173,7 @@ class MemberProfileControllerTest {
         String id = "9999";
         Optional<Member> optMember = memberRepository.findById(Long.parseLong(id));
         assertThat(optMember).isPresent();
-        mvc.perform(MockMvcRequestBuilders.get("/userprofile")
+        mvc.perform(MockMvcRequestBuilders.get("/profile/member")
                         .param("id", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
@@ -202,7 +202,7 @@ class MemberProfileControllerTest {
         String content = objectMapper.writeValueAsString(memberDto);
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                        .post("/update")
+                        .put("/profile")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
