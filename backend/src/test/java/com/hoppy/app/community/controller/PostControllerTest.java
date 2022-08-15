@@ -148,8 +148,8 @@ class PostControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("message", is("게시물 조회 완료")))
-                .andExpect(jsonPath("$.data.ownerName", is("testName")))
-                .andExpect(jsonPath("$.data.ownerProfileUrl", is("testProfileUrl")))
+                .andExpect(jsonPath("$.data.authorName", is("testName")))
+                .andExpect(jsonPath("$.data.authorProfileUrl", is("testProfileUrl")))
                 .andExpect(jsonPath("$.data.replyCount", is(REPLY_COUNT + (REPLY_COUNT * RE_REPLY_COUNT))))
                 .andDo(document("post-detail",
                         preprocessRequest(prettyPrint()),

@@ -20,9 +20,9 @@ import lombok.ToString;
 @ToString
 public class ReplyDto {
 
-    private String ownerProfileUrl;
+    private String authorProfileUrl;
 
-    private String ownerName;
+    private String authorName;
 
     private String content;
 
@@ -34,8 +34,8 @@ public class ReplyDto {
 
     public static ReplyDto of(Reply reply) {
         return ReplyDto.builder()
-                .ownerProfileUrl(reply.getAuthor().getProfileImageUrl())
-                .ownerName(reply.getAuthor().getUsername())
+                .authorProfileUrl(reply.getAuthor().getProfileImageUrl())
+                .authorName(reply.getAuthor().getUsername())
                 .content(reply.getContent())
                 .build();
     }

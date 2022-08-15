@@ -1,7 +1,6 @@
 package com.hoppy.app.community.dto;
 
 import com.hoppy.app.community.domain.ReReply;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,9 +19,9 @@ import lombok.ToString;
 @ToString
 public class ReReplyDto {
 
-    private String ownerProfileUrl;
+    private String authorProfileUrl;
 
-    private String ownerName;
+    private String authorName;
 
     private String content;
 
@@ -32,8 +31,8 @@ public class ReReplyDto {
 
     public static ReReplyDto of(ReReply reReply) {
         return ReReplyDto.builder()
-                .ownerProfileUrl(reReply.getAuthor().getProfileImageUrl())
-                .ownerName(reReply.getAuthor().getUsername())
+                .authorProfileUrl(reReply.getAuthor().getProfileImageUrl())
+                .authorName(reReply.getAuthor().getUsername())
                 .content(reReply.getContent())
                 .build();
     }

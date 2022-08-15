@@ -545,7 +545,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220815T052022Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220815%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=8d2dd8da6eab8f9895032b3b545936e34d6f8e3cdfbb48450f689010a686cf6f"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220815T073410Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220815%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=4cc9dd16ea86177e53a96d92996ff96ceeacfba1f40a5802d417bdef0e714e57"
   }
 }</code></pre>
 </div>
@@ -964,47 +964,47 @@ Host: localhost:8080</code></pre>
   "message" : "게시물 조회 완료",
   "data" : {
     "id" : 2,
-    "ownerProfileUrl" : "testProfileUrl",
-    "ownerName" : "testName",
+    "authorName" : "testName",
+    "authorProfileUrl" : "testProfileUrl",
     "title" : "0-title",
     "content" : "0-content",
     "liked" : true,
     "likeCount" : 1,
     "replyCount" : 6,
     "replies" : [ {
-      "ownerProfileUrl" : "testProfileUrl",
-      "ownerName" : "testName",
-      "content" : "1-content",
-      "liked" : false,
-      "likeCount" : 0,
-      "replies" : [ {
-        "ownerProfileUrl" : "testProfileUrl",
-        "ownerName" : "testName",
-        "content" : "0-content",
-        "liked" : false,
-        "likeCount" : 0
-      }, {
-        "ownerProfileUrl" : "testProfileUrl",
-        "ownerName" : "testName",
-        "content" : "1-content",
-        "liked" : false,
-        "likeCount" : 0
-      } ]
-    }, {
-      "ownerProfileUrl" : "testProfileUrl",
-      "ownerName" : "testName",
+      "authorProfileUrl" : "testProfileUrl",
+      "authorName" : "testName",
       "content" : "0-content",
       "liked" : false,
       "likeCount" : 0,
       "replies" : [ {
-        "ownerProfileUrl" : "testProfileUrl",
-        "ownerName" : "testName",
+        "authorProfileUrl" : "testProfileUrl",
+        "authorName" : "testName",
+        "content" : "1-content",
+        "liked" : false,
+        "likeCount" : 0
+      }, {
+        "authorProfileUrl" : "testProfileUrl",
+        "authorName" : "testName",
+        "content" : "0-content",
+        "liked" : false,
+        "likeCount" : 0
+      } ]
+    }, {
+      "authorProfileUrl" : "testProfileUrl",
+      "authorName" : "testName",
+      "content" : "1-content",
+      "liked" : false,
+      "likeCount" : 0,
+      "replies" : [ {
+        "authorProfileUrl" : "testProfileUrl",
+        "authorName" : "testName",
         "content" : "0-content",
         "liked" : false,
         "likeCount" : 0
       }, {
-        "ownerProfileUrl" : "testProfileUrl",
-        "ownerName" : "testName",
+        "authorProfileUrl" : "testProfileUrl",
+        "authorName" : "testName",
         "content" : "1-content",
         "liked" : false,
         "likeCount" : 0
@@ -1117,40 +1117,40 @@ X-Frame-Options: DENY</code></pre>
     "content" : "This is 5th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T14:20:18.543677",
-    "modifiedDate" : "2022-08-15T14:20:18.543677"
+    "createdDate" : "2022-08-15T16:34:05.717652",
+    "modifiedDate" : "2022-08-15T16:34:05.717652"
   }, {
     "id" : 4,
     "title" : "4th Story",
     "content" : "This is 4th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T14:20:18.54268",
-    "modifiedDate" : "2022-08-15T14:20:18.54268"
+    "createdDate" : "2022-08-15T16:34:05.715652",
+    "modifiedDate" : "2022-08-15T16:34:05.715652"
   }, {
     "id" : 3,
     "title" : "3th Story",
     "content" : "This is 3th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T14:20:18.541679",
-    "modifiedDate" : "2022-08-15T14:20:18.541679"
+    "createdDate" : "2022-08-15T16:34:05.710651",
+    "modifiedDate" : "2022-08-15T16:34:05.710651"
   }, {
     "id" : 2,
     "title" : "2th Story",
     "content" : "This is 2th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T14:20:18.540685",
-    "modifiedDate" : "2022-08-15T14:20:18.540685"
+    "createdDate" : "2022-08-15T16:34:05.70866",
+    "modifiedDate" : "2022-08-15T16:34:05.70866"
   }, {
     "id" : 1,
     "title" : "1th Story",
     "content" : "This is 1th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T14:20:18.520679",
-    "modifiedDate" : "2022-08-15T14:20:18.520679"
+    "createdDate" : "2022-08-15T16:34:05.67665",
+    "modifiedDate" : "2022-08-15T16:34:05.67665"
   } ]
 }</code></pre>
 </div>
@@ -1180,7 +1180,7 @@ X-Frame-Options: DENY</code></pre>
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
-    "meetingsId" : [ 130, 136, 133 ]
+    "meetingsId" : [ 133, 136, 130 ]
   }
 }</code></pre>
 </div>
@@ -1279,8 +1279,8 @@ X-Frame-Options: DENY</code></pre>
     "content" : "This is Test code",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-15T14:20:18.8686777",
-    "modifiedDate" : "2022-08-15T14:20:18.8686777"
+    "createdDate" : "2022-08-15T16:34:06.1736508",
+    "modifiedDate" : "2022-08-15T16:34:06.1736508"
   }
 }</code></pre>
 </div>
@@ -1316,8 +1316,8 @@ X-Frame-Options: DENY</code></pre>
     "content" : "This is updated story",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-15T14:20:18.807677",
-    "modifiedDate" : "2022-08-15T14:20:18.8266801"
+    "createdDate" : "2022-08-15T16:34:06.091655",
+    "modifiedDate" : "2022-08-15T16:34:06.1166509"
   }
 }</code></pre>
 </div>
@@ -1354,7 +1354,7 @@ X-Frame-Options: DENY</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-15 14:18:54 +0900
+Last updated 2022-08-15 16:21:10 +0900
 </div>
 </div>
 </body>
