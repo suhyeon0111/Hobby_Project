@@ -23,7 +23,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "order by p.id desc")
     List<Post> infiniteScrollPagingPost(@Param("meeting") Meeting meeting, @Param("lastId") Long lastId, Pageable pageable);
 
-    @Query("select p from Post p "
+    @Query("select distinct p from Post p "
             + "join fetch p.author "
             + "join fetch p.replies as pr "
             + "join fetch pr.author "
