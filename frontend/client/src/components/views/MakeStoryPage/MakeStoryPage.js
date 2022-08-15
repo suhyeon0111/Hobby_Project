@@ -27,38 +27,6 @@ function HobbyStoryPage(props) {
         setFileName(event.target.value)
     }
 
-    const uploadHandler = () => {
-        return <>
-            <div
-                            style={{
-                                width: '109px',
-                                height: '75px',
-                                border: '1px solid',
-                                color: 'gray',
-                                borderRadius: '11px',
-                                margin: '16px 20px 0px 11px',
-                                padding: '9px'
-                            }}>
-                            <Avatar
-                                shape="square"
-                                size={55}
-                                src={FileName}
-                                onChange={fileNameHandler}
-                                value={FileName}
-                                style={{
-                                    float: 'left'
-                                }}/>
-                            <Icon
-                                type='delete'
-                                style={{
-                                    fontSize: '20px',
-                                    float: 'right',
-                                    marginTop: '15px'
-                                }}/>
-                        </div>
-        </>
-    }
-
     const onChange = (event) => {
         if (event.target.files[0]) {
             //업로딩이 되면
