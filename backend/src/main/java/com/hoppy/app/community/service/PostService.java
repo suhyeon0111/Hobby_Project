@@ -13,6 +13,8 @@ public interface PostService {
 
     public Post findById(long id);
 
+    public void likePost(long memberId, long postId);
+
     public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId);
 
     public long getLastId(List<PostDto> posts);

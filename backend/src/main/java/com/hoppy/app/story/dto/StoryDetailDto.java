@@ -31,6 +31,7 @@ public class StoryDetailDto {
                 .memberId(member.getId())
                 .username(member.getUsername())
                 .createdDate(story.getCreatedDate())
-                .modifiedDate(story.getModifiedDate()).build();
+                .modifiedDate(story.getModifiedDate())
+                .build();
     }
 }

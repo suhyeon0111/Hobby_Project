@@ -143,7 +143,6 @@ class PostServiceSpringBootTest {
     void getPostDetailTest() {
         // given
         final long TEST_MEMBER_ID = 1L;
-        final int POST_COUNT = 1;
         final int REPLY_COUNT = 2;
         final int RE_REPLY_COUNT = 2;
 
