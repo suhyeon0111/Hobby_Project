@@ -21,11 +21,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/profile")
 public class MemberProfileController {
 
     private final MemberRepository memberRepository;
@@ -36,7 +38,7 @@ public class MemberProfileController {
     /**
      * 현재 로그인 한 사용자의 마이페이지 데이터를 반환
      */
-    @GetMapping("/myprofile")
+    @GetMapping
     public ResponseEntity<ResponseDto> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
         Optional<Member> member = memberRepository.findById(memberId);
@@ -48,7 +50,7 @@ public class MemberProfileController {
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
     }
 
-    @GetMapping("/myprofile/story")
+    @GetMapping("/story")
     private ResponseEntity<ResponseDto> showMyStories(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
         Optional<Member> member = memberRepository.findById(memberId);
@@ -59,7 +61,7 @@ public class MemberProfileController {
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, storyDetails);
     }
 
-    @GetMapping("/userprofile")
+    @GetMapping("/member")
     public ResponseEntity<ResponseDto> showUserProfile(@RequestParam("id") String id) {
         Long memberId = Long.parseLong(id);
         Optional<Member> member = memberRepository.findById(memberId);

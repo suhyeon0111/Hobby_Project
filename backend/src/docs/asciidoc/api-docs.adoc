@@ -129,7 +129,7 @@ include::{snippets}/post-like-request/http-response.adoc[]
 === 내 프로필 조회
 .request url
 ----
-GET /api/myprofile
+GET /api/profile
 ----
 .request body
 include::{snippets}/show-myProfile/request-body.adoc[]
@@ -139,7 +139,7 @@ include::{snippets}/show-myProfile/response-body.adoc[]
 === 내 스토리 조회 (마이프로필)
 .request url
 ----
-GET /api/myprofile/story
+GET /api/profile/story
 ----
 .request body
 include::{snippets}/myprofile-story/request-body.adoc[]
@@ -149,7 +149,7 @@ include::{snippets}/myprofile-story/response-body.adoc[]
 === 사용자 프로필 조회
 .request url
 ----
-GET /api/userprofile?id={사용자 id}
+GET /api/profile/member?id={memberId}
 ----
 .request body
 include::{snippets}/show-userProfile/request-body.adoc[]
@@ -159,7 +159,7 @@ include::{snippets}/show-userProfile/response-body.adoc[]
 === 프로필 수정
 .request url
 ----
-POST /api/update
+PUT /api/profile
 ----
 .request body
 include::{snippets}/update-user/request-body.adoc[]
@@ -169,7 +169,7 @@ include::{snippets}/update-user/response-body.adoc[]
 === 회원 탈퇴
 .request url
 ----
-GET /api/delete
+DELETE /api/profile
 ----
 .request body
 include::{snippets}/delete-user/request-body.adoc[]
@@ -181,7 +181,7 @@ include::{snippets}/delete-user/response-body.adoc[]
 === 스토리 업로드
 .request url
 ----
-POST /api/story/upload
+POST /api/story
 ----
 .request body
 include::{snippets}/upload-story/request-body.adoc[]
@@ -191,7 +191,7 @@ include::{snippets}/upload-story/response-body.adoc[]
 === 스토리 수정
 .request url
 ----
-POST /api/story/update?id={storyId}
+PUT /api/story?id={storyId}
 ----
 .request body
 include::{snippets}/update-story/request-body.adoc[]
@@ -201,7 +201,7 @@ include::{snippets}/update-story/response-body.adoc[]
 === 스토리 삭제
 .request url
 ----
-GET /api/story/delete?id={storyId}
+DELETE /api/story?id={storyId}
 ----
 .request body
 include::{snippets}/delete-story/request-body.adoc[]

@@ -14,9 +14,12 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +31,7 @@ public class MemberDaoController {
     private final MemberRepository memberRepository;
 
     // TODO: 주소 변경 부탁합니다. 다른 곳에서도 update 써야되용. PUT /profile 이런식으로 부탁..
-    @PostMapping("/update")
+    @PutMapping("/profile")
     public ResponseEntity<ResponseDto> updateUser(
             @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UpdateMemberDto memberDto) {
         Optional<Member> optMember = memberRepository.findById(userDetails.getId());
@@ -45,7 +48,7 @@ public class MemberDaoController {
      * 탈퇴한 회원을 식별
      */
     // TODO: 주소 변경 부탁합니다. 다른 곳에서도 update 써야되용. DELETE /member 이런식으로 부탁..
-    @GetMapping("/delete")
+    @DeleteMapping("/member")
     public ResponseEntity<ResponseDto> deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long memberId = customUserDetails.getId();
         memberService.deleteById(memberId);

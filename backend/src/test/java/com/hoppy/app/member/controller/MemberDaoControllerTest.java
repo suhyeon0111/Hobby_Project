@@ -76,8 +76,8 @@ class MemberDaoControllerTest {
         Long id = Long.parseLong(authentication.getName());
         Optional<Member> optMember = memberRepository.findById(id);
         assertThat(optMember).isPresent();
-        ResultActions result = mvc.perform(MockMvcRequestBuilders.
-                        get("/delete")
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                        .delete("/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 )

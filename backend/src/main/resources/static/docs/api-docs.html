@@ -545,7 +545,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220815T073410Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220815%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=4cc9dd16ea86177e53a96d92996ff96ceeacfba1f40a5802d417bdef0e714e57"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220815T123247Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220815%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=7772fa22a5c4657a7d44962b1cb605022d6f60a4443833aa6b02d42e977b698a"
   }
 }</code></pre>
 </div>
@@ -610,7 +610,7 @@ memberLimit: 최소 2 최대 20 입니다.</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "meetingId" : 106
+  "meetingId" : 113
 }</code></pre>
 </div>
 </div>
@@ -642,7 +642,7 @@ memberLimit: 최소 2 최대 20 입니다.</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{
-  "meetingId" : 107
+  "meetingId" : 114
 }</code></pre>
 </div>
 </div>
@@ -688,105 +688,105 @@ liked: 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
   "message" : "모임 조회 완료",
   "data" : {
     "meetingList" : [ {
-      "id" : 23,
+      "id" : 30,
       "url" : "default-url",
       "title" : "20-title",
       "content" : "20-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 22,
+      "id" : 29,
       "url" : "default-url",
       "title" : "19-title",
       "content" : "19-content",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 21,
+      "id" : 28,
       "url" : "default-url",
       "title" : "18-title",
       "content" : "18-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 20,
+      "id" : 27,
       "url" : "default-url",
       "title" : "17-title",
       "content" : "17-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 19,
+      "id" : 26,
       "url" : "default-url",
       "title" : "16-title",
       "content" : "16-content",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 18,
+      "id" : 25,
       "url" : "default-url",
       "title" : "15-title",
       "content" : "15-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 17,
+      "id" : 24,
       "url" : "default-url",
       "title" : "14-title",
       "content" : "14-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 16,
+      "id" : 23,
       "url" : "default-url",
       "title" : "13-title",
       "content" : "13-content",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 15,
+      "id" : 22,
       "url" : "default-url",
       "title" : "12-title",
       "content" : "12-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 14,
+      "id" : 21,
       "url" : "default-url",
       "title" : "11-title",
       "content" : "11-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 13,
+      "id" : 20,
       "url" : "default-url",
       "title" : "10-title",
       "content" : "10-content",
       "participants" : 1,
       "liked" : true
     }, {
-      "id" : 12,
+      "id" : 19,
       "url" : "default-url",
       "title" : "9-title",
       "content" : "9-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 11,
+      "id" : 18,
       "url" : "default-url",
       "title" : "8-title",
       "content" : "8-content",
       "participants" : 1,
       "liked" : false
     }, {
-      "id" : 10,
+      "id" : 17,
       "url" : "default-url",
       "title" : "7-title",
       "content" : "7-content",
       "participants" : 1,
       "liked" : true
     } ],
-    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=9"
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting?categoryNumber=2&amp;lastId=16"
   }
 }</code></pre>
 </div>
@@ -803,7 +803,7 @@ liked: 현재 사용자가 좋아요를 눌렀는지 여부를 나타냄</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/45 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/52 HTTP/1.1
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -815,7 +815,7 @@ Host: localhost:8080</code></pre>
   "status" : 200,
   "message" : "모임 상세 페이지 조회 완료",
   "data" : {
-    "id" : 45,
+    "id" : 52,
     "title" : "1-title",
     "content" : "1-content",
     "url" : "default-url",
@@ -843,7 +843,7 @@ GET /api/meeting/posts?meetingId={id}</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/posts?meetingId=44 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /meeting/posts?meetingId=51 HTTP/1.1
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -856,7 +856,7 @@ Host: localhost:8080</code></pre>
   "message" : "커뮤니티 게시물 조회 완료",
   "data" : {
     "postList" : [ {
-      "id" : 34,
+      "id" : 20,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "20-title",
@@ -865,7 +865,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 33,
+      "id" : 19,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "19-title",
@@ -874,7 +874,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 32,
+      "id" : 18,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "18-title",
@@ -883,7 +883,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 31,
+      "id" : 17,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "17-title",
@@ -892,7 +892,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 30,
+      "id" : 16,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "16-title",
@@ -901,7 +901,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 29,
+      "id" : 15,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "15-title",
@@ -910,7 +910,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 28,
+      "id" : 14,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "14-title",
@@ -919,7 +919,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 27,
+      "id" : 13,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "13-title",
@@ -928,7 +928,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     } ],
-    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting/posts?meetingId=44&amp;lastId=26"
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting/posts?meetingId=51&amp;lastId=12"
   }
 }</code></pre>
 </div>
@@ -950,7 +950,7 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /post/2 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /post/22 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -963,7 +963,7 @@ Host: localhost:8080</code></pre>
   "status" : 200,
   "message" : "게시물 조회 완료",
   "data" : {
-    "id" : 2,
+    "id" : 22,
     "authorName" : "testName",
     "authorProfileUrl" : "testProfileUrl",
     "title" : "0-title",
@@ -974,26 +974,26 @@ Host: localhost:8080</code></pre>
     "replies" : [ {
       "authorProfileUrl" : "testProfileUrl",
       "authorName" : "testName",
-      "content" : "0-content",
+      "content" : "1-content",
       "liked" : false,
       "likeCount" : 0,
       "replies" : [ {
         "authorProfileUrl" : "testProfileUrl",
         "authorName" : "testName",
-        "content" : "1-content",
+        "content" : "0-content",
         "liked" : false,
         "likeCount" : 0
       }, {
         "authorProfileUrl" : "testProfileUrl",
         "authorName" : "testName",
-        "content" : "0-content",
+        "content" : "1-content",
         "liked" : false,
         "likeCount" : 0
       } ]
     }, {
       "authorProfileUrl" : "testProfileUrl",
       "authorName" : "testName",
-      "content" : "1-content",
+      "content" : "0-content",
       "liked" : false,
       "likeCount" : 0,
       "replies" : [ {
@@ -1026,7 +1026,7 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /post/like/1 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /post/like/21 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -1063,7 +1063,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>GET /api/myprofile</pre>
+<pre>GET /api/profile</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1085,7 +1085,7 @@ X-Frame-Options: DENY</code></pre>
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
     "deleted" : false,
-    "myMeetingsId" : [ 133, 136, 130 ]
+    "myMeetingsId" : [ 3, 6, 9 ]
   }
 }</code></pre>
 </div>
@@ -1096,7 +1096,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>GET /api/myprofile/story</pre>
+<pre>GET /api/profile/story</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1117,40 +1117,40 @@ X-Frame-Options: DENY</code></pre>
     "content" : "This is 5th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T16:34:05.717652",
-    "modifiedDate" : "2022-08-15T16:34:05.717652"
+    "createdDate" : "2022-08-15T21:32:31.196027",
+    "modifiedDate" : "2022-08-15T21:32:31.196027"
   }, {
     "id" : 4,
     "title" : "4th Story",
     "content" : "This is 4th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T16:34:05.715652",
-    "modifiedDate" : "2022-08-15T16:34:05.715652"
+    "createdDate" : "2022-08-15T21:32:31.191408",
+    "modifiedDate" : "2022-08-15T21:32:31.191408"
   }, {
     "id" : 3,
     "title" : "3th Story",
     "content" : "This is 3th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T16:34:05.710651",
-    "modifiedDate" : "2022-08-15T16:34:05.710651"
+    "createdDate" : "2022-08-15T21:32:31.186869",
+    "modifiedDate" : "2022-08-15T21:32:31.186869"
   }, {
     "id" : 2,
     "title" : "2th Story",
     "content" : "This is 2th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T16:34:05.70866",
-    "modifiedDate" : "2022-08-15T16:34:05.70866"
+    "createdDate" : "2022-08-15T21:32:31.178225",
+    "modifiedDate" : "2022-08-15T21:32:31.178225"
   }, {
     "id" : 1,
     "title" : "1th Story",
     "content" : "This is 1th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T16:34:05.67665",
-    "modifiedDate" : "2022-08-15T16:34:05.67665"
+    "createdDate" : "2022-08-15T21:32:31.13148",
+    "modifiedDate" : "2022-08-15T21:32:31.13148"
   } ]
 }</code></pre>
 </div>
@@ -1161,7 +1161,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>GET /api/userprofile?id={사용자 id}</pre>
+<pre>GET /api/profile/member?id={memberId}</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1180,7 +1180,7 @@ X-Frame-Options: DENY</code></pre>
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
-    "meetingsId" : [ 133, 136, 130 ]
+    "meetingsId" : [ 3, 6, 9 ]
   }
 }</code></pre>
 </div>
@@ -1191,7 +1191,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>POST /api/update</pre>
+<pre>PUT /api/profile</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1224,7 +1224,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>GET /api/delete</pre>
+<pre>DELETE /api/profile</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1254,7 +1254,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>POST /api/story/upload</pre>
+<pre>POST /api/story</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1274,13 +1274,13 @@ X-Frame-Options: DENY</code></pre>
   "status" : 200,
   "message" : "스토리 업로드 완료",
   "data" : {
-    "id" : 21,
+    "id" : 32,
     "title" : "Story Upload Test",
     "content" : "This is Test code",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-15T16:34:06.1736508",
-    "modifiedDate" : "2022-08-15T16:34:06.1736508"
+    "createdDate" : "2022-08-15T21:32:45.225713",
+    "modifiedDate" : "2022-08-15T21:32:45.225713"
   }
 }</code></pre>
 </div>
@@ -1291,7 +1291,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>POST /api/story/update?id={storyId}</pre>
+<pre>PUT /api/story?id={storyId}</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1311,13 +1311,13 @@ X-Frame-Options: DENY</code></pre>
   "status" : 200,
   "message" : "스토리 업로드 완료",
   "data" : {
-    "id" : 11,
+    "id" : 22,
     "title" : "Update Story Test",
     "content" : "This is updated story",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-15T16:34:06.091655",
-    "modifiedDate" : "2022-08-15T16:34:06.1166509"
+    "createdDate" : "2022-08-15T21:32:45.131218",
+    "modifiedDate" : "2022-08-15T21:32:45.178371"
   }
 }</code></pre>
 </div>
@@ -1328,7 +1328,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
-<pre>GET /api/story/delete?id={storyId}</pre>
+<pre>DELETE /api/story?id={storyId}</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1354,7 +1354,7 @@ X-Frame-Options: DENY</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-15 16:21:10 +0900
+Last updated 2022-08-15 21:31:15 +0900
 </div>
 </div>
 </body>

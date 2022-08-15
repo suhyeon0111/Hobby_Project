@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ public class StoryController {
 
     private final ResponseService responseService;
 
-    @PostMapping("/upload")
+    @PostMapping
     public ResponseEntity<ResponseDto> uploadStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto) {
         Member member = memberService.findById(userDetails.getId());
         Story story = storyManageService.uploadStory(dto, member);
@@ -43,7 +44,7 @@ public class StoryController {
         return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDetailDto);
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public ResponseEntity<ResponseDto> updateStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto, @RequestParam("id") String id) {
         Story story = storyManageService.updateStory(dto, Long.parseLong(id));
         Member member = memberService.findById(userDetails.getId());
@@ -51,7 +52,7 @@ public class StoryController {
         return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDetailDto);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<ResponseDto> deleteStory(@RequestParam("id") String id) {
         storyManageService.deleteStory(Long.parseLong(id));
         return responseService.successResult(SuccessCode.DELETE_STORY_SUCCESS);
