@@ -73,24 +73,22 @@ jacocoTestReport {
 	}
 }
 
-asciidoctor {
+task beforeAsciidoctor(type: Delete) {
 	dependsOn 'jacocoTestReport'
+	delete ('src/main/resources/static/docs/api-docs.html')
+}
+
+asciidoctor {
+	dependsOn 'beforeAsciidoctor'
 	sourceDir 'src/docs/asciidoc'
 	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
 }
 
-task deleteRemainDocument {
+task copyDocument(type: Copy) {
 	dependsOn 'asciidoctor'
-	delete file('src/main/resources/static/docs')
-}
-
-task copyDocument {
-	dependsOn 'deleteRemainDocument'
-	copy {
-		from "build/docs/asciidoc/"
-		into "src/main/resources/static/docs"
-	}
+	from ('build/docs/asciidoc/api-docs.html')
+	into ('src/main/resources/static/docs')
 }
 
 build {
