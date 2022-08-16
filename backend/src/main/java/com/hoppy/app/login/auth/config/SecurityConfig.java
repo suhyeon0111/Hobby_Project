@@ -25,6 +25,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity(debug = true)
@@ -52,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
-                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeRequests()
 //                .antMatchers("/oauth2/**", "/login/**").permitAll()
