@@ -545,7 +545,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220815T123247Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220815%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=7772fa22a5c4657a7d44962b1cb605022d6f60a4443833aa6b02d42e977b698a"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220816T031826Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220816%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=c2a33a6f94f61e7691a1d06fcf00d18f89ce976a0cdb259828c5ef8612a61682"
   }
 }</code></pre>
 </div>
@@ -974,26 +974,26 @@ Host: localhost:8080</code></pre>
     "replies" : [ {
       "authorProfileUrl" : "testProfileUrl",
       "authorName" : "testName",
-      "content" : "1-content",
+      "content" : "0-content",
       "liked" : false,
       "likeCount" : 0,
       "replies" : [ {
         "authorProfileUrl" : "testProfileUrl",
         "authorName" : "testName",
-        "content" : "0-content",
+        "content" : "1-content",
         "liked" : false,
         "likeCount" : 0
       }, {
         "authorProfileUrl" : "testProfileUrl",
         "authorName" : "testName",
-        "content" : "1-content",
+        "content" : "0-content",
         "liked" : false,
         "likeCount" : 0
       } ]
     }, {
       "authorProfileUrl" : "testProfileUrl",
       "authorName" : "testName",
-      "content" : "0-content",
+      "content" : "1-content",
       "liked" : false,
       "likeCount" : 0,
       "replies" : [ {
@@ -1085,7 +1085,7 @@ X-Frame-Options: DENY</code></pre>
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
     "deleted" : false,
-    "myMeetingsId" : [ 3, 6, 9 ]
+    "myMeetingsId" : [ 6, 9, 3 ]
   }
 }</code></pre>
 </div>
@@ -1117,40 +1117,45 @@ X-Frame-Options: DENY</code></pre>
     "content" : "This is 5th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T21:32:31.196027",
-    "modifiedDate" : "2022-08-15T21:32:31.196027"
+    "filename" : "5.jpg",
+    "createdDate" : "2022-08-16T12:18:04.704208",
+    "modifiedDate" : "2022-08-16T12:18:04.704208"
   }, {
     "id" : 4,
     "title" : "4th Story",
     "content" : "This is 4th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T21:32:31.191408",
-    "modifiedDate" : "2022-08-15T21:32:31.191408"
+    "filename" : "4.jpg",
+    "createdDate" : "2022-08-16T12:18:04.700984",
+    "modifiedDate" : "2022-08-16T12:18:04.700984"
   }, {
     "id" : 3,
     "title" : "3th Story",
     "content" : "This is 3th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T21:32:31.186869",
-    "modifiedDate" : "2022-08-15T21:32:31.186869"
+    "filename" : "3.jpg",
+    "createdDate" : "2022-08-16T12:18:04.698098",
+    "modifiedDate" : "2022-08-16T12:18:04.698098"
   }, {
     "id" : 2,
     "title" : "2th Story",
     "content" : "This is 2th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T21:32:31.178225",
-    "modifiedDate" : "2022-08-15T21:32:31.178225"
+    "filename" : "2.jpg",
+    "createdDate" : "2022-08-16T12:18:04.690215",
+    "modifiedDate" : "2022-08-16T12:18:04.690215"
   }, {
     "id" : 1,
     "title" : "1th Story",
     "content" : "This is 1th Story",
     "username" : "강해상",
     "memberId" : 9999,
-    "createdDate" : "2022-08-15T21:32:31.13148",
-    "modifiedDate" : "2022-08-15T21:32:31.13148"
+    "filename" : "1.jpg",
+    "createdDate" : "2022-08-16T12:18:04.634533",
+    "modifiedDate" : "2022-08-16T12:18:04.634533"
   } ]
 }</code></pre>
 </div>
@@ -1180,7 +1185,7 @@ X-Frame-Options: DENY</code></pre>
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
-    "meetingsId" : [ 3, 6, 9 ]
+    "meetingsId" : [ 3, 9, 6 ]
   }
 }</code></pre>
 </div>
@@ -1279,8 +1284,9 @@ X-Frame-Options: DENY</code></pre>
     "content" : "This is Test code",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-15T21:32:45.225713",
-    "modifiedDate" : "2022-08-15T21:32:45.225713"
+    "filename" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/example.jpg",
+    "createdDate" : "2022-08-16T12:18:23.464155",
+    "modifiedDate" : "2022-08-16T12:18:23.464155"
   }
 }</code></pre>
 </div>
@@ -1316,8 +1322,9 @@ X-Frame-Options: DENY</code></pre>
     "content" : "This is updated story",
     "username" : "최대한",
     "memberId" : 8669,
-    "createdDate" : "2022-08-15T21:32:45.131218",
-    "modifiedDate" : "2022-08-15T21:32:45.178371"
+    "filename" : "test_success.wav",
+    "createdDate" : "2022-08-16T12:18:23.356228",
+    "modifiedDate" : "2022-08-16T12:18:23.400752"
   }
 }</code></pre>
 </div>
