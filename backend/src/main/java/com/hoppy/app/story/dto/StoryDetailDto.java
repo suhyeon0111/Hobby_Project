@@ -20,6 +20,7 @@ public class StoryDetailDto {
     private String content;
     private String username;
     private Long memberId;
+    private String filename;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -29,6 +30,7 @@ public class StoryDetailDto {
                 .title(story.getTitle())
                 .content(story.getContent())
                 .memberId(member.getId())
+                .filename(story.getFilePath())
                 .username(member.getUsername())
                 .createdDate(story.getCreatedDate())
                 .modifiedDate(story.getModifiedDate())
