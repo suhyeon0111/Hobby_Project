@@ -169,7 +169,7 @@ include::{snippets}/update-user/response-body.adoc[]
 === 회원 탈퇴
 .request url
 ----
-DELETE /api/profile
+DELETE /api/member
 ----
 .request body
 include::{snippets}/delete-user/request-body.adoc[]
