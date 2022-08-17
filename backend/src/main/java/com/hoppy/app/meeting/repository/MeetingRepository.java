@@ -38,6 +38,6 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     @Query("select m from Meeting m where m.id = :id")
     Optional<Meeting> findByIdUsingLock(@Param("id") Long id);
 
-    @Query("select distinct m from Meeting m join fetch m.participants where m.id = :id")
+    @Query("select distinct m from Meeting m left join fetch m.participants where m.id = :id")
     Optional<Meeting> findWithParticipantsById(@Param("id") Long id);
 }

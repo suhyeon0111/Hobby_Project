@@ -25,9 +25,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("select distinct p from Post p "
             + "join fetch p.author "
-            + "join fetch p.replies as pr "
+            + "left join fetch p.replies as pr "
             + "join fetch pr.author "
-            + "join fetch pr.reReplies as prr "
+            + "left join fetch pr.reReplies as prr "
             + "join fetch prr.author "
             + "where p.id = :id")
     Optional<Post> getPostDetail(@Param("id") Long id);

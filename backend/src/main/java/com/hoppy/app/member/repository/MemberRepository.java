@@ -16,9 +16,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select distinct m from Member m where m.id > :lastId and m.id in :membersId order by m.id desc")
     List<Member> infiniteScrollPagingMember(@Param("membersId") List<Long> membersId, @Param("lastId") Long lastId, Pageable pageable);
 
-    @Query("select distinct m from Member m join fetch m.postLikes where m.id = :id")
+    @Query("select distinct m from Member m left join fetch m.postLikes where m.id = :id")
     Optional<Member> findByIdWithPostLikes(@Param("id") Long id);
 
-    @Query("select distinct m from Member m join fetch m.meetingLikes where m.id = :id")
+    @Query("select distinct m from Member m left join fetch m.meetingLikes where m.id = :id")
     Optional<Member> findByIdWithMeetingLikes(@Param("id") Long id);
 }
