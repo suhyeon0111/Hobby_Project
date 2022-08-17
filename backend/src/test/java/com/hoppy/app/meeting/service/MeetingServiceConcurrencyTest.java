@@ -22,20 +22,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author 태경 2022-07-30
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-class MeetingInquiryServiceConcurrencyTest {
+class MeetingServiceConcurrencyTest {
 
     @Autowired
-    MeetingInquiryServiceImpl meetingInquiryService;
-
-    @Autowired
-    MeetingManageService meetingManageService;
+    MeetingServiceImpl meetingInquiryService;
 
     @Autowired
     MemberMeetingRepository memberMeetingRepository;
@@ -46,15 +42,15 @@ class MeetingInquiryServiceConcurrencyTest {
     @Autowired
     MemberRepository memberRepository;
 
-    Logger log = (Logger) LoggerFactory.getLogger(MeetingInquiryServiceConcurrencyTest.class);
+    Logger log = (Logger) LoggerFactory.getLogger(MeetingServiceConcurrencyTest.class);
 
     @AfterEach
     void after() {
         log.info("[afterEach 메서드 수행]");
 
+        memberMeetingRepository.deleteAll();
         memberRepository.deleteAll();
         meetingRepository.deleteAll();
-        memberMeetingRepository.deleteAll();
     }
 
     @DisplayName("모임 가입 동시성 이슈 테스트")
@@ -94,7 +90,7 @@ class MeetingInquiryServiceConcurrencyTest {
         countDownLatch.await();
 
         //then
-        List<MemberMeeting> memberMeetings = memberMeetingRepository.findALlByMeetingId(meeting.getId());
+        List<MemberMeeting> memberMeetings = memberMeetingRepository.findALlByMeeting(meeting);
         long memberMeetingCount = memberMeetings.size();
 
         assertThat(memberMeetingCount).isEqualTo(MAXIMUM_PEOPLE);

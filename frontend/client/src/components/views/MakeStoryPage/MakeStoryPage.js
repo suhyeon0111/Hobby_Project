@@ -102,7 +102,7 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/story/upload", body, {
+                .post("https://hoppy.kro.kr/api/story", body, {
                     headers, 
                     withCredentials: false
                 })
@@ -127,7 +127,7 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/story/upload", body, {
+                .post("https://hoppy.kro.kr/api/story", body, {
                     headers, 
                     withCredentials: false
                 })

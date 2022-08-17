@@ -26,16 +26,15 @@ public class UserProfileDto {
     private String username;
     private String profileUrl;
     private String intro;
-    private Set<MemberMeeting> userMeetings = new HashSet<>();
-    private List<StoryDetailDto> userStories;
+    private List<Long> meetingsId;
 
-    public static UserProfileDto of(Member member, List<StoryDetailDto> storyDetails) {
+    public static UserProfileDto of(Member member) {
         return UserProfileDto.builder()
                 .username(member.getUsername())
                 .profileUrl(member.getProfileImageUrl())
                 .intro(member.getIntro())
-                .userMeetings(member.getMyMeetings())
-                .userStories(storyDetails)
+                .meetingsId(member.getMyMeetings().stream().map(MemberMeeting::getMeetingId).collect(
+                        Collectors.toList()))
                 .build();
     }
 }

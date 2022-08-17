@@ -16,5 +16,5 @@ public interface StoryManageService {
 
     public void deleteStory(Long storyId);
 
-    public List<StoryDetailDto> showStoriesInProfile(Member member);
+    public List<StoryDetailDto> showMyStoriesInProfile(Member member);
 }

@@ -1,5 +1,9 @@
 package com.hoppy.app.member.domain;
 
+import com.hoppy.app.like.domain.MemberMeetingLike;
+import com.hoppy.app.like.domain.MemberPostLike;
+import com.hoppy.app.like.domain.MemberReReplyLike;
+import com.hoppy.app.like.domain.MemberReplyLike;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.story.domain.story.Story;
@@ -22,6 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.ToString.Exclude;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Getter
@@ -48,12 +53,36 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     @Default
     @Exclude
     private Set<MemberMeeting> myMeetings = new HashSet<>();
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberMeetingLike> meetingLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberPostLike> postLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberReplyLike> replyLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberReReplyLike> reReplyLikes = new HashSet<>();
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     @Default
     @Exclude

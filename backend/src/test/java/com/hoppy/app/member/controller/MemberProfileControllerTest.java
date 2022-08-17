@@ -97,7 +97,11 @@ class MemberProfileControllerTest {
             Meeting meeting = meetingRepository.save(Meeting.builder().ownerId(member.getId()).url("https://test" + i + ".com")
                     .title(i + "번 모임").content("Welcome to meeting No." + i).category(category).memberLimit(i+9).build());
             if(i % 3 == 0) {
-                memberMeetingRepository.save(MemberMeeting.builder().memberId(member.getId()).meetingId(meeting.getId()).build());
+                memberMeetingRepository.save(MemberMeeting.builder()
+                        .member(member)
+                        .meeting(meeting)
+                        .build()
+                );
             }
         }
 
@@ -131,7 +135,7 @@ class MemberProfileControllerTest {
 
         assertThat(optMember).isPresent();
 
-        mvc.perform(MockMvcRequestBuilders.get("/myprofile")
+        mvc.perform(MockMvcRequestBuilders.get("/profile")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 )
@@ -145,11 +149,31 @@ class MemberProfileControllerTest {
     }
 
     @Test
+    @WithMockCustomUser(id = "9999")
+    void showMyStoriesInProfile() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+        Optional<Member> optMember = memberRepository.findById(memberId);
+        assertThat(optMember).isPresent();
+        ResultActions result = mvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/profile/story")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+                )
+                .andDo(print());
+        result.andExpect(status().isOk())
+                .andDo(document("myprofile-story",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
+    }
+
+    @Test
     void showUserProfile() throws Exception {
         String id = "9999";
         Optional<Member> optMember = memberRepository.findById(Long.parseLong(id));
         assertThat(optMember).isPresent();
-        mvc.perform(MockMvcRequestBuilders.get("/userprofile")
+        mvc.perform(MockMvcRequestBuilders.get("/profile/member")
                         .param("id", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
@@ -178,7 +202,7 @@ class MemberProfileControllerTest {
         String content = objectMapper.writeValueAsString(memberDto);
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                        .post("/update")
+                        .put("/profile")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))

@@ -103,7 +103,7 @@ class StoryControllerTest {
         UploadStoryDto dto = UploadStoryDto.builder().title("Story Upload Test").content("This is Test code").filename("example.jpg").build();
         String content = objectMapper.writeValueAsString(dto);
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .post("/story/upload")
+                .post("/story")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
@@ -125,7 +125,7 @@ class StoryControllerTest {
         UploadStoryDto dto = UploadStoryDto.builder().title("Update Story Test").content("This is updated story").filename("test_success.wav").build();
         String content = objectMapper.writeValueAsString(dto);
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .post("/story/update")
+                .put("/story")
                 .param("id", String.valueOf(storyId))
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ class StoryControllerTest {
         assertThat(optStory.isPresent()).isTrue();
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .delete("/story/delete")
+                .delete("/story")
                 .param("id", String.valueOf(storyId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))

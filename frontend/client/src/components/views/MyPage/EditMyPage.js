@@ -22,8 +22,6 @@ function EditMyPage(props) {
     const Intro = EditUser.intro
     const ProfileUrl = EditUser.profileUrl
     const UserName = EditUser.username
-    // console.log(EditUser)
-    // console.log(ProfileUrl)
 
     //edit form 제작
 
@@ -127,7 +125,7 @@ function EditMyPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/update", body, {
+                .put("https://hoppy.kro.kr/api/profile", body, {
                     headers,
                     withCredentials: false
                 })
@@ -152,7 +150,7 @@ function EditMyPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/update", body, {
+                .put("https://hoppy.kro.kr/api/profile", body, {
                     headers,
                     withCredentials: false
                 })
@@ -177,7 +175,7 @@ function EditMyPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/update", body, {
+                .put("https://hoppy.kro.kr/api/profile", body, {
                     headers,
                     withCredentials: false
                 })
@@ -202,7 +200,7 @@ function EditMyPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/update", body, {
+                .put("https://hoppy.kro.kr/api/profile", body, {
                     headers,
                     withCredentials: false
                 })
@@ -227,7 +225,7 @@ function EditMyPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/update", body, {
+                .put("https://hoppy.kro.kr/api/profile", body, {
                     headers,
                     withCredentials: false
                 })
@@ -252,7 +250,7 @@ function EditMyPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/update", body, {
+                .put("https://hoppy.kro.kr/api/profile", body, {
                     headers,
                     withCredentials: false
                 })
@@ -277,7 +275,7 @@ function EditMyPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/update", body, {
+                .put("https://hoppy.kro.kr/api/profile", body, {
                     headers,
                     withCredentials: false
                 })

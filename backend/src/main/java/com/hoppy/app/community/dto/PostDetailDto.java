@@ -1,6 +1,7 @@
 package com.hoppy.app.community.dto;
 
 import com.hoppy.app.community.domain.Post;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,22 +9,20 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * @author 태경 2022-08-05
+ * @author 태경 2022-08-09
  */
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PostDto {
-    /*
-    * 커뮤니티 게시물 목록 조회 시 사용되는 Dto 입니다. -tae
-    * */
+public class PostDetailDto {
+
     private long id;
 
-    private String ownerProfileUrl;
+    private String authorName;
 
-    private String ownerName;
+    private String authorProfileUrl;
 
     private String title;
 
@@ -35,16 +34,19 @@ public class PostDto {
 
     private int replyCount;
 
-    public static PostDto postToPostDto(Post post, boolean liked, int likeCount, int replyCount) {
-        return PostDto.builder()
+    private List<ReplyDto> replies;
+
+    public static PostDetailDto of(Post post, boolean liked, int likeCount, int replyCount, List<ReplyDto> replies) {
+        return PostDetailDto.builder()
                 .id(post.getId())
-                .ownerProfileUrl(post.getAuthor().getProfileImageUrl())
-                .ownerName(post.getAuthor().getUsername())
+                .authorProfileUrl(post.getAuthor().getProfileImageUrl())
+                .authorName(post.getAuthor().getUsername())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .liked(liked)
                 .likeCount(likeCount)
                 .replyCount(replyCount)
+                .replies(replies)
                 .build();
     }
 }

@@ -10,6 +10,11 @@ import org.springframework.stereotype.Component;
 public class ResponseServiceImpl implements ResponseService {
 
     @Override
+    public ResponseEntity<ResponseDto> ok() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<ResponseDto> successResult(SuccessCode code) {
         return new ResponseEntity<>(ResponseDto.commonResponse(code.getStatus(), code.getMessage()),
                 HttpStatus.valueOf(code.getStatus()));
