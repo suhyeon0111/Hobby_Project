@@ -38,11 +38,11 @@ public enum ErrorCode {
     MAX_PARTICIPANTS(403, "M004", "모임 인원 초과입니다"),
     ALREADY_JOIN(403, "M005", "이미 가입한 멤버입니다"),
     NOT_JOINED(403, "M006", "모임에 가입해주세요"),
-    NO_MORE_MEETING(403, "M007", "마지막 모임입니다"),
+    NO_MORE_MEETING(403, "M007", "더 이상 조회할 모임이 없습니다"),
 
     // Post
     POST_NOT_FOUND(403, "P001", "존재하지 않는 게시물입니다"),
-    NO_MORE_POST(403, "P002", "마지막 게시물입니다"),
+    NO_MORE_POST(403, "P002", "더 이상 조회할 게시물이 없습니다"),
     ALREADY_LIKED_POST(403, "P003", "좋아요 중복 요청"),
 
     // Member

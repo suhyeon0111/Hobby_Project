@@ -1,5 +1,6 @@
 package com.hoppy.app.health.controller;
 
+import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
@@ -22,6 +23,8 @@ public class HealthController {
     private final Environment env;
     private final ResponseService responseService;
 
+    private final AuthTokenProvider tokenProvider;
+
     @GetMapping
     public ResponseEntity<ResponseDto> checkHealth() {
         return responseService.successResult(SuccessCode.HEALTH_CHECK_SUCCESS);
@@ -32,8 +35,8 @@ public class HealthController {
         return responseService.successResult(SuccessCode.PROFILE_CHECK_SUCCESS, env.getActiveProfiles());
     }
 
-    @GetMapping("/echo")
-    public ResponseEntity<String> getEchoPage(@RequestParam(value = "data", required = false) String data) {
-        return new ResponseEntity<String>(data, HttpStatus.OK);
+    @GetMapping("/jwt")
+    public ResponseEntity<ResponseDto> getEchoPage() {
+        return responseService.successResult(SuccessCode.LOGIN_SUCCESS, tokenProvider.createUserAuthToken("1"));
     }
 }
