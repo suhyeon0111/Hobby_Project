@@ -1,4 +1,3 @@
-import { Button } from 'antd'
 import React from 'react'
 
 import ArtImg from '../LandingPage/img/art.png'

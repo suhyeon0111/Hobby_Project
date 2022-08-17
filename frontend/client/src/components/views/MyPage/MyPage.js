@@ -20,9 +20,7 @@ function MyPage() {
         setUserInfo(response.payload.data)
       })
     }, [])
-
-    const Email = UserInfo.email
-    const Id = UserInfo.Id
+    
     const Intro = UserInfo.intro
     const ProfileUrl = UserInfo.profileUrl
     const UserName = UserInfo.username
