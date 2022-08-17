@@ -17,7 +17,6 @@ public enum Category {
     LIFE(4),
     FOOD(5),
     TRIP(6),
-    ERROR(9999),
     ;
 
     private int num;

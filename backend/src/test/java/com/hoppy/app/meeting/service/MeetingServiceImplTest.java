@@ -26,6 +26,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author 태경 2022-07-18
@@ -161,5 +162,24 @@ class MeetingServiceImplTest {
 
         //then
         assertEquals(ErrorCode.MEETING_NOT_FOUND.getMessage(), exception.getMessage());
+    }
+
+    @DisplayName("모임 페이징 테스트: 더 이상 조회할 모임이 없을 경우")
+    @Test
+    void pagingMeetingExceptionTest() {
+        //given
+        final var REQ_CATEGORY_NUM = 2;
+        final var REQ_LAST_ID = 0L;
+        final var REQ_MEMBER_ID = 1L;
+        Category category = Category.intToCategory(REQ_CATEGORY_NUM);
+        Pageable pageable = PageRequest.of(0, 14);
+        given(meetingRepository.infiniteScrollPaging(category, Long.MAX_VALUE, pageable)).willReturn(new ArrayList<>());
+
+        // when
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> meetingInquiryService.pagingMeeting(REQ_CATEGORY_NUM, REQ_LAST_ID, REQ_MEMBER_ID));
+
+        // then
+        assertEquals(ErrorCode.NO_MORE_MEETING.getMessage(), exception.getMessage());
     }
 }

@@ -51,7 +51,6 @@ public class MeetingController {
         Member member = memberService.findById(userDetails.getId());
         Meeting meeting = meetingService.createMeeting(dto, member.getId());
         meetingService.createAndSaveMemberMeetingData(meeting, member);
-
         return responseService.successResult(SuccessCode.CREATE_MEETING_SUCCESS);
     }
 
@@ -62,7 +61,6 @@ public class MeetingController {
     ) {
         Long meetingId = meetingJoinDto.getMeetingId();
         meetingService.checkJoinRequestValid(meetingId, userDetails.getId());
-
         return responseService.successResult(SuccessCode.JOIN_MEETING_SUCCESS);
     }
 
@@ -72,7 +70,6 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         meetingService.withdrawMeeting(meetingWithdrawalDto.getMeetingId(), userDetails.getId());
-
         return responseService.successResult(SuccessCode.WITHDRAW_MEETING_SUCCESS);
     }
 
@@ -82,15 +79,7 @@ public class MeetingController {
             @RequestParam(value = "lastId", defaultValue = "0") long lastId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        lastId = meetingService.checkLastIdValid(lastId);
-        Category category = Category.intToCategory(categoryNumber);
-
-        List<Meeting> meetingList = meetingService.pagingMeetingList(category, lastId);
-        lastId = meetingService.getLastId(meetingList);
-        String nextPagingUrl = meetingService.createNextPagingUrl(categoryNumber, lastId);
-        List<MeetingDto> meetingDtoList = meetingService.listToDtoList(meetingList, userDetails.getId());
-        PagingMeetingDto pagingMeetingDto = PagingMeetingDto.of(meetingDtoList, nextPagingUrl);
-
+        PagingMeetingDto pagingMeetingDto = meetingService.pagingMeeting(categoryNumber, lastId, userDetails.getId());
         return responseService.successResult(SuccessCode.INQUIRY_MEETING_SUCCESS, pagingMeetingDto);
     }
 

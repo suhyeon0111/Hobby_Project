@@ -4,6 +4,7 @@ import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.dto.MeetingDto;
+import com.hoppy.app.meeting.dto.PagingMeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
@@ -12,6 +13,7 @@ import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
+import com.hoppy.app.response.service.SuccessCode;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -47,10 +49,6 @@ public class MeetingServiceImpl implements MeetingService {
     public Meeting createMeeting(CreateMeetingDto dto, Long ownerId) throws BusinessException {
         if(checkTitleDuplicate(dto.getTitle())) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
-        }
-
-        if(Category.intToCategory(dto.getCategory()) == Category.ERROR) {
-            throw new BusinessException(ErrorCode.BAD_CATEGORY);
         }
         return meetingRepository.save(Meeting.of(dto, ownerId));
     }
@@ -111,18 +109,12 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public long getLastId(List<Meeting> meetingList) {
-        return meetingList.get(meetingList.size() - 1).getId() - 1;
+        return meetingList.get(meetingList.size() - 1).getId();
     }
 
     @Override
-    public long checkLastIdValid(long lastId) {
-        if(lastId == 0) {
-            return Long.MAX_VALUE;
-        }
-        else if(lastId < 0) {
-            throw new BusinessException(ErrorCode.NO_MORE_POST);
-        }
-        return lastId;
+    public long validCheckLastId(long lastId) {
+        return (lastId == 0 ? Long.MAX_VALUE : lastId);
     }
 
     @Override
@@ -143,6 +135,22 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingList.stream()
                 .map(M -> MeetingDto.meetingToMeetingDto(M, likedMap.containsKey(M.getId())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PagingMeetingDto pagingMeeting(int categoryNumber, long lastId, long memberId) {
+        lastId = validCheckLastId(lastId);
+        Category category = Category.intToCategory(categoryNumber);
+        List<Meeting> meetingList = pagingMeetingList(category, lastId);
+        if(meetingList.isEmpty()) {
+            throw new BusinessException(ErrorCode.NO_MORE_MEETING);
+        }
+
+        lastId = getLastId(meetingList);
+        String nextPagingUrl = createNextPagingUrl(categoryNumber, lastId);
+        List<MeetingDto> meetingDtoList = listToDtoList(meetingList, memberId);
+
+        return PagingMeetingDto.of(meetingDtoList, nextPagingUrl);
     }
 
     @Override
