@@ -39,6 +39,8 @@ public enum SuccessCode {
     // Story
     UPLOAD_STORY_SUCCESS("스토리 업로드 완료", 200),
     DELETE_STORY_SUCCESS("스토리 삭제 완료", 200),
+    INQUIRY_STORY_SUCCESS("스토리 조회 완료", 200),
+    
     ;
 
     private final String message;
