@@ -6,6 +6,7 @@ import com.hoppy.app.member.dto.MyProfileDto;
 import com.hoppy.app.member.dto.UpdateMemberDto;
 import com.hoppy.app.member.dto.UserProfileDto;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.member.service.MemberServiceImpl;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -36,7 +37,7 @@ public class MemberProfileController {
 
     private final ResponseService responseService;
     private final StoryManageService storyManageService;
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
 
     @GetMapping
     public ResponseEntity<ResponseDto> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
