@@ -34,7 +34,6 @@ import org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodPro
 @RequestMapping("/profile")
 public class MemberProfileController {
 
-    private final MemberRepository memberRepository;
     private final ResponseService responseService;
     private final StoryManageService storyManageService;
     private final MemberServiceImpl memberService;
@@ -42,46 +41,35 @@ public class MemberProfileController {
     @GetMapping
     public ResponseEntity<ResponseDto> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-
-        MyProfileDto myProfileDto = MyProfileDto.of(member.get());
+        Member member = memberService.findById(memberId);
+        MyProfileDto myProfileDto = MyProfileDto.of(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
     }
 
     @GetMapping("/story")
     private ResponseEntity<ResponseDto> showMyStories(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        List<StoryDetailDto> storyDetails = storyManageService.showMyStoriesInProfile(member.get());
+        Member member = memberService.findById(memberId);
+        List<StoryDetailDto> storyDetails = storyManageService.showMyStoriesInProfile(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, storyDetails);
     }
 
     @GetMapping("/member")
     public ResponseEntity<ResponseDto> showUserProfile(@RequestParam("id") String id) {
         Long memberId = Long.parseLong(id);
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isEmpty() || member.get().isDeleted()) {
+        Member member = memberService.findById(memberId);
+        if(member.isDeleted()) {
             throw new BusinessException(ErrorCode.DELETED_MEMBER);
         }
-        UserProfileDto userProfileDto = UserProfileDto.of(member.get());
+        UserProfileDto userProfileDto = UserProfileDto.of(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
     }
 
     @PutMapping
     public ResponseEntity<ResponseDto> updateUser(
             @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UpdateMemberDto memberDto) {
-        Optional<Member> optMember = memberRepository.findById(userDetails.getId());
-        if(optMember.isPresent()) {
-            Member member = memberService.updateById(userDetails.getId(), memberDto);
-            UpdateMemberDto updateMemberDto = UpdateMemberDto.of(member);
-            return responseService.successResult(SuccessCode.UPDATE_SUCCESS, updateMemberDto);
-        }
-        throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        Member member = memberService.updateById(userDetails.getId(), memberDto);
+        UpdateMemberDto updateMemberDto = UpdateMemberDto.of(member);
+        return responseService.successResult(SuccessCode.UPDATE_SUCCESS, updateMemberDto);
     }
 }
