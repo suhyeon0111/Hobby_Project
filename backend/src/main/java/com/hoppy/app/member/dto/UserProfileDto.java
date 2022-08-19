@@ -2,11 +2,7 @@ package com.hoppy.app.member.dto;
 
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.story.domain.story.Story;
-import com.hoppy.app.story.dto.StoryDetailDto;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
