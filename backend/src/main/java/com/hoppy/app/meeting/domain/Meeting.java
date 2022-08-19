@@ -93,7 +93,7 @@ public class Meeting {
     public static Meeting of(CreateMeetingDto dto, Long ownerId) {
         return Meeting.builder()
                 .ownerId(ownerId)
-                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
+                .url(dto.getFilename())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .memberLimit(dto.getMemberLimit())
