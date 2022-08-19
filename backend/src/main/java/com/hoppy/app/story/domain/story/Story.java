@@ -48,15 +48,12 @@ public class Story extends BaseTimeEntity {
     @Exclude
     private Member member;
 
-    private boolean deleted;
-
     public static Story of(UploadStoryDto dto, Member member) {
         return Story.builder()
                 .member(member)
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .filePath(dto.getFilename())
-                .deleted(false)
                 .build();
     }
 }
