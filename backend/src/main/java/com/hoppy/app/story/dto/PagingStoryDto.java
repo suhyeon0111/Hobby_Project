@@ -2,6 +2,7 @@ package com.hoppy.app.story.dto;
 
 import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,23 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagingStoryDto {
 
-    private Long id;
-    private String title;
-    private String content;
-    private String username;
-    private String filename;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private List<StoryDetailDto> storyList;
+    private String nextPagingUrl;
 
-    public static PagingStoryDto from(Story story) {
+    public static PagingStoryDto of(List<StoryDetailDto> storyList, String nextPagingUrl) {
         return PagingStoryDto.builder()
-                .id(story.getId())
-                .title(story.getTitle())
-                .content(story.getContent())
-                .username(story.getMember().getUsername())
-                .filename(story.getFilePath())
-                .createdDate(story.getCreatedDate())
-                .modifiedDate(story.getModifiedDate())
+                .storyList(storyList)
+                .nextPagingUrl(nextPagingUrl)
                 .build();
     }
 }
