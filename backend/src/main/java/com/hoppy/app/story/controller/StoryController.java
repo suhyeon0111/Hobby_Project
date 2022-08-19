@@ -7,10 +7,10 @@ import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
-import com.hoppy.app.story.dto.StoryDetailDto;
+import com.hoppy.app.story.dto.PagingStoryDto;
+import com.hoppy.app.story.dto.StoryDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
-import com.hoppy.app.story.service.StoryManageService;
-import java.util.Optional;
+import com.hoppy.app.story.service.StoryService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/story")
 public class StoryController {
 
-    private final StoryManageService storyManageService;
+    private final StoryService storyService;
 
     private final MemberService memberService;
 
@@ -38,23 +38,30 @@ public class StoryController {
     @PostMapping
     public ResponseEntity<ResponseDto> uploadStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto) {
         Member member = memberService.findById(userDetails.getId());
-        Story story = storyManageService.uploadStory(dto, member);
-        storyManageService.saveStory(story, member);
-        StoryDetailDto storyDetailDto = StoryDetailDto.of(story, member);
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDetailDto);
+        Story story = storyService.uploadStory(dto, member);
+        storyService.saveStory(story, member);
+        StoryDto storyDto = StoryDto.of(story, member);
+        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDto);
     }
 
     @PutMapping
     public ResponseEntity<ResponseDto> updateStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto, @RequestParam("id") String id) {
-        Story story = storyManageService.updateStory(dto, Long.parseLong(id));
+        Story story = storyService.updateStory(dto, Long.parseLong(id));
         Member member = memberService.findById(userDetails.getId());
-        StoryDetailDto storyDetailDto = StoryDetailDto.of(story, member);
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDetailDto);
+        StoryDto storyDto = StoryDto.of(story, member);
+        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDto);
     }
 
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteStory(@RequestParam("id") String id) {
-        storyManageService.deleteStory(Long.parseLong(id));
+        storyService.deleteStory(Long.parseLong(id));
         return responseService.successResult(SuccessCode.DELETE_STORY_SUCCESS);
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto> showStoryList(@AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(value = "lastId", defaultValue = "0") long lastId) {
+        PagingStoryDto pagingStory = storyService.pagingStory(lastId);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, pagingStory);
     }
 }
