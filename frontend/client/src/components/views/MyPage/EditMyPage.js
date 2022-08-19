@@ -87,7 +87,6 @@ function EditMyPage(props) {
         }
         else {
             //업로드를 취소하면
-            Intro()
             return
         }
 
@@ -334,7 +333,7 @@ function EditMyPage(props) {
                     https://velog.io/@kbing14/React-%ED%94%84%EB%A1%9C%ED%95%84-%EC%82%AC%EC%A7%84-%EC%97%85%EB%A1%9C%EB%8D%94-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
                     }
                     <Avatar
-                        src={ProfileUrl}
+                        src={EditProfileUrl?EditProfileUrl:ProfileUrl}
                         onChange={editProfileUrlHandler}
                         value={EditProfileUrl}
                         onClick={() => {fileInput.current.click()}}
