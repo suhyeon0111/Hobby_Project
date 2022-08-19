@@ -5,20 +5,15 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.MyProfileDto;
 import com.hoppy.app.member.dto.UpdateMemberDto;
 import com.hoppy.app.member.dto.UserProfileDto;
-import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberService;
-import com.hoppy.app.member.service.MemberServiceImpl;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
-import com.hoppy.app.story.domain.story.Story;
-import com.hoppy.app.story.dto.StoryDetailDto;
-import com.hoppy.app.story.repository.StoryRepository;
-import com.hoppy.app.story.service.StoryManageService;
+import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.service.StoryService;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +30,7 @@ import org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodPro
 public class MemberProfileController {
 
     private final ResponseService responseService;
-    private final StoryManageService storyManageService;
+    private final StoryService storyService;
     private final MemberService memberService;
 
     @GetMapping
@@ -51,7 +45,7 @@ public class MemberProfileController {
     private ResponseEntity<ResponseDto> showMyStories(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
         Member member = memberService.findById(memberId);
-        List<StoryDetailDto> storyDetails = storyManageService.showMyStoriesInProfile(member);
+        List<StoryDto> storyDetails = storyService.showMyStoriesInProfile(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, storyDetails);
     }
 
