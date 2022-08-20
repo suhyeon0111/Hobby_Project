@@ -34,15 +34,16 @@ jobs:
 #     - name: clean cache
 #       run: cd frontend/client && npm cache clean --force
 
-    - name: clean package-lock.json
-      run: cd frontend/client && rm -rf package-lock.json
-  
-    - name: npm ci
-      run: cd frontend/client && npm install
-    
-    - name: npm build
-      run: cd frontend/client && npm run build
-    
+#     - name: clean package-lock.json
+#       run: cd frontend/client && rm -rf package-lock.json
+
+    - name: build
+      working-directory: ./frontend/client
+      run: |
+        npm install -g yarn
+        yarn install --prefer-offline
+        yarn build
+        
     - name: npm test
       run: cd frontend/client && npm test
 
