@@ -41,6 +41,7 @@ jobs:
       working-directory: ./frontend/client
       run: |
         npm install -g yarn
+        rm -rf package-lock.json
         yarn install --prefer-offline
         yarn build
         
