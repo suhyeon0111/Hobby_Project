@@ -40,9 +40,8 @@ jobs:
     - name: build
       working-directory: ./frontend/client
       run: |
-        npm install -g yarn
-        yarn install --prefer-offline
-        yarn run build
+        npm install
+        npm run build
         
     - name: npm test
       run: cd frontend/client && npm test
