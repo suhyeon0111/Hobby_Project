@@ -31,14 +31,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
   
-    - name: clean cache
-      run: cd frontend/client && npm cache clean --force
+#     - name: clean cache
+#       run: cd frontend/client && npm cache clean --force
+
+    - name: clean package-lock.json
+      run: cd frontend/client && rm -rf package-lock.json
   
     - name: npm ci
       run: cd frontend/client && npm install
     
     - name: npm build
-      run: cd frontend/client && npm run build -prod
+      run: cd frontend/client && npm run build
     
     - name: npm test
       run: cd frontend/client && npm test
