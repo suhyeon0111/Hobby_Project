@@ -4,6 +4,7 @@ import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.UpdateMemberDto;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.member.service.MemberServiceImpl;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberDaoController {
 
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
     private final ResponseService responseService;
     @DeleteMapping("/member")
     public ResponseEntity<ResponseDto> deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
