@@ -5,19 +5,15 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.dto.MyProfileDto;
 import com.hoppy.app.member.dto.UpdateMemberDto;
 import com.hoppy.app.member.dto.UserProfileDto;
-import com.hoppy.app.member.repository.MemberRepository;
-import com.hoppy.app.member.service.MemberServiceImpl;
+import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
-import com.hoppy.app.story.domain.story.Story;
-import com.hoppy.app.story.dto.StoryDetailDto;
-import com.hoppy.app.story.repository.StoryRepository;
-import com.hoppy.app.story.service.StoryManageService;
+import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.service.StoryService;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,61 +23,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/profile")
 public class MemberProfileController {
 
-    private final MemberRepository memberRepository;
     private final ResponseService responseService;
-    private final StoryManageService storyManageService;
-    private final MemberServiceImpl memberService;
+    private final StoryService storyService;
+    private final MemberService memberService;
 
     @GetMapping
     public ResponseEntity<ResponseDto> showMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-
-        MyProfileDto myProfileDto = MyProfileDto.of(member.get());
+        Member member = memberService.findById(memberId);
+        MyProfileDto myProfileDto = MyProfileDto.of(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, myProfileDto);
     }
 
     @GetMapping("/story")
     private ResponseEntity<ResponseDto> showMyStories(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        List<StoryDetailDto> storyDetails = storyManageService.showMyStoriesInProfile(member.get());
+        Member member = memberService.findById(memberId);
+        List<StoryDto> storyDetails = storyService.showMyStoriesInProfile(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, storyDetails);
     }
 
     @GetMapping("/member")
     public ResponseEntity<ResponseDto> showUserProfile(@RequestParam("id") String id) {
         Long memberId = Long.parseLong(id);
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isEmpty() || member.get().isDeleted()) {
+        Member member = memberService.findById(memberId);
+        if(member.isDeleted()) {
             throw new BusinessException(ErrorCode.DELETED_MEMBER);
         }
-        UserProfileDto userProfileDto = UserProfileDto.of(member.get());
+        UserProfileDto userProfileDto = UserProfileDto.of(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, userProfileDto);
     }
 
     @PutMapping
     public ResponseEntity<ResponseDto> updateUser(
             @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UpdateMemberDto memberDto) {
-        Optional<Member> optMember = memberRepository.findById(userDetails.getId());
-        if(optMember.isPresent()) {
-            Member member = memberService.updateById(userDetails.getId(), memberDto);
-            UpdateMemberDto updateMemberDto = UpdateMemberDto.of(member);
-            return responseService.successResult(SuccessCode.UPDATE_SUCCESS, updateMemberDto);
-        }
-        throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        Member member = memberService.updateById(userDetails.getId(), memberDto);
+        UpdateMemberDto updateMemberDto = UpdateMemberDto.of(member);
+        return responseService.successResult(SuccessCode.UPDATE_SUCCESS, updateMemberDto);
     }
 }
