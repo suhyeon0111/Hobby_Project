@@ -14,12 +14,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoryRepository extends JpaRepository<Story, Long> {
 
+
     /**
-     * 프로필에서 보이는 스토리는 최신순 (storyId 내림차순)으로 3개만 표시
+     * 마이 프로필에서 보여지는 스토리
      */
-    // TODO: '더보기'등의 버튼 클릭으로 해당 사용자가 작성한 모든 스토리를 조회할 수 있도록 구현
     List<Story> findByMemberIdOrderByIdDesc(Long memberId);
-    
+
+    /**
+     * [취미 스토리]에서 보이는 모든 사용자들의 스토리, 최신순 (storyId 내림차순)으로 3개씩 페이지네이션
+     */
     @Query("select s from Story as s join fetch s.member where s.id < :lastId order by s.id desc")
     List<Story> findNextStoryOrderByIdDesc(@Param("lastId") Long lastId, Pageable pageable);
 }
