@@ -30,16 +30,9 @@ function HobbyStoryPage(props) {
     const onChange = (event) => {
         if (event.target.files[0]) {
             //업로딩이 되면
-            const targetFile = event
-                .target
-                .files[0];
-            const name = (event.target.files[0].name) + (
-                event.target.files[0].lastModified
-            )
-            const type = event
-                .target
-                .files[0]
-                .type
+            const targetFile = event.target.files[0];
+            const name = (event.target.files[0].name) + (event.target.files[0].lastModified)
+            const type = event.target.files[0].type
             const headers = {
                 Authorization: token
             }
@@ -60,12 +53,14 @@ function HobbyStoryPage(props) {
                         },
                         body: targetFile
                     });
+                    console.log('req', req)
                     return fetch(req);
                 })
                 .then(response => {
                     console.log('res>>>>>', response)
                     if (response.status === 200) {
                         const url = new URL(response.url)
+                        console.log(url.origin + url.pathname)
                         setFileName(url.origin + url.pathname)
                         alert("사진 업로드에 성공했습니다.")
                     } else {
@@ -73,6 +68,8 @@ function HobbyStoryPage(props) {
                     }
                 })
             setFile(event.target.files[0])
+        } else {
+            return
         }
         //프로필 사진 나타내기
         const reader = new FileReader();
@@ -85,14 +82,16 @@ function HobbyStoryPage(props) {
         reader.readAsDataURL(event.target.files[0])
     }
 
-    // console.log('Filename >>>', FileName)
+    console.log('Filename >>>', FileName)
 
     //글 올리기 버튼 event-handler
     const submitHandler = (event) => {
         event.preventDefault();
         if (!Title && !Content) {
             return alert("제목과 내용을 입력해주세요.")
-        } else if (Title && Content) {
+        }
+
+        if (Title && Content) {
             const body = {
                 title: Title,
                 content: Content,
@@ -102,10 +101,11 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/story", body, {
-                    headers, 
-                    withCredentials: false
-                })
+                .post(
+                    "https://hoppy.kro.kr/api/story",
+                    body,
+                    {headers, withCredentials: false}
+                )
                 .then(response => {
                     console.log('res>>>>', response)
                     if (response.data.status === 200) {
@@ -127,10 +127,11 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/story", body, {
-                    headers, 
-                    withCredentials: false
-                })
+                .post(
+                    "https://hoppy.kro.kr/api/story",
+                    body,
+                    {headers, withCredentials: false}
+                )
                 .then(response => {
                     console.log('res>>>>', response)
                     if (response.data.status === 200) {

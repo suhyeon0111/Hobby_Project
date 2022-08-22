@@ -8,7 +8,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "formik": "^1.5.8",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "^16.8.6",
     "react-app-polyfill": "^1.0.6",
     "react-device-detect": "^2.2.2",
@@ -23,7 +23,7 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "export PORT=8888 && react-scripts start",
+    "start": "set PORT=8888 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
