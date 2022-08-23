@@ -36,10 +36,11 @@ public class MemberReReplyLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "reReply_id")
     private ReReply reReply;
 
     public Long getMemberId() {

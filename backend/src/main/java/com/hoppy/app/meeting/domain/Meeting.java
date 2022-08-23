@@ -39,7 +39,7 @@ public class Meeting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // TODO: 단방향 OneToOne으로 교체하기
     private Long ownerId;
 
     @Column(nullable = false)

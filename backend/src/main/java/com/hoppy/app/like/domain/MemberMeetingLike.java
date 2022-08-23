@@ -27,10 +27,10 @@ public class MemberMeetingLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Meeting meeting;
 
     public Long getMemberId() {
