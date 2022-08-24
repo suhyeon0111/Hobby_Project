@@ -30,6 +30,7 @@ function LandingPage() {
   const hobbyImageStyle = {
     width: "62px",
     height: "62px",
+    display: "inline-block",
   };
 
   return (
