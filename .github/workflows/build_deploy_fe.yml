@@ -61,6 +61,6 @@ jobs:
     name: 프론트엔드 자동 배포
     runs-on: [ self-hosted, hoppy ]
     steps:
-      - name: Docker run
+      - name: 자동 배포
         run: |
           /home/ec2-user/deploy-fe.sh
