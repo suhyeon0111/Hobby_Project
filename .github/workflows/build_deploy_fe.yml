@@ -62,5 +62,6 @@ jobs:
     runs-on: [ self-hosted, hoppy ]
     steps:
       - name: 자동 배포
+        working-directory: /home/ec2-user
         run: |
-          /home/ec2-user/deploy-fe.sh
+          ./deploy-fe.sh
