@@ -50,7 +50,7 @@ jobs:
       
     - name: s3에 업로드
       working-directory: ./frontend/client
-      run: aws s3 cp build.zip s3://hoppyservice/static
+      run: aws s3 mv build.zip s3://hoppyservice/static/build.zip
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
