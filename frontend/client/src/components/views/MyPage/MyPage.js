@@ -19,7 +19,7 @@ function MyPage() {
         console.log('res>>>', response)
         setUserInfo(response.payload.data)
       })
-    }, [])
+    }, [dispatch, setUserInfo])
     
     const Intro = UserInfo.intro
     const ProfileUrl = UserInfo.profileUrl

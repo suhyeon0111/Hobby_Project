@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {useState, useEffect, useRef} from 'react'
 import {Avatar, Button, Input, Form} from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
@@ -17,7 +19,7 @@ function EditMyPage(props) {
         dispatch(getUser()).then(response => {
             setEditUser(response.payload.data)
         })
-    }, [])
+    }, [dispatch, setEditUser])
 
     const Intro = EditUser.intro
     const ProfileUrl = EditUser.profileUrl
