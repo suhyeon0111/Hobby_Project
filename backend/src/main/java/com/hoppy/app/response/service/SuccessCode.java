@@ -30,12 +30,17 @@ public enum SuccessCode {
     WITHDRAW_MEETING_SUCCESS("모임 탈퇴 완료", 200),
     INQUIRY_COMMUNITY_POSTS_SUCCESS("커뮤니티 게시물 조회 완료", 200),
 
+    // post
+    GET_POST_DETAIL_SUCCESS("게시물 조회 완료", 200),
+
     // member
     SHOW_PROFILE_SUCCESS("유저 프로필 조회 완료", 200),
 
     // Story
     UPLOAD_STORY_SUCCESS("스토리 업로드 완료", 200),
     DELETE_STORY_SUCCESS("스토리 삭제 완료", 200),
+    INQUIRY_STORY_SUCCESS("스토리 조회 완료", 200),
+    
     ;
 
     private final String message;

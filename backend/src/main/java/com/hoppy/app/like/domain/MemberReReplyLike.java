@@ -2,6 +2,7 @@ package com.hoppy.app.like.domain;
 
 import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
+import com.hoppy.app.member.domain.Member;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +30,17 @@ public class MemberReReplyLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long memberId;
-    private Long reReplyId;
+    @ManyToOne
+    private Member member;
+
+    @ManyToOne
+    private ReReply reReply;
+
+    public Long getMemberId() {
+        return member.getId();
+    }
+
+    public Long getReReplyId() {
+        return reReply.getId();
+    }
 }

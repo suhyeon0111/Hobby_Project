@@ -1,6 +1,7 @@
 package com.hoppy.app.meeting.domain;
 
 import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.member.domain.MemberMeeting;
@@ -63,26 +64,36 @@ public class Meeting {
     @Builder.Default
     private Boolean fullFlag = false;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meetingId")
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     @Builder.Default
     @Exclude
-    @BatchSize(size = 20)
     private Set<MemberMeeting> participants = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "meeting")
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     @Builder.Default
     @Exclude
-    Set<Post> posts = new HashSet<>();
+    private Set<MemberMeetingLike> likes = new HashSet<>();
+
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Builder.Default
+    @Exclude
+    private Set<Post> posts = new HashSet<>();
 
     public Boolean isFull() {
         return this.fullFlag;
     }
 
+    public void addParticipant(MemberMeeting participant) {
+        participants.add(participant);
+    }
+
     public static Meeting of(CreateMeetingDto dto, Long ownerId) {
         return Meeting.builder()
                 .ownerId(ownerId)
-                .url("https://hoppyservice.s3.ap-northeast-2.amazonaws.com/" + dto.getFilename())
+                .url(dto.getFilename())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .memberLimit(dto.getMemberLimit())

@@ -101,11 +101,10 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post(
-                    "https://hoppy.kro.kr/api/story",
-                    body,
-                    {headers, withCredentials: false}
-                )
+                .post("https://hoppy.kro.kr/api/story", body, {
+                    headers, 
+                    withCredentials: false
+                })
                 .then(response => {
                     console.log('res>>>>', response)
                     if (response.data.status === 200) {

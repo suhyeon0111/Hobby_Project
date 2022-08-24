@@ -1,9 +1,8 @@
 package com.hoppy.app.story.dto;
 
-import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.story.domain.BaseTimeEntity;
 import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,18 +18,19 @@ public class StoryDetailDto {
     private String title;
     private String content;
     private String username;
-    private Long memberId;
+    private String filename;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public static StoryDetailDto of(Story story, Member member) {
+    public static StoryDetailDto from(Story story) {
         return StoryDetailDto.builder()
                 .id(story.getId())
                 .title(story.getTitle())
                 .content(story.getContent())
-                .memberId(member.getId())
-                .username(member.getUsername())
+                .username(story.getMember().getUsername())
+                .filename(story.getFilePath())
                 .createdDate(story.getCreatedDate())
-                .modifiedDate(story.getModifiedDate()).build();
+                .modifiedDate(story.getModifiedDate())
+                .build();
     }
 }

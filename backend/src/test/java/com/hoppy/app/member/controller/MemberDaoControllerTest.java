@@ -1,7 +1,6 @@
 package com.hoppy.app.member.controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -11,7 +10,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
-import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
@@ -78,8 +76,8 @@ class MemberDaoControllerTest {
         Long id = Long.parseLong(authentication.getName());
         Optional<Member> optMember = memberRepository.findById(id);
         assertThat(optMember).isPresent();
-        ResultActions result = mvc.perform(MockMvcRequestBuilders.
-                        get("/delete")
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                        .delete("/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
                 )

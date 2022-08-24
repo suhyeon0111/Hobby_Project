@@ -26,14 +26,24 @@ public class MemberMeeting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long memberId;
+    @ManyToOne
+    private Member member;
 
-    private Long meetingId;
+    @ManyToOne
+    private Meeting meeting;
 
-    public static MemberMeeting of(Long memberId, Long meetingId) {
+    public Long getMemberId() {
+        return member.getId();
+    }
+
+    public Long getMeetingId() {
+        return meeting.getId();
+    }
+
+    public static MemberMeeting of(Member member, Meeting meeting) {
         return MemberMeeting.builder()
-                .memberId(memberId)
-                .meetingId(meetingId)
+                .member(member)
+                .meeting(meeting)
                 .build();
     }
 }

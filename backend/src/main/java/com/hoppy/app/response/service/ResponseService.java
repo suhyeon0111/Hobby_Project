@@ -5,6 +5,7 @@ import com.hoppy.app.response.dto.ResponseDto;
 import org.springframework.http.ResponseEntity;
 
 public interface ResponseService {
+    public ResponseEntity<ResponseDto> ok();
     public ResponseEntity<ResponseDto> successResult(SuccessCode code);
     public ResponseEntity<ResponseDto> successResult(SuccessCode code, Object body);
 }
