@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Button, Icon, Avatar } from 'antd'
 import React, { useState, useEffect } from 'react'
 import Axios from 'axios'
