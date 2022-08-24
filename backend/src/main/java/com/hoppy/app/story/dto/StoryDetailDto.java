@@ -20,6 +20,8 @@ public class StoryDetailDto {
 
     private Long id;
 
+    private String profileUrl;
+
     private String title;
 
     private String content;
@@ -41,6 +43,7 @@ public class StoryDetailDto {
     public static StoryDetailDto from(Story story) {
         return StoryDetailDto.builder()
                 .id(story.getId())
+                .profileUrl(story.getMember().getProfileImageUrl())
                 .title(story.getTitle())
                 .content(story.getContent())
                 .username(story.getMember().getUsername())
