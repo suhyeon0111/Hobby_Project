@@ -20,8 +20,6 @@ public class SaveStoryDto {
 
     private Long id;
 
-    private String profileUrl;
-
     private String title;
 
     private String content;
