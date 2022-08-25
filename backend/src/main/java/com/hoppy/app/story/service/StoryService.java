@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface StoryService {
 
+    public Story findByStoryId(Long storyId);
     public void saveStory(Story story, Member member);
 
     public Story uploadStory(UploadStoryDto dto, Member member);
@@ -22,4 +23,6 @@ public interface StoryService {
     public PagingStoryDto pagingStory(Long lastId);
 
     public void likeStory(Long memberId, Long storyId);
+
+    public void enterStoryReply(Long memberId, Long storyId);
 }

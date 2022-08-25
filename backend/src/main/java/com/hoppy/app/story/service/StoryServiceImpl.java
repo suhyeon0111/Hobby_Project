@@ -28,7 +28,7 @@ public class StoryServiceImpl implements StoryService {
     private final MemberStoryLikeRepository memberStoryLikeRepository;
 
     private final MemberService memberService;
-
+    @Override
     public Story findByStoryId(Long storyId) {
         Optional<Story> optStory = storyRepository.findById(storyId);
         if(optStory.isEmpty()) {
@@ -36,6 +36,7 @@ public class StoryServiceImpl implements StoryService {
         }
         return optStory.get();
     }
+
 
     @Override
     public void saveStory(Story story, Member member) {
@@ -126,5 +127,12 @@ public class StoryServiceImpl implements StoryService {
         Story story = findByStoryId(storyId);
         memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
     }
+
+    @Override
+    public void enterStoryReply(Long memberId, Long storyId) {
+        Story story = findByStoryId(storyId);
+
+    }
+
 
 }
