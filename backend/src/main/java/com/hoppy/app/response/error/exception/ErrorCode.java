@@ -45,6 +45,9 @@ public enum ErrorCode {
     NO_MORE_POST(403, "P002", "더 이상 조회할 게시물이 없습니다"),
     ALREADY_LIKED_POST(403, "P003", "좋아요 중복 요청"),
 
+    // Reply
+    REPLY_NOT_FOUND(403, "R001", "존재하지 않는 댓글입니다"),
+
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
     DELETED_MEMBER(403, "MM002", "탈퇴한 멤버입니다."),

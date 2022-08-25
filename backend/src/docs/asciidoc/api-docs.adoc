@@ -91,6 +91,19 @@ include::{snippets}/meeting-detail/http-request.adoc[]
 .response body
 include::{snippets}/meeting-detail/response-body.adoc[]
 
+=== 모임 좋아요 요청
+.request url
+----
+GET /api/meeting/like/{모임 고유 id}
+----
+.request header
+include::{snippets}/meeting-like-request/http-request.adoc[]
+.response header
+----
+NOTE: response body 없음
+----
+include::{snippets}/meeting-like-request/http-response.adoc[]
+
 === 모임 내 게시물 조회 (페이징)
 .request url
 ----
@@ -103,7 +116,7 @@ include::{snippets}/post-pagination/http-request.adoc[]
 include::{snippets}/post-pagination/response-body.adoc[]
 
 == 게시물 API
-=== 게시물 조회하기
+=== 게시물 상세 조회하기
 .request url
 ----
 GET /api/post/{postId}
@@ -121,7 +134,7 @@ GET /api/post/like/{postId}
 include::{snippets}/post-like-request/http-request.adoc[]
 .response header
 ----
-response body는 없습니다
+NOTE: response body 없음
 ----
 include::{snippets}/post-like-request/http-response.adoc[]
 == 유저 프로필 API
