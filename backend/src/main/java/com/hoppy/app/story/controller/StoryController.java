@@ -49,7 +49,7 @@ public class StoryController {
         Story story = storyService.updateStory(dto, Long.parseLong(id));
         Member member = memberService.findById(userDetails.getId());
         SaveStoryDto saveStoryDto = SaveStoryDto.of(story, member);
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, saveStoryDto);
+        return responseService.successResult(SuccessCode.UPDATE_STORY_SUCCESS, saveStoryDto);
     }
 
     @DeleteMapping
