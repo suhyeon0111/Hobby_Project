@@ -81,8 +81,8 @@ class StoryControllerTest {
             );
         }*/
 
-        Member member1 = Member.builder().id(8669L).username("최대한").build();
-        Member member2 = Member.builder().id(7601L).username("김태경").build();
+        Member member1 = Member.builder().id(8669L).username("최대한").profileImageUrl("korea88@naver.com").build();
+        Member member2 = Member.builder().id(7601L).username("김태경").profileImageUrl("seaworld@daum.net").build();
 
         memberRepository.save(member1);
         memberRepository.save(member2);

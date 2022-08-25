@@ -1,12 +1,15 @@
 package com.hoppy.app.story.service;
 
+import com.hoppy.app.like.domain.MemberStoryLike;
+import com.hoppy.app.like.repository.MemberStoryLikeRepository;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.StoryDetailDto;
-import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.dto.SaveStoryDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.util.List;
@@ -21,6 +24,19 @@ import org.springframework.stereotype.Service;
 public class StoryServiceImpl implements StoryService {
 
     private final StoryRepository storyRepository;
+
+    private final MemberStoryLikeRepository memberStoryLikeRepository;
+
+    private final MemberService memberService;
+    @Override
+    public Story findByStoryId(Long storyId) {
+        Optional<Story> optStory = storyRepository.findById(storyId);
+        if(optStory.isEmpty()) {
+            throw new BusinessException(ErrorCode.STORY_NOT_FOUND);
+        }
+        return optStory.get();
+    }
+
 
     @Override
     public void saveStory(Story story, Member member) {
@@ -57,9 +73,9 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<StoryDto> showMyStoriesInProfile(Member member) {
+    public List<SaveStoryDto> showMyStoriesInProfile(Member member) {
         List<Story> stories = storyRepository.findByMemberIdOrderByIdDesc(member.getId());
-        return stories.stream().map(story -> StoryDto.of(story, member)).collect(
+        return stories.stream().map(story -> SaveStoryDto.of(story, member)).collect(
                 Collectors.toList());
     }
 
@@ -97,5 +113,26 @@ public class StoryServiceImpl implements StoryService {
             return "end";
         }
     }
+
+    @Override
+    public void likeStory(Long memberId, Long storyId) {
+        Optional<MemberStoryLike> likeOptional = memberStoryLikeRepository.findByMemberIdAndStoryId(memberId, storyId);
+
+        // TODO: 이미 좋아요를 누른 상태라면 '좋아요 취소' 기능 구현 필요
+        // TODO: 단, 좋아요 광클 시 데이터 처리를 고려해야함
+        if (likeOptional.isPresent()) {
+            return;
+        }
+        Member member = memberService.findById(memberId);
+        Story story = findByStoryId(storyId);
+        memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
+    }
+
+    @Override
+    public void enterStoryReply(Long memberId, Long storyId) {
+        Story story = findByStoryId(storyId);
+
+    }
+
 
 }
