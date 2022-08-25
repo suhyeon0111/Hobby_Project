@@ -1,5 +1,7 @@
 package com.hoppy.app.meeting.service;
 
+import com.hoppy.app.like.domain.MemberMeetingLike;
+import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
@@ -34,6 +36,7 @@ public class MeetingServiceImpl implements MeetingService {
     private final MemberService memberService;
     private final MeetingRepository meetingRepository;
     private final MemberMeetingRepository memberMeetingRepository;
+    private final MemberMeetingLikeRepository memberMeetingLikeRepository;
 
     @Override
     @Transactional
@@ -154,7 +157,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Meeting getById(long id) {
+    public Meeting findById(long id) {
         Optional<Meeting> meeting = meetingRepository.findById(id);
         if(meeting.isEmpty()) {
             throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
@@ -163,7 +166,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Meeting getByIdWithParticipants(long id) {
+    public Meeting findByIdWithParticipants(long id) {
         Optional<Meeting> meeting = meetingRepository.findWithParticipantsById(id);
         if(meeting.isEmpty()) {
             throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
@@ -188,6 +191,17 @@ public class MeetingServiceImpl implements MeetingService {
                 .stream()
                 .map(M -> ParticipantDto.memberToParticipantDto(M, meeting.getOwnerId()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void likeMeeting(long memberId, long meetingId) {
+        Optional<MemberMeetingLike> opt = memberMeetingLikeRepository.findByMemberIdAndMeetingId(memberId, meetingId);
+        if(opt.isPresent()) return;
+
+        Member member = memberService.findById(memberId);
+        Meeting meeting = findById(meetingId);
+        memberMeetingLikeRepository.save(MemberMeetingLike.of(member, meeting));
     }
 
     @Override

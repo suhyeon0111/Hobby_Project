@@ -46,7 +46,7 @@ function MakeMeetingPage() {
                     }}>
                     <div style={hobbyBoxStyle}>
                         운동
-                        <img src={ExerciseImg} style={hobbyImageStyle}/>
+                        <img src={ExerciseImg} alt='exercise' style={hobbyImageStyle}/>
                     </div>
                 </a>
                 <a
@@ -57,7 +57,7 @@ function MakeMeetingPage() {
                     }}>
                     <div style={hobbyBoxStyle}>
                         공예
-                        <img src={ArtImg} style={hobbyImageStyle}/>
+                        <img src={ArtImg} alt='art' style={hobbyImageStyle}/>
                     </div>
                 </a>
                 <a
@@ -68,7 +68,7 @@ function MakeMeetingPage() {
                     }}>
                     <div style={hobbyBoxStyle}>
                         음악
-                        <img src={MusicImg} style={hobbyImageStyle}/>
+                        <img src={MusicImg} alt='music' style={hobbyImageStyle}/>
                     </div>
                 </a>
                 <a
@@ -79,7 +79,7 @@ function MakeMeetingPage() {
                     }}>
                     <div style={hobbyBoxStyle}>
                         일상
-                        <img src={DailyImg} style={hobbyImageStyle}/>
+                        <img src={DailyImg} alt='daily' style={hobbyImageStyle}/>
                     </div>
                 </a>
                 <a
@@ -90,7 +90,7 @@ function MakeMeetingPage() {
                     }}>
                     <div style={hobbyBoxStyle}>
                         음식
-                        <img src={FoodImg} style={hobbyImageStyle}/>
+                        <img src={FoodImg} alt='food' style={hobbyImageStyle}/>
                     </div>
                 </a>
                 <a
@@ -101,7 +101,7 @@ function MakeMeetingPage() {
                     }}>
                     <div style={hobbyBoxStyle}>
                         여행
-                        <img src={TripImg} style={hobbyImageStyle}/>
+                        <img src={TripImg} alt='trip' style={hobbyImageStyle}/>
                     </div>
                 </a>
             </div>

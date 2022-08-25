@@ -5,6 +5,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -303,12 +304,8 @@ class MeetingControllerTest {
                 );
             }
         }
-
-        var requestUrl = "/meeting/posts" + "?meetingId=" + meeting.getId();
-        System.out.println(requestUrl);
-
         mockMvc.perform(MockMvcRequestBuilders
-                        .get(requestUrl)
+                        .get("/meeting/posts" + "?meetingId=" + meeting.getId())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -317,5 +314,35 @@ class MeetingControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
+    }
+
+    @DisplayName("모임 좋아요 테스트")
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void meetingLikeTest() throws Exception {
+        Optional<Member> optionalMember = memberRepository.findById(1L);
+        assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
+        Member member = optionalMember.get();
+
+        Meeting meeting = meetingRepository.save(Meeting.builder()
+                .ownerId(member.getId())
+                .category(Category.ART)
+                .title("like-test-title")
+                .content("like-test-content")
+                .memberLimit(15)
+                .build()
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/meeting/like/" + meeting.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("meeting-like-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
     }
 }
