@@ -4,11 +4,15 @@ import com.hoppy.app.like.domain.MemberStoryLike;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberStoryLikeRepository extends JpaRepository<MemberStoryLike, Long> {
 
     @Query("select s from MemberStoryLike s where s.member.id = :memberId and s.story.id = :storyId")
-    Optional<MemberStoryLike> findByMemberIdAndStoryId(Long memberId, Long storyId);
+    Optional<MemberStoryLike> findByMemberIdAndStoryId(
+            @Param("memberId") Long memberId,
+            @Param("storyId") Long storyId
+    );
 }
