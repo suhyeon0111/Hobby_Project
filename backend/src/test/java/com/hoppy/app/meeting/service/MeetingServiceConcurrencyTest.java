@@ -14,6 +14,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  */
 @SpringBootTest
 @AutoConfigureMockMvc
+@Slf4j
 class MeetingServiceConcurrencyTest {
 
     @Autowired
@@ -41,8 +44,6 @@ class MeetingServiceConcurrencyTest {
 
     @Autowired
     MemberRepository memberRepository;
-
-    Logger log = (Logger) LoggerFactory.getLogger(MeetingServiceConcurrencyTest.class);
 
     @AfterEach
     void after() {
