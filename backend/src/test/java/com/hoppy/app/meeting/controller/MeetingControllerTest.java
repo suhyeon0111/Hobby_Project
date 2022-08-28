@@ -1,5 +1,6 @@
 package com.hoppy.app.meeting.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -48,9 +49,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-@AutoConfigureRestDocs
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
 @TestInstance(Lifecycle.PER_METHOD)
 @DisplayName("모임 컨트롤러 테스트")
 class MeetingControllerTest {
@@ -178,7 +179,7 @@ class MeetingControllerTest {
     void getMeetingDetailTest() throws Exception {
         //given
         List<Meeting> meetingList = meetingRepository.findAll();
-        Assertions.assertThat(meetingList.size()).isGreaterThan(0);
+        assertThat(meetingList.size()).isGreaterThan(0);
         Long testMeetingId = meetingList.get(0).getId();
 
         //when~then
@@ -304,6 +305,8 @@ class MeetingControllerTest {
                 );
             }
         }
+
+        // when
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/meeting/posts" + "?meetingId=" + meeting.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -320,6 +323,7 @@ class MeetingControllerTest {
     @Test
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void meetingLikeTest() throws Exception {
+        // given
         Optional<Member> optionalMember = memberRepository.findById(1L);
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
         Member member = optionalMember.get();
@@ -333,6 +337,7 @@ class MeetingControllerTest {
                 .build()
         );
 
+        // when
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/meeting/like/" + meeting.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -344,5 +349,46 @@ class MeetingControllerTest {
                         preprocessResponse(prettyPrint())
                 ))
                 .andDo(print());
+
+        // then
+        Optional<MemberMeetingLike> opt = memberMeetingLikeRepository.findByMemberIdAndMeetingId(member.getId(), meeting.getId());
+        assertThat(opt).isPresent();
+    }
+
+    @DisplayName("모임 좋아요 취소 테스트")
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void meetingDislikeTest() throws Exception {
+        // given
+        Optional<Member> optionalMember = memberRepository.findById(1L);
+        assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
+        Member member = optionalMember.get();
+
+        Meeting meeting = meetingRepository.save(Meeting.builder()
+                .ownerId(member.getId())
+                .category(Category.ART)
+                .title("like-test-title")
+                .content("like-test-content")
+                .memberLimit(15)
+                .build()
+        );
+        memberMeetingLikeRepository.save(MemberMeetingLike.of(member, meeting));
+
+        // when
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/meeting/dislike/" + meeting.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("meeting-dislike-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
+
+        // then
+        Optional<MemberMeetingLike> opt = memberMeetingLikeRepository.findByMemberIdAndMeetingId(member.getId(), meeting.getId());
+        assertThat(opt).isEmpty();
     }
 }

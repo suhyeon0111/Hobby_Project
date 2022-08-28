@@ -15,18 +15,17 @@ import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
-import com.hoppy.app.response.service.SuccessCode;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -202,6 +201,12 @@ public class MeetingServiceImpl implements MeetingService {
         Member member = memberService.findById(memberId);
         Meeting meeting = findById(meetingId);
         memberMeetingLikeRepository.save(MemberMeetingLike.of(member, meeting));
+    }
+
+    @Override
+    @Transactional
+    public void dislikeMeeting(long memberId, long meetingId) {
+        memberMeetingLikeRepository.deleteByMemberIdAndMeetingId(memberId, meetingId);
     }
 
     @Override

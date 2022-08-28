@@ -32,4 +32,5 @@ public interface MeetingService {
     public List<ParticipantDto> getParticipantDtoList(Meeting meeting);
 
     public void likeMeeting(long memberId, long meetingId);
+    public void dislikeMeeting(long memberId, long meetingId);
 }
