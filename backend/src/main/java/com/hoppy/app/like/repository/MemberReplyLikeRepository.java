@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,8 +21,17 @@ public interface MemberReplyLikeRepository extends JpaRepository<MemberReplyLike
 
     int countAllByReply(Reply reply);
 
-    @Query("select m from MemberReplyLike m where m.member.id = :memberId and m.reply.id = :replyId")
+    @Query("select m from MemberReplyLike m " +
+            "where m.member.id = :memberId and m.reply.id = :replyId")
     Optional<MemberReplyLike> findByMemberIdAndReplyId(
+            @Param("memberId") Long memberId,
+            @Param("replyId") Long replyId
+    );
+
+    @Modifying
+    @Query("delete from MemberReplyLike m " +
+            "where m.member.id = :memberId and m.reply.id = :replyId")
+    void deleteByMemberIdAndReplyId(
             @Param("memberId") Long memberId,
             @Param("replyId") Long replyId
     );

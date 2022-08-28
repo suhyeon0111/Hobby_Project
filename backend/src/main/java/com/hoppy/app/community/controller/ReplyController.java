@@ -7,10 +7,7 @@ import com.hoppy.app.response.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * packageName    : com.hoppy.app.community.controller
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2022-08-25        Kim       최초 생성
+ * 2022-08-28        Kim       댓글, 대댓글 좋아요 기능 추가
  */
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +35,33 @@ public class ReplyController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         replyService.likeReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @DeleteMapping("/dislike/{id}")
+    public ResponseEntity<ResponseDto> dislikeReply(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.dislikeReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @GetMapping("/re/like/{id}")
+    public ResponseEntity<ResponseDto> likeReReply(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.likeReReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @DeleteMapping("/re/dislike/{id}")
+    public ResponseEntity<ResponseDto> dislikeReReply(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.dislikeReReply(userDetails.getId(), id);
         return responseService.ok();
     }
 }
