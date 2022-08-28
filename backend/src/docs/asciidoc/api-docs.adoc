@@ -94,15 +94,28 @@ include::{snippets}/meeting-detail/response-body.adoc[]
 === 모임 좋아요 요청
 .request url
 ----
-GET /api/meeting/like/{모임 고유 id}
+GET /api/meeting/like/{meetingId}
 ----
 .request header
 include::{snippets}/meeting-like-request/http-request.adoc[]
 .response header
 ----
 NOTE: response body 없음
+HTTP/1.1 200 OK
 ----
-include::{snippets}/meeting-like-request/http-response.adoc[]
+
+=== 모임 좋아요 취소 요청
+.request url
+----
+DELETE /api/meeting/like/{meetingId}
+----
+.request header
+include::{snippets}/meeting-dislike-request/http-request.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
 
 === 모임 내 게시물 조회 (페이징)
 .request url
@@ -116,6 +129,7 @@ include::{snippets}/post-pagination/http-request.adoc[]
 include::{snippets}/post-pagination/response-body.adoc[]
 
 == 게시물 API
+
 === 게시물 상세 조회하기
 .request url
 ----
@@ -125,6 +139,7 @@ GET /api/post/{postId}
 include::{snippets}/post-detail/http-request.adoc[]
 .response body
 include::{snippets}/post-detail/response-body.adoc[]
+
 === 게시물 좋아요 요청
 .request url
 ----
@@ -135,8 +150,74 @@ include::{snippets}/post-like-request/http-request.adoc[]
 .response header
 ----
 NOTE: response body 없음
+HTTP/1.1 200 OK
 ----
-include::{snippets}/post-like-request/http-response.adoc[]
+=== 게시물 좋아요 취소 요청
+.request url
+----
+DELETE /api/post/like/{postId}
+----
+.request header
+include::{snippets}/post-dislike-request/http-request.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
+=== 댓글 좋아요 요청
+.request url
+----
+GET /api/reply/like/{replyId}
+----
+.request header
+include::{snippets}/reply-like-request/http-request.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
+=== 댓글 좋아요 취소 요청
+.request url
+----
+DELETE /api/reply/like/{replyId}
+----
+.request header
+include::{snippets}/reply-dislike-request/http-request.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
+=== 대댓글 좋아요 요청
+.request url
+----
+GET /api/reply/re/like/{reReplyId}
+----
+.request header
+include::{snippets}/reReply-like-request/http-request.adoc[]
+
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
+=== 대댓글 좋아요 취소 요청
+.request url
+----
+DELETE /api/reply/re/like/{reReplyId}
+----
+.request header
+include::{snippets}/reReply-dislike-request/http-request.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
 == 유저 프로필 API
 
 === 내 프로필 조회
