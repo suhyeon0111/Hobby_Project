@@ -5,6 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
+import com.hoppy.app.like.domain.MemberPostLike;
+import com.hoppy.app.like.domain.MemberReplyLike;
+import com.hoppy.app.like.repository.MemberPostLikeRepository;
+import com.hoppy.app.like.repository.MemberReReplyLikeRepository;
+import com.hoppy.app.like.repository.MemberReplyLikeRepository;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.repository.MeetingRepository;
@@ -13,6 +18,8 @@ import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +34,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @author 태경 2022-08-06
  */
 @DataJpaTest
+@Slf4j
 // 외부 DB 사용할 때 주석 해제
 //@AutoConfigureTestDatabase(replace = Replace.NONE)
 //@ActiveProfiles("test")
@@ -46,6 +54,9 @@ class PostRepositoryTest {
 
     @Autowired
     ReReplyRepository reReplyRepository;
+
+    @Autowired
+    MemberPostLikeRepository memberPostLikeRepository;
 
     @Autowired
     EntityManager em;
@@ -183,5 +194,64 @@ class PostRepositoryTest {
         // then
         assertThat(post.getReplies().size()).isEqualTo(REPLY_COUNT);
         post.getReplies().forEach(R -> assertThat(R.getReReplies().size()).isEqualTo(RE_REPLY_COUNT));
+    }
+
+    @DisplayName("게시물 좋아요 테스트")
+    @Test
+    void likeTest() {
+        // given
+        final long TEST_MEMBER_ID = 1L;
+        Member member = memberRepository.save(
+            Member.builder()
+                .id(TEST_MEMBER_ID)
+                .build()
+        );
+
+        Post post = postRepository.save(
+            Post.builder()
+                .title("title")
+                .content("content")
+                .build()
+        );
+        memberPostLikeRepository.save(MemberPostLike.of(member, post));
+        em.flush();
+        em.clear();
+
+        // when
+        Optional<MemberPostLike> opt = memberPostLikeRepository.findByMemberIdAndPostId(member.getId(), post.getId());
+
+        // then
+        assertThat(opt).isPresent();
+    }
+
+    @DisplayName("게시물 좋아요 취소 테스트")
+    @Test
+    void dislikeTest() {
+        // given
+        final long TEST_MEMBER_ID = 1L;
+        Member member = memberRepository.save(
+                Member.builder()
+                        .id(TEST_MEMBER_ID)
+                        .build()
+        );
+
+        Post post = postRepository.save(
+                Post.builder()
+                        .title("title")
+                        .content("content")
+                        .build()
+        );
+        memberPostLikeRepository.save(MemberPostLike.of(member, post));
+        em.flush();
+        em.clear();
+        memberPostLikeRepository.deleteByMemberIdAndPostId(member.getId(), post.getId());
+        em.flush();
+        em.clear();
+
+        // when
+        Optional<MemberPostLike> opt = memberPostLikeRepository.findByMemberIdAndPostId(member.getId(), post.getId());
+
+        // then
+        assertThat(opt).isEmpty();
     }
 }

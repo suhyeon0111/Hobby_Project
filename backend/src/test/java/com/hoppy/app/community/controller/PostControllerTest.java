@@ -1,5 +1,6 @@
 package com.hoppy.app.community.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -26,6 +27,7 @@ import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +45,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.util.Optional;
+
 /**
  * @author 태경 2022-08-14
  */
@@ -50,7 +54,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @TestInstance(Lifecycle.PER_METHOD)
-@DisplayName("Post 컨트롤러 테스트")
+@DisplayName("게시물 컨트롤러 테스트")
 class PostControllerTest {
 
     @Autowired
@@ -159,6 +163,7 @@ class PostControllerTest {
     }
 
     @Test
+    @DisplayName("게시물 좋아요 컨트롤러 테스트")
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void likePostTest() throws Exception {
         // given
@@ -187,5 +192,43 @@ class PostControllerTest {
                         preprocessResponse(prettyPrint())
                 ))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시물 좋아요 취소 컨트롤러 테스트")
+    @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
+    void dislikePostTest() throws Exception {
+        // given
+        Member member = memberRepository.save(
+                Member.builder()
+                        .id(TEST_MEMBER_ID)
+                        .username("test-name")
+                        .profileImageUrl("test-url")
+                        .build()
+        );
+        Post post = postRepository.save(
+                Post.builder()
+                        .title("test-title")
+                        .content("test-content")
+                        .build()
+        );
+        memberPostLikeRepository.save(MemberPostLike.of(member, post));
+
+        // when
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/post/dislike/" + post.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("post-dislike-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
+
+        // then
+        Optional<MemberPostLike> opt = memberPostLikeRepository.findByMemberIdAndPostId(member.getId(), post.getId());
+        assertThat(opt).isEmpty();
     }
 }

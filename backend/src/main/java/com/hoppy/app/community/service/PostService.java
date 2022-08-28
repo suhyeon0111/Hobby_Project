@@ -15,6 +15,8 @@ public interface PostService {
 
     public void likePost(long memberId, long postId);
 
+    public void dislikePost(long memberId, long postId);
+
     public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId);
 
     public long getLastId(List<PostDto> posts);
