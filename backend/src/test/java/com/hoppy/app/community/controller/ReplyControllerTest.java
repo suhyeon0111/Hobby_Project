@@ -13,7 +13,6 @@ import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -138,7 +136,7 @@ class ReplyControllerTest {
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/reply/dislike/" + reply.getId())
+                        .delete("/reply/like/" + reply.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -211,7 +209,7 @@ class ReplyControllerTest {
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/reply/re/dislike/" + reReply.getId())
+                        .delete("/reply/re/like/" + reReply.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )

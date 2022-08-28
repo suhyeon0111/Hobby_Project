@@ -38,7 +38,7 @@ public class ReplyController {
         return responseService.ok();
     }
 
-    @DeleteMapping("/dislike/{id}")
+    @DeleteMapping("/like/{id}")
     public ResponseEntity<ResponseDto> dislikeReply(
             @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -56,7 +56,7 @@ public class ReplyController {
         return responseService.ok();
     }
 
-    @DeleteMapping("/re/dislike/{id}")
+    @DeleteMapping("/re/like/{id}")
     public ResponseEntity<ResponseDto> dislikeReReply(
             @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails

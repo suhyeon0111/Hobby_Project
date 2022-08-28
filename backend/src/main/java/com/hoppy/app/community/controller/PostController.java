@@ -1,6 +1,5 @@
 package com.hoppy.app.community.controller;
 
-import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
@@ -41,7 +40,7 @@ public class PostController {
         return responseService.ok();
     }
 
-    @DeleteMapping("/dislike/{id}")
+    @DeleteMapping("/like/{id}")
     public ResponseEntity<ResponseDto> dislikePost(
             @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails

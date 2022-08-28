@@ -105,7 +105,7 @@ public class MeetingController {
         return responseService.ok();
     }
 
-    @DeleteMapping("/dislike/{id}")
+    @DeleteMapping("/like/{id}")
     public ResponseEntity<ResponseDto> dislikeMeeting(
             @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails

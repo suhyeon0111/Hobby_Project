@@ -32,7 +32,7 @@ import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -376,7 +376,7 @@ class MeetingControllerTest {
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/meeting/dislike/" + meeting.getId())
+                        .delete("/meeting/like/" + meeting.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
