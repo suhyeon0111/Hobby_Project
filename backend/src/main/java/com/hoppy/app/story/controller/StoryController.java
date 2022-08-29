@@ -9,6 +9,7 @@ import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
+import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.service.StoryService;
 import javax.validation.Valid;
@@ -67,6 +68,14 @@ public class StoryController {
     @GetMapping("/like")
     public ResponseEntity<ResponseDto> likeStory(@RequestParam(value = "id") Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyService.likeStory(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @PostMapping("/reply")
+    public ResponseEntity<ResponseDto> enterReply(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody StoryReplyRequestDto dto) {
+        storyService.enterStoryReply(userDetails.getId(), id, dto);
         return responseService.ok();
     }
 }
