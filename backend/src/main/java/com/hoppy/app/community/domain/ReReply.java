@@ -42,11 +42,11 @@ public class ReReply {
     @Column(nullable = false)
     private String content;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @Exclude
     private Member author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Exclude
     private Reply reply;
 

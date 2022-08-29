@@ -49,10 +49,11 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @Transactional
     public Meeting createMeeting(CreateMeetingDto dto, Long ownerId) throws BusinessException {
+        Member owner = memberService.findById(ownerId);
         if(checkTitleDuplicate(dto.getTitle())) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
         }
-        return meetingRepository.save(Meeting.of(dto, ownerId));
+        return meetingRepository.save(Meeting.of(dto, owner));
     }
 
     @Override
@@ -188,7 +189,7 @@ public class MeetingServiceImpl implements MeetingService {
     public List<ParticipantDto> getParticipantDtoList(Meeting meeting) {
         return getParticipantList(meeting)
                 .stream()
-                .map(M -> ParticipantDto.memberToParticipantDto(M, meeting.getOwnerId()))
+                .map(M -> ParticipantDto.memberToParticipantDto(M, meeting.getOwner().getId()))
                 .collect(Collectors.toList());
     }
 

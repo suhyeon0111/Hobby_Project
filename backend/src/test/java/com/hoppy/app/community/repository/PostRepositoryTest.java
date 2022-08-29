@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 
+import com.hoppy.app.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,10 +65,15 @@ class PostRepositoryTest {
     @DisplayName("커뮤니티 게시물 페이지네이션 테스트")
     @Test
     void pagingPostListTest() {
+        Member owner = memberRepository.save(
+                Member.builder()
+                        .id(1L)
+                        .build()
+        );
         // given
         Meeting meeting = meetingRepository.save(
                 Meeting.builder()
-                        .ownerId(1L)
+                        .owner(owner)
                         .title("0-title")
                         .content("0-content")
                         .category(Category.LIFE)
@@ -97,6 +103,7 @@ class PostRepositoryTest {
                 replyRepository.save(
                     Reply.builder()
                             .post(post)
+                            .author(member)
                             .content(j + "-content")
                             .build()
                 );
@@ -207,12 +214,7 @@ class PostRepositoryTest {
                 .build()
         );
 
-        Post post = postRepository.save(
-            Post.builder()
-                .title("title")
-                .content("content")
-                .build()
-        );
+        Post post = postRepository.save(Utility.testPost(member));
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
         em.flush();
         em.clear();
@@ -234,16 +236,8 @@ class PostRepositoryTest {
                         .id(TEST_MEMBER_ID)
                         .build()
         );
-
-        Post post = postRepository.save(
-                Post.builder()
-                        .title("title")
-                        .content("content")
-                        .build()
-        );
+        Post post = postRepository.save(Utility.testPost(member));
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
-        em.flush();
-        em.clear();
         memberPostLikeRepository.deleteByMemberIdAndPostId(member.getId(), post.getId());
         em.flush();
         em.clear();

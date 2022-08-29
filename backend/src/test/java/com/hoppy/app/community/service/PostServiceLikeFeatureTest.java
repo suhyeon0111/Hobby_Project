@@ -42,6 +42,7 @@ public class PostServiceLikeFeatureTest {
         );
         Post post = postRepository.save(Post.builder()
                 .title("test-title")
+                .author(member)
                 .content("test-content")
                 .build()
         );

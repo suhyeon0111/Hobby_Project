@@ -26,6 +26,7 @@ import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.utility.Utility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -82,8 +83,8 @@ class PostControllerTest {
         reReplyRepository.deleteAll();
         replyRepository.deleteAll();
         postRepository.deleteAll();
-        memberRepository.deleteAll();
         meetingRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test
@@ -99,7 +100,7 @@ class PostControllerTest {
         );
         Meeting meeting = meetingRepository.save(
                 Meeting.builder()
-                        .ownerId(TEST_MEMBER_ID)
+                        .owner(member)
                         .title("title")
                         .content("content")
                         .category(Category.LIFE)
@@ -168,12 +169,7 @@ class PostControllerTest {
                         .profileImageUrl("test-url")
                         .build()
         );
-        Post post = postRepository.save(
-                Post.builder()
-                        .title("test-title")
-                        .content("test-content")
-                        .build()
-        );
+        Post post = postRepository.save(Utility.testPost(member));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/post/like/" + post.getId())
@@ -200,12 +196,7 @@ class PostControllerTest {
                         .profileImageUrl("test-url")
                         .build()
         );
-        Post post = postRepository.save(
-                Post.builder()
-                        .title("test-title")
-                        .content("test-content")
-                        .build()
-        );
+        Post post = postRepository.save(Utility.testPost(member));
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
 
         // when
