@@ -105,6 +105,15 @@ public class MeetingController {
         return responseService.ok();
     }
 
+    @DeleteMapping("/like/{id}")
+    public ResponseEntity<ResponseDto> dislikeMeeting(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        meetingService.dislikeMeeting(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
     @GetMapping("/posts")
     public ResponseEntity<ResponseDto> getPostsWithPaging(
             @RequestParam(value = "meetingId", defaultValue = "0") long meetingId,

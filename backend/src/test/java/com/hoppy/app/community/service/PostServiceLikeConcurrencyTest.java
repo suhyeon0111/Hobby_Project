@@ -10,6 +10,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
+
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author 태경 2022-08-15
  */
 @SpringBootTest
+@Slf4j
 public class PostServiceLikeConcurrencyTest {
 
     @Autowired
@@ -40,8 +43,6 @@ public class PostServiceLikeConcurrencyTest {
 
     @Autowired
     EntityManager em;
-
-    Logger log = (Logger) LoggerFactory.getLogger(PostServiceLikeConcurrencyTest.class);
 
     @AfterEach
     void clean() {
