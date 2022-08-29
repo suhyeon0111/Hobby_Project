@@ -1,5 +1,6 @@
 package com.hoppy.app.community.controller;
 
+import com.hoppy.app.community.dto.CreatePostDto;
 import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
@@ -29,6 +30,15 @@ public class PostController {
     ) {
         PostDetailDto dto = postService.getPostDetailV2(id, userDetails.getId());
         return responseService.successResult(SuccessCode.GET_POST_DETAIL_SUCCESS, dto);
+    }
+
+    @PostMapping
+    public ResponseEntity<ResponseDto> createPost(
+            @RequestBody CreatePostDto createPostDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        postService.createPost(createPostDto, userDetails.getId());
+        return responseService.successResult(SuccessCode.CREATE_POST_SUCCESS);
     }
 
     @GetMapping("/like/{id}")

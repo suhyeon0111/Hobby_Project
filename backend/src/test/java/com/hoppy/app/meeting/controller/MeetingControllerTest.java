@@ -33,6 +33,7 @@ import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
 import java.util.Optional;
 
+import com.hoppy.app.utility.Utility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -80,19 +81,30 @@ class MeetingControllerTest {
     @Autowired
     private PostRepository postRepository;
 
+    @AfterEach
+    void after() {
+        memberMeetingLikeRepository.deleteAll();
+        memberPostLikeRepository.deleteAll();
+        memberMeetingRepository.deleteAll();
+        postRepository.deleteAll();
+        meetingRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
+
     @BeforeEach
     void before() {
         final long MEMBER_ID = 1L;
-        Member member = Member.builder()
+        Member member = memberRepository.save(
+                Member.builder()
                 .username("tae-kyoung")
                 .profileImageUrl("profile-url")
                 .id(MEMBER_ID)
-                .build();
-        member = memberRepository.save(member);
+                .build()
+        );
 
         for (int i = 0; i < 20; i++) {
             Meeting meeting = meetingRepository.save(Meeting.builder()
-                    .ownerId(member.getId())
+                    .owner(member)
                     .category(Category.ART)
                     .title((i + 1) + "-title")
                     .content((i + 1) + "-content")
@@ -114,16 +126,6 @@ class MeetingControllerTest {
                 );
             }
         }
-    }
-
-    @AfterEach
-    void after() {
-        memberMeetingLikeRepository.deleteAll();
-        memberPostLikeRepository.deleteAll();
-        memberMeetingRepository.deleteAll();
-        postRepository.deleteAll();
-        memberRepository.deleteAll();
-        meetingRepository.deleteAll();
     }
 
     @DisplayName("모임 생성 테스트")
@@ -201,14 +203,8 @@ class MeetingControllerTest {
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void meetingJoinTest() throws Exception {
         //given
-        Meeting meeting = Meeting.builder()
-                .ownerId(1L)
-                .category(Category.ART)
-                .title("title")
-                .content("content")
-                .memberLimit(15)
-                .build();
-        meeting = meetingRepository.save(meeting);
+        Member member = memberRepository.save(Utility.testMember(1L));
+        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(member));
 
         MeetingJoinDto meetingJoinDto = MeetingJoinDto.builder()
                 .meetingId(meeting.getId())
@@ -271,19 +267,8 @@ class MeetingControllerTest {
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
 
         Member author = optionalMember.get();
-        Meeting meeting = meetingRepository.save(Meeting.builder()
-                .ownerId(author.getId())
-                .category(Category.ART)
-                .title("post-paging-test-title")
-                .content("post-paging-test-content")
-                .memberLimit(15)
-                .build()
-        );
-        memberMeetingRepository.save(MemberMeeting.builder()
-                .meeting(meeting)
-                .member(author)
-                .build()
-        );
+        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(author));
+        memberMeetingRepository.save(MemberMeeting.of(author, meeting));
 
         final int POST_COUNT = 20;
         for(int i = 0; i < POST_COUNT; i++) {
@@ -326,16 +311,9 @@ class MeetingControllerTest {
         // given
         Optional<Member> optionalMember = memberRepository.findById(1L);
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
-        Member member = optionalMember.get();
 
-        Meeting meeting = meetingRepository.save(Meeting.builder()
-                .ownerId(member.getId())
-                .category(Category.ART)
-                .title("like-test-title")
-                .content("like-test-content")
-                .memberLimit(15)
-                .build()
-        );
+        Member member = optionalMember.get();
+        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(member));
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
@@ -362,16 +340,9 @@ class MeetingControllerTest {
         // given
         Optional<Member> optionalMember = memberRepository.findById(1L);
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
-        Member member = optionalMember.get();
 
-        Meeting meeting = meetingRepository.save(Meeting.builder()
-                .ownerId(member.getId())
-                .category(Category.ART)
-                .title("like-test-title")
-                .content("like-test-content")
-                .memberLimit(15)
-                .build()
-        );
+        Member member = optionalMember.get();
+        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(member));
         memberMeetingLikeRepository.save(MemberMeetingLike.of(member, meeting));
 
         // when

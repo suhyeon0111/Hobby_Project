@@ -4,19 +4,12 @@ import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
+import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,8 +32,9 @@ public class Meeting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) // TODO: 단방향 OneToOne으로 교체하기
-    private Long ownerId;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @Exclude
+    private Member owner;
 
     @Column(nullable = false)
     @Builder.Default
@@ -90,9 +84,9 @@ public class Meeting {
         participants.add(participant);
     }
 
-    public static Meeting of(CreateMeetingDto dto, Long ownerId) {
+    public static Meeting of(CreateMeetingDto dto, Member owner) {
         return Meeting.builder()
-                .ownerId(ownerId)
+                .owner(owner)
                 .url(dto.getFilename())
                 .title(dto.getTitle())
                 .content(dto.getContent())
