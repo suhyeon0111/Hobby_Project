@@ -38,13 +38,15 @@ public class StoryReply {
     @Column(nullable = false)
     private String content;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @Exclude
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Exclude
     private Story story;
+
+    private String createDate;
 
     @OneToMany(mappedBy = "reply", fetch = FetchType.LAZY)
     @BatchSize(size = 100)
