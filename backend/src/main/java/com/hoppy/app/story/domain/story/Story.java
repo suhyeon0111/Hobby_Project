@@ -9,6 +9,7 @@ import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.domain.BaseTimeEntity;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -55,7 +56,7 @@ public class Story extends BaseTimeEntity {
     @Exclude
     private Member member;
 
-    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @BatchSize(size = 100)
     @Default
     @Exclude
