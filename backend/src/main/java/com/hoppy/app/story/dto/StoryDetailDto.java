@@ -3,6 +3,7 @@ package com.hoppy.app.story.dto;
 import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +50,7 @@ public class StoryDetailDto {
                 .username(story.getMember().getUsername())
                 .filename(story.getFilePath())
                 .createdDate(story.getCreatedDate())
+                .replies(story.getReplies().stream().map(StoryReplyDto::of).collect(Collectors.toList()))
                 .build();
     }
 }
