@@ -10,9 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
+import com.hoppy.app.community.dto.CreatePostDto;
 import com.hoppy.app.community.repository.PostRepository;
 import com.hoppy.app.community.repository.ReReplyRepository;
 import com.hoppy.app.community.repository.ReplyRepository;
@@ -37,6 +39,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -53,7 +56,10 @@ import java.util.Optional;
 class PostControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Autowired
     MemberRepository memberRepository;
@@ -87,6 +93,7 @@ class PostControllerTest {
         memberRepository.deleteAll();
     }
 
+    @DisplayName("게시물 상세 조회 테스트")
     @Test
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void getPostDetail() throws Exception {
@@ -157,18 +164,42 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("게시물 작성 테스트")
     @Test
+    @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
+    void createPostTest() throws Exception {
+        // given
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Meeting meeting = meetingRepository.save(Utility.testArtMeeting(member));
+        CreatePostDto createPostDto = CreatePostDto.builder()
+                .meetingId(meeting.getId())
+                .title("test-title")
+                .content("test-content")
+                .build();
+
+        String content = objectMapper.writeValueAsString(createPostDto);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/post")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("message", is("게시물 생성 완료")))
+                .andDo(document("create-post",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
     @DisplayName("게시물 좋아요 컨트롤러 테스트")
+    @Test
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void likePostTest() throws Exception {
         // given
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .username("test-name")
-                        .profileImageUrl("test-url")
-                        .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
         Post post = postRepository.save(Utility.testPost(member));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -184,18 +215,12 @@ class PostControllerTest {
                 .andDo(print());
     }
 
-    @Test
     @DisplayName("게시물 좋아요 취소 컨트롤러 테스트")
+    @Test
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void dislikePostTest() throws Exception {
         // given
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .username("test-name")
-                        .profileImageUrl("test-url")
-                        .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
         Post post = postRepository.save(Utility.testPost(member));
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
 
