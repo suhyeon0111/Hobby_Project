@@ -65,6 +65,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
+    public void dislikePost(long memberId, long postId) {
+        memberPostLikeRepository.deleteByMemberIdAndPostId(memberId, postId);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId) {
 

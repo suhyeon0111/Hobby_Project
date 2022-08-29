@@ -6,6 +6,7 @@ import com.hoppy.app.member.domain.Member;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,8 +17,17 @@ public interface MemberPostLikeRepository extends JpaRepository<MemberPostLike, 
 
     Optional<MemberPostLike> findByMemberAndPost(Member member, Post post);
 
-    @Query("select m from MemberPostLike m where m.member.id = :memberId and m.post.id = :postId")
+    @Query("select m from MemberPostLike m " +
+            "where m.member.id = :memberId and m.post.id = :postId")
     Optional<MemberPostLike> findByMemberIdAndPostId(
+            @Param("memberId") Long memberId,
+            @Param("postId") Long postId
+    );
+
+    @Modifying
+    @Query("delete from MemberPostLike m " +
+            "where m.member.id = :memberId and m.post.id = :postId")
+    void deleteByMemberIdAndPostId(
             @Param("memberId") Long memberId,
             @Param("postId") Long postId
     );
