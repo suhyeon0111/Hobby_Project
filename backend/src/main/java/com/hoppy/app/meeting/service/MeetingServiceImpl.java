@@ -77,6 +77,10 @@ public class MeetingServiceImpl implements MeetingService {
         Meeting meeting = optionalMeeting.get();
         Member member = memberService.findById(memberId);
 
+        if(meeting.getOwner().getId() == member.getId()) {
+            throw new BusinessException(ErrorCode.OWNER_WITHDRAW_ERROR);
+        }
+
         Set<MemberMeeting> participants = meeting.getParticipants();
         boolean joined = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(!joined) {

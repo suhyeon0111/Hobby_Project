@@ -230,11 +230,13 @@ class MeetingControllerTest {
 
     @DisplayName("모임 탈퇴 테스트")
     @Test
-    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    @WithMockCustomUser(id = "99", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void meetingWithdrawTest() throws Exception {
         //given
         List<Meeting> meetingList = meetingRepository.findAll();
         Meeting meeting = meetingList.get(0);
+        Member member = memberRepository.save(Utility.testMember(99L));
+        memberMeetingRepository.save(MemberMeeting.of(member, meeting));
 
         MeetingWithdrawalDto meetingWithdrawalDto = MeetingWithdrawalDto.builder()
                 .meetingId(meeting.getId())
