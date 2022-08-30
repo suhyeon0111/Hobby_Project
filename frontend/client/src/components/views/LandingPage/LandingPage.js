@@ -107,7 +107,7 @@ function LandingPage() {
           style={{ textDecoration: "none", color: "#000" }}
         >
           <div style={hobbyBoxStyle}>
-            <div>음악</div>
+            <div>음식</div>
             <img src={FoodImg} alt="음식" style={hobbyImageStyle} />
           </div>
         </a>
