@@ -1,38 +1,55 @@
 package com.hoppy.app.story.dto;
 
-import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+
+/**
+ * 페이지네이션 시 간단하게 보여줄 총 좋아요/댓글 수를 포함한 스토리 Dto
+ */
+
 public class StoryDto {
 
     private Long id;
-    private String title;
-    private String content;
-    private String username;
-    private Long memberId;
-    private String filename;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
 
-    public static StoryDto of(Story story, Member member) {
+    private String profileUrl;
+
+    private String username;
+
+    private String title;
+
+    private String content;
+
+    private boolean liked;
+
+    private int likeCount;
+
+    private int replyCount;
+
+    private LocalDateTime createdDate;
+
+    public static StoryDto of(Story story) {
         return StoryDto.builder()
                 .id(story.getId())
+                .profileUrl(story.getMember().getProfileImageUrl())
+                .username(story.getMember().getUsername())
                 .title(story.getTitle())
                 .content(story.getContent())
-                .memberId(member.getId())
-                .filename(story.getFilePath())
-                .username(member.getUsername())
+                .likeCount(story.getLikes().size())
+                .replyCount(story.getReplies().size())
                 .createdDate(story.getCreatedDate())
-                .modifiedDate(story.getModifiedDate())
                 .build();
     }
 }

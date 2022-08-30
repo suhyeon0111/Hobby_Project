@@ -5,6 +5,9 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoppy.app.like.domain.MemberStoryLike;
+import com.hoppy.app.like.repository.MemberStoryLikeRepository;
+import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberService;
@@ -15,7 +18,9 @@ import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +33,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,6 +45,11 @@ class StoryServiceImplTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    MemberService memberService;
+    
+    @Autowired
+    MemberStoryLikeRepository memberStoryLikeRepository;
 
     @Autowired
     StoryRepository storyRepository;
@@ -50,39 +63,24 @@ class StoryServiceImplTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @BeforeEach
-    void setup() {
-
-        Member member1 = Member.builder().id(8669L).username("최대한").build();
-        Member member2 = Member.builder().id(7601L).username("김태경").build();
-
-        memberRepository.save(member1);
-        memberRepository.save(member2);
-
-        for(int i = 1; i <= 20; i++) {
-            Member member = null;
-            if(i % 2 == 0) {
-                member = member1;
-            } else if(i % 2 != 0) {
-                member = member2;
-            }
-            storyRepository.save(
-                    Story.builder()
-                            .member(member)
-                            .title(i+"th Story")
-                            .content("This is " + i + "th Story")
-                            .filePath(i+".jpg")
-                            .member(member).build()
-            );
-        }
-    }
-
-    @DisplayName("스토리 서비스 페이징 정상 동작 테스트")
+    @DisplayName("스토리 좋아요 기능 테스트")
     @Test
-    void pagingStory() {
-        PagingStoryDto storyDetailDtoList = storyService.pagingStory(Long.MAX_VALUE);
-        assertThat(storyDetailDtoList.getStoryList().size()).isEqualTo(3);
+    @Transactional
+    void storyLikeTest() {
+        Member member = memberRepository.save(Member.builder()
+                .id(8669L)
+                .build()
+        );
+        Story story = storyRepository.save(Story.builder()
+                .title("Story Like Test")
+                .content("This is Test")
+                .member(member)
+                .build()
+        );
+        
+        memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
     }
+
 
     
 /*  

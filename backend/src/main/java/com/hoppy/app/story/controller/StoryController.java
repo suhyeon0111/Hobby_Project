@@ -8,7 +8,10 @@ import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
+import com.hoppy.app.story.dto.SaveStoryDto;
+import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.service.StoryService;
 import javax.validation.Valid;
@@ -40,16 +43,16 @@ public class StoryController {
         Member member = memberService.findById(userDetails.getId());
         Story story = storyService.uploadStory(dto, member);
         storyService.saveStory(story, member);
-        StoryDto storyDto = StoryDto.of(story, member);
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDto);
+        SaveStoryDto saveStoryDto = SaveStoryDto.of(story, member);
+        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, saveStoryDto);
     }
 
     @PutMapping
     public ResponseEntity<ResponseDto> updateStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto, @RequestParam("id") String id) {
         Story story = storyService.updateStory(dto, Long.parseLong(id));
         Member member = memberService.findById(userDetails.getId());
-        StoryDto storyDto = StoryDto.of(story, member);
-        return responseService.successResult(SuccessCode.UPLOAD_STORY_SUCCESS, storyDto);
+        SaveStoryDto saveStoryDto = SaveStoryDto.of(story, member);
+        return responseService.successResult(SuccessCode.UPDATE_STORY_SUCCESS, saveStoryDto);
     }
 
     @DeleteMapping
@@ -59,8 +62,43 @@ public class StoryController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDto> showStoryList(@RequestParam(value = "lastId", defaultValue = "0") long lastId) {
+    public ResponseEntity<ResponseDto> showStoryList(@RequestParam(value = "lastId", defaultValue = "0") Long lastId) {
         PagingStoryDto pagingStory = storyService.pagingStory(lastId);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, pagingStory);
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<ResponseDto> likeStory(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyService.likeStory(userDetails.getId(), id);
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
+    }
+
+    @DeleteMapping("/like")
+    public ResponseEntity<ResponseDto> dislikeStory(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyService.dislikeStory(userDetails.getId(), id);
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
+    }
+
+    @PostMapping("/reply")
+    public ResponseEntity<ResponseDto> uploadReply(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody StoryReplyRequestDto dto) {
+        storyService.uploadStoryReply(userDetails.getId(), id, dto);
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
+    }
+
+    @DeleteMapping("/reply")
+    public ResponseEntity<ResponseDto> deleteReply(
+            @RequestParam(value = "storyId") Long storyId,
+            @RequestParam(value = "replyId") Long replyId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyService.deleteStoryReply(storyId, replyId);
+        Story story = storyService.findByStoryId(storyId);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
     }
 }

@@ -350,3 +350,37 @@ GET /api/story?lastId={lastId}
 ----
 .response body
 include::{snippets}/story-pagination/response-body.adoc[]
+
+=== 스토리 좋아요 요청
+.request url
+----
+GET /api/story/like?id={storyId}
+----
+.response body
+include::{snippets}/story-like-request/response-body.adoc[]
+
+=== 스토리 좋아요 취소 요청
+.request url
+----
+DELETE /api/story/like?id={storyId}
+----
+.response body
+include::{snippets}/story-dislike-request/response-body.adoc[]
+
+=== 스토리 댓글 업로드
+.request url
+----
+POST /api/story/reply?id={storyId}
+----
+.request body
+include::{snippets}/story-reply-request/request-body.adoc[]
+.response body
+include::{snippets}/story-reply-request/response-body.adoc[]
+
+=== 스토리 댓글 삭제
+.request url
+----
+DELETE /api/story/reply?storyId={storyId}&replyId={replyId}
+----
+.response body
+include::{snippets}/story-reply-delete-request/response-body.adoc[]
