@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Button, Icon, Avatar } from 'antd'
 import React, { useState, useEffect } from 'react'
 import Axios from 'axios'
@@ -20,7 +22,7 @@ function HobbyStoryPage() {
         })
         .then(response => {
             if(response.data.status === 200 && response.data !== undefined) {
-                // console.log('response.data.data', response.data.data.nextPagingUrl)
+                console.log('response.data.data', response.data.data.nextPagingUrl)
                 setStoryList(response.data.data.storyList)
                 setPagination(response.data.data.nextPagingUrl)
             } else {
@@ -56,6 +58,12 @@ function HobbyStoryPage() {
             }
         }
 
+        //무한 스크롤
+        //https://piaflu.tistory.com/125
+        //lastId : https://hianna.tistory.com/465
+
+        console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
+
         return <div
         style={{
             width: '90%',
@@ -63,13 +71,13 @@ function HobbyStoryPage() {
         }}
         key={index}>
         <div>
-            {/* <Avatar
+            <Avatar
                 size={27}
-                src={}
+                src={story.profileUrl}
                 style={{
                     float: 'left',
                     marginRight: '8px'
-                }}/> */}
+                }}/>
             <p
                 style={{
                     float: 'left',
@@ -107,8 +115,8 @@ function HobbyStoryPage() {
                 width: '100%',
                 justifyContent: 'flex-end',
                 alignItems: 'stretch',
-                gap: '10px',
-                padding: '0px 10px 0px 0px',
+                gap: '5px',
+                padding: '0px 5px 0px 0px',
             }}>
             <Icon
                 type='heart'
