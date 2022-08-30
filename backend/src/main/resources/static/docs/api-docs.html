@@ -465,18 +465,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_모임_좋아요_요청">모임 좋아요 요청</a></li>
 <li><a href="#_모임_좋아요_취소_요청">모임 좋아요 취소 요청</a></li>
 <li><a href="#_모임_내_게시물_조회_페이징">모임 내 게시물 조회 (페이징)</a></li>
-</ul>
-</li>
 <li><a href="#_게시물_api">게시물 API</a>
-<ul class="sectlevel2">
+<ul class="sectlevel3">
 <li><a href="#_게시물_작성하기">게시물 작성하기</a></li>
 <li><a href="#_게시물_상세_조회하기">게시물 상세 조회하기</a></li>
 <li><a href="#_게시물_좋아요_요청">게시물 좋아요 요청</a></li>
 <li><a href="#_게시물_좋아요_취소_요청">게시물 좋아요 취소 요청</a></li>
+</ul>
+</li>
+<li><a href="#_댓글">댓글</a>
+<ul class="sectlevel3">
+<li><a href="#_댓글_작성하기">댓글 작성하기</a></li>
 <li><a href="#_댓글_좋아요_요청">댓글 좋아요 요청</a></li>
 <li><a href="#_댓글_좋아요_취소_요청">댓글 좋아요 취소 요청</a></li>
+</ul>
+</li>
+<li><a href="#_대댓글">대댓글</a>
+<ul class="sectlevel3">
+<li><a href="#_대댓글_작성하기">대댓글 작성하기</a></li>
 <li><a href="#_대댓글_좋아요_요청">대댓글 좋아요 요청</a></li>
 <li><a href="#_대댓글_좋아요_취소_요청">대댓글 좋아요 취소 요청</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_유저_프로필_api">유저 프로필 API</a>
@@ -554,7 +564,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
   "status" : 200,
   "message" : "URL 발급 완료",
   "data" : {
-    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220829T163825Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220829%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=3a2fa5977f05ed9413986699333c9584336be6afbd03f4c91da6aa148837f083"
+    "url" : "https://hoppyservice.s3.ap-northeast-2.amazonaws.com/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20220830T175516Z&amp;X-Amz-SignedHeaders=content-type%3Bhost&amp;X-Amz-Expires=300&amp;X-Amz-Credential=accessKey%2F20220830%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Signature=1da4752c219e0b8205f67779c8a8d513a25faad3c11a50cc8e4bed19acf81b41"
   }
 }</code></pre>
 </div>
@@ -913,7 +923,7 @@ Host: localhost:8080</code></pre>
   "message" : "커뮤니티 게시물 조회 완료",
   "data" : {
     "postList" : [ {
-      "id" : 36,
+      "id" : 38,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "20-title",
@@ -922,7 +932,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 35,
+      "id" : 37,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "19-title",
@@ -931,7 +941,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 34,
+      "id" : 36,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "18-title",
@@ -940,7 +950,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 33,
+      "id" : 35,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "17-title",
@@ -949,7 +959,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 32,
+      "id" : 34,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "16-title",
@@ -958,7 +968,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 31,
+      "id" : 33,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "15-title",
@@ -967,7 +977,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     }, {
-      "id" : 30,
+      "id" : 32,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "14-title",
@@ -976,7 +986,7 @@ Host: localhost:8080</code></pre>
       "likeCount" : 0,
       "replyCount" : 0
     }, {
-      "id" : 29,
+      "id" : 31,
       "ownerProfileUrl" : "profile-url",
       "ownerName" : "tae-kyoung",
       "title" : "13-title",
@@ -985,19 +995,16 @@ Host: localhost:8080</code></pre>
       "likeCount" : 1,
       "replyCount" : 0
     } ],
-    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting/posts?meetingId=45&amp;lastId=28"
+    "nextPagingUrl" : "https://hoppy.kro.kr/api/meeting/posts?meetingId=45&amp;lastId=30"
   }
 }</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_게시물_api"><a class="link" href="#_게시물_api">게시물 API</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_게시물_작성하기"><a class="link" href="#_게시물_작성하기">게시물 작성하기</a></h3>
+<h3 id="_게시물_api"><a class="link" href="#_게시물_api">게시물 API</a></h3>
+<div class="sect3">
+<h4 id="_게시물_작성하기"><a class="link" href="#_게시물_작성하기">게시물 작성하기</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1005,7 +1012,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">request header</div>
+<div class="title">request body</div>
 <div class="content">
 <pre class="highlight nowrap"><code>{
   "meetingId" : 2,
@@ -1026,8 +1033,8 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_게시물_상세_조회하기"><a class="link" href="#_게시물_상세_조회하기">게시물 상세 조회하기</a></h3>
+<div class="sect3">
+<h4 id="_게시물_상세_조회하기"><a class="link" href="#_게시물_상세_조회하기">게시물 상세 조회하기</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1059,28 +1066,6 @@ Host: localhost:8080</code></pre>
     "likeCount" : 1,
     "replyCount" : 6,
     "replies" : [ {
-      "id" : 2,
-      "authorProfileUrl" : "testProfileUrl",
-      "authorName" : "testName",
-      "content" : "1-content",
-      "liked" : false,
-      "likeCount" : 0,
-      "replies" : [ {
-        "id" : 4,
-        "authorProfileUrl" : "testProfileUrl",
-        "authorName" : "testName",
-        "content" : "1-content",
-        "liked" : false,
-        "likeCount" : 0
-      }, {
-        "id" : 3,
-        "authorProfileUrl" : "testProfileUrl",
-        "authorName" : "testName",
-        "content" : "0-content",
-        "liked" : false,
-        "likeCount" : 0
-      } ]
-    }, {
       "id" : 1,
       "authorProfileUrl" : "testProfileUrl",
       "authorName" : "testName",
@@ -1088,17 +1073,39 @@ Host: localhost:8080</code></pre>
       "liked" : false,
       "likeCount" : 0,
       "replies" : [ {
+        "id" : 1,
+        "authorProfileUrl" : "testProfileUrl",
+        "authorName" : "testName",
+        "content" : "0-content",
+        "liked" : false,
+        "likeCount" : 0
+      }, {
         "id" : 2,
         "authorProfileUrl" : "testProfileUrl",
         "authorName" : "testName",
         "content" : "1-content",
         "liked" : false,
         "likeCount" : 0
-      }, {
-        "id" : 1,
+      } ]
+    }, {
+      "id" : 2,
+      "authorProfileUrl" : "testProfileUrl",
+      "authorName" : "testName",
+      "content" : "1-content",
+      "liked" : false,
+      "likeCount" : 0,
+      "replies" : [ {
+        "id" : 3,
         "authorProfileUrl" : "testProfileUrl",
         "authorName" : "testName",
         "content" : "0-content",
+        "liked" : false,
+        "likeCount" : 0
+      }, {
+        "id" : 4,
+        "authorProfileUrl" : "testProfileUrl",
+        "authorName" : "testName",
+        "content" : "1-content",
         "liked" : false,
         "likeCount" : 0
       } ]
@@ -1108,8 +1115,8 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_게시물_좋아요_요청"><a class="link" href="#_게시물_좋아요_요청">게시물 좋아요 요청</a></h3>
+<div class="sect3">
+<h4 id="_게시물_좋아요_요청"><a class="link" href="#_게시물_좋아요_요청">게시물 좋아요 요청</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1133,8 +1140,8 @@ HTTP/1.1 200 OK</pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_게시물_좋아요_취소_요청"><a class="link" href="#_게시물_좋아요_취소_요청">게시물 좋아요 취소 요청</a></h3>
+<div class="sect3">
+<h4 id="_게시물_좋아요_취소_요청"><a class="link" href="#_게시물_좋아요_취소_요청">게시물 좋아요 취소 요청</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1158,8 +1165,36 @@ HTTP/1.1 200 OK</pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="_댓글_좋아요_요청"><a class="link" href="#_댓글_좋아요_요청">댓글 좋아요 요청</a></h3>
+<h3 id="_댓글"><a class="link" href="#_댓글">댓글</a></h3>
+<div class="sect3">
+<h4 id="_댓글_작성하기"><a class="link" href="#_댓글_작성하기">댓글 작성하기</a></h4>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/reply</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "postId" : 5,
+  "content" : "content"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response header</div>
+<div class="content">
+<pre>NOTE: response body 없음
+HTTP/1.1 200 OK</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_댓글_좋아요_요청"><a class="link" href="#_댓글_좋아요_요청">댓글 좋아요 요청</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1169,7 +1204,7 @@ HTTP/1.1 200 OK</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /reply/like/4 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /reply/like/6 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -1183,8 +1218,8 @@ HTTP/1.1 200 OK</pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_댓글_좋아요_취소_요청"><a class="link" href="#_댓글_좋아요_취소_요청">댓글 좋아요 취소 요청</a></h3>
+<div class="sect3">
+<h4 id="_댓글_좋아요_취소_요청"><a class="link" href="#_댓글_좋아요_취소_요청">댓글 좋아요 취소 요청</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1194,7 +1229,7 @@ HTTP/1.1 200 OK</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /reply/like/3 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /reply/like/4 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -1208,8 +1243,36 @@ HTTP/1.1 200 OK</pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="_대댓글_좋아요_요청"><a class="link" href="#_대댓글_좋아요_요청">대댓글 좋아요 요청</a></h3>
+<h3 id="_대댓글"><a class="link" href="#_대댓글">대댓글</a></h3>
+<div class="sect3">
+<h4 id="_대댓글_작성하기"><a class="link" href="#_대댓글_작성하기">대댓글 작성하기</a></h4>
+<div class="listingblock">
+<div class="title">request url</div>
+<div class="content">
+<pre>POST /api/reply/re</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">request body</div>
+<div class="content">
+<pre class="highlight nowrap"><code>{
+  "replyId" : 3,
+  "content" : "content"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response header</div>
+<div class="content">
+<pre>NOTE: response body 없음
+HTTP/1.1 200 OK</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_대댓글_좋아요_요청"><a class="link" href="#_대댓글_좋아요_요청">대댓글 좋아요 요청</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1233,8 +1296,8 @@ HTTP/1.1 200 OK</pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_대댓글_좋아요_취소_요청"><a class="link" href="#_대댓글_좋아요_취소_요청">대댓글 좋아요 취소 요청</a></h3>
+<div class="sect3">
+<h4 id="_대댓글_좋아요_취소_요청"><a class="link" href="#_대댓글_좋아요_취소_요청">대댓글 좋아요 취소 요청</a></h4>
 <div class="listingblock">
 <div class="title">request url</div>
 <div class="content">
@@ -1244,7 +1307,7 @@ HTTP/1.1 200 OK</pre>
 <div class="listingblock">
 <div class="title">request header</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /reply/re/like/6 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /reply/re/like/7 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -1255,6 +1318,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre>NOTE: response body 없음
 HTTP/1.1 200 OK</pre>
+</div>
 </div>
 </div>
 </div>
@@ -1290,7 +1354,7 @@ HTTP/1.1 200 OK</pre>
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
     "deleted" : false,
-    "myMeetingsId" : [ 176, 173, 179 ]
+    "myMeetingsId" : [ 176, 179, 182 ]
   }
 }</code></pre>
 </div>
@@ -1323,8 +1387,8 @@ HTTP/1.1 200 OK</pre>
     "username" : "강해상",
     "memberId" : 9999,
     "filename" : "5.jpg",
-    "createdDate" : "2022-08-30T01:38:23.70288",
-    "modifiedDate" : "2022-08-30T01:38:23.70288"
+    "createdDate" : "2022-08-31T02:55:14.352867",
+    "modifiedDate" : "2022-08-31T02:55:14.352867"
   }, {
     "id" : 4,
     "title" : "4th Story",
@@ -1332,8 +1396,8 @@ HTTP/1.1 200 OK</pre>
     "username" : "강해상",
     "memberId" : 9999,
     "filename" : "4.jpg",
-    "createdDate" : "2022-08-30T01:38:23.701881",
-    "modifiedDate" : "2022-08-30T01:38:23.701881"
+    "createdDate" : "2022-08-31T02:55:14.352867",
+    "modifiedDate" : "2022-08-31T02:55:14.352867"
   }, {
     "id" : 3,
     "title" : "3th Story",
@@ -1341,8 +1405,8 @@ HTTP/1.1 200 OK</pre>
     "username" : "강해상",
     "memberId" : 9999,
     "filename" : "3.jpg",
-    "createdDate" : "2022-08-30T01:38:23.701881",
-    "modifiedDate" : "2022-08-30T01:38:23.701881"
+    "createdDate" : "2022-08-31T02:55:14.351867",
+    "modifiedDate" : "2022-08-31T02:55:14.351867"
   }, {
     "id" : 2,
     "title" : "2th Story",
@@ -1350,8 +1414,8 @@ HTTP/1.1 200 OK</pre>
     "username" : "강해상",
     "memberId" : 9999,
     "filename" : "2.jpg",
-    "createdDate" : "2022-08-30T01:38:23.700882",
-    "modifiedDate" : "2022-08-30T01:38:23.700882"
+    "createdDate" : "2022-08-31T02:55:14.350867",
+    "modifiedDate" : "2022-08-31T02:55:14.350867"
   }, {
     "id" : 1,
     "title" : "1th Story",
@@ -1359,8 +1423,8 @@ HTTP/1.1 200 OK</pre>
     "username" : "강해상",
     "memberId" : 9999,
     "filename" : "1.jpg",
-    "createdDate" : "2022-08-30T01:38:23.688879",
-    "modifiedDate" : "2022-08-30T01:38:23.688879"
+    "createdDate" : "2022-08-31T02:55:14.335868",
+    "modifiedDate" : "2022-08-31T02:55:14.335868"
   } ]
 }</code></pre>
 </div>
@@ -1390,7 +1454,7 @@ HTTP/1.1 200 OK</pre>
     "username" : "마석도",
     "profileUrl" : "www.changing-url.com",
     "intro" : "회원 정보 수정 테스트",
-    "meetingsId" : [ 173, 176, 179 ]
+    "meetingsId" : [ 176, 182, 179 ]
   }
 }</code></pre>
 </div>
@@ -1490,8 +1554,8 @@ HTTP/1.1 200 OK</pre>
     "username" : "최대한",
     "memberId" : 8669,
     "filename" : "example.jpg",
-    "createdDate" : "2022-08-30T01:38:23.9190505",
-    "modifiedDate" : "2022-08-30T01:38:23.9190505"
+    "createdDate" : "2022-08-31T02:55:14.5778666",
+    "modifiedDate" : "2022-08-31T02:55:14.5778666"
   }
 }</code></pre>
 </div>
@@ -1528,8 +1592,8 @@ HTTP/1.1 200 OK</pre>
     "username" : "최대한",
     "memberId" : 8669,
     "filename" : "test_success.wav",
-    "createdDate" : "2022-08-30T01:38:23.859048",
-    "modifiedDate" : "2022-08-30T01:38:23.8840511"
+    "createdDate" : "2022-08-31T02:55:14.513868",
+    "modifiedDate" : "2022-08-31T02:55:14.5388676"
   }
 }</code></pre>
 </div>
@@ -1582,24 +1646,24 @@ GET /api/story?lastId={lastId}</pre>
       "content" : "This is 20th Story",
       "username" : "최대한",
       "filename" : "20.jpg",
-      "createdDate" : "2022-08-30T01:38:23.948049",
-      "modifiedDate" : "2022-08-30T01:38:23.948049"
+      "createdDate" : "2022-08-31T02:55:14.610867",
+      "modifiedDate" : "2022-08-31T02:55:14.610867"
     }, {
       "id" : 85,
       "title" : "19th Story",
       "content" : "This is 19th Story",
       "username" : "김태경",
       "filename" : "19.jpg",
-      "createdDate" : "2022-08-30T01:38:23.94705",
-      "modifiedDate" : "2022-08-30T01:38:23.94705"
+      "createdDate" : "2022-08-31T02:55:14.609867",
+      "modifiedDate" : "2022-08-31T02:55:14.609867"
     }, {
       "id" : 84,
       "title" : "18th Story",
       "content" : "This is 18th Story",
       "username" : "최대한",
       "filename" : "18.jpg",
-      "createdDate" : "2022-08-30T01:38:23.946049",
-      "modifiedDate" : "2022-08-30T01:38:23.946049"
+      "createdDate" : "2022-08-31T02:55:14.609867",
+      "modifiedDate" : "2022-08-31T02:55:14.609867"
     } ],
     "nextPagingUrl" : "https://hoppy.kro.kr/api/story?lastId=84"
   }
@@ -1613,7 +1677,7 @@ GET /api/story?lastId={lastId}</pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-30 01:38:07 +0900
+Last updated 2022-08-31 02:54:58 +0900
 </div>
 </div>
 </body>
