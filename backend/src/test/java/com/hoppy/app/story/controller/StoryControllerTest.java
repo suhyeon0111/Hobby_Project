@@ -57,30 +57,7 @@ class StoryControllerTest {
 
     @BeforeEach
     void setup() {
-        /*Member member = Member.builder()
-                .username("최대한")
-                .role(Role.USER)
-                .id(8669L)
-                .profileImageUrl("https://www.image.com/test")
-                .socialType(SocialType.KAKAO)
-                .email("test99@naver.com")
-                .password("secret-key")
-                .intro("잘부탁드립니다.")
-                .build();
-
-        memberRepository.save(member);
-
-        for(int i = 1; i <= 5; i++) {
-            storyRepository.save(
-                    Story.builder()
-                            .member(member)
-                            .title(i+"th Story")
-                            .content("This is " + i + "th Story")
-                            .filePath(i+".jpg")
-                            .member(member).build()
-            );
-        }*/
-
+        
         Member member1 = Member.builder().id(8669L).username("최대한").profileImageUrl("korea88@naver.com").build();
         Member member2 = Member.builder().id(7601L).username("김태경").profileImageUrl("seaworld@daum.net").build();
 

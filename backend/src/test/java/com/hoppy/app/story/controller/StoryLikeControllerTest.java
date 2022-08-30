@@ -1,48 +1,60 @@
-package com.hoppy.app.story.service;
+package com.hoppy.app.story.controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoppy.app.like.repository.MemberStoryLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
+import com.hoppy.app.login.auth.SocialType;
+import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberService;
-import com.hoppy.app.response.error.exception.BusinessException;
-import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.story.domain.story.Story;
-import com.hoppy.app.story.dto.PagingStoryDto;
+import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
-import java.util.ArrayList;
+import com.hoppy.app.story.service.StoryService;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import org.assertj.core.api.Assertions;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
+@AutoConfigureRestDocs
 @AutoConfigureMockMvc
-class StoryServiceImplTest {
+@TestInstance(Lifecycle.PER_CLASS)
+public class StoryLikeControllerTest {
 
     @Autowired
     MemberRepository memberRepository;
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    MemberStoryLikeRepository memberStoryLikeRepository;
 
     @Autowired
     StoryRepository storyRepository;
@@ -82,17 +94,18 @@ class StoryServiceImplTest {
             );
         }
 
-        List<Story> storyList = storyRepository.findAll();
-        for(int i = 0; i < storyList.size(); i++) {
-            if(i % 2 == 0) {
-                storyService.likeStory(member1.getId(), storyList.get(i).getId());
-            }
-            storyService.likeStory(member2.getId(), storyList.get(i).getId());
-        }
+//        List<Story> storyList = storyRepository.findAll();
+//        for(int i = 0; i < storyList.size(); i++) {
+//            if(i % 2 == 0) {
+//                storyService.likeStory(member1.getId(), storyList.get(i).getId());
+//            }
+//            storyService.likeStory(member2.getId(), storyList.get(i).getId());
+//        }
     }
 
     @AfterEach
     void afterEach() {
+        memberStoryLikeRepository.deleteAll();
         storyRepository.deleteAll();
         memberRepository.deleteAll();
     }
@@ -100,41 +113,19 @@ class StoryServiceImplTest {
     @DisplayName("스토리 좋아요 기능 테스트")
     @Test
     @WithMockCustomUser(id = "8669")
+    @Transactional
     void storyLikeTest() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = Long.parseLong(authentication.getName());
-        List<Story> storyList = storyRepository.findAll();
-        for(int i = 0; i < storyList.size(); i++) {
-            if(i % 2 == 0) {
-                assertThat(storyList.get(i).getLikes().size()).isEqualTo(1);
-            } else {
-                assertThat(storyList.get(i).getLikes().size()).isEqualTo(2);
-            }
-        }
+        Member member1 = memberService.findById(id);
+        Member member2 = memberService.findById(7601L);
+        
+        Story story = storyService.findByStoryId(1L);
+        storyService.likeStory(id, 1L);
+        Story newStory = storyService.findByStoryId(1L);
+        System.out.println("story.getTitle() = " + newStory.getTitle());
+        System.out.println("story.getContent() = " + newStory.getContent());
+        System.out.println("story.getLikes().size() = " + newStory.getLikes().size());
+        System.out.println("story.getLikes() = " + newStory.getLikes());
     }
-
-    @DisplayName("스토리 서비스 페이징 정상 동작 테스트")
-    @Test
-    void pagingStory() {
-        PagingStoryDto storyDetailDtoList = storyService.pagingStory(Long.MAX_VALUE);
-        assertThat(storyDetailDtoList.getStoryList().size()).isEqualTo(3);
-    }
-
-    
-/*  
-    // 더 이상 조회할 스토리가 없을 시 예외 확인
-    // Mock 관련 오류 발생하는 듯. 수정 필요
-    @Test
-    void no_more_story_exception() {
-        final var lastId = 0L;
-        Pageable pageable = PageRequest.of(0, 3);
-
-        List<Story> storyList = storyRepository.findNextStoryOrderByIdDesc(Long.MAX_VALUE, pageable);
-        assertThat(storyList.isEmpty()).isTrue();
-
-        given(storyRepository.findNextStoryOrderByIdDesc(Long.MAX_VALUE, pageable)).willReturn(new ArrayList<>());
-        BusinessException exception = org.junit.jupiter.api.Assertions.assertThrows(BusinessException.class,
-                () -> storyService.pagingStory(lastId));
-        org.junit.jupiter.api.Assertions.assertEquals(ErrorCode.NO_MORE_STORY, exception.getMessage());
-    }*/
 }
