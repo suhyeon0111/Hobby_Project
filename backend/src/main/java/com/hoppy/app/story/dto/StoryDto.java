@@ -15,6 +15,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
+/**
+ * 페이지네이션 시 간단하게 보여줄 총 좋아요/댓글 수를 포함한 스토리 Dto
+ */
+
 public class StoryDto {
 
     private Long id;
@@ -36,17 +41,14 @@ public class StoryDto {
     private LocalDateTime createdDate;
 
     public static StoryDto of(Story story) {
-//        public static StoryDto of(Story story, boolean liked, int likeCount, int replyCount) {
         return StoryDto.builder()
                 .id(story.getId())
                 .profileUrl(story.getMember().getProfileImageUrl())
                 .username(story.getMember().getUsername())
                 .title(story.getTitle())
                 .content(story.getContent())
-//                .likeCount(likeCount)
                 .likeCount(story.getLikes().size())
                 .replyCount(story.getReplies().size())
-//                .replyCount(replyCount)
                 .createdDate(story.getCreatedDate())
                 .build();
     }
