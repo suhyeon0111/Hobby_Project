@@ -1,5 +1,7 @@
 import React from "react";
+// import { FaCode } from "react-icons/fa";
 import { Button, Input } from "antd";
+import Axios from "axios";
 
 import CharacterImg from "./img/character.png";
 import ArtImg from "./img/art.png";
@@ -14,8 +16,8 @@ function LandingPage() {
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
 
-  const token = localStorage.getItem('Authorization')
-  console.log('token is >>>', token)
+  const token = localStorage.getItem("Authorization");
+  console.log("token is >>>", token);
 
   const hobbyBoxStyle = {
     width: "108px",
@@ -30,8 +32,6 @@ function LandingPage() {
   const hobbyImageStyle = {
     width: "62px",
     height: "62px",
-    margin: "0px auto",
-    display: "block",
   };
 
   return (
@@ -74,14 +74,14 @@ function LandingPage() {
           style={{ textDecoration: "none", color: "#000" }}
         >
           <div style={hobbyBoxStyle}>
-            운동
-            <img src={ExerciseImg} alt='운동' style={hobbyImageStyle} />
+            <div>운동</div>
+            <img src={ExerciseImg} alt="운동" style={hobbyImageStyle} />
           </div>
         </a>
         <a href="/artMeeting" style={{ textDecoration: "none", color: "#000" }}>
           <div style={hobbyBoxStyle}>
-            공예
-            <img src={ArtImg} alt='공예' style={hobbyImageStyle} />
+            <div>공예</div>
+            <img src={ArtImg} alt="공예" style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -89,8 +89,8 @@ function LandingPage() {
           style={{ textDecoration: "none", color: "#000" }}
         >
           <div style={hobbyBoxStyle}>
-            음악
-            <img src={MusicImg} alt='음악' style={hobbyImageStyle} />
+            <div>음악</div>
+            <img src={MusicImg} alt="음악" style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -98,8 +98,8 @@ function LandingPage() {
           style={{ textDecoration: "none", color: "#000" }}
         >
           <div style={hobbyBoxStyle}>
-            일상
-            <img src={DailyImg} alt='일상' style={hobbyImageStyle} />
+            <div>일상</div>
+            <img src={DailyImg} alt="일상" style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -107,8 +107,8 @@ function LandingPage() {
           style={{ textDecoration: "none", color: "#000" }}
         >
           <div style={hobbyBoxStyle}>
-            음식
-            <img src={FoodImg} alt='음식' style={hobbyImageStyle} />
+            <div>음악</div>
+            <img src={FoodImg} alt="음식" style={hobbyImageStyle} />
           </div>
         </a>
         <a
@@ -116,8 +116,8 @@ function LandingPage() {
           style={{ textDecoration: "none", color: "#000" }}
         >
           <div style={hobbyBoxStyle}>
-            여행
-            <img src={TripImg} alt='여행' style={hobbyImageStyle} />
+            <div>여행</div>
+            <img src={TripImg} alt="여행" style={hobbyImageStyle} />
           </div>
         </a>
 
@@ -172,7 +172,7 @@ function LandingPage() {
           </div>
           <img
             src={CharacterImg}
-            alt='쿼카'
+            alt="쿼카"
             style={{
               width: "126px",
               height: "131px",
@@ -232,7 +232,7 @@ function LandingPage() {
           </div>
           <img
             src={HobbyStoryImg}
-            alt='Hoppy'
+            alt="Hoppy"
             style={{
               width: "126px",
               height: "131px",
