@@ -9,6 +9,8 @@ import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
+import com.hoppy.app.story.dto.StoryDetailDto;
+import com.hoppy.app.story.dto.StoryDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.service.StoryService;
@@ -69,14 +71,16 @@ public class StoryController {
     public ResponseEntity<ResponseDto> likeStory(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyService.likeStory(userDetails.getId(), id);
-        return responseService.ok();
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
     }
 
     @DeleteMapping("/like")
     public ResponseEntity<ResponseDto> dislikeStory(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyService.dislikeStory(userDetails.getId(), id);
-        return responseService.ok();
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
     }
 
     @PostMapping("/reply")
@@ -84,7 +88,8 @@ public class StoryController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody StoryReplyRequestDto dto) {
         storyService.uploadStoryReply(userDetails.getId(), id, dto);
-        return responseService.ok();
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
     }
 
     @DeleteMapping("/reply")
@@ -93,6 +98,7 @@ public class StoryController {
             @RequestParam(value = "replyId") Long replyId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyService.deleteStoryReply(storyId, replyId);
-        return responseService.ok();
+        Story story = storyService.findByStoryId(storyId);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
     }
 }
