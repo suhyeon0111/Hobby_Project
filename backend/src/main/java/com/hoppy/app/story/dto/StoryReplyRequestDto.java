@@ -24,6 +24,7 @@ public class StoryReplyRequestDto {
     private String content;
     private Member member;
     private Story story;
+    @Builder.Default
     private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
     public StoryReply toEntity() {
