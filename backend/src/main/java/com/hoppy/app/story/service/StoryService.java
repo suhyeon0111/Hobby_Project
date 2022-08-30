@@ -4,6 +4,7 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
+import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import java.util.List;
 
@@ -24,5 +25,10 @@ public interface StoryService {
 
     public void likeStory(Long memberId, Long storyId);
 
-    public void enterStoryReply(Long memberId, Long storyId);
+    public void dislikeStory(Long memberId, Long storyId);
+
+    public void uploadStoryReply(Long memberId, Long storyId, StoryReplyRequestDto dto);
+
+    public void deleteStoryReply(Long storyId, Long replyId);
+
 }

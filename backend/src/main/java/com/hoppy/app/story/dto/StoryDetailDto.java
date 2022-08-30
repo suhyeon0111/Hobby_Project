@@ -3,19 +3,20 @@ package com.hoppy.app.story.dto;
 import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * 스토리 리스트에 표기될 단순 정보를 포함한 좋아요 수, 댓글 수를 반환하는 Dto
- */
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * (스토리 클릭 시 나타날) 스토리의 모든 정보를 반환하는 Dto
+ */
 public class StoryDetailDto {
 
     private Long id;
@@ -47,8 +48,11 @@ public class StoryDetailDto {
                 .title(story.getTitle())
                 .content(story.getContent())
                 .username(story.getMember().getUsername())
+                .likeCount(story.getLikes().size())
+                .replyCount(story.getReplies().size())
                 .filename(story.getFilePath())
                 .createdDate(story.getCreatedDate())
+                .replies(story.getReplies().stream().map(StoryReplyDto::of).collect(Collectors.toList()))
                 .build();
     }
 }

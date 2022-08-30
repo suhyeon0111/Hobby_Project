@@ -9,6 +9,9 @@ import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
+import com.hoppy.app.story.dto.StoryDetailDto;
+import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.service.StoryService;
 import javax.validation.Valid;
@@ -65,8 +68,37 @@ public class StoryController {
     }
 
     @GetMapping("/like")
-    public ResponseEntity<ResponseDto> likeStory(@RequestParam(value = "id") Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<ResponseDto> likeStory(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyService.likeStory(userDetails.getId(), id);
-        return responseService.ok();
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
+    }
+
+    @DeleteMapping("/like")
+    public ResponseEntity<ResponseDto> dislikeStory(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyService.dislikeStory(userDetails.getId(), id);
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
+    }
+
+    @PostMapping("/reply")
+    public ResponseEntity<ResponseDto> uploadReply(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody StoryReplyRequestDto dto) {
+        storyService.uploadStoryReply(userDetails.getId(), id, dto);
+        Story story = storyService.findByStoryId(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
+    }
+
+    @DeleteMapping("/reply")
+    public ResponseEntity<ResponseDto> deleteReply(
+            @RequestParam(value = "storyId") Long storyId,
+            @RequestParam(value = "replyId") Long replyId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyService.deleteStoryReply(storyId, replyId);
+        Story story = storyService.findByStoryId(storyId);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
     }
 }

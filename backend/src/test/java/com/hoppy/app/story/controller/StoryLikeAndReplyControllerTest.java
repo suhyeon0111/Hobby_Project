@@ -1,6 +1,5 @@
 package com.hoppy.app.story.controller;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -11,17 +10,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.like.repository.MemberStoryLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
-import com.hoppy.app.login.auth.SocialType;
-import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.story.domain.story.Story;
-import com.hoppy.app.story.dto.UploadStoryDto;
+import com.hoppy.app.story.dto.StoryDetailDto;
+import com.hoppy.app.story.dto.StoryReplyRequestDto;
+import com.hoppy.app.story.repository.StoryReplyRepository;
 import com.hoppy.app.story.repository.StoryRepository;
 import com.hoppy.app.story.service.StoryService;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
+import javax.print.attribute.standard.Media;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,24 +38,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
-class StoryControllerTest {
+public class StoryLikeAndReplyControllerTest {
 
     @Autowired
     MemberRepository memberRepository;
 
     @Autowired
-    StoryRepository storyRepository;
+    MemberService memberService;
+
+    @Autowired
+    StoryReplyRepository storyReplyRepository;
 
     @Autowired
     MemberStoryLikeRepository memberStoryLikeRepository;
 
     @Autowired
+    StoryRepository storyRepository;
+
+    @Autowired
     StoryService storyService;
+
     @Autowired
     MockMvc mvc;
 
@@ -71,14 +79,14 @@ class StoryControllerTest {
         memberRepository.save(member1);
         memberRepository.save(member2);
 
-        for(int i = 1; i <= 20; i++) {
+        for(int i = 1; i <= 5; i++) {
             Member member = null;
             if(i % 2 == 0) {
                 member = member1;
-            } else if(i % 2 != 0) {
+            } else {
                 member = member2;
             }
-            storyRepository.save(
+            Story story = storyRepository.save(
                     Story.builder()
                             .member(member)
                             .title(i+"th Story")
@@ -86,6 +94,7 @@ class StoryControllerTest {
                             .filePath(i+".jpg")
                             .member(member).build()
             );
+            storyService.likeStory(member2.getId(), story.getId());
         }
     }
 
@@ -96,92 +105,107 @@ class StoryControllerTest {
         memberRepository.deleteAll();
     }
 
-    @DisplayName("스토리 업로드 테스트")
+    @DisplayName("스토리 좋아요 컨트롤러 테스트")
     @Test
     @WithMockCustomUser(id = "8669")
-    void uploadStory() throws Exception {
+    void storyLikeTest() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long id = Long.parseLong(authentication.getName());
-        Optional<Member> optMember = memberRepository.findById(id);
-        assertThat(optMember.isPresent()).isTrue();
-        UploadStoryDto dto = UploadStoryDto.builder().title("Story Upload Test").content("This is Test code").filename("example.jpg").build();
-        String content = objectMapper.writeValueAsString(dto);
+        List<Story> storyList = storyRepository.findAll();
+        Long storyId = storyList.get(0).getId();
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .post("/story")
-                .content(content)
+                .get("/story/like")
+                .param("id", String.valueOf(storyId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-        ).andDo(print());
+        );
         result.andExpect(status().isOk())
-                .andDo(document("upload-story",
+                .andDo(print())
+                .andDo(document("story-like-request",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())));
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
-    @DisplayName("스토리 수정 테스트")
+    @DisplayName("좋아요 취소 컨트롤러 테스트")
+    @Test
+    @WithMockCustomUser(id = "7601")
+    void storyDislikeTest() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<Story> storyList = storyRepository.findAll();
+        Long storyId = storyList.get(0).getId();
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .delete("/story/like")
+                .param("id", String.valueOf(storyId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+        );
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("story-dislike-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @DisplayName("스토리 댓글 등록 테스트")
     @Test
     @WithMockCustomUser(id = "8669")
-    void updateStory() throws Exception {
-        List<Story> stories = storyRepository.findAll();
-        Long storyId = stories.get(0).getId();
-        Optional<Story> optStory = storyRepository.findById(storyId);
-        assertThat(optStory.isPresent()).isTrue();
-        UploadStoryDto dto = UploadStoryDto.builder().title("Update Story Test").content("This is updated story").filename("test_success.wav").build();
+    void uploadStoryReplyTest() throws Exception {
+        List<Story> storyList = storyRepository.findAll();
+        Long storyId = storyList.get(0).getId();
+        StoryReplyRequestDto dto = StoryReplyRequestDto.builder().content("This is Story Reply Test").build();
         String content = objectMapper.writeValueAsString(dto);
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .put("/story")
+                .post("/story/reply")
                 .param("id", String.valueOf(storyId))
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-        ).andDo(print());
+        );
         result.andExpect(status().isOk())
-                .andDo(document("update-story",
+                .andDo(print())
+                .andDo(document("story-reply-request",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())));
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
-    @DisplayName("스토리 삭제 테스트")
+    @DisplayName("스토리 댓글 삭제 테스트")
     @Test
-    void deleteStory() throws Exception {
-        List<Story> stories = storyRepository.findAll();
-        Long storyId = stories.get(0).getId();
-        Optional<Story> optStory = storyRepository.findById(storyId);
-        assertThat(optStory.isPresent()).isTrue();
+    @WithMockCustomUser(id = "8669")
+    void deleteStoryReplyTest() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .delete("/story")
-                .param("id", String.valueOf(storyId))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-        ).andDo(print());
+        Long memberId = Long.parseLong(authentication.getName());
+        Member member = memberService.findById(memberId);
 
-        Optional<Story> deletedStory = storyRepository.findById(storyId);
-        assertThat(deletedStory.isEmpty()).isTrue();
-        result.andExpect(status().isOk())
-                .andDo(document("delete-story",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())));
-    }
-
-    @DisplayName("스토리 조회 페이징 테스트")
-    @Test
-    void showStoryList() throws Exception {
         List<Story> storyList = storyRepository.findAll();
-        System.out.println("storyList.size() = " + storyList.size());
-        for(int i = 0; i < storyList.size(); i++) {
-            if(i % 2 == 0) {
-                storyService.likeStory(8669L, storyList.get(i).getId());
-            }
-            storyService.likeStory(7601L, storyList.get(i).getId());
+        Long storyId = storyList.get(0).getId();
+
+        Story story = storyService.findByStoryId(storyId);
+
+        for(int i = 0; i < 3; i++) {
+            String content = "This is " + String.valueOf(i+1) + "th reply";
+            StoryReplyRequestDto dto = StoryReplyRequestDto.builder()
+                    .content(content)
+                    .member(member)
+                    .story(story)
+                    .build();
+
+            storyService.uploadStoryReply(memberId, storyId, dto);
         }
+
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .get("/story")
+                .delete("/story/reply")
+                .param("storyId", String.valueOf(storyId))
+                .param("replyId", String.valueOf(1L))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-        ).andDo(print());
+        );
+
         result.andExpect(status().isOk())
-                .andDo(document("story-pagination",
+                .andDo(print())
+                .andDo(document("story-reply-delete-request",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));

@@ -7,10 +7,14 @@ import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.domain.story.StoryReply;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
+import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
+import com.hoppy.app.story.repository.StoryReplyRepository;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +33,8 @@ public class StoryServiceImpl implements StoryService {
     private final MemberStoryLikeRepository memberStoryLikeRepository;
 
     private final MemberService memberService;
+
+    private final StoryReplyRepository storyReplyRepository;
     @Override
     public Story findByStoryId(Long storyId) {
         Optional<Story> optStory = storyRepository.findById(storyId);
@@ -89,13 +96,16 @@ public class StoryServiceImpl implements StoryService {
         }
         lastId = getLastId(storyList);
         String nextPageUrl = getNextPagingUrl(lastId);
-        List<StoryDetailDto> storyDetailDtoList = listToDtoList(storyList);
+//        List<StoryDetailDto> storyDetailDtoList = listToDtoList(storyList);
+        List<StoryDto> storyDtoList = listToDtoList(storyList);
 
-        return PagingStoryDto.of(storyDetailDtoList, nextPageUrl);
+        return PagingStoryDto.of(storyDtoList, nextPageUrl);
     }
 
-    public List<StoryDetailDto> listToDtoList(List<Story> storyList) {
-        return storyList.stream().map(StoryDetailDto::from).collect(Collectors.toList());
+    public List<StoryDto> listToDtoList(List<Story> storyList) {
+//        public List<StoryDetailDto> listToDtoList(List<Story> storyList) {
+//        return storyList.stream().map(StoryDetailDto::from).collect(Collectors.toList());
+        return storyList.stream().map(StoryDto::of).collect(Collectors.toList());
     }
 
     public Long validCheckLastId(Long lastId) {
@@ -115,6 +125,7 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    @Transactional
     public void likeStory(Long memberId, Long storyId) {
         Optional<MemberStoryLike> likeOptional = memberStoryLikeRepository.findByMemberIdAndStoryId(memberId, storyId);
 
@@ -129,10 +140,26 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public void enterStoryReply(Long memberId, Long storyId) {
-        Story story = findByStoryId(storyId);
-
+    @Transactional
+    public void dislikeStory(Long memberId, Long storyId) {
+        memberStoryLikeRepository.deleteByMemberIdAndStoryId(memberId, storyId);
     }
 
+    @Override
+    public void uploadStoryReply(Long memberId, Long storyId, StoryReplyRequestDto dto) {
+        Story story = findByStoryId(storyId);
+        Member member = memberService.findById(memberId);
+        dto.setMember(member);
+        dto.setStory(story);
+        StoryReply reply = dto.toEntity();
+        storyReplyRepository.save(reply);
+    }
 
+    @Override
+    @Transactional
+    public void deleteStoryReply(Long storyId, Long replyId) {
+        // TODO: 댓글이 존재하지 않을 때 예외 처리
+        // TODO: 작성자에 한하여 댓글 수정 및 삭제 권한 부여
+        storyReplyRepository.deleteByStoryIdAndReplyId(storyId, replyId);
+    }
 }
