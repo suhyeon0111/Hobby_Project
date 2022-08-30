@@ -1,7 +1,6 @@
 import React from "react";
 // import { FaCode } from "react-icons/fa";
 import { Button, Input } from "antd";
-import Axios from "axios";
 
 import CharacterImg from "./img/character.png";
 import ArtImg from "./img/art.png";
