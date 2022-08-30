@@ -35,16 +35,18 @@ public class StoryDto {
 
     private LocalDateTime createdDate;
 
-    public static StoryDto of(Story story, boolean liked, int likeCount, int replyCount) {
+    public static StoryDto of(Story story) {
+//        public static StoryDto of(Story story, boolean liked, int likeCount, int replyCount) {
         return StoryDto.builder()
                 .id(story.getId())
                 .profileUrl(story.getMember().getProfileImageUrl())
                 .username(story.getMember().getUsername())
                 .title(story.getTitle())
                 .content(story.getContent())
-                .liked(liked)
-                .likeCount(likeCount)
-                .replyCount(replyCount)
+//                .likeCount(likeCount)
+                .likeCount(story.getLikes().size())
+                .replyCount(story.getReplies().size())
+//                .replyCount(replyCount)
                 .createdDate(story.getCreatedDate())
                 .build();
     }
