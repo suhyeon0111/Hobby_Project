@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import com.hoppy.app.utility.Utility;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,8 +55,9 @@ class MeetingServiceImplTest {
         List<Long> memberIdList = new ArrayList<>();
         List<Member> memberList = new ArrayList<>();
 
+        Member owner = Utility.testMember(OWNER_ID);
         Meeting meeting = Meeting.builder()
-                .ownerId(OWNER_ID)
+                .owner(owner)
                 .title("test")
                 .content("test")
                 .memberLimit(15)
@@ -62,9 +65,7 @@ class MeetingServiceImplTest {
                 .build();
 
         for (int i = 1; i <= PARTICIPANT_COUNT; i++) {
-            Member member = Member.builder()
-                    .id((long) i)
-                    .build();
+            Member member = Utility.testMember(i);
             meeting.addParticipant(MemberMeeting.builder()
                     .member(member)
                     .meeting(meeting)
@@ -88,8 +89,9 @@ class MeetingServiceImplTest {
     @Test
     void checkJoinRequestValidFailTest1() {
         //given
+        Member owner = Utility.testMember(1L);
         Meeting meeting = Meeting.builder()
-                .ownerId(1L)
+                .owner(owner)
                 .title("test")
                 .content("test")
                 .memberLimit(0)
@@ -119,11 +121,9 @@ class MeetingServiceImplTest {
         Set<MemberMeeting> participants = new HashSet<>();
         final var REQUEST_MEMBER_ID = 1111L;
         final var REQUEST_MEETING_ID = 2222L;
-        Member member = Member.builder()
-                .id(REQUEST_MEMBER_ID)
-                .build();
+        Member member = Utility.testMember(REQUEST_MEMBER_ID);
         Meeting meeting = Meeting.builder()
-                .ownerId(1L)
+                .owner(member)
                 .title("test")
                 .content("test")
                 .memberLimit(5)

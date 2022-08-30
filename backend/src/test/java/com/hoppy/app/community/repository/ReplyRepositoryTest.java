@@ -8,6 +8,7 @@ import com.hoppy.app.like.repository.MemberReReplyLikeRepository;
 import com.hoppy.app.like.repository.MemberReplyLikeRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,16 +58,8 @@ public class ReplyRepositoryTest {
     void replyLikeTest() {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-            Member.builder()
-                .id(TEST_MEMBER_ID)
-                .build()
-        );
-        Reply reply = replyRepository.save(
-            Reply.builder()
-                .content("content")
-                .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Reply reply = replyRepository.save(Utility.testReply(member));
         memberReplyLikeRepository.save(MemberReplyLike.of(member, reply));
         em.flush();
         em.clear();
@@ -83,24 +76,14 @@ public class ReplyRepositoryTest {
     void replyDislikeTest() {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .build()
-        );
-        Reply reply = replyRepository.save(
-                Reply.builder()
-                        .content("content")
-                        .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Reply reply = replyRepository.save(Utility.testReply(member));
         memberReplyLikeRepository.save(MemberReplyLike.of(member, reply));
-        em.flush();
-        em.clear();
-        memberReplyLikeRepository.deleteByMemberIdAndReplyId(member.getId(), reply.getId());
         em.flush();
         em.clear();
 
         // when
+        memberReplyLikeRepository.deleteByMemberIdAndReplyId(member.getId(), reply.getId());
         Optional<MemberReplyLike> opt = memberReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reply.getId());
 
         // then
@@ -112,22 +95,14 @@ public class ReplyRepositoryTest {
     void reReplyLikeTest() {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .build()
-        );
-        Reply reply = replyRepository.save(
-                Reply.builder()
-                        .content("content")
-                        .build()
-        );
-        memberReplyLikeRepository.save(MemberReplyLike.of(member, reply));
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        ReReply reReply = reReplyRepository.save(Utility.testReReply(member));
+        memberReReplyLikeRepository.save(MemberReReplyLike.of(member, reReply));
         em.flush();
         em.clear();
 
         // when
-        Optional<MemberReplyLike> opt = memberReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reply.getId());
+        Optional<MemberReReplyLike> opt = memberReReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reReply.getId());
 
         // then
         assertThat(opt).isPresent();
@@ -138,24 +113,14 @@ public class ReplyRepositoryTest {
     void reReplyDislikeTest() {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .build()
-        );
-        ReReply reReply = reReplyRepository.save(
-                ReReply.builder()
-                        .content("content")
-                        .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        ReReply reReply = reReplyRepository.save(Utility.testReReply(member));
         memberReReplyLikeRepository.save(MemberReReplyLike.of(member, reReply));
-        em.flush();
-        em.clear();
-        memberReReplyLikeRepository.deleteByMemberIdAndReplyId(member.getId(), reReply.getId());
         em.flush();
         em.clear();
 
         // when
+        memberReReplyLikeRepository.deleteByMemberIdAndReplyId(member.getId(), reReply.getId());
         Optional<MemberReReplyLike> opt = memberReReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reReply.getId());
 
         // then

@@ -15,12 +15,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.hoppy.app.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +28,6 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author 태경 2022-07-30
  */
 @SpringBootTest
-@AutoConfigureMockMvc
 @Slf4j
 class MeetingServiceConcurrencyTest {
 
@@ -50,8 +48,8 @@ class MeetingServiceConcurrencyTest {
         log.info("[afterEach 메서드 수행]");
 
         memberMeetingRepository.deleteAll();
-        memberRepository.deleteAll();
         meetingRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @DisplayName("모임 가입 동시성 이슈 테스트")
@@ -62,17 +60,21 @@ class MeetingServiceConcurrencyTest {
         final int PARTICIPANT_PEOPLE = 5;
         final int MAXIMUM_PEOPLE = 2;
 
-        Meeting meeting = meetingRepository.save(Meeting.builder()
-                .ownerId(0L)
-                .title("ConcurrencyTest")
-                .content("ConcurrencyTest")
-                .memberLimit(MAXIMUM_PEOPLE)
-                .category(Category.HEALTH)
-                .build());
+        Member owner = memberRepository.save(Utility.testMember(99L));
+        Meeting meeting = meetingRepository.save(
+                Meeting.builder()
+                        .owner(owner)
+                        .url("test-url")
+                        .title("test-title")
+                        .content("test-content")
+                        .category(Category.HEALTH)
+                        .memberLimit(MAXIMUM_PEOPLE)
+                        .build()
+        );
 
         CountDownLatch countDownLatch = new CountDownLatch(PARTICIPANT_PEOPLE);
 
-        for(int i = 1; i < 11; i++) {
+        for(int i = 1; i <= PARTICIPANT_PEOPLE; i++) {
             memberRepository.save(Member.builder()
                     .id((long) i)
                     .build()

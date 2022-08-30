@@ -13,6 +13,7 @@ import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
+import com.hoppy.app.utility.Utility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,8 +74,8 @@ class ReplyControllerTest {
     @AfterEach
     void after() {
         memberReReplyLikeRepository.deleteAll();
-        memberReplyLikeRepository.deleteAll();
         reReplyRepository.deleteAll();
+        memberReplyLikeRepository.deleteAll();
         replyRepository.deleteAll();
         memberRepository.deleteAll();
     }
@@ -84,18 +85,8 @@ class ReplyControllerTest {
     void likeReply() throws Exception {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-            Member.builder()
-                .id(TEST_MEMBER_ID)
-                .username("testName")
-                .profileImageUrl("testProfileUrl")
-                .build()
-        );
-        Reply reply = replyRepository.save(
-            Reply.builder()
-                .content("content")
-                .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Reply reply = replyRepository.save(Utility.testReply(member));
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
@@ -120,18 +111,8 @@ class ReplyControllerTest {
     void dislikeReply() throws Exception {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .username("testName")
-                        .profileImageUrl("testProfileUrl")
-                        .build()
-        );
-        Reply reply = replyRepository.save(
-                Reply.builder()
-                        .content("content")
-                        .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Reply reply = replyRepository.save(Utility.testReply(member));
         memberReplyLikeRepository.save(MemberReplyLike.of(member, reply));
 
         // when
@@ -157,18 +138,8 @@ class ReplyControllerTest {
     void likeReReply() throws Exception {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .username("testName")
-                        .profileImageUrl("testProfileUrl")
-                        .build()
-        );
-        ReReply reReply = reReplyRepository.save(
-                ReReply.builder()
-                        .content("content")
-                        .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        ReReply reReply = reReplyRepository.save(Utility.testReReply(member));
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
@@ -193,18 +164,8 @@ class ReplyControllerTest {
     void dislikeReReply() throws Exception {
         // given
         final long TEST_MEMBER_ID = 1L;
-        Member member = memberRepository.save(
-                Member.builder()
-                        .id(TEST_MEMBER_ID)
-                        .username("testName")
-                        .profileImageUrl("testProfileUrl")
-                        .build()
-        );
-        ReReply reReply = reReplyRepository.save(
-                ReReply.builder()
-                        .content("content")
-                        .build()
-        );
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        ReReply reReply = reReplyRepository.save(Utility.testReReply(member));
         memberReReplyLikeRepository.save(MemberReReplyLike.of(member, reReply));
 
         // when

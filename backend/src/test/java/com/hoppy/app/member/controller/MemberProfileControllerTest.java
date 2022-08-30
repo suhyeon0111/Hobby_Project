@@ -94,7 +94,7 @@ class MemberProfileControllerTest {
             Category category;
             if(i % 2 == 0) category = Category.HEALTH;
             else category = Category.LIFE;
-            Meeting meeting = meetingRepository.save(Meeting.builder().ownerId(member.getId()).url("https://test" + i + ".com")
+            Meeting meeting = meetingRepository.save(Meeting.builder().owner(member).url("https://test" + i + ".com")
                     .title(i + "번 모임").content("Welcome to meeting No." + i).category(category).memberLimit(i+9).build());
             if(i % 3 == 0) {
                 memberMeetingRepository.save(MemberMeeting.builder()
@@ -120,6 +120,7 @@ class MemberProfileControllerTest {
     @AfterAll
     void afterAll() {
         memberMeetingRepository.deleteAll();
+        meetingRepository.deleteAll();
         storyRepository.deleteAll();
         memberRepository.deleteAll();
     }

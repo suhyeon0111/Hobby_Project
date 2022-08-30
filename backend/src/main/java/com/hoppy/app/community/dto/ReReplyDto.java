@@ -19,6 +19,8 @@ import lombok.ToString;
 @ToString
 public class ReReplyDto {
 
+    private long id;
+
     private String authorProfileUrl;
 
     private String authorName;
@@ -31,6 +33,7 @@ public class ReReplyDto {
 
     public static ReReplyDto of(ReReply reReply) {
         return ReReplyDto.builder()
+                .id(reReply.getId())
                 .authorProfileUrl(reReply.getAuthor().getProfileImageUrl())
                 .authorName(reReply.getAuthor().getUsername())
                 .content(reReply.getContent())

@@ -1,6 +1,7 @@
 package com.hoppy.app.community.service;
 
 import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.dto.CreatePostDto;
 import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.meeting.domain.Meeting;
@@ -12,6 +13,8 @@ import java.util.List;
 public interface PostService {
 
     public Post findById(long id);
+
+    public void createPost(CreatePostDto createPostDto, long memberId);
 
     public void likePost(long memberId, long postId);
 
