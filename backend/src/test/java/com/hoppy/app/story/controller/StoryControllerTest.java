@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoppy.app.like.repository.MemberStoryLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
@@ -17,6 +18,7 @@ import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
+import com.hoppy.app.story.service.StoryService;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +52,11 @@ class StoryControllerTest {
     StoryRepository storyRepository;
 
     @Autowired
+    MemberStoryLikeRepository memberStoryLikeRepository;
+
+    @Autowired
+    StoryService storyService;
+    @Autowired
     MockMvc mvc;
 
     @Autowired
@@ -57,7 +64,7 @@ class StoryControllerTest {
 
     @BeforeEach
     void setup() {
-        
+
         Member member1 = Member.builder().id(8669L).username("최대한").profileImageUrl("korea88@naver.com").build();
         Member member2 = Member.builder().id(7601L).username("김태경").profileImageUrl("seaworld@daum.net").build();
 
@@ -84,6 +91,7 @@ class StoryControllerTest {
 
     @AfterEach
     void afterEach() {
+        memberStoryLikeRepository.deleteAll();
         storyRepository.deleteAll();
         memberRepository.deleteAll();
     }
@@ -159,6 +167,14 @@ class StoryControllerTest {
     @DisplayName("스토리 조회 페이징 테스트")
     @Test
     void showStoryList() throws Exception {
+        List<Story> storyList = storyRepository.findAll();
+        System.out.println("storyList.size() = " + storyList.size());
+        for(int i = 0; i < storyList.size(); i++) {
+            if(i % 2 == 0) {
+                storyService.likeStory(8669L, storyList.get(i).getId());
+            }
+            storyService.likeStory(7601L, storyList.get(i).getId());
+        }
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .get("/story")
                 .contentType(MediaType.APPLICATION_JSON)
