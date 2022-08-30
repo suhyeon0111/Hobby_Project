@@ -62,7 +62,7 @@ public class Story extends BaseTimeEntity {
     @Exclude
     private Set<StoryReply> replies = new HashSet<>();
 
-    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @BatchSize(size = 100)
     @Default
     @Exclude
