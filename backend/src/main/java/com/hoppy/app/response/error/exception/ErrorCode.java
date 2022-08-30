@@ -39,6 +39,7 @@ public enum ErrorCode {
     ALREADY_JOIN(403, "M005", "이미 가입한 멤버입니다"),
     NOT_JOINED(403, "M006", "모임에 가입해주세요"),
     NO_MORE_MEETING(403, "M007", "더 이상 조회할 모임이 없습니다"),
+    OWNER_WITHDRAW_ERROR(403, "M008", "모임 주인은 탈퇴할 수 없습니다"),
 
     // Post
     POST_NOT_FOUND(403, "P001", "존재하지 않는 게시물입니다"),

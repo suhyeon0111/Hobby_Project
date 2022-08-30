@@ -1,7 +1,12 @@
 package com.hoppy.app.community.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
+import com.hoppy.app.community.dto.CreateReReplyDto;
+import com.hoppy.app.community.dto.CreateReplyDto;
+import com.hoppy.app.community.repository.PostRepository;
 import com.hoppy.app.community.repository.ReReplyRepository;
 import com.hoppy.app.community.repository.ReplyRepository;
 import com.hoppy.app.like.domain.MemberReReplyLike;
@@ -23,16 +28,19 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -57,7 +65,13 @@ class ReplyControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Autowired
     private ReplyRepository replyRepository;
@@ -74,9 +88,10 @@ class ReplyControllerTest {
     @AfterEach
     void after() {
         memberReReplyLikeRepository.deleteAll();
-        reReplyRepository.deleteAll();
         memberReplyLikeRepository.deleteAll();
+        reReplyRepository.deleteAll();
         replyRepository.deleteAll();
+        postRepository.deleteAll();
         memberRepository.deleteAll();
     }
 
@@ -184,5 +199,61 @@ class ReplyControllerTest {
         // then
         Optional<MemberReReplyLike> opt = memberReReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reReply.getId());
         assertThat(opt).isEmpty();
+    }
+
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void createReply() throws Exception {
+        //given
+        final long TEST_MEMBER_ID = 1L;
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Post post = postRepository.save(Utility.testPost(member));
+        CreateReplyDto createReplyDto = CreateReplyDto.builder()
+                .postId(post.getId())
+                .content("content")
+                .build();
+
+        String content = objectMapper.writeValueAsString(createReplyDto);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/reply")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("create-reply",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void createReReply() throws Exception {
+        //given
+        final long TEST_MEMBER_ID = 1L;
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Reply reply = replyRepository.save(Utility.testReply(member));
+        CreateReReplyDto createReReplyDto = CreateReReplyDto.builder()
+                .replyId(reply.getId())
+                .content("content")
+                .build();
+
+        String content = objectMapper.writeValueAsString(createReReplyDto);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/reply/re")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("create-reReply",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 }

@@ -1,7 +1,10 @@
 package com.hoppy.app.community.service;
 
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
+import com.hoppy.app.community.dto.CreateReReplyDto;
+import com.hoppy.app.community.dto.CreateReplyDto;
 import com.hoppy.app.community.repository.ReReplyRepository;
 import com.hoppy.app.community.repository.ReplyRepository;
 import com.hoppy.app.like.domain.MemberReReplyLike;
@@ -35,10 +38,19 @@ public class ReplyServiceImpl implements ReplyService {
 
     private final MemberReplyLikeRepository memberReplyLikeRepository;
     private final MemberReReplyLikeRepository memberReReplyLikeRepository;
+    private final PostService postService;
     private final MemberService memberService;
     private final ReplyRepository replyRepository;
     private final ReReplyRepository reReplyRepository;
 
+
+    @Override
+    @Transactional
+    public Reply createReply(long memberId, CreateReplyDto createReplyDto) {
+        Member member = memberService.findById(memberId);
+        Post post = postService.findById(createReplyDto.getPostId());
+        return replyRepository.save(createReplyDto.toReply(member, post));
+    }
 
     @Override
     public Reply findReplyById(long replyId) {
@@ -64,6 +76,14 @@ public class ReplyServiceImpl implements ReplyService {
     @Transactional
     public void dislikeReply(long memberId, long replyId) {
         memberReplyLikeRepository.deleteByMemberIdAndReplyId(memberId, replyId);
+    }
+
+    @Override
+    @Transactional
+    public ReReply createReReply(long memberId, CreateReReplyDto createReReplyDto) {
+        Member member = memberService.findById(memberId);
+        Reply reply = findReplyById(createReReplyDto.getReplyId());
+        return reReplyRepository.save(createReReplyDto.toReReply(member, reply));
     }
 
     @Override

@@ -21,31 +21,26 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findById(long id) {
-        Optional<Member> optMember = memberRepository.findById(id);
-        if(optMember.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        return optMember.get();
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Override
     public Member findByIdWithPostLikes(long id) {
-        Optional<Member> optMember = memberRepository.findByIdWithPostLikes(id);
-        if(optMember.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        return optMember.get();
+        return memberRepository.findByIdWithPostLikes(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    @Override
+    public Member findByIdWithMeetingLikes(long id) {
+        return memberRepository.findByIdWithMeetingLikes(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Override
     @Transactional
     public Member updateById(long memberId, UpdateMemberDto memberDto) {
-        Optional<Member> optMember = memberRepository.findById(memberId);
-        if(optMember.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        Member member = optMember.get();
-
+        Member member = findById(memberId);
         member.setUsername(memberDto.getUsername());
         member.setIntro(memberDto.getIntro());
         member.setProfileImageUrl(memberDto.getProfileUrl());
@@ -82,22 +77,16 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<Long> getMeetingLikes(long memberId) {
-        Optional<Member> opt = memberRepository.findByIdWithMeetingLikes(memberId);
-        if(opt.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        return opt.get().getMeetingLikes().stream()
+        Member member = findByIdWithMeetingLikes(memberId);
+        return member.getMeetingLikes().stream()
                 .map(M -> M.getMeeting().getId())
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean checkMeetingLiked(long memberId, long meetingId) {
-        Optional<Member> opt = memberRepository.findByIdWithMeetingLikes(memberId);
-        if(opt.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
-        }
-        return opt.get().getMeetingLikes().stream()
+        Member member = findByIdWithMeetingLikes(memberId);
+        return member.getMeetingLikes().stream()
                 .anyMatch(M -> M.getMeetingId() == meetingId);
     }
 

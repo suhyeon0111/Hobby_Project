@@ -77,6 +77,10 @@ public class MeetingServiceImpl implements MeetingService {
         Meeting meeting = optionalMeeting.get();
         Member member = memberService.findById(memberId);
 
+        if(meeting.getOwner().getId() == member.getId()) {
+            throw new BusinessException(ErrorCode.OWNER_WITHDRAW_ERROR);
+        }
+
         Set<MemberMeeting> participants = meeting.getParticipants();
         boolean joined = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(!joined) {
@@ -158,20 +162,14 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public Meeting findById(long id) {
-        Optional<Meeting> meeting = meetingRepository.findById(id);
-        if(meeting.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
-        }
-        return meeting.get();
+        return meetingRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEETING_NOT_FOUND));
     }
 
     @Override
     public Meeting findByIdWithParticipants(long id) {
-        Optional<Meeting> meeting = meetingRepository.findWithParticipantsById(id);
-        if(meeting.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
-        }
-        return meeting.get();
+        return meetingRepository.findWithParticipantsById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEETING_NOT_FOUND));
     }
 
     @Override
@@ -196,11 +194,11 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @Transactional
     public void likeMeeting(long memberId, long meetingId) {
-        Optional<MemberMeetingLike> opt = memberMeetingLikeRepository.findByMemberIdAndMeetingId(memberId, meetingId);
-        if(opt.isPresent()) return;
+        boolean alreadyLiked = memberMeetingLikeRepository.findByMemberIdAndMeetingId(memberId, meetingId).isPresent();
+        if(alreadyLiked) return;
 
-        Member member = memberService.findById(memberId);
         Meeting meeting = findById(meetingId);
+        Member member = memberService.findById(memberId);
         memberMeetingLikeRepository.save(MemberMeetingLike.of(member, meeting));
     }
 

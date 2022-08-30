@@ -45,8 +45,6 @@ class MeetingServiceConcurrencyTest {
 
     @AfterEach
     void after() {
-        log.info("[afterEach 메서드 수행]");
-
         memberMeetingRepository.deleteAll();
         meetingRepository.deleteAll();
         memberRepository.deleteAll();

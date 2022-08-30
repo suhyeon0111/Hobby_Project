@@ -1,5 +1,7 @@
 package com.hoppy.app.community.controller;
 
+import com.hoppy.app.community.dto.CreateReReplyDto;
+import com.hoppy.app.community.dto.CreateReplyDto;
 import com.hoppy.app.community.service.ReplyService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.response.dto.ResponseDto;
@@ -38,6 +40,15 @@ public class ReplyController {
         return responseService.ok();
     }
 
+    @PostMapping
+    public ResponseEntity<ResponseDto> createReply(
+            @RequestBody CreateReplyDto createReplyDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.createReply(userDetails.getId(), createReplyDto);
+        return responseService.ok();
+    }
+
     @DeleteMapping("/like/{id}")
     public ResponseEntity<ResponseDto> dislikeReply(
             @PathVariable("id") long id,
@@ -53,6 +64,15 @@ public class ReplyController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         replyService.likeReReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @PostMapping("/re")
+    public ResponseEntity<ResponseDto> createReReply(
+            @RequestBody CreateReReplyDto createReReplyDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.createReReply(userDetails.getId(), createReReplyDto);
         return responseService.ok();
     }
 
