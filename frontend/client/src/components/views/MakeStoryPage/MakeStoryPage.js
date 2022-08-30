@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {useState, useRef} from 'react'
 import {Input, Button, Icon, Avatar, Form} from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
@@ -13,6 +15,7 @@ function HobbyStoryPage(props) {
     const [Content, setContent] = useState("")
     const [FileName, setFileName] = useState("")
     const [File, setFile] = useState([])
+    const [Name, setName] = useState("")
     //파일 업로더 생성
     const fileInput = useRef(null)
 
@@ -27,51 +30,14 @@ function HobbyStoryPage(props) {
         setFileName(event.target.value)
     }
 
-    const uploadHandler = () => {
-        return <>
-            <div
-                            style={{
-                                width: '109px',
-                                height: '75px',
-                                border: '1px solid',
-                                color: 'gray',
-                                borderRadius: '11px',
-                                margin: '16px 20px 0px 11px',
-                                padding: '9px'
-                            }}>
-                            <Avatar
-                                shape="square"
-                                size={55}
-                                src={FileName}
-                                onChange={fileNameHandler}
-                                value={FileName}
-                                style={{
-                                    float: 'left'
-                                }}/>
-                            <Icon
-                                type='delete'
-                                style={{
-                                    fontSize: '20px',
-                                    float: 'right',
-                                    marginTop: '15px'
-                                }}/>
-                        </div>
-        </>
-    }
-
     const onChange = (event) => {
         if (event.target.files[0]) {
             //업로딩이 되면
-            const targetFile = event
-                .target
-                .files[0];
-            const name = (event.target.files[0].name) + (
-                event.target.files[0].lastModified
-            )
-            const type = event
-                .target
-                .files[0]
-                .type
+            console.log('event.target.files[0]', event.target.files[0])
+            setName(event.target.files[0].name)
+            const targetFile = event.target.files[0];
+            const name = (event.target.files[0].name) + (event.target.files[0].lastModified)
+            const type = event.target.files[0].type
             const headers = {
                 Authorization: token
             }
@@ -92,19 +58,23 @@ function HobbyStoryPage(props) {
                         },
                         body: targetFile
                     });
+                    console.log('req', req)
                     return fetch(req);
                 })
                 .then(response => {
                     console.log('res>>>>>', response)
                     if (response.status === 200) {
                         const url = new URL(response.url)
+                        console.log(url.origin + url.pathname)
                         setFileName(url.origin + url.pathname)
                         alert("사진 업로드에 성공했습니다.")
                     } else {
                         alert("사진 업로드에 실패했습니다.")
                     }
                 })
-            setFile(event.target.files[0])
+            setFile(event.target.files[0].name)
+        } else {
+            return
         }
         //프로필 사진 나타내기
         const reader = new FileReader();
@@ -117,14 +87,14 @@ function HobbyStoryPage(props) {
         reader.readAsDataURL(event.target.files[0])
     }
 
-    // console.log('Filename >>>', FileName)
-
     //글 올리기 버튼 event-handler
     const submitHandler = (event) => {
         event.preventDefault();
         if (!Title && !Content) {
             return alert("제목과 내용을 입력해주세요.")
-        } else if (Title && Content) {
+        }
+
+        if (Title && Content) {
             const body = {
                 title: Title,
                 content: Content,
@@ -134,10 +104,11 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/story/upload", body, {
-                    headers, 
-                    withCredentials: false
-                })
+                .post(
+                    "https://hoppy.kro.kr/api/story",
+                    body,
+                    {headers, withCredentials: false}
+                )
                 .then(response => {
                     console.log('res>>>>', response)
                     if (response.data.status === 200) {
@@ -159,10 +130,11 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post("https://hoppy.kro.kr/api/story/upload", body, {
-                    headers, 
-                    withCredentials: false
-                })
+                .post(
+                    "https://hoppy.kro.kr/api/story",
+                    body,
+                    {headers, withCredentials: false}
+                )
                 .then(response => {
                     console.log('res>>>>', response)
                     if (response.data.status === 200) {
@@ -244,23 +216,24 @@ function HobbyStoryPage(props) {
                             ref={fileInput}/>
                         <div
                             style={{
-                                width: '109px',
+                                width: '350px',
                                 height: '75px',
                                 border: '1px solid',
                                 color: 'gray',
                                 borderRadius: '11px',
                                 margin: '16px 20px 0px 11px',
-                                padding: '9px'
+                                padding: '9px',
+                                display: 'flex',
                             }}>
                             <Avatar
                                 shape="square"
                                 size={55}
                                 src={FileName}
                                 onChange={fileNameHandler}
-                                value={FileName}
-                                style={{
-                                    float: 'left'
-                                }}/>
+                                value={FileName}/>
+                                <p style={{width: '250px', marginTop: '12px'}}>
+                                    {Name}
+                                </p>
                             <Icon
                                 type='delete'
                                 style={{
