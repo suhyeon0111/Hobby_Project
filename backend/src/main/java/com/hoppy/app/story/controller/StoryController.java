@@ -7,12 +7,14 @@ import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.domain.story.StoryReply;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
 import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.StoryDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
+import com.hoppy.app.story.service.StoryReplyService;
 import com.hoppy.app.story.service.StoryService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +36,11 @@ public class StoryController {
 
     private final StoryService storyService;
 
+    private final StoryReplyService storyReplyService;
     private final MemberService memberService;
 
     private final ResponseService responseService;
+
 
     @PostMapping
     public ResponseEntity<ResponseDto> uploadStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto) {
@@ -87,7 +91,7 @@ public class StoryController {
     public ResponseEntity<ResponseDto> uploadReply(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody StoryReplyRequestDto dto) {
-        storyService.uploadStoryReply(userDetails.getId(), id, dto);
+        storyReplyService.uploadStoryReply(userDetails.getId(), id, dto);
         Story story = storyService.findByStoryId(id);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
     }
@@ -97,7 +101,7 @@ public class StoryController {
             @RequestParam(value = "storyId") Long storyId,
             @RequestParam(value = "replyId") Long replyId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        storyService.deleteStoryReply(storyId, replyId);
+        storyReplyService.deleteStoryReply(storyId, replyId);
         Story story = storyService.findByStoryId(storyId);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
     }
