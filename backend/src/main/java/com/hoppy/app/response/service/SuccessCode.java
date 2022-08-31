@@ -33,6 +33,7 @@ public enum SuccessCode {
     // post
     GET_POST_DETAIL_SUCCESS("게시물 조회 완료", 200),
     CREATE_POST_SUCCESS("게시물 생성 완료", 200),
+    DELETE_POST_SUCCESS("게시물 제거 완료", 200),
 
     // member
     SHOW_PROFILE_SUCCESS("유저 프로필 조회 완료", 200),

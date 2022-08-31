@@ -83,11 +83,17 @@ public class ReplyRepositoryTest {
         em.clear();
 
         // when
-        memberReplyLikeRepository.deleteByMemberIdAndReplyId(member.getId(), reply.getId());
-        Optional<MemberReplyLike> opt = memberReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reply.getId());
+        memberReplyLikeRepository.delete(
+                memberReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reply.getId())
+                        .orElseThrow()
+        );
+        em.flush();
+        em.clear();
 
         // then
-        assertThat(opt).isEmpty();
+        assertThat(
+                memberReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reply.getId())
+        ).isEmpty();
     }
 
     @DisplayName("대댓글 좋아요 테스트")
@@ -120,10 +126,16 @@ public class ReplyRepositoryTest {
         em.clear();
 
         // when
-        memberReReplyLikeRepository.deleteByMemberIdAndReplyId(member.getId(), reReply.getId());
-        Optional<MemberReReplyLike> opt = memberReReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reReply.getId());
+        memberReReplyLikeRepository.delete(
+                memberReReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reReply.getId())
+                        .orElseThrow()
+        );
+        em.flush();
+        em.clear();
 
         // then
-        assertThat(opt).isEmpty();
+        assertThat(
+                memberReReplyLikeRepository.findByMemberIdAndReplyId(member.getId(), reReply.getId())
+        ).isEmpty();
     }
 }

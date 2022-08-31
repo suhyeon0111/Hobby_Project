@@ -28,5 +28,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "where p.id = :id")
     Optional<Post> getPostDetail(@Param("id") Long id);
 
-    List<Post> findAllByMeeting(Meeting meeting);
+    @Query("select distinct p from Post p "
+            + "left join fetch p.replies as pr "
+            + "left join fetch pr.reReplies as prr "
+            + "where p.id = :id and p.author.id = :authorId")
+    Optional<Post> getPostDetailByIdAndAuthorId(@Param("id") Long id, @Param("authorId") Long authorId);
+
+    @Query("select p from Post p where p.id = :id and p.author.id = :authorId")
+    Optional<Post> findByIdAndAuthorId(@Param("id") Long id, @Param("authorId") Long authorId);
 }
