@@ -16,6 +16,8 @@ public interface PostService {
 
     public void createPost(CreatePostDto createPostDto, long memberId);
 
+    public void deletePost(long memberId, long postId);
+
     public void likePost(long memberId, long postId);
 
     public void dislikePost(long memberId, long postId);

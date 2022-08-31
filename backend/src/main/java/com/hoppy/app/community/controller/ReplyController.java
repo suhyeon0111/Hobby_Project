@@ -6,6 +6,7 @@ import com.hoppy.app.community.service.ReplyService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
+import com.hoppy.app.response.service.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,6 +50,15 @@ public class ReplyController {
         return responseService.ok();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDto> deleteReply(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.deleteReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
     @DeleteMapping("/like/{id}")
     public ResponseEntity<ResponseDto> dislikeReply(
             @PathVariable("id") long id,
@@ -73,6 +83,15 @@ public class ReplyController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         replyService.createReReply(userDetails.getId(), createReReplyDto);
+        return responseService.ok();
+    }
+
+    @DeleteMapping("/re/{id}")
+    public ResponseEntity<ResponseDto> deleteReReply(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.deleteReReply(userDetails.getId(), id);
         return responseService.ok();
     }
 

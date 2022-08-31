@@ -27,12 +27,4 @@ public interface MemberReReplyLikeRepository extends JpaRepository<MemberReReply
             @Param("memberId") Long memberId,
             @Param("reReplyId") Long reReplyId
     );
-
-    @Modifying
-    @Query("delete from MemberReReplyLike m " +
-            "where m.member.id = :memberId and m.reReply.id = :reReplyId")
-    void deleteByMemberIdAndReplyId(
-            @Param("memberId") Long memberId,
-            @Param("reReplyId") Long reReplyId
-    );
 }
