@@ -41,6 +41,15 @@ public class PostController {
         return responseService.successResult(SuccessCode.CREATE_POST_SUCCESS);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDto> deletePost(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        postService.deletePost(userDetails.getId(), id);
+        return responseService.successResult(SuccessCode.DELETE_POST_SUCCESS);
+    }
+
     @GetMapping("/like/{id}")
     public ResponseEntity<ResponseDto> likePost(
             @PathVariable("id") long id,

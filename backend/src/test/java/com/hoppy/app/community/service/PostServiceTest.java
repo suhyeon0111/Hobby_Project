@@ -18,8 +18,10 @@ import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
+import java.util.Optional;
 
 import com.hoppy.app.utility.Utility;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author 태경 2022-08-10
  */
 @SpringBootTest
+@Slf4j
 class PostServiceTest {
 
     @Autowired
@@ -205,5 +208,35 @@ class PostServiceTest {
         assertThat(postDetailDto.getId()).isEqualTo(post.getId());
         assertThat(postDetailDto.isLiked()).isTrue();
         assertThat(postDetailDto.getReplyCount()).isEqualTo(REPLY_COUNT + (REPLY_COUNT * RE_REPLY_COUNT));
+    }
+
+    @DisplayName("게시물 삭제 테스트")
+    @Test
+    void postDeleteTest() {
+        // given
+        Member member = memberRepository.save(Utility.testMember(1L));
+        Post post = postRepository.save(Utility.testPost(member));
+
+        for(int i = 0; i < 5; i++) {
+            Reply reply = replyRepository.save(Utility.testReply(member, post, "test"));
+
+            for(int j = 0; j < 5; j++) {
+                ReReply reReply = reReplyRepository.save(Utility.testReReply(member, reply, "test"));
+            }
+        }
+
+        // when
+        postService.deletePost(member.getId(), post.getId());
+
+        // then
+        Optional<Post> opt = postRepository.getPostDetailByIdAndAuthorId(post.getId(), member.getId());
+        assertThat(opt).isEmpty();
+
+        /*
+        * 쿼리 총 세 번 발생
+        * 1. 연관 대댓글 삭제 쿼리
+        * 2. 연관 댓글 삭제 쿼리
+        * 3. 게시글 삭제 쿼리
+        * */
     }
 }

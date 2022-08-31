@@ -241,4 +241,31 @@ class PostControllerTest {
         Optional<MemberPostLike> opt = memberPostLikeRepository.findByMemberIdAndPostId(member.getId(), post.getId());
         assertThat(opt).isEmpty();
     }
+
+    @DisplayName("게시물 삭제 컨트롤러 테스트")
+    @Test
+    @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
+    void deletePostTest() throws Exception {
+        // given
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Post post = postRepository.save(Utility.testPost(member));
+
+        // when
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/post/" + post.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("message", is("게시물 제거 완료")))
+                .andDo(document("post-delete-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
+
+        // then
+        Optional<Post> opt = postRepository.findByIdAndAuthorId(post.getId(), member.getId());
+        assertThat(opt).isEmpty();
+    }
 }

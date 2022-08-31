@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,5 +93,37 @@ class ReplyServiceTest {
 
         // then
         assertThat(reReply.getContent()).isEqualTo("content");
+    }
+
+    @Test
+    void deleteReply() {
+        // given
+        Member member = memberRepository.save(Utility.testMember(1L));
+        Reply reply = replyRepository.save(Utility.testReply(member));
+
+        for(int i = 0; i < 10; i++) {
+            reReplyRepository.save(Utility.testReReply(member, reply, "test"));
+        }
+
+        // when
+        replyService.deleteReply(member.getId(), reply.getId());
+
+        // then
+        Optional<Reply> opt = replyRepository.findByIdAndAuthorId(reply.getId(), member.getId());
+        assertThat(opt).isEmpty();
+    }
+
+    @Test
+    void deleteReReply() {
+        // given
+        Member member = memberRepository.save(Utility.testMember(1L));
+        ReReply reReply = reReplyRepository.save(Utility.testReReply(member));
+
+        // when
+        replyService.deleteReReply(member.getId(), reReply.getId());
+
+        // then
+        Optional<ReReply> opt = reReplyRepository.findByIdAndAuthorId(reReply.getId(), member.getId());
+        assertThat(opt).isEmpty();
     }
 }

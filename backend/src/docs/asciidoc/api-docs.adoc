@@ -140,6 +140,16 @@ include::{snippets}/create-post/request-body.adoc[]
 .response body
 include::{snippets}/create-post/response-body.adoc[]
 
+==== 게시물 제거하기
+.request url
+----
+DELETE /api/post/{postId}
+----
+.request header
+include::{snippets}/post-delete-request/http-request.adoc[]
+.response body
+include::{snippets}/post-delete-request/response-body.adoc[]
+
 ==== 게시물 상세 조회하기
 .request url
 ----
@@ -189,6 +199,19 @@ NOTE: response body 없음
 HTTP/1.1 200 OK
 ----
 
+==== 댓글 제거하기
+.request url
+----
+DELETE /api/reply/{replyId}
+----
+.request header
+include::{snippets}/reply-delete-request/http-request.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
 ==== 댓글 좋아요 요청
 .request url
 ----
@@ -223,6 +246,19 @@ POST /api/reply/re
 ----
 .request body
 include::{snippets}/create-reReply/request-body.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
+==== 대댓글 제거하기
+.request url
+----
+DELETE /api/reply/re/{reReplyId}
+----
+.request header
+include::{snippets}/reReply-delete-request/http-request.adoc[]
 .response header
 ----
 NOTE: response body 없음

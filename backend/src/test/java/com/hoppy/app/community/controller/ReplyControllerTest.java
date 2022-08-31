@@ -256,4 +256,56 @@ class ReplyControllerTest {
                         preprocessResponse(prettyPrint())
                 ));
     }
+
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void deleteReply() throws Exception {
+        // given
+        final long TEST_MEMBER_ID = 1L;
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        Reply reply = replyRepository.save(Utility.testReply(member));
+
+        // when
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/reply/" + reply.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("reply-delete-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
+
+        // then
+        Optional<Reply> opt = replyRepository.findByIdAndAuthorId(reply.getId(), member.getId());
+        assertThat(opt).isEmpty();
+    }
+
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void deleteReReply() throws Exception {
+        // given
+        final long TEST_MEMBER_ID = 1L;
+        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
+        ReReply reReply = reReplyRepository.save(Utility.testReReply(member));
+
+        // when
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/reply/re/" + reReply.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("reReply-delete-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
+
+        // then
+        Optional<ReReply> opt = reReplyRepository.findByIdAndAuthorId(reReply.getId(), member.getId());
+        assertThat(opt).isEmpty();
+    }
 }

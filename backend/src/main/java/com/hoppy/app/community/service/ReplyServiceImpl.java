@@ -19,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * packageName    : com.hoppy.app.community.service
@@ -53,12 +55,24 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public Reply findReplyById(long replyId) {
-        Optional<Reply> opt = replyRepository.findById(replyId);
-        if(opt.isEmpty()) {
-            throw new BusinessException(ErrorCode.REPLY_NOT_FOUND);
+    @Transactional
+    public void deleteReply(long memberId, long replyId) {
+        Reply reply = replyRepository.findByIdAndAuthorIdWithReReplies(replyId, memberId)
+                 .orElseThrow(() -> new BusinessException(ErrorCode.REPLY_NOT_FOUND));
+
+        if(!reply.getReReplies().isEmpty()) {
+            reReplyRepository.deleteAllByList(reply.getReReplies().stream()
+                    .map(R -> R.getId())
+                    .collect(Collectors.toList())
+            );
         }
-        return opt.get();
+        replyRepository.delete(reply);
+    }
+
+    @Override
+    public Reply findReplyById(long replyId) {
+        return replyRepository.findById(replyId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.REPLY_NOT_FOUND));
     }
 
     @Override
@@ -75,7 +89,9 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     @Transactional
     public void dislikeReply(long memberId, long replyId) {
-        memberReplyLikeRepository.deleteByMemberIdAndReplyId(memberId, replyId);
+        memberReplyLikeRepository.delete(
+                memberReplyLikeRepository.findByMemberIdAndReplyId(memberId, replyId).orElseThrow()
+        );
     }
 
     @Override
@@ -87,12 +103,18 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    @Transactional
+    public void deleteReReply(long memberId, long reReplyId) {
+        reReplyRepository.delete(
+                reReplyRepository.findByIdAndAuthorId(reReplyId, memberId)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.REPLY_NOT_FOUND))
+        );
+    }
+
+    @Override
     public ReReply findReReplyById(long reReplyId) {
-        Optional<ReReply> opt = reReplyRepository.findById(reReplyId);
-        if(opt.isEmpty()) {
-            throw new BusinessException(ErrorCode.REPLY_NOT_FOUND);
-        }
-        return opt.get();
+        return reReplyRepository.findById(reReplyId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.REPLY_NOT_FOUND));
     }
 
     @Override
@@ -109,6 +131,8 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     @Transactional
     public void dislikeReReply(long memberId, long reReplyId) {
-        memberReReplyLikeRepository.deleteByMemberIdAndReplyId(memberId, reReplyId);
+        memberReReplyLikeRepository.delete(
+            memberReReplyLikeRepository.findByMemberIdAndReplyId(memberId, reReplyId).orElseThrow()
+        );
     }
 }
