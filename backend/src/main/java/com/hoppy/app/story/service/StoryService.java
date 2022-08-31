@@ -27,8 +27,4 @@ public interface StoryService {
 
     public void dislikeStory(Long memberId, Long storyId);
 
-    public void uploadStoryReply(Long memberId, Long storyId, StoryReplyRequestDto dto);
-
-    public void deleteStoryReply(Long storyId, Long replyId);
-
 }

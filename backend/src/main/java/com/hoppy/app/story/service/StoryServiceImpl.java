@@ -34,7 +34,6 @@ public class StoryServiceImpl implements StoryService {
 
     private final MemberService memberService;
 
-    private final StoryReplyRepository storyReplyRepository;
     @Override
     public Story findByStoryId(Long storyId) {
         Optional<Story> optStory = storyRepository.findById(storyId);
@@ -96,15 +95,12 @@ public class StoryServiceImpl implements StoryService {
         }
         lastId = getLastId(storyList);
         String nextPageUrl = getNextPagingUrl(lastId);
-//        List<StoryDetailDto> storyDetailDtoList = listToDtoList(storyList);
         List<StoryDto> storyDtoList = listToDtoList(storyList);
 
         return PagingStoryDto.of(storyDtoList, nextPageUrl);
     }
 
     public List<StoryDto> listToDtoList(List<Story> storyList) {
-//        public List<StoryDetailDto> listToDtoList(List<Story> storyList) {
-//        return storyList.stream().map(StoryDetailDto::from).collect(Collectors.toList());
         return storyList.stream().map(StoryDto::of).collect(Collectors.toList());
     }
 
@@ -143,23 +139,5 @@ public class StoryServiceImpl implements StoryService {
     @Transactional
     public void dislikeStory(Long memberId, Long storyId) {
         memberStoryLikeRepository.deleteByMemberIdAndStoryId(memberId, storyId);
-    }
-
-    @Override
-    public void uploadStoryReply(Long memberId, Long storyId, StoryReplyRequestDto dto) {
-        Story story = findByStoryId(storyId);
-        Member member = memberService.findById(memberId);
-        dto.setMember(member);
-        dto.setStory(story);
-        StoryReply reply = dto.toEntity();
-        storyReplyRepository.save(reply);
-    }
-
-    @Override
-    @Transactional
-    public void deleteStoryReply(Long storyId, Long replyId) {
-        // TODO: 댓글이 존재하지 않을 때 예외 처리
-        // TODO: 작성자에 한하여 댓글 수정 및 삭제 권한 부여
-        storyReplyRepository.deleteByStoryIdAndReplyId(storyId, replyId);
     }
 }

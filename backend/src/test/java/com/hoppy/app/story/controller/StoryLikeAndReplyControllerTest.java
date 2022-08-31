@@ -18,6 +18,7 @@ import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.repository.StoryReplyRepository;
 import com.hoppy.app.story.repository.StoryRepository;
+import com.hoppy.app.story.service.StoryReplyService;
 import com.hoppy.app.story.service.StoryService;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -54,6 +55,9 @@ public class StoryLikeAndReplyControllerTest {
 
     @Autowired
     StoryReplyRepository storyReplyRepository;
+
+    @Autowired
+    StoryReplyService storyReplyService;
 
     @Autowired
     MemberStoryLikeRepository memberStoryLikeRepository;
@@ -188,11 +192,9 @@ public class StoryLikeAndReplyControllerTest {
             String content = "This is " + String.valueOf(i+1) + "th reply";
             StoryReplyRequestDto dto = StoryReplyRequestDto.builder()
                     .content(content)
-                    .member(member)
-                    .story(story)
                     .build();
 
-            storyService.uploadStoryReply(memberId, storyId, dto);
+            storyReplyService.uploadStoryReply(memberId, storyId, dto);
         }
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders

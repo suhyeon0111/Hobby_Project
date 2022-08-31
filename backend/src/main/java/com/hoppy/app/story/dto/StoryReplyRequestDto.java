@@ -22,19 +22,16 @@ public class StoryReplyRequestDto {
 
     private Long id;
     private String content;
-    private Member member;
-    private Story story;
     @Builder.Default
     private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
-    public StoryReply toEntity() {
-        StoryReply reply = StoryReply.builder()
+    public StoryReply toEntity(Member member, Story story) {
+         return StoryReply.builder()
                 .id(id)
                 .content(content)
                 .member(member)
                 .story(story)
                 .createDate(createdDate)
                 .build();
-        return reply;
     }
 }
