@@ -7,5 +7,6 @@ public interface StoryReplyService {
     public void uploadStoryReply(Long memberId, Long storyId, StoryReplyRequestDto dto);
 
     public void deleteStoryReply(Long storyId, Long replyId);
-    
+
+    public void likeStoryReply(Long memberId, Long replyId);
 }

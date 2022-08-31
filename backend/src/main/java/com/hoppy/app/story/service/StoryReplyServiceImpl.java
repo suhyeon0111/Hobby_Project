@@ -38,4 +38,9 @@ public class StoryReplyServiceImpl implements StoryReplyService {
         // TODO: 작성자에 한하여 댓글 수정 및 삭제 권한 부여
         storyReplyRepository.deleteByStoryIdAndReplyId(storyId, replyId);
     }
+
+    @Override
+    public void likeStoryReply(Long memberId, Long replyId) {
+
+    }
 }
