@@ -30,6 +30,8 @@ public class StoryDto {
 
     private String title;
 
+    private String filename;
+
     private String content;
 
     private boolean liked;
@@ -47,6 +49,7 @@ public class StoryDto {
                 .username(story.getMember().getUsername())
                 .title(story.getTitle())
                 .content(story.getContent())
+                .filename(story.getFilePath())
                 .likeCount(story.getLikes().size())
                 .replyCount(story.getReplies().size())
                 .createdDate(story.getCreatedDate())
