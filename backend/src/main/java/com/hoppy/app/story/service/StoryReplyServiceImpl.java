@@ -10,9 +10,13 @@ import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.domain.story.StoryReply;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
+import com.hoppy.app.story.repository.StoryReReplyRepository;
 import com.hoppy.app.story.repository.StoryReplyRepository;
 import com.hoppy.app.story.repository.StoryRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +35,7 @@ public class StoryReplyServiceImpl implements StoryReplyService {
     private final MemberService memberService;
 
     private final StoryReplyRepository storyReplyRepository;
+    private final StoryReReplyRepository storyReReplyRepository;
 
     @Override
     public void uploadStoryReply(Long memberId, Long storyId, StoryReplyRequestDto dto) {
@@ -41,8 +46,22 @@ public class StoryReplyServiceImpl implements StoryReplyService {
 
     @Override
     @Transactional
-    public void deleteStoryReply(Long storyId, Long replyId) {
-        storyReplyRepository.deleteByStoryIdAndReplyId(storyId, replyId);
+    public void deleteStoryReply(Long memberId, Long replyId) {
+        StoryReply reply = findReReplies(memberId, replyId);
+        if(!reply.getReReplies().isEmpty()) {
+            List<Long> idList = reply.getReReplies().stream().map(R -> R.getId()).collect(
+                    Collectors.toList());
+            storyReReplyRepository.deleteAllByList(idList);
+        }
+        storyReplyRepository.delete(reply);
+    }
+
+    public StoryReply findReReplies(Long memberId, Long replyId) {
+        Optional<StoryReply> reply = storyReplyRepository.findByIdAndMemberIdWithReReplies(replyId, memberId);
+        if(reply.isEmpty()) {
+            throw new BusinessException(ErrorCode.REPLY_NOT_FOUND);
+        }
+        return reply.get();
     }
 
     public StoryReply findByReplyId(Long replyId) {
