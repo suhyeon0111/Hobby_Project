@@ -27,4 +27,6 @@ public interface StoryService {
 
     public void dislikeStory(Long memberId, Long storyId);
 
+    public void likeOrDislikeStory(Long memberId, Long storyId);
+
 }

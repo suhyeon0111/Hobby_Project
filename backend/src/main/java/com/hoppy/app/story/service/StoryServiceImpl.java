@@ -140,4 +140,16 @@ public class StoryServiceImpl implements StoryService {
     public void dislikeStory(Long memberId, Long storyId) {
         memberStoryLikeRepository.deleteByMemberIdAndStoryId(memberId, storyId);
     }
+
+    @Override
+    public void likeOrDislikeStory(Long memberId, Long storyId) {
+        Optional <MemberStoryLike> optional = memberStoryLikeRepository.findByMemberIdAndStoryId(memberId, storyId);
+        if(optional.isPresent()) {
+            memberStoryLikeRepository.delete(optional.get());
+        } else {
+            Member member = memberService.findById(memberId);
+            Story story = findByStoryId(storyId);
+            memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
+        }
+    }
 }

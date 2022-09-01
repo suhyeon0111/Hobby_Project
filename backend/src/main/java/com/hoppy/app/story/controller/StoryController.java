@@ -74,18 +74,18 @@ public class StoryController {
     @GetMapping("/like")
     public ResponseEntity<ResponseDto> likeStory(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        storyService.likeStory(userDetails.getId(), id);
+        storyService.likeOrDislikeStory(userDetails.getId(), id);
         Story story = storyService.findByStoryId(id);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
     }
 
-    @DeleteMapping("/like")
+/*    @DeleteMapping("/like")
     public ResponseEntity<ResponseDto> dislikeStory(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyService.dislikeStory(userDetails.getId(), id);
         Story story = storyService.findByStoryId(id);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
-    }
+    }*/
 
     @PostMapping("/reply")
     public ResponseEntity<ResponseDto> uploadReply(@RequestParam(value = "id") Long id,
