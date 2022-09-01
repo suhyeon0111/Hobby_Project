@@ -22,7 +22,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-
+@Table(
+        uniqueConstraints={
+                @UniqueConstraint(
+                        columnNames={"member_id", "story_id"}
+                )
+        }
+)
 public class MemberStoryLike {
 
     @Id

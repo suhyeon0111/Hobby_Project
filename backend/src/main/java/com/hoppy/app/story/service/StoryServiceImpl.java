@@ -114,7 +114,8 @@ public class StoryServiceImpl implements StoryService {
 
     public String getNextPagingUrl(Long lastId) {
         if(lastId >= 0) {
-            return "https://hoppy.kro.kr/api/story?lastId=" + lastId;
+//            return "https://hoppy.kro.kr/api/story?lastId=" + lastId;
+            return String.valueOf(lastId);
         } else {
             return "end";
         }
@@ -139,5 +140,17 @@ public class StoryServiceImpl implements StoryService {
     @Transactional
     public void dislikeStory(Long memberId, Long storyId) {
         memberStoryLikeRepository.deleteByMemberIdAndStoryId(memberId, storyId);
+    }
+
+    @Override
+    public void likeOrDislikeStory(Long memberId, Long storyId) {
+        Optional <MemberStoryLike> optional = memberStoryLikeRepository.findByMemberIdAndStoryId(memberId, storyId);
+        if(optional.isPresent()) {
+            memberStoryLikeRepository.delete(optional.get());
+        } else {
+            Member member = memberService.findById(memberId);
+            Story story = findByStoryId(storyId);
+            memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
+        }
     }
 }

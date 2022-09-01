@@ -130,7 +130,7 @@ public class StoryLikeAndReplyControllerTest {
                 ));
     }
 
-    @DisplayName("좋아요 취소 컨트롤러 테스트")
+    /*@DisplayName("좋아요 취소 컨트롤러 테스트")
     @Test
     @WithMockCustomUser(id = "7601")
     void storyDislikeTest() throws Exception {
@@ -149,7 +149,7 @@ public class StoryLikeAndReplyControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
-    }
+    }*/
 
     @DisplayName("스토리 댓글 등록 테스트")
     @Test
