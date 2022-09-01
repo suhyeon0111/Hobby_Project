@@ -89,7 +89,7 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public PagingStoryDto pagingStory(Long lastId) {
         lastId = validCheckLastId(lastId);
-        List<Story> storyList = storyRepository.findNextStoryOrderByIdDesc(lastId, PageRequest.of(0, 3));
+        List<Story> storyList = storyRepository.findNextStoryOrderByIdDesc(lastId, PageRequest.of(0, 10));
         if(storyList.isEmpty()) {
             throw new BusinessException(ErrorCode.NO_MORE_STORY);
         }
