@@ -15,12 +15,14 @@ import lombok.NoArgsConstructor;
 public class PagingStoryDto {
 
     private List<StoryDto> storyList;
-    private String nextPagingUrl;
+//    private String nextPagingUrl;
+    private String lastId;
 
-    public static PagingStoryDto of(List<StoryDto> storyList, String nextPagingUrl) {
+    public static PagingStoryDto of(List<StoryDto> storyList, String lastId) {
         return PagingStoryDto.builder()
                 .storyList(storyList)
-                .nextPagingUrl(nextPagingUrl)
+//                .nextPagingUrl(nextPagingUrl)
+                .lastId(lastId)
                 .build();
     }
 }

@@ -114,7 +114,8 @@ public class StoryServiceImpl implements StoryService {
 
     public String getNextPagingUrl(Long lastId) {
         if(lastId >= 0) {
-            return "https://hoppy.kro.kr/api/story?lastId=" + lastId;
+//            return "https://hoppy.kro.kr/api/story?lastId=" + lastId;
+            return String.valueOf(lastId);
         } else {
             return "end";
         }
