@@ -109,7 +109,7 @@ public class StoryLikeAndReplyControllerTest {
         memberRepository.deleteAll();
     }
 
-    @DisplayName("스토리 좋아요 컨트롤러 테스트")
+    @DisplayName("스토리 좋아요 및 좋아요 취소 컨트롤러 테스트")
     @Test
     @WithMockCustomUser(id = "8669")
     void storyLikeTest() throws Exception {
