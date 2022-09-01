@@ -6,10 +6,11 @@ import com.hoppy.app.like.domain.MemberStoryReplyLike;
 import com.hoppy.app.member.domain.Member;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface MemberStoryReplyLikeRepository {
+public interface MemberStoryReplyLikeRepository extends JpaRepository<MemberStoryReplyLike, Long> {
 
     List<MemberStoryReplyLike> findAllByMember(Member member);
 
