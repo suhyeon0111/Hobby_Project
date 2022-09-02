@@ -20,7 +20,7 @@ function LeftMenu(props) {
         }
 
         Axios
-          .get('https://hoppy.kro.kr/api/delete', {
+          .delete('https://hoppy.kro.kr/api/member', {
             headers,
             withCredentials: false
           })
@@ -28,6 +28,8 @@ function LeftMenu(props) {
             console.log('res>>>', response)
             if (response.data.status === 200) {
               alert('탈퇴가 완료되었습니다.')
+              localStorage.removeItem('Authorization', `Bearer ${token}`);
+              delete Axios.defaults.headers.common['Authorization'];
               window.location.href = "http://localhost:8888"
             } else {
               alert('탈퇴 처리를 실패했습니다. 다시 시도해주세요.')

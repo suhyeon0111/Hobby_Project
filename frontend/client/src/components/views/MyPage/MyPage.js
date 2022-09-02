@@ -19,10 +19,8 @@ function MyPage() {
         console.log('res>>>', response)
         setUserInfo(response.payload.data)
       })
-    }, [])
-
-    const Email = UserInfo.email
-    const Id = UserInfo.Id
+    }, [dispatch, setUserInfo])
+    
     const Intro = UserInfo.intro
     const ProfileUrl = UserInfo.profileUrl
     const UserName = UserInfo.username
@@ -91,10 +89,10 @@ function MyPage() {
                     }}>다른 사람들에게 자신을 소개해주세요!</p>
                 <div
                     style={{
-                        wordBreak: 'break-all',
                         width: '90%',
                         height: '117px',
                         margin: '18px 20px 0px 20px',
+                        padding: '20px 24px 20px 24px',
                         fontSize: '11px',
                         color: '#464646',
                         border: '0.8px solid #A5A5A5',
@@ -102,8 +100,13 @@ function MyPage() {
                     }}>
                     <div
                         style={{
+                            display: 'block',
+                            width: '100%',
+                            height: '100%',
                             textAlign: 'left',
-                            margin: '20px 0px 20px 24px'
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-all',
+                            overflowY: 'auto'
                         }}>
                         {Intro}
                     </div>

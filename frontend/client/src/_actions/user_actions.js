@@ -9,7 +9,7 @@ axios.defaults.withCredentials = false;
 export function getUser() {
     const token = localStorage.getItem('Authorization')
     
-    const request = axios.get(`https://hoppy.kro.kr/api/myprofile`, {
+    const request = axios.get(`https://hoppy.kro.kr/api/profile`, {
         headers: {
             Authorization: token
         }, withCredentials: false
