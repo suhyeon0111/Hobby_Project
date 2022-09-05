@@ -44,7 +44,9 @@ public enum SuccessCode {
 
     UPDATE_STORY_SUCCESS("스토리 수정 완료", 200),
     INQUIRY_STORY_SUCCESS("스토리 조회 완료", 200),
-    
+
+    // Reply
+    DELETE_REPLY_SUCCESS("댓글 삭제 완료", 200),
     ;
 
     private final String message;
