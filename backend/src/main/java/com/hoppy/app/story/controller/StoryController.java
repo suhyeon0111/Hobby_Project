@@ -93,7 +93,7 @@ public class StoryController {
             @RequestParam(value = "id") Long replyId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyReplyService.deleteStoryReply(userDetails.getId(), replyId);
-        return responseService.ok();
+        return responseService.successResult(SuccessCode.DELETE_REPLY_SUCCESS);
     }
 
     @GetMapping("reply/like")
