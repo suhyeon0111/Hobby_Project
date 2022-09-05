@@ -98,7 +98,7 @@ public class StoryLikeAndReplyControllerTest {
                             .filePath(i+".jpg")
                             .member(member).build()
             );
-            storyService.likeStory(member2.getId(), story.getId());
+            storyService.likeOrDislikeStory(member2.getId(), story.getId());
         }
     }
 

@@ -171,9 +171,9 @@ class StoryControllerTest {
         System.out.println("storyList.size() = " + storyList.size());
         for(int i = 0; i < storyList.size(); i++) {
             if(i % 2 == 0) {
-                storyService.likeStory(8669L, storyList.get(i).getId());
+                storyService.likeOrDislikeStory(8669L, storyList.get(i).getId());
             }
-            storyService.likeStory(7601L, storyList.get(i).getId());
+            storyService.likeOrDislikeStory(7601L, storyList.get(i).getId());
         }
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .get("/story")
