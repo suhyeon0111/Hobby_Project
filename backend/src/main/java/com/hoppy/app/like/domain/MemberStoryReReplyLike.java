@@ -27,7 +27,7 @@ import lombok.ToString;
 @Table(
         uniqueConstraints={
                 @UniqueConstraint(
-                        columnNames={"member_id", "reRply_id"}
+                        columnNames={"member_id", "reReply_id"}
                 )
         }
 )
@@ -41,6 +41,7 @@ public class MemberStoryReReplyLike {
     private Member member;
 
     @ManyToOne
+    @JoinColumn(name = "reReply_id")
     private StoryReReply reReply;
 
     public static MemberStoryReReplyLike of(Member member, StoryReReply reReply) {

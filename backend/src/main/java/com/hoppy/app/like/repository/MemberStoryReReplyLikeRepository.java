@@ -13,7 +13,7 @@ public interface MemberStoryReReplyLikeRepository extends JpaRepository<StoryReR
 
     List<MemberStoryReReplyLike> findAllByMember(Member member);
 
-    @Query("select s from MemberStoryReReplyLike s where s.member.id = :memberId and s.reReply.id")
+    @Query("select s from MemberStoryReReplyLike s where s.member.id = :memberId and s.reReply.id = :reReplyId")
     Optional<MemberStoryReReplyLike> findByMemberIdAndReplyId(
             @Param("memberId") Long memberId,
             @Param("reReplyId") Long reReplyId
