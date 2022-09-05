@@ -199,8 +199,7 @@ public class StoryLikeAndReplyControllerTest {
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .delete("/story/reply")
-                .param("storyId", String.valueOf(storyId))
-                .param("replyId", String.valueOf(1L))
+                .param("id", String.valueOf(1L))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
         );
