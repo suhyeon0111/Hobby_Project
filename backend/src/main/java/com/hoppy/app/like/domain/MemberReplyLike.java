@@ -1,11 +1,11 @@
 package com.hoppy.app.like.domain;
 
+import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.domain.Reply;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import com.hoppy.app.member.domain.Member;
+
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,12 +22,37 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
+@Table(
+        uniqueConstraints={
+                @UniqueConstraint(
+                        columnNames={"member_id", "reply_id"}
+                )
+        }
+)
 public class MemberReplyLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long memberId;
-    private Long replyId;
+    @ManyToOne(optional = false)
+    private Member member;
+
+    @ManyToOne(optional = false)
+    private Reply reply;
+
+    public Long getMemberId() {
+        return member.getId();
+    }
+
+    public Long getReplyId() {
+        return reply.getId();
+    }
+
+    public static MemberReplyLike of(Member member, Reply reply) {
+        return MemberReplyLike.builder()
+                .member(member)
+                .reply(reply)
+                .build();
+    }
 }

@@ -74,6 +74,7 @@ function HobbyStoryPage(props) {
                     }
                 })
             setFile(event.target.files[0].name)
+
         } else {
             return
         }
@@ -95,8 +96,6 @@ function HobbyStoryPage(props) {
             return alert("제목과 내용을 입력해주세요.")
         }
 
-        console.log('F', FileName)
-
         if (Title && Content && FileName === "") {
             const body = {
                 title: Title,
@@ -107,11 +106,10 @@ function HobbyStoryPage(props) {
                 Authorization: token
             }
             Axios
-                .post(
-                    "https://hoppy.kro.kr/api/story",
-                    body,
-                    {headers, withCredentials: false}
-                )
+                .post("https://hoppy.kro.kr/api/story", body, {
+                    headers, 
+                    withCredentials: false
+                })
                 .then(response => {
                     console.log('res>>>>', response)
                     if (response.data.status === 200) {

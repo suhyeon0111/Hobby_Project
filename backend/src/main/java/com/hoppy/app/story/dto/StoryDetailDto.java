@@ -1,36 +1,58 @@
 package com.hoppy.app.story.dto;
 
-import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.story.domain.BaseTimeEntity;
 import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * (스토리 클릭 시 나타날) 스토리의 모든 정보를 반환하는 Dto
+ */
 public class StoryDetailDto {
 
     private Long id;
-    private String title;
-    private String content;
-    private String username;
-    private Long memberId;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
 
-    public static StoryDetailDto of(Story story, Member member) {
+    private String profileUrl;
+
+    private String title;
+
+    private String content;
+
+    private String username;
+
+    private String filename;
+
+    private boolean liked;
+
+    private int likeCount;
+
+    private int replyCount;
+
+    private LocalDateTime createdDate;
+
+    private List<StoryReplyDto> replies;
+
+    public static StoryDetailDto from(Story story) {
         return StoryDetailDto.builder()
                 .id(story.getId())
+                .profileUrl(story.getMember().getProfileImageUrl())
                 .title(story.getTitle())
                 .content(story.getContent())
-                .memberId(member.getId())
-                .username(member.getUsername())
+                .username(story.getMember().getUsername())
+                .likeCount(story.getLikes().size())
+                .replyCount(story.getReplies().size())
+                .filename(story.getFilePath())
                 .createdDate(story.getCreatedDate())
-                .modifiedDate(story.getModifiedDate()).build();
+                .replies(story.getReplies().stream().map(StoryReplyDto::of).collect(Collectors.toList()))
+                .build();
     }
 }

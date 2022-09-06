@@ -69,13 +69,15 @@ function HobbyStoryPage() {
         }}
         key={index}>
         <div>
-            <Avatar
-                size={27}
-                src={story.profileUrl}
-                style={{
-                    float: 'left',
-                    marginRight: '8px'
-                }}/>
+            <a href={`/user/${story.memberId}`}>
+              <Avatar
+                  size={27}
+                  src={story.profileUrl}
+                  style={{
+                      float: 'left',
+                      marginRight: '8px'
+                  }}/>
+            </a>
             <p
                 style={{
                     float: 'left',

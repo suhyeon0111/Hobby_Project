@@ -1,0 +1,67 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: CI to Docker Hub - FrontEnd
+
+on:
+  push:
+    paths:
+      - "frontend/**"
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.16.0]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - name: 체크아웃
+      uses: actions/checkout@v3
+      
+    - name: Node.js 설정 ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+  
+#     - name: clean cache
+#       run: cd frontend/client && npm cache clean --force
+
+#     - name: clean package-lock.json
+#       run: cd frontend/client && rm -rf package-lock.json
+
+    - name: 빌드
+      working-directory: ./frontend/client
+      run: |
+        npm install
+        npm run build
+
+    - name: 빌드 폴더 압축하기
+      working-directory: ./frontend/client
+      run: |
+        zip -r build.zip ./build
+      
+    - name: s3에 업로드
+      working-directory: ./frontend/client
+      run: aws s3 mv build.zip s3://hoppyservice/static/build.zip
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+      
+  deploy:
+    needs: build
+    name: 프론트엔드 자동 배포
+    runs-on: [ self-hosted, hoppy ]
+    steps:
+      - name: 자동 배포
+        working-directory: /home/ec2-user
+        run: |
+          ./deploy-fe.sh

@@ -38,12 +38,23 @@ public enum ErrorCode {
     MAX_PARTICIPANTS(403, "M004", "모임 인원 초과입니다"),
     ALREADY_JOIN(403, "M005", "이미 가입한 멤버입니다"),
     NOT_JOINED(403, "M006", "모임에 가입해주세요"),
+    NO_MORE_MEETING(403, "M007", "더 이상 조회할 모임이 없습니다"),
+    OWNER_WITHDRAW_ERROR(403, "M008", "모임 주인은 탈퇴할 수 없습니다"),
+
+    // Post
+    POST_NOT_FOUND(403, "P001", "존재하지 않는 게시물입니다"),
+    NO_MORE_POST(403, "P002", "더 이상 조회할 게시물이 없습니다"),
+    ALREADY_LIKED_POST(403, "P003", "좋아요 중복 요청"),
+
+    // Reply
+    REPLY_NOT_FOUND(403, "R001", "존재하지 않는 댓글입니다"),
 
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
     DELETED_MEMBER(403, "MM002", "탈퇴한 멤버입니다."),
     // Story
-    STORY_NOT_FOUND(403, "SS001", "존재하지 않는 스토리입니다.")
+    STORY_NOT_FOUND(403, "SS001", "존재하지 않는 스토리입니다."),
+    NO_MORE_STORY(403, "SS002", "더 이상 조회할 스토리가 없습니다")
     ;
     private final String code;
     private final String message;

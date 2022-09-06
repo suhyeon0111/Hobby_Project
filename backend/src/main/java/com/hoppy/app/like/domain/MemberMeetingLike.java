@@ -1,27 +1,50 @@
 package com.hoppy.app.like.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.meeting.domain.Meeting;
+import com.hoppy.app.member.domain.Member;
+
+import javax.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
+@Table(
+        uniqueConstraints={
+                @UniqueConstraint(
+                        columnNames={"member_id", "meeting_id"}
+                )
+        }
+)
 public class MemberMeetingLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long memberId;
-    private Long meetingId;
+    @ManyToOne(optional = false)
+    private Member member;
+
+    @ManyToOne(optional = false)
+    private Meeting meeting;
+
+    public Long getMemberId() {
+        return member.getId();
+    }
+
+    public Long getMeetingId() {
+        return meeting.getId();
+    }
+
+    public static MemberMeetingLike of(Member member, Meeting meeting) {
+        return MemberMeetingLike.builder()
+                .member(member)
+                .meeting(meeting)
+                .build();
+    }
 }

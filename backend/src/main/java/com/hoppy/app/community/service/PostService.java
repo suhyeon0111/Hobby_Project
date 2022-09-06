@@ -1,6 +1,8 @@
 package com.hoppy.app.community.service;
 
 import com.hoppy.app.community.domain.Post;
+import com.hoppy.app.community.dto.CreatePostDto;
+import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.meeting.domain.Meeting;
 import java.util.List;
@@ -10,11 +12,23 @@ import java.util.List;
  */
 public interface PostService {
 
-    List<Post> pagingPostList(Meeting meeting, long lastId);
+    public Post findById(long id);
 
-    long getLastId(List<Post> posts);
+    public void createPost(CreatePostDto createPostDto, long memberId);
 
-    String createNextPagingUrl(long meetingId, long lastId);
+    public void deletePost(long memberId, long postId);
 
-    List<PostDto> listToDtoList(List<Post> posts, long memberId);
+    public void likePost(long memberId, long postId);
+
+    public void dislikePost(long memberId, long postId);
+
+    public List<PostDto> pagingPostListV2(Meeting meeting, long lastId, long memberId);
+
+    public long getLastId(List<PostDto> posts);
+
+    public long validCheckLastId(long lastId);
+
+    public String createNextPagingUrl(long meetingId, long lastId);
+
+    public PostDetailDto getPostDetailV2(long postId, long memberId);
 }
