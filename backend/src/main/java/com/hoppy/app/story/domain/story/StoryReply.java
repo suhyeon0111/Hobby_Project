@@ -1,6 +1,7 @@
 package com.hoppy.app.story.domain.story;
 
 import com.hoppy.app.like.domain.MemberReplyLike;
+import com.hoppy.app.like.domain.MemberStoryReplyLike;
 import com.hoppy.app.member.domain.Member;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,5 +59,5 @@ public class StoryReply {
     @BatchSize(size = 100)
     @Default
     @Exclude
-    private Set<MemberReplyLike> likes = new HashSet<>();
+    private Set<MemberStoryReplyLike> likes = new HashSet<>();
 }
