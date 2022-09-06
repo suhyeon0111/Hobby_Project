@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect, useState } from 'react'
 import { Avatar } from 'antd'
 import Axios from 'axios';
@@ -46,15 +48,13 @@ function ViewUserPage(props) {
             <div
                 style={{
                     width: '100%',
-                    margin: '3rem auto'
+                    margin: '2rem auto'
                 }}>
                 <Avatar
                     src={Member.profileUrl}
                     style={{
                         width: '142px',
                         height: '142px',
-                        marginTop: '21px',
-                        marginRight: '10px',
                         background: '#A5A5A5'
                     }}
                 />
