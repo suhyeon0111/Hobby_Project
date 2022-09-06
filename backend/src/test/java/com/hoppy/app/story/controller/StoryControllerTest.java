@@ -168,7 +168,6 @@ class StoryControllerTest {
     @Test
     void showStoryList() throws Exception {
         List<Story> storyList = storyRepository.findAll();
-        System.out.println("storyList.size() = " + storyList.size());
         for(int i = 0; i < storyList.size(); i++) {
             if(i % 2 == 0) {
                 storyService.likeOrDislikeStory(8669L, storyList.get(i).getId());
@@ -182,6 +181,24 @@ class StoryControllerTest {
         ).andDo(print());
         result.andExpect(status().isOk())
                 .andDo(document("story-pagination",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @DisplayName("스토리 상세 조회 테스트")
+    @Test
+    void showStoryDetails() throws Exception {
+        List<Story> storyList = storyRepository.findAll();
+        Long storyId = storyList.get(0).getId();
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .get("/story/detail")
+                .param("id", String.valueOf(storyId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8)));
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("show-story-detail",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
