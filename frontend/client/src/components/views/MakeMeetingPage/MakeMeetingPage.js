@@ -82,7 +82,7 @@ function MakeMeetingPage() {
           }}
         >
           <div style={hobbyBoxStyle}>
-            음악
+            <div>음악</div>
             <img src={MusicImg} alt="음악" style={hobbyImageStyle} />
           </div>
         </a>

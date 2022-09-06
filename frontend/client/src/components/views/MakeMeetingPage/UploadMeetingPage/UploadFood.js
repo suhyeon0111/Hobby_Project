@@ -4,19 +4,12 @@ import { Input, Button, Icon, Form } from "antd";
 import Axios from "axios";
 import TextArea from "antd/lib/input/TextArea";
 import ImageIcon from "../../LandingPage/img/food.png";
-import { getUser } from "../../../../_actions/user_actions";
 import "./UploadMeeting.css";
 
 function UploadFood() {
   // 토큰 가져오기
-  const dispatch = useDispatch();
-
   const token = localStorage.getItem("Authorization");
   console.log("token>>>>>", token);
-
-  useEffect(() => {
-    dispatch(getUser()).then((response) => {});
-  }, []);
 
   // 모임 생성 form
   const [UploadTitle, setUploadTitle] = useState("");
