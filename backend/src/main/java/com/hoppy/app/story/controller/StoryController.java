@@ -78,6 +78,11 @@ public class StoryController {
         Story story = storyService.findByStoryId(id);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
     }
+    @GetMapping("/detail")
+    public ResponseEntity<ResponseDto> showStoryDetails(@RequestParam(value = "id") Long id) {
+        StoryDetailDto storyDetailDto = storyService.showStoryDetails(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, storyDetailDto);
+    }
 
     @PostMapping("/reply")
     public ResponseEntity<ResponseDto> uploadReply(@RequestParam(value = "id") Long id,
@@ -96,6 +101,7 @@ public class StoryController {
         return responseService.successResult(SuccessCode.DELETE_REPLY_SUCCESS);
     }
 
+
     @GetMapping("reply/like")
     public ResponseEntity<ResponseDto> likeStoryReply(
             @RequestParam(value = "id") Long id,
@@ -103,4 +109,5 @@ public class StoryController {
         storyReplyService.likeOrDislikeStoryReply(userDetails.getId(), id);
         return responseService.ok();
     }
+
 }

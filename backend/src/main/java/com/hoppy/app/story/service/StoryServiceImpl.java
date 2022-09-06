@@ -153,4 +153,10 @@ public class StoryServiceImpl implements StoryService {
             memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
         }
     }
+
+    @Override
+    public StoryDetailDto showStoryDetails(Long storyId) {
+        Story story = findByStoryId(storyId);
+        return StoryDetailDto.from(story);
+    }
 }
