@@ -4,11 +4,9 @@ import com.hoppy.app.community.dto.PagingPostDto;
 import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
-import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.dto.MeetingDetailDto;
-import com.hoppy.app.meeting.dto.MeetingDto;
 import com.hoppy.app.meeting.dto.MeetingJoinDto;
 import com.hoppy.app.meeting.dto.MeetingWithdrawalDto;
 import com.hoppy.app.meeting.dto.PagingMeetingDto;
@@ -88,7 +86,7 @@ public class MeetingController {
             @PathVariable("id") long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Meeting meeting = meetingService.getById(id);
+        Meeting meeting = meetingService.findById(id);
         List<ParticipantDto> participantList = meetingService.getParticipantDtoList(meeting);
         meetingService.checkJoinedMemberV2(participantList, userDetails.getId());
 
@@ -98,6 +96,24 @@ public class MeetingController {
         return responseService.successResult(SuccessCode.INQUIRE_MEETING_DETAIL_SUCCESS, meetingDetailDto);
     }
 
+    @GetMapping("/like/{id}")
+    public ResponseEntity<ResponseDto> likeMeeting(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        meetingService.likeMeeting(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @DeleteMapping("/like/{id}")
+    public ResponseEntity<ResponseDto> dislikeMeeting(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        meetingService.dislikeMeeting(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
     @GetMapping("/posts")
     public ResponseEntity<ResponseDto> getPostsWithPaging(
             @RequestParam(value = "meetingId", defaultValue = "0") long meetingId,
@@ -105,7 +121,7 @@ public class MeetingController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         lastId = postService.validCheckLastId(lastId);
-        Meeting meeting = meetingService.getById(meetingId);
+        Meeting meeting = meetingService.findById(meetingId);
         List<Member> participantList = meetingService.getParticipantList(meeting);
         meetingService.checkJoinedMemberV1(participantList, userDetails.getId());
 

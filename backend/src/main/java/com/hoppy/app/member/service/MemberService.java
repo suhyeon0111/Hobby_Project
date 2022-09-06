@@ -11,6 +11,8 @@ public interface MemberService {
 
     public Member findByIdWithPostLikes(long id);
 
+    public Member findByIdWithMeetingLikes(long id);
+
     public Member updateById(long memberId, UpdateMemberDto memberDto);
 
     public Member deleteById(long id);

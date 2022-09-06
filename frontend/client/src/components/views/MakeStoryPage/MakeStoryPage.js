@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {useState, useRef} from 'react'
 import {Input, Button, Icon, Avatar, Form} from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
@@ -81,8 +83,6 @@ function HobbyStoryPage(props) {
         }
         reader.readAsDataURL(event.target.files[0])
     }
-
-    console.log('Filename >>>', FileName)
 
     //글 올리기 버튼 event-handler
     const submitHandler = (event) => {

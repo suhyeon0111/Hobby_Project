@@ -1,20 +1,17 @@
 package com.hoppy.app.community.service;
 
 import com.hoppy.app.community.domain.Post;
-import com.hoppy.app.community.domain.ReReply;
-import com.hoppy.app.community.domain.Reply;
-import com.hoppy.app.community.dto.PostDetailDto;
-import com.hoppy.app.community.dto.PostDto;
-import com.hoppy.app.community.dto.ReReplyDto;
-import com.hoppy.app.community.dto.ReplyDto;
+import com.hoppy.app.community.dto.*;
 import com.hoppy.app.community.repository.PostRepository;
+import com.hoppy.app.community.repository.ReReplyRepository;
+import com.hoppy.app.community.repository.ReplyRepository;
 import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.domain.MemberReReplyLike;
 import com.hoppy.app.like.domain.MemberReplyLike;
 import com.hoppy.app.like.repository.MemberPostLikeRepository;
 import com.hoppy.app.meeting.domain.Meeting;
+import com.hoppy.app.meeting.service.MeetingService;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
@@ -27,7 +24,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,16 +37,53 @@ public class PostServiceImpl implements PostService {
 
     private final int PAGING_COUNT = 8;
     private final PostRepository postRepository;
+    private final ReplyRepository replyRepository;
+    private final ReReplyRepository reReplyRepository;
     private final MemberPostLikeRepository memberPostLikeRepository;
     private final MemberService memberService;
+    private final MeetingService meetingService;
 
     @Override
     public Post findById(long id) {
-        Optional<Post> optionalPost = postRepository.findById(id);
-        if(optionalPost.isEmpty()) {
-            throw new BusinessException(ErrorCode.POST_NOT_FOUND);
+        return postRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
+    }
+
+    @Override
+    @Transactional
+    public void createPost(CreatePostDto createPostDto, long memberId) {
+        Meeting meeting = meetingService.findById(createPostDto.getMeetingId());
+        Member author = memberService.findById(memberId);
+
+        postRepository.save(Post.builder()
+                .title(createPostDto.getTitle())
+                .content(createPostDto.getContent())
+                .author(author)
+                .meeting(meeting)
+                .build()
+        );
+    }
+
+    @Override
+    @Transactional
+    public void deletePost(long memberId, long postId) {
+        Post post = postRepository.getPostDetailByIdAndAuthorId(postId, memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
+
+        if(!post.getReplies().isEmpty()) {
+            List<Long> replyList = new ArrayList<>();
+            List<Long> reReplyList = new ArrayList<>();
+
+            for(var r : post.getReplies()) {
+                replyList.add(r.getId());
+                for(var rr : r.getReReplies()) {
+                    reReplyList.add(rr.getId());
+                }
+            }
+            if(!reReplyList.isEmpty()) reReplyRepository.deleteAllByList(reReplyList);
+            replyRepository.deleteAllByList(replyList);
         }
-        return optionalPost.get();
+        postRepository.delete(post);
     }
 
     @Override
@@ -62,6 +95,12 @@ public class PostServiceImpl implements PostService {
         Member member = memberService.findById(memberId);
         Post post = findById(postId);
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
+    }
+
+    @Override
+    @Transactional
+    public void dislikePost(long memberId, long postId) {
+        memberPostLikeRepository.deleteByMemberIdAndPostId(memberId, postId);
     }
 
     @Override
@@ -92,8 +131,7 @@ public class PostServiceImpl implements PostService {
                 .map(P -> PostDto.postToPostDto(
                         P,
                         likedMap.containsKey(P.getId()),
-                        likesCountMap.get(P.getId()),
-                        repliesCountMap.get(P.getId()))
+                        likesCountMap.get(P.getId()), repliesCountMap.get(P.getId()))
                 )
                 .collect(Collectors.toList());
     }
@@ -124,11 +162,9 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public PostDetailDto getPostDetailV2(long postId, long memberId) {
-        Optional<Post> optPost = postRepository.getPostDetail(postId);
-        if(optPost.isEmpty()) {
-            throw new BusinessException(ErrorCode.POST_NOT_FOUND);
-        }
-        Post post = optPost.get();
+        Post post = postRepository.getPostDetail(postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
+
         Member member = memberService.findByIdWithPostLikes(memberId);
 
         boolean postLiked = member.getPostLikes().stream().anyMatch(L -> L.getPost().getId() == postId);

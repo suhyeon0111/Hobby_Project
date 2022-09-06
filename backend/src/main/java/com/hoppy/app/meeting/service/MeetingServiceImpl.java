@@ -1,5 +1,7 @@
 package com.hoppy.app.meeting.service;
 
+import com.hoppy.app.like.domain.MemberMeetingLike;
+import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
@@ -13,18 +15,17 @@ import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
-import com.hoppy.app.response.service.SuccessCode;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -34,6 +35,7 @@ public class MeetingServiceImpl implements MeetingService {
     private final MemberService memberService;
     private final MeetingRepository meetingRepository;
     private final MemberMeetingRepository memberMeetingRepository;
+    private final MemberMeetingLikeRepository memberMeetingLikeRepository;
 
     @Override
     @Transactional
@@ -47,10 +49,11 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @Transactional
     public Meeting createMeeting(CreateMeetingDto dto, Long ownerId) throws BusinessException {
+        Member owner = memberService.findById(ownerId);
         if(checkTitleDuplicate(dto.getTitle())) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
         }
-        return meetingRepository.save(Meeting.of(dto, ownerId));
+        return meetingRepository.save(Meeting.of(dto, owner));
     }
 
     @Override
@@ -73,6 +76,10 @@ public class MeetingServiceImpl implements MeetingService {
         }
         Meeting meeting = optionalMeeting.get();
         Member member = memberService.findById(memberId);
+
+        if(meeting.getOwner().getId() == member.getId()) {
+            throw new BusinessException(ErrorCode.OWNER_WITHDRAW_ERROR);
+        }
 
         Set<MemberMeeting> participants = meeting.getParticipants();
         boolean joined = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
@@ -154,21 +161,15 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Meeting getById(long id) {
-        Optional<Meeting> meeting = meetingRepository.findById(id);
-        if(meeting.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
-        }
-        return meeting.get();
+    public Meeting findById(long id) {
+        return meetingRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEETING_NOT_FOUND));
     }
 
     @Override
-    public Meeting getByIdWithParticipants(long id) {
-        Optional<Meeting> meeting = meetingRepository.findWithParticipantsById(id);
-        if(meeting.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
-        }
-        return meeting.get();
+    public Meeting findByIdWithParticipants(long id) {
+        return meetingRepository.findWithParticipantsById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEETING_NOT_FOUND));
     }
 
     @Override
@@ -186,8 +187,25 @@ public class MeetingServiceImpl implements MeetingService {
     public List<ParticipantDto> getParticipantDtoList(Meeting meeting) {
         return getParticipantList(meeting)
                 .stream()
-                .map(M -> ParticipantDto.memberToParticipantDto(M, meeting.getOwnerId()))
+                .map(M -> ParticipantDto.memberToParticipantDto(M, meeting.getOwner().getId()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void likeMeeting(long memberId, long meetingId) {
+        boolean alreadyLiked = memberMeetingLikeRepository.findByMemberIdAndMeetingId(memberId, meetingId).isPresent();
+        if(alreadyLiked) return;
+
+        Meeting meeting = findById(meetingId);
+        Member member = memberService.findById(memberId);
+        memberMeetingLikeRepository.save(MemberMeetingLike.of(member, meeting));
+    }
+
+    @Override
+    @Transactional
+    public void dislikeMeeting(long memberId, long meetingId) {
+        memberMeetingLikeRepository.deleteByMemberIdAndMeetingId(memberId, meetingId);
     }
 
     @Override

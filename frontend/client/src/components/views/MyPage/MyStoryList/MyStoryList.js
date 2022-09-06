@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import {Avatar, Icon} from 'antd'
 import Axios from 'axios'
 import moment from 'moment';
@@ -34,7 +36,7 @@ function MyStoryList() {
       dispatch(getUser()).then(response => {
         setUserInfo(response.payload.data)
       })
-    }, [])
+    }, [dispatch, setUserInfo])
 
     useEffect(() => {
         getStoryList()

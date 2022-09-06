@@ -10,6 +10,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
+
+import com.hoppy.app.utility.Utility;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author 태경 2022-08-15
  */
 @SpringBootTest
+@Slf4j
 public class PostServiceLikeConcurrencyTest {
 
     @Autowired
@@ -41,13 +45,11 @@ public class PostServiceLikeConcurrencyTest {
     @Autowired
     EntityManager em;
 
-    Logger log = (Logger) LoggerFactory.getLogger(PostServiceLikeConcurrencyTest.class);
-
     @AfterEach
     void clean() {
         memberPostLikeRepository.deleteAll();
-        memberRepository.deleteAll();
         postRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @DisplayName("게시물 좋아요 동시성 중복 요청 처리 테스트")
@@ -58,11 +60,7 @@ public class PostServiceLikeConcurrencyTest {
                 .id(1L)
                 .build()
         );
-        Post post = postRepository.save(Post.builder()
-                .title("test-title")
-                .content("test-content")
-                .build()
-        );
+        Post post = postRepository.save(Utility.testPost(member));
 
         final int REQUEST_COUNT = 10;
         CountDownLatch countDownLatch = new CountDownLatch(REQUEST_COUNT);

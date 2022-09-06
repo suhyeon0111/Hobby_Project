@@ -14,8 +14,8 @@ public interface MeetingService {
     public void createAndSaveMemberMeetingData(Meeting meeting, Member member);
     public boolean checkTitleDuplicate(String name);
     public Meeting createMeeting(CreateMeetingDto dto, Long ownerId);
-    public Meeting getById(long id);
-    public Meeting getByIdWithParticipants(long id);
+    public Meeting findById(long id);
+    public Meeting findByIdWithParticipants(long id);
 
     public void withdrawMeeting(Long meetingId, Long memberId);
     public void checkJoinRequestValid(long meetingId, long memberId);
@@ -31,4 +31,6 @@ public interface MeetingService {
     public List<Member> getParticipantList(Meeting meeting);
     public List<ParticipantDto> getParticipantDtoList(Meeting meeting);
 
+    public void likeMeeting(long memberId, long meetingId);
+    public void dislikeMeeting(long memberId, long meetingId);
 }

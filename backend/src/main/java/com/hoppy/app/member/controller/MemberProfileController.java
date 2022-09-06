@@ -11,7 +11,7 @@ import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
-import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.dto.SaveStoryDto;
 import com.hoppy.app.story.service.StoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class MemberProfileController {
     private ResponseEntity<ResponseDto> showMyStories(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long memberId = userDetails.getId();
         Member member = memberService.findById(memberId);
-        List<StoryDto> storyDetails = storyService.showMyStoriesInProfile(member);
+        List<SaveStoryDto> storyDetails = storyService.showMyStoriesInProfile(member);
         return responseService.successResult(SuccessCode.SHOW_PROFILE_SUCCESS, storyDetails);
     }
 

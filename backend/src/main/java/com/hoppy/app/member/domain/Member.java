@@ -4,6 +4,7 @@ import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.domain.MemberReReplyLike;
 import com.hoppy.app.like.domain.MemberReplyLike;
+import com.hoppy.app.like.domain.MemberStoryLike;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.story.domain.story.Story;
@@ -87,4 +88,10 @@ public class Member {
     @Default
     @Exclude
     private Set<Story> stories = new HashSet<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    @Default
+    @Exclude
+    private Set<MemberStoryLike> storyLikes = new HashSet<>();
 }

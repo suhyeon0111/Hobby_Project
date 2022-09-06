@@ -18,19 +18,22 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("select distinct p from Post p "
-            + "join fetch p.author "
             + "where p.meeting = :meeting and p.id < :lastId "
             + "order by p.id desc")
     List<Post> infiniteScrollPagingPost(@Param("meeting") Meeting meeting, @Param("lastId") Long lastId, Pageable pageable);
 
     @Query("select distinct p from Post p "
-            + "join fetch p.author "
             + "left join fetch p.replies as pr "
-            + "join fetch pr.author "
             + "left join fetch pr.reReplies as prr "
-            + "join fetch prr.author "
             + "where p.id = :id")
     Optional<Post> getPostDetail(@Param("id") Long id);
 
-    List<Post> findAllByMeeting(Meeting meeting);
+    @Query("select distinct p from Post p "
+            + "left join fetch p.replies as pr "
+            + "left join fetch pr.reReplies as prr "
+            + "where p.id = :id and p.author.id = :authorId")
+    Optional<Post> getPostDetailByIdAndAuthorId(@Param("id") Long id, @Param("authorId") Long authorId);
+
+    @Query("select p from Post p where p.id = :id and p.author.id = :authorId")
+    Optional<Post> findByIdAndAuthorId(@Param("id") Long id, @Param("authorId") Long authorId);
 }
