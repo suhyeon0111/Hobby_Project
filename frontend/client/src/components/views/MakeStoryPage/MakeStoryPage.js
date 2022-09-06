@@ -74,7 +74,6 @@ function HobbyStoryPage(props) {
                     }
                 })
             setFile(event.target.files[0].name)
-
         } else {
             return
         }
@@ -95,7 +94,6 @@ function HobbyStoryPage(props) {
         if (!Title && !Content) {
             return alert("제목과 내용을 입력해주세요.")
         }
-
         if (Title && Content && FileName === "") {
             const body = {
                 title: Title,
