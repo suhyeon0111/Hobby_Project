@@ -4,7 +4,7 @@ import { Button, Icon, Avatar } from 'antd'
 import React, { useState, useEffect } from 'react'
 import Axios from 'axios'
 import moment from 'moment'
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 function HobbyStoryPage() {
 
@@ -70,13 +70,13 @@ function HobbyStoryPage() {
         key={index}>
         <div>
             <a href={`/user/${story.memberId}`}>
-            <Avatar
-                size={27}
-                src={story.profileUrl}
-                style={{
-                    float: 'left',
-                    marginRight: '8px'
-                }}/>
+              <Avatar
+                  size={27}
+                  src={story.profileUrl}
+                  style={{
+                      float: 'left',
+                      marginRight: '8px'
+                  }}/>
             </a>
             <p
                 style={{
@@ -157,7 +157,7 @@ function HobbyStoryPage() {
             })
             .then(response => response.json())
             .then(response => {
-                console.log('resresres', response)
+                // console.log('resresres', response)
                 if (response.code === 'SS002') {
                     console.log(response.message)
                     setFetching(false)
