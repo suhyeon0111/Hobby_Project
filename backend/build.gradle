@@ -23,7 +23,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'mysql:mysql-connector-java'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -43,11 +43,18 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDirectory = file('build/customJacocoReportDir')
 }
 
 ext {
@@ -68,27 +75,22 @@ jacocoTestReport {
 	}
 }
 
-jacoco {
-	toolVersion = "0.8.8"
-	reportsDirectory = file('build/customJacocoReportDir')
+task beforeAsciidoctor(type: Delete) {
+	dependsOn 'jacocoTestReport'
+	delete ('src/main/resources/static/docs/api-docs.html')
 }
 
 asciidoctor {
-	dependsOn 'jacocoTestReport'
+	dependsOn 'beforeAsciidoctor'
 	sourceDir 'src/docs/asciidoc'
-
 	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
 }
 
-asciidoctor.doFirst {
-	delete file('src/main/resources/static/docs')
-}
-
 task copyDocument(type: Copy) {
 	dependsOn 'asciidoctor'
-	from "build/docs/asciidoc/"
-	into "src/main/resources/static/docs"
+	from ('build/docs/asciidoc/api-docs.html')
+	into ('src/main/resources/static/docs')
 }
 
 build {

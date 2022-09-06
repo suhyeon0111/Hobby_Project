@@ -10,14 +10,18 @@ import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.story.domain.story.Story;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.transaction.Transactional;
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -33,20 +37,20 @@ class StoryRepositoryTest {
 
     @BeforeEach
     void setup() {
-        Member member = Member.builder()
-                .username("최대한")
-                .role(Role.USER)
-                .id(8669L)
-                .profileImageUrl("https://www.image.com/test")
-                .socialType(SocialType.KAKAO)
-                .email("test99@naver.com")
-                .password("secret-key")
-                .intro("잘부탁드립니다.")
-                .build();
 
-        memberRepository.save(member);
+        Member member1 = Member.builder().id(8669L).username("최대한").build();
+        Member member2 = Member.builder().id(7601L).username("김태경").build();
 
-        for(int i = 1; i <= 5; i++) {
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        for(int i = 1; i <= 20; i++) {
+            Member member = null;
+            if(i % 2 == 0) {
+                member = member1;
+            } else if(i % 2 != 0) {
+                member = member2;
+            }
             storyRepository.save(
                     Story.builder()
                             .member(member)
@@ -65,16 +69,6 @@ class StoryRepositoryTest {
         memberRepository.deleteAll();
     }
 
-    @Test
-    @WithMockCustomUser(id = "8669")
-    void sortingWithQueryMethod() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long memberId = Long.parseLong(authentication.getName());
-        List<Story> stories = storyRepository.findTop3ByMemberIdOrderByIdDesc(memberId);
-        stories.forEach(story -> {
-            System.out.println("story = " + story);
-        });
-    }
 
     @Test
     public void insertBaseTimeEntity() {
@@ -89,5 +83,12 @@ class StoryRepositoryTest {
         Story story = storyList.get(0);
 
         System.out.println(">>>>>>>> createDate=" + story.getCreatedDate() + ", modifiedDate=" + story.getModifiedDate());
+    }
+
+    @DisplayName("레포지토리 쿼리 정상 동작 테스트")
+    @Test
+    void repositoryPagingTest() throws Exception {
+        List<Story> stories = storyRepository.findNextStoryOrderByIdDesc(Long.MAX_VALUE, PageRequest.of(0, 3));
+        assertThat(stories.size()).isEqualTo(3);
     }
 }

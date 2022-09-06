@@ -1,11 +1,11 @@
 import React from "react";
-import {Input, Card} from "antd";
+import {Input} from "antd";
 import Axios from "axios";
 // import CardHandler from '../CardHandler/CardHandler';
 
 function ExerciseMeetingPage() {
     const {Search} = Input;
-    const {Meta} = Card;
+    // const {Meta} = Card;
 
     const onSearch = (value) => console.log(value);
 

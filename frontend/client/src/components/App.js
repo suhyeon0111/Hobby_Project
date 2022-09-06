@@ -12,6 +12,7 @@ import NotificationPage from "./views/NotificationPage/NotificationPage";
 
 import AuthRedirectHandler from "./views/LoginPage/KakaoLogin/AuthRedirectHandler";
 import KakaoLoginPage from "./views/LoginPage/KakaoLogin/KakaoLoginPage";
+import LogoutPage from "./views/LogoutPage/LogoutPage.js";
 
 import MyPage from "./views/MyPage/MyPage";
 import EditMyPage from "./views/MyPage/EditMyPage.js";
@@ -25,7 +26,8 @@ import MusicMeetingPage from "./views/MusicMeetingPage/MusicMeetingPage";
 import TripMeetingPage from "./views/TripMeetingPage/TripMeetingPage";
 
 import HobbyStoryPage from "./views/HobbyStoryPage/HobbyStoryPage";
-import MakeStoryPage from "./views/MakeStoryPage/MakeStoryPage"
+import MakeStoryPage from "./views/MakeStoryPage/MakeStoryPage";
+import ViewUserPage from "./views/ViewUserPage/ViewUserPage";
 
 import MakeMeetingPage from "./views/MakeMeetingPage/MakeMeetingPage";
 import UploadExercise from "./views/MakeMeetingPage/UploadMeetingPage/UploadExercise";
@@ -58,6 +60,7 @@ function App() {
 
           <Route exact path="/login" component={(KakaoLoginPage)} />
           <Route exact path="/login/auth/kakao" component={(AuthRedirectHandler)} />
+          <Route exact path="/logout" component={(LogoutPage)} />
 
           <Route exact path="/notification" component={(NotificationPage)} />
 
@@ -87,6 +90,9 @@ function App() {
           {/* 스토리 */}
           <Route exact path="/hobbystory" component={(HobbyStoryPage)} />
           <Route exact path="/hobbystory/upload" component={(MakeStoryPage)} />
+
+          {/* 사용자 프로필 */}
+          <Route exact path="/user/:userId" component={(ViewUserPage)} />
         </Switch>
       </div>
       <Footer />

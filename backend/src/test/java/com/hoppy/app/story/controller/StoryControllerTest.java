@@ -1,7 +1,6 @@
 package com.hoppy.app.story.controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -10,24 +9,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoppy.app.like.repository.MemberStoryLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.login.auth.SocialType;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.story.domain.story.Story;
-import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
+import com.hoppy.app.story.service.StoryService;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -55,6 +52,11 @@ class StoryControllerTest {
     StoryRepository storyRepository;
 
     @Autowired
+    MemberStoryLikeRepository memberStoryLikeRepository;
+
+    @Autowired
+    StoryService storyService;
+    @Autowired
     MockMvc mvc;
 
     @Autowired
@@ -62,20 +64,20 @@ class StoryControllerTest {
 
     @BeforeEach
     void setup() {
-        Member member = Member.builder()
-                .username("최대한")
-                .role(Role.USER)
-                .id(8669L)
-                .profileImageUrl("https://www.image.com/test")
-                .socialType(SocialType.KAKAO)
-                .email("test99@naver.com")
-                .password("secret-key")
-                .intro("잘부탁드립니다.")
-                .build();
 
-        memberRepository.save(member);
+        Member member1 = Member.builder().id(8669L).username("최대한").profileImageUrl("korea88@naver.com").build();
+        Member member2 = Member.builder().id(7601L).username("김태경").profileImageUrl("seaworld@daum.net").build();
 
-        for(int i = 1; i <= 5; i++) {
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        for(int i = 1; i <= 20; i++) {
+            Member member = null;
+            if(i % 2 == 0) {
+                member = member1;
+            } else if(i % 2 != 0) {
+                member = member2;
+            }
             storyRepository.save(
                     Story.builder()
                             .member(member)
@@ -89,10 +91,12 @@ class StoryControllerTest {
 
     @AfterEach
     void afterEach() {
+        memberStoryLikeRepository.deleteAll();
         storyRepository.deleteAll();
         memberRepository.deleteAll();
     }
 
+    @DisplayName("스토리 업로드 테스트")
     @Test
     @WithMockCustomUser(id = "8669")
     void uploadStory() throws Exception {
@@ -103,7 +107,7 @@ class StoryControllerTest {
         UploadStoryDto dto = UploadStoryDto.builder().title("Story Upload Test").content("This is Test code").filename("example.jpg").build();
         String content = objectMapper.writeValueAsString(dto);
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .post("/story/upload")
+                .post("/story")
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
@@ -114,6 +118,7 @@ class StoryControllerTest {
                         preprocessResponse(prettyPrint())));
     }
 
+    @DisplayName("스토리 수정 테스트")
     @Test
     @WithMockCustomUser(id = "8669")
     void updateStory() throws Exception {
@@ -121,11 +126,10 @@ class StoryControllerTest {
         Long storyId = stories.get(0).getId();
         Optional<Story> optStory = storyRepository.findById(storyId);
         assertThat(optStory.isPresent()).isTrue();
-        assertThat(optStory.get().isDeleted()).isFalse();
         UploadStoryDto dto = UploadStoryDto.builder().title("Update Story Test").content("This is updated story").filename("test_success.wav").build();
         String content = objectMapper.writeValueAsString(dto);
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .post("/story/update")
+                .put("/story")
                 .param("id", String.valueOf(storyId))
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,6 +141,7 @@ class StoryControllerTest {
                         preprocessResponse(prettyPrint())));
     }
 
+    @DisplayName("스토리 삭제 테스트")
     @Test
     void deleteStory() throws Exception {
         List<Story> stories = storyRepository.findAll();
@@ -145,7 +150,7 @@ class StoryControllerTest {
         assertThat(optStory.isPresent()).isTrue();
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .delete("/story/delete")
+                .delete("/story")
                 .param("id", String.valueOf(storyId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
@@ -157,5 +162,28 @@ class StoryControllerTest {
                 .andDo(document("delete-story",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())));
+    }
+
+    @DisplayName("스토리 조회 페이징 테스트")
+    @Test
+    void showStoryList() throws Exception {
+        List<Story> storyList = storyRepository.findAll();
+        System.out.println("storyList.size() = " + storyList.size());
+        for(int i = 0; i < storyList.size(); i++) {
+            if(i % 2 == 0) {
+                storyService.likeStory(8669L, storyList.get(i).getId());
+            }
+            storyService.likeStory(7601L, storyList.get(i).getId());
+        }
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .get("/story")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+        ).andDo(print());
+        result.andExpect(status().isOk())
+                .andDo(document("story-pagination",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 }
