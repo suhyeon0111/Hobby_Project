@@ -54,12 +54,12 @@ function MyStoryList() {
         let createDate = story.createdDate
         let datestr = createDate.substr(0, 10)
         let timestr = createDate.substr(11, 15)
-        let datemoment = moment(datestr, 'YYYY-MM-DD').add(5, 'days').format('MM/DD')
+        let datemoment = moment(datestr, 'YYYY-MM-DD').add('days').format('MM/DD')
         let timemoment = moment(timestr, 'h:mm::ss').format(' h:mm')
         let date = datemoment + timemoment
 
         const image = () => {
-            if(story.filename === 'https://hoppyservice.s3.ap-northeast-2.amazonaws.com/') {
+            if(story.filename === '') {
                 return <>
                     <Avatar shape='square' size={340} style={{display: 'none'}} />
                 </>
@@ -122,21 +122,25 @@ function MyStoryList() {
                 width: '100%',
                 justifyContent: 'flex-end',
                 alignItems: 'stretch',
-                gap: '10px',
-                padding: '0px 10px 0px 0px',
+                gap: '5px',
+                padding: '0px 5px 0px 0px',
             }}>
             <Icon
                 type='heart'
                 style={{
                     fontSize: '20px'
                 }}/>
-            <p>1</p>
+            <p>
+                0
+            </p>
             <Icon
                 type='message'
                 style={{
                     fontSize: '20px'
                 }}/>
-            <p>1</p>
+            <p>
+                0
+            </p>
         </div>
         <div
             style={{

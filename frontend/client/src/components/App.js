@@ -26,7 +26,8 @@ import MusicMeetingPage from "./views/MusicMeetingPage/MusicMeetingPage";
 import TripMeetingPage from "./views/TripMeetingPage/TripMeetingPage";
 
 import HobbyStoryPage from "./views/HobbyStoryPage/HobbyStoryPage";
-import MakeStoryPage from "./views/MakeStoryPage/MakeStoryPage"
+import MakeStoryPage from "./views/MakeStoryPage/MakeStoryPage";
+import ViewUserPage from "./views/ViewUserPage/ViewUserPage";
 
 import MakeMeetingPage from "./views/MakeMeetingPage/MakeMeetingPage";
 import UploadExercise from "./views/MakeMeetingPage/UploadMeetingPage/UploadExercise";
@@ -89,6 +90,9 @@ function App() {
           {/* 스토리 */}
           <Route exact path="/hobbystory" component={(HobbyStoryPage)} />
           <Route exact path="/hobbystory/upload" component={(MakeStoryPage)} />
+
+          {/* 사용자 프로필 */}
+          <Route exact path="/user/:userId" component={(ViewUserPage)} />
         </Switch>
       </div>
       <Footer />
