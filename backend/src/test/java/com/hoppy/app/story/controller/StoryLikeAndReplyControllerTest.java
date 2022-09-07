@@ -181,12 +181,9 @@ public class StoryLikeAndReplyControllerTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Long memberId = Long.parseLong(authentication.getName());
-        Member member = memberService.findById(memberId);
 
         List<Story> storyList = storyRepository.findAll();
         Long storyId = storyList.get(0).getId();
-
-        Story story = storyService.findByStoryId(storyId);
 
         for(int i = 0; i < 3; i++) {
             String content = "This is " + String.valueOf(i+1) + "th reply";
@@ -197,9 +194,11 @@ public class StoryLikeAndReplyControllerTest {
             storyReplyService.uploadStoryReply(memberId, storyId, dto);
         }
 
+        Long tmpStoryId = storyReplyRepository.findAll().get(0).getId();
+
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .delete("/story/reply")
-                .param("id", String.valueOf(1L))
+                .param("id", String.valueOf(tmpStoryId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
         );

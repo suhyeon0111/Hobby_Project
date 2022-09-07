@@ -16,8 +16,13 @@ import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.dto.StoryReReplyRequestDto;
+import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
+import com.hoppy.app.story.repository.StoryReReplyRepository;
+import com.hoppy.app.story.repository.StoryReplyRepository;
 import com.hoppy.app.story.repository.StoryRepository;
+import com.hoppy.app.story.service.StoryReplyService;
 import com.hoppy.app.story.service.StoryService;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -56,6 +61,15 @@ class StoryControllerTest {
 
     @Autowired
     StoryService storyService;
+
+    @Autowired
+    StoryReplyService storyReplyService;
+
+    @Autowired
+    StoryReplyRepository storyReplyRepository;
+
+    @Autowired
+    StoryReReplyRepository storyReReplyRepository;
     @Autowired
     MockMvc mvc;
 
@@ -91,6 +105,8 @@ class StoryControllerTest {
 
     @AfterEach
     void afterEach() {
+        storyReReplyRepository.deleteAll();
+        storyReplyRepository.deleteAll();
         memberStoryLikeRepository.deleteAll();
         storyRepository.deleteAll();
         memberRepository.deleteAll();
@@ -191,6 +207,22 @@ class StoryControllerTest {
     void showStoryDetails() throws Exception {
         List<Story> storyList = storyRepository.findAll();
         Long storyId = storyList.get(0).getId();
+
+        for(int i = 0; i < storyList.size(); i++) {
+            if(i % 2 == 0) {
+                storyService.likeOrDislikeStory(8669L, storyList.get(i).getId());
+            }
+            storyService.likeOrDislikeStory(7601L, storyList.get(i).getId());
+        }
+
+        for(int i = 0; i < storyList.size(); i++) {
+            storyReplyService.uploadStoryReply(8669L, storyList.get(i).getId(), StoryReplyRequestDto.builder().content("Reply").build());
+            if(i % 2 == 0) {
+                Long replyId = storyReplyRepository.findAll().get(i).getId();
+                storyReplyService.uploadStoryReReply(7601L, replyId, StoryReReplyRequestDto.builder().content("ReReply").build());
+            }
+        }
+
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .get("/story/detail")
                 .param("id", String.valueOf(storyId))
