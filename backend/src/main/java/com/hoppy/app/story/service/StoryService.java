@@ -4,6 +4,7 @@ import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
+import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import java.util.List;
@@ -29,5 +30,6 @@ public interface StoryService {
 
     public void likeOrDislikeStory(Long memberId, Long storyId);
 
+    public StoryDetailDto showStoryDetails(Long storyId);
     // TODO: 스토리 상세 정보 조회 (스토리 클릭 시)
 }

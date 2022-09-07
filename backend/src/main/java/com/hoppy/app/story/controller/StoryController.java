@@ -12,6 +12,7 @@ import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
 import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.dto.StoryReReplyRequestDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.service.StoryReplyService;
@@ -60,8 +61,8 @@ public class StoryController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseDto> deleteStory(@RequestParam("id") String id) {
-        storyService.deleteStory(Long.parseLong(id));
+    public ResponseEntity<ResponseDto> deleteStory(@RequestParam("id") Long id) {
+        storyService.deleteStory(id);
         return responseService.successResult(SuccessCode.DELETE_STORY_SUCCESS);
     }
 
@@ -77,6 +78,11 @@ public class StoryController {
         storyService.likeOrDislikeStory(userDetails.getId(), id);
         Story story = storyService.findByStoryId(id);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
+    }
+    @GetMapping("/detail")
+    public ResponseEntity<ResponseDto> showStoryDetails(@RequestParam(value = "id") Long id) {
+        StoryDetailDto storyDetailDto = storyService.showStoryDetails(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, storyDetailDto);
     }
 
     @PostMapping("/reply")
@@ -96,11 +102,27 @@ public class StoryController {
         return responseService.successResult(SuccessCode.DELETE_REPLY_SUCCESS);
     }
 
+
     @GetMapping("reply/like")
     public ResponseEntity<ResponseDto> likeStoryReply(
             @RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyReplyService.likeOrDislikeStoryReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @PostMapping("/reReply")
+    public ResponseEntity<ResponseDto> uploadReReply(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody StoryReReplyRequestDto dto) {
+        storyReplyService.uploadStoryReReply(userDetails.getId(), id, dto);
+        return responseService.ok();
+    }
+
+    @DeleteMapping("/reReply")
+    public ResponseEntity<ResponseDto> deleteReReply(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyReplyService.deleteStoryReReply(userDetails.getId(), id);
         return responseService.ok();
     }
 }

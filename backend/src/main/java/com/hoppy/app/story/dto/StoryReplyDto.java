@@ -3,6 +3,7 @@ package com.hoppy.app.story.dto;
 import com.hoppy.app.story.domain.story.StoryReReply;
 import com.hoppy.app.story.domain.story.StoryReply;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +36,8 @@ public class StoryReplyDto {
                 .profileUrl(storyReply.getMember().getProfileImageUrl())
                 .username(storyReply.getMember().getUsername())
                 .content(storyReply.getContent())
+                .reReplies(storyReply.getReReplies().stream().map(StoryReReplyDto::of).collect(
+                        Collectors.toList()))
                 .build();
     }
 }

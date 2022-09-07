@@ -408,7 +408,17 @@ include::{snippets}/story-reply-request/response-body.adoc[]
 === 스토리 댓글 삭제
 .request url
 ----
-DELETE /api/story/reply?storyId={storyId}&replyId={replyId}
+DELETE /api/story/reply?id={replyId}
 ----
 .response body
 include::{snippets}/story-reply-delete-request/response-body.adoc[]
+
+=== 스토리 상세 조회
+.request url
+----
+GET /api/story/detail?storyId={storyId}
+----
+.request body
+include::{snippets}/show-story-detail/request-body.adoc[]
+.response body
+include::{snippets}/show-story-detail/response-body.adoc[]
