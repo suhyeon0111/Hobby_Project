@@ -111,7 +111,7 @@ public class StoryController {
         return responseService.ok();
     }
 
-    @PostMapping("/reReply")
+    @PostMapping("/reply/re")
     public ResponseEntity<ResponseDto> uploadReReply(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody StoryReReplyRequestDto dto) {
@@ -119,10 +119,18 @@ public class StoryController {
         return responseService.ok();
     }
 
-    @DeleteMapping("/reReply")
+    @DeleteMapping("/reply/re")
     public ResponseEntity<ResponseDto> deleteReReply(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         storyReplyService.deleteStoryReReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @GetMapping("/reply/re/like")
+    public ResponseEntity<ResponseDto> likeStoryReReply(
+            @RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyReplyService.likeOrDisLikeStoryReReply(userDetails.getId(), id);
         return responseService.ok();
     }
 }
