@@ -3,6 +3,8 @@ package com.hoppy.app.story.domain.story;
 import com.hoppy.app.like.domain.MemberReReplyLike;
 import com.hoppy.app.like.domain.MemberStoryReReplyLike;
 import com.hoppy.app.member.domain.Member;
+import com.hoppy.app.story.domain.BaseTimeEntity;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -30,7 +32,7 @@ import org.hibernate.annotations.BatchSize;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class StoryReReply {
+public class StoryReReply extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +47,6 @@ public class StoryReReply {
     @ManyToOne
     @Exclude
     private StoryReply reply;
-
-    private String createdDate;
 
     @OneToMany(mappedBy = "reReply", fetch = FetchType.LAZY)
     @BatchSize(size = 100)
