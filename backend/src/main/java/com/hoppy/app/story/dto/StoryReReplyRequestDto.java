@@ -20,21 +20,17 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class StoryReReplyRequestDto {
-
-    private Long id;
-
     private String content;
 
-    @Builder.Default
-    private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+//    @Builder.Default
+//    private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
     public StoryReReply toEntity(Member member, StoryReply reply) {
         return StoryReReply.builder()
-                .id(id)
                 .content(content)
                 .member(member)
                 .reply(reply)
-                .createdDate(createdDate)
+//                .createdDate(createdDate)
                 .build();
     }
 }

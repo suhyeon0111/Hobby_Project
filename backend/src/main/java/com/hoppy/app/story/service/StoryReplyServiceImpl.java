@@ -53,8 +53,9 @@ public class StoryReplyServiceImpl implements StoryReplyService {
     @Override
     @Transactional
     public void deleteStoryReply(Long memberId, Long replyId) {
-        StoryReply reply = checkReReplies(memberId, replyId);
+        StoryReply reply = checkStoryReReplies(memberId, replyId);
         if(!reply.getReReplies().isEmpty()) {
+            memberStoryReplyLikeRepository.deleteByMemberIdAndReplyId(memberId, replyId);
             List<Long> idList = reply.getReReplies().stream().map(R -> R.getId()).collect(
                     Collectors.toList());
             storyReReplyRepository.deleteAllByList(idList);
@@ -63,7 +64,7 @@ public class StoryReplyServiceImpl implements StoryReplyService {
     }
 
     @Override
-    public StoryReply checkReReplies(Long memberId, Long replyId) {
+    public StoryReply checkStoryReReplies(Long memberId, Long replyId) {
         Optional<StoryReply> reply = storyReplyRepository.findByIdAndMemberIdWithReReplies(replyId, memberId);
         if(reply.isEmpty()) {
             throw new BusinessException(ErrorCode.REPLY_NOT_FOUND);
@@ -81,27 +82,14 @@ public class StoryReplyServiceImpl implements StoryReplyService {
     }
 
     @Override
-    public void likeStoryReply(Long memberId, Long replyId) {
-        Optional<MemberStoryReplyLike> optional =
-                memberStoryReplyLikeRepository.findByMemberIdAndReplyId(memberId, replyId);
-        if(optional.isPresent()) {
-            return;
+    public StoryReReply findByReReplyId(Long reReplyId) {
+        Optional<StoryReReply> reReply = storyReReplyRepository.findById(reReplyId);
+        if(reReply.isEmpty()) {
+            throw new BusinessException(ErrorCode.REPLY_NOT_FOUND);
         }
-        Member member = memberService.findById(memberId);
-        StoryReply reply = findByReplyId(replyId);
-        memberStoryReplyLikeRepository.save(MemberStoryReplyLike.of(member, reply));
+        return reReply.get();
     }
-    @Override
-    public void dislikeStoryReply(Long memberId, Long replyId) {
-        Optional<MemberStoryReplyLike> optional =
-                memberStoryReplyLikeRepository.findByMemberIdAndReplyId(memberId, replyId);
-        if(optional.isPresent()) {
-            memberStoryReplyLikeRepository.delete(optional.get());
-        }
-        else {
-            return;
-        }
-    }
+
     @Override
     public void likeOrDislikeStoryReply(Long memberId, Long replyId) {
         Optional<MemberStoryReplyLike> optional =
@@ -127,6 +115,7 @@ public class StoryReplyServiceImpl implements StoryReplyService {
     @Override
     @Transactional
     public void deleteStoryReReply(Long memberId, Long reReplyId) {
+        memberStoryReReplyLikeRepository.deleteByMemberIdAndReReplyId(memberId, reReplyId);
         storyReReplyRepository.delete(
                 storyReReplyRepository.findByIdAndMemberId(reReplyId, memberId)
                         .orElseThrow(() -> new BusinessException(ErrorCode.REPLY_NOT_FOUND))
@@ -136,11 +125,13 @@ public class StoryReplyServiceImpl implements StoryReplyService {
     @Override
     public void likeOrDisLikeStoryReReply(Long memberId, Long reReplyId) {
         Optional<MemberStoryReReplyLike> optional =
-                memberStoryReReplyLikeRepository.findByMemberIdAndReplyId(memberId, reReplyId);
-//        if(optional.isPresent()) {
-//            memberStoryReReplyLikeRepository.delete(optional.get());
-//        } else {
-//
-//        }
+                memberStoryReReplyLikeRepository.findByMemberIdAndReReplyId(memberId, reReplyId);
+        if(optional.isPresent()) {
+            memberStoryReReplyLikeRepository.delete(optional.get());
+        } else {
+            Member member = memberService.findById(memberId);
+            StoryReReply reReply = findByReReplyId(reReplyId);
+            memberStoryReReplyLikeRepository.save(MemberStoryReReplyLike.of(member, reReply));
+        }
     }
 }
