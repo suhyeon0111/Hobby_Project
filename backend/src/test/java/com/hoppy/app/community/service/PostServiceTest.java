@@ -7,6 +7,7 @@ import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.PostDetailDto;
 import com.hoppy.app.community.dto.PostDto;
+import com.hoppy.app.community.dto.UpdatePostDto;
 import com.hoppy.app.community.repository.PostRepository;
 import com.hoppy.app.community.repository.ReReplyRepository;
 import com.hoppy.app.community.repository.ReplyRepository;
@@ -20,7 +21,7 @@ import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
 import java.util.Optional;
 
-import com.hoppy.app.utility.Utility;
+import com.hoppy.app.utility.EntityUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -80,8 +81,8 @@ class PostServiceTest {
         final int RE_REPLY_COUNT = 5;
         final int PAGING_SIZE = 8;
 
-        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
-        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(member));
+        Member member = memberRepository.save(EntityUtility.testMember(TEST_MEMBER_ID));
+        Meeting meeting = meetingRepository.save(EntityUtility.testHealthMeeting(member));
         for(int i = 0; i < POST_COUNT; i++) {
             Post post = postRepository.save(
                 Post.builder()
@@ -214,14 +215,14 @@ class PostServiceTest {
     @Test
     void postDeleteTest() {
         // given
-        Member member = memberRepository.save(Utility.testMember(1L));
-        Post post = postRepository.save(Utility.testPost(member));
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        Post post = postRepository.save(EntityUtility.testPost(member));
 
         for(int i = 0; i < 5; i++) {
-            Reply reply = replyRepository.save(Utility.testReply(member, post, "test"));
+            Reply reply = replyRepository.save(EntityUtility.testReply(member, post, "test"));
 
             for(int j = 0; j < 5; j++) {
-                ReReply reReply = reReplyRepository.save(Utility.testReReply(member, reply, "test"));
+                ReReply reReply = reReplyRepository.save(EntityUtility.testReReply(member, reply, "test"));
             }
         }
 
@@ -238,5 +239,24 @@ class PostServiceTest {
         * 2. 연관 댓글 삭제 쿼리
         * 3. 게시글 삭제 쿼리
         * */
+    }
+
+    @DisplayName("게시물 수정 테스트")
+    @Test
+    void postUpdateTest() {
+        // given
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        Post post = postRepository.save(EntityUtility.testPost(member));
+
+        UpdatePostDto updatePostDto = new UpdatePostDto("update", null, null);
+
+        // when
+        postService.updatePost(updatePostDto, member.getId(), post.getId());
+
+        // then
+        Post findPost = postService.findById(post.getId());
+        assertThat(findPost.getTitle()).isEqualTo("update");
+        assertThat(findPost.getImageUrl()).isEqualTo(post.getImageUrl());
+        assertThat(findPost.getContent()).isEqualTo(post.getContent());
     }
 }

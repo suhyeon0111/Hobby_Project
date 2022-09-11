@@ -6,10 +6,7 @@ import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.like.domain.MemberPostLike;
-import com.hoppy.app.like.domain.MemberReplyLike;
 import com.hoppy.app.like.repository.MemberPostLikeRepository;
-import com.hoppy.app.like.repository.MemberReReplyLikeRepository;
-import com.hoppy.app.like.repository.MemberReplyLikeRepository;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.repository.MeetingRepository;
@@ -19,17 +16,13 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 
-import com.hoppy.app.utility.Utility;
+import com.hoppy.app.utility.EntityUtility;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author 태경 2022-08-06
@@ -214,7 +207,7 @@ class PostRepositoryTest {
                 .build()
         );
 
-        Post post = postRepository.save(Utility.testPost(member));
+        Post post = postRepository.save(EntityUtility.testPost(member));
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
         em.flush();
         em.clear();
@@ -236,7 +229,7 @@ class PostRepositoryTest {
                         .id(TEST_MEMBER_ID)
                         .build()
         );
-        Post post = postRepository.save(Utility.testPost(member));
+        Post post = postRepository.save(EntityUtility.testPost(member));
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
         memberPostLikeRepository.deleteByMemberIdAndPostId(member.getId(), post.getId());
         em.flush();

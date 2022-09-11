@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.repository.PostRepository;
@@ -22,7 +23,9 @@ import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.meeting.dto.CreateMeetingDto;
 import com.hoppy.app.meeting.dto.MeetingJoinDto;
 import com.hoppy.app.meeting.dto.MeetingWithdrawalDto;
+import com.hoppy.app.meeting.dto.UpdateMeetingDto;
 import com.hoppy.app.meeting.repository.MeetingRepository;
+import com.hoppy.app.meeting.service.MeetingService;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
@@ -33,7 +36,9 @@ import com.hoppy.app.member.repository.MemberRepository;
 import java.util.List;
 import java.util.Optional;
 
-import com.hoppy.app.utility.Utility;
+import com.hoppy.app.member.service.MemberService;
+import com.hoppy.app.utility.EntityUtility;
+import com.hoppy.app.utility.RequestUtility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +52,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -62,6 +68,12 @@ class MeetingControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private MeetingService meetingService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -203,8 +215,8 @@ class MeetingControllerTest {
     @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
     void meetingJoinTest() throws Exception {
         //given
-        Member member = memberRepository.save(Utility.testMember(1L));
-        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(member));
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        Meeting meeting = meetingRepository.save(EntityUtility.testHealthMeeting(member));
 
         MeetingJoinDto meetingJoinDto = MeetingJoinDto.builder()
                 .meetingId(meeting.getId())
@@ -235,7 +247,7 @@ class MeetingControllerTest {
         //given
         List<Meeting> meetingList = meetingRepository.findAll();
         Meeting meeting = meetingList.get(0);
-        Member member = memberRepository.save(Utility.testMember(99L));
+        Member member = memberRepository.save(EntityUtility.testMember(99L));
         memberMeetingRepository.save(MemberMeeting.of(member, meeting));
 
         MeetingWithdrawalDto meetingWithdrawalDto = MeetingWithdrawalDto.builder()
@@ -269,7 +281,7 @@ class MeetingControllerTest {
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
 
         Member author = optionalMember.get();
-        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(author));
+        Meeting meeting = meetingRepository.save(EntityUtility.testHealthMeeting(author));
         memberMeetingRepository.save(MemberMeeting.of(author, meeting));
 
         final int POST_COUNT = 20;
@@ -315,7 +327,7 @@ class MeetingControllerTest {
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
 
         Member member = optionalMember.get();
-        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(member));
+        Meeting meeting = meetingRepository.save(EntityUtility.testHealthMeeting(member));
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
@@ -344,7 +356,7 @@ class MeetingControllerTest {
         assert optionalMember.isPresent() : "NOT_FOUND_MEMBER";
 
         Member member = optionalMember.get();
-        Meeting meeting = meetingRepository.save(Utility.testHealthMeeting(member));
+        Meeting meeting = meetingRepository.save(EntityUtility.testHealthMeeting(member));
         memberMeetingLikeRepository.save(MemberMeetingLike.of(member, meeting));
 
         // when
@@ -363,5 +375,31 @@ class MeetingControllerTest {
         // then
         Optional<MemberMeetingLike> opt = memberMeetingLikeRepository.findByMemberIdAndMeetingId(member.getId(), meeting.getId());
         assertThat(opt).isEmpty();
+    }
+
+    @DisplayName("모임 수정 테스트")
+    @Test
+    @WithMockCustomUser(id = "1", password = "secret-key", role = Role.USER, socialType = SocialType.KAKAO)
+    void meetingUpdateTest() throws Exception {
+        // given
+        Member member = memberService.findById(1L);
+        Meeting meeting = meetingRepository.save(EntityUtility.testMeeting(member, Category.HEALTH));
+        UpdateMeetingDto dto = new UpdateMeetingDto("update-title", "update-content", null);
+        String content = objectMapper.writeValueAsString(dto);
+
+        // when
+        ResultActions resultActions = RequestUtility.patchRequest(mockMvc, "/meeting/" + meeting.getId(), content);
+
+        // then
+        meeting = meetingService.findById(meeting.getId());
+        assertThat(meeting.getTitle()).isEqualTo("update-title");
+        assertThat(meeting.getContent()).isEqualTo("update-content");
+        assertThat(meeting.getUrl()).isNotNull();
+
+        resultActions.andDo(document("meeting-update-request",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())
+        ))
+        .andDo(print());
     }
 }

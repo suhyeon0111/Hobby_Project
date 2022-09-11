@@ -16,6 +16,7 @@ import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,13 @@ class StoryReplyServiceImplTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @AfterEach
+    void clean() {
+        memberStoryLikeRepository.deleteAll();
+        storyRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
     
     @Test
     @Transactional

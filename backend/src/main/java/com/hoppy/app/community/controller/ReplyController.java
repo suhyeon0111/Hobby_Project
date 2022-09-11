@@ -2,6 +2,7 @@ package com.hoppy.app.community.controller;
 
 import com.hoppy.app.community.dto.CreateReReplyDto;
 import com.hoppy.app.community.dto.CreateReplyDto;
+import com.hoppy.app.community.dto.UpdateReplyDto;
 import com.hoppy.app.community.service.ReplyService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.response.dto.ResponseDto;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * packageName    : com.hoppy.app.community.controller
@@ -50,6 +53,16 @@ public class ReplyController {
         return responseService.ok();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseDto> patchReply(
+            @PathVariable("id") long id,
+            @RequestBody UpdateReplyDto updateReplyDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.updateReply(updateReplyDto, userDetails.getId(), id);
+        return responseService.ok();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto> deleteReply(
             @PathVariable("id") long id,
@@ -83,6 +96,16 @@ public class ReplyController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         replyService.createReReply(userDetails.getId(), createReReplyDto);
+        return responseService.ok();
+    }
+
+    @PatchMapping("/re/{id}")
+    public ResponseEntity<ResponseDto> patchReReply(
+            @PathVariable("id") long id,
+            @RequestBody UpdateReplyDto updateReplyDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        replyService.updateReReply(updateReplyDto, userDetails.getId(), id);
         return responseService.ok();
     }
 

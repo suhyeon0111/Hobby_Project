@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.hoppy.app.utility.Utility;
+import com.hoppy.app.utility.EntityUtility;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +55,7 @@ class MeetingServiceImplUnitTest {
         List<Long> memberIdList = new ArrayList<>();
         List<Member> memberList = new ArrayList<>();
 
-        Member owner = Utility.testMember(OWNER_ID);
+        Member owner = EntityUtility.testMember(OWNER_ID);
         Meeting meeting = Meeting.builder()
                 .owner(owner)
                 .title("test")
@@ -65,7 +65,7 @@ class MeetingServiceImplUnitTest {
                 .build();
 
         for (int i = 1; i <= PARTICIPANT_COUNT; i++) {
-            Member member = Utility.testMember(i);
+            Member member = EntityUtility.testMember(i);
             meeting.addParticipant(MemberMeeting.builder()
                     .member(member)
                     .meeting(meeting)
@@ -89,7 +89,7 @@ class MeetingServiceImplUnitTest {
     @Test
     void checkJoinRequestValidFailTest1() {
         //given
-        Member owner = Utility.testMember(1L);
+        Member owner = EntityUtility.testMember(1L);
         Meeting meeting = Meeting.builder()
                 .owner(owner)
                 .title("test")
@@ -121,7 +121,7 @@ class MeetingServiceImplUnitTest {
         Set<MemberMeeting> participants = new HashSet<>();
         final var REQUEST_MEMBER_ID = 1111L;
         final var REQUEST_MEETING_ID = 2222L;
-        Member member = Utility.testMember(REQUEST_MEMBER_ID);
+        Member member = EntityUtility.testMember(REQUEST_MEMBER_ID);
         Meeting meeting = Meeting.builder()
                 .owner(member)
                 .title("test")

@@ -63,6 +63,13 @@ class StoryServiceImplTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @AfterEach
+    void clean() {
+        memberStoryLikeRepository.deleteAll();
+        storyRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
+
     @DisplayName("스토리 좋아요 기능 테스트")
     @Test
     @Transactional

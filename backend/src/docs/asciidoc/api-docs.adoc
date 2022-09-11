@@ -3,6 +3,10 @@
 :toclevels: 4
 :sectlinks:
 
+----
+[❗] 모든 request body의 필드는 누락되면 안됩니다.
+----
+
 == 점검 API
 === 서버 상태 확인하기
 .request url
@@ -39,6 +43,16 @@ memberLimit: 최소 2 최대 20 입니다.
 include::{snippets}/create-meeting/request-body.adoc[]
 .response body
 include::{snippets}/create-meeting/response-body.adoc[]
+
+=== 모임 수정하기
+.request url
+----
+PATCH /api/meeting/{meetingId}
+----
+.request body
+include::{snippets}/meeting-update-request/request-body.adoc[]
+.response body
+include::{snippets}/meeting-update-request/response-body.adoc[]
 
 === 모임 참가하기
 .request url
@@ -140,6 +154,16 @@ include::{snippets}/create-post/request-body.adoc[]
 .response body
 include::{snippets}/create-post/response-body.adoc[]
 
+==== 게시물 수정하기
+.request url
+----
+PATCH /api/post/{postId}
+----
+.request body
+include::{snippets}/post-update-request/request-body.adoc[]
+.response body
+include::{snippets}/post-update-request/response-body.adoc[]
+
 ==== 게시물 제거하기
 .request url
 ----
@@ -199,6 +223,19 @@ NOTE: response body 없음
 HTTP/1.1 200 OK
 ----
 
+==== 댓글 수정하기
+.request url
+----
+PATCH /api/reply/{replyId}
+----
+.request body
+include::{snippets}/reply-update-request/request-body.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
 ==== 댓글 제거하기
 .request url
 ----
@@ -246,6 +283,19 @@ POST /api/reply/re
 ----
 .request body
 include::{snippets}/create-reReply/request-body.adoc[]
+.response header
+----
+NOTE: response body 없음
+HTTP/1.1 200 OK
+----
+
+==== 대댓글 수정하기
+.request url
+----
+PATCH /api/reply/re/{reReplyId}
+----
+.request body
+include::{snippets}/reReply-update-request/request-body.adoc[]
 .response header
 ----
 NOTE: response body 없음

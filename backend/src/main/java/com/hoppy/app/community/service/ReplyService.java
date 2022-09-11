@@ -4,8 +4,7 @@ import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.CreateReReplyDto;
 import com.hoppy.app.community.dto.CreateReplyDto;
-
-import java.util.List;
+import com.hoppy.app.community.dto.UpdateReplyDto;
 
 /**
  * packageName    : com.hoppy.app.community.service
@@ -24,10 +23,12 @@ public interface ReplyService {
     void deleteReply(long memberId, long replyId);
     Reply findReplyById(long replyId);
     void likeReply(long memberId, long replyId);
+    void updateReply(UpdateReplyDto updateReplyDto, long memberId, long replyId);
     void dislikeReply(long memberId, long replyId);
     ReReply createReReply(long memberId, CreateReReplyDto createReReplyDto);
     void deleteReReply(long memberId, long reReplyId);
     ReReply findReReplyById(long reReplyId);
     void likeReReply(long memberId, long reReplyId);
     void dislikeReReply(long memberId, long reReplyId);
+    void updateReReply(UpdateReplyDto updateReplyDto, long memberId, long reReplyId);
 }

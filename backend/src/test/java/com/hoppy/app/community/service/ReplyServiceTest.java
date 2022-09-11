@@ -5,24 +5,21 @@ import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.CreateReReplyDto;
 import com.hoppy.app.community.dto.CreateReplyDto;
+import com.hoppy.app.community.dto.UpdateReplyDto;
 import com.hoppy.app.community.repository.PostRepository;
 import com.hoppy.app.community.repository.ReReplyRepository;
 import com.hoppy.app.community.repository.ReplyRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
-import com.hoppy.app.utility.Utility;
-import org.assertj.core.api.Assertions;
+import com.hoppy.app.utility.EntityUtility;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * packageName    : com.hoppy.app.community.service
@@ -64,8 +61,8 @@ class ReplyServiceTest {
     @Test
     void createReply() {
         // given
-        Member member = memberRepository.save(Utility.testMember(1L));
-        Post post = postRepository.save(Utility.testPost(member));
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        Post post = postRepository.save(EntityUtility.testPost(member));
         CreateReplyDto createReplyDto = CreateReplyDto.builder()
                 .postId(post.getId())
                 .content("content")
@@ -81,8 +78,8 @@ class ReplyServiceTest {
     @Test
     void createReReply() {
         // given
-        Member member = memberRepository.save(Utility.testMember(1L));
-        Reply reply = replyRepository.save(Utility.testReply(member));
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        Reply reply = replyRepository.save(EntityUtility.testReply(member));
         CreateReReplyDto createReReplyDto = CreateReReplyDto.builder()
                 .replyId(reply.getId())
                 .content("content")
@@ -98,11 +95,11 @@ class ReplyServiceTest {
     @Test
     void deleteReply() {
         // given
-        Member member = memberRepository.save(Utility.testMember(1L));
-        Reply reply = replyRepository.save(Utility.testReply(member));
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        Reply reply = replyRepository.save(EntityUtility.testReply(member));
 
         for(int i = 0; i < 10; i++) {
-            reReplyRepository.save(Utility.testReReply(member, reply, "test"));
+            reReplyRepository.save(EntityUtility.testReReply(member, reply, "test"));
         }
 
         // when
@@ -116,8 +113,8 @@ class ReplyServiceTest {
     @Test
     void deleteReReply() {
         // given
-        Member member = memberRepository.save(Utility.testMember(1L));
-        ReReply reReply = reReplyRepository.save(Utility.testReReply(member));
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        ReReply reReply = reReplyRepository.save(EntityUtility.testReReply(member));
 
         // when
         replyService.deleteReReply(member.getId(), reReply.getId());
@@ -125,5 +122,35 @@ class ReplyServiceTest {
         // then
         Optional<ReReply> opt = reReplyRepository.findByIdAndAuthorId(reReply.getId(), member.getId());
         assertThat(opt).isEmpty();
+    }
+
+    @Test
+    void updateReplyTest() {
+        // given
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        Reply reply = replyRepository.save(EntityUtility.testReply(member));
+
+        // when
+        UpdateReplyDto updateReplyDto = new UpdateReplyDto("update");
+        replyService.updateReply(updateReplyDto, 1L, reply.getId());
+
+        // then
+        reply = replyService.findReplyById(reply.getId());
+        assertThat(reply.getContent()).isEqualTo("update");
+    }
+
+    @Test
+    void updateReReplyTest() {
+        // given
+        Member member = memberRepository.save(EntityUtility.testMember(1L));
+        ReReply reReply = reReplyRepository.save(EntityUtility.testReReply(member));
+
+        // when
+        UpdateReplyDto updateReplyDto = new UpdateReplyDto("update");
+        replyService.updateReReply(updateReplyDto, 1L, reReply.getId());
+
+        // then
+        reReply = replyService.findReReplyById(reReply.getId());
+        assertThat(reReply.getContent()).isEqualTo("update");
     }
 }

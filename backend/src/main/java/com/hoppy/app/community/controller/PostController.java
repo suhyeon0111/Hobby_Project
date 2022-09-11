@@ -2,6 +2,7 @@ package com.hoppy.app.community.controller;
 
 import com.hoppy.app.community.dto.CreatePostDto;
 import com.hoppy.app.community.dto.PostDetailDto;
+import com.hoppy.app.community.dto.UpdatePostDto;
 import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.response.dto.ResponseDto;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author 태경 2022-08-09
@@ -39,6 +42,16 @@ public class PostController {
     ) {
         postService.createPost(createPostDto, userDetails.getId());
         return responseService.successResult(SuccessCode.CREATE_POST_SUCCESS);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseDto> patchPost(
+            @PathVariable("id") long id,
+            @RequestBody UpdatePostDto updatePostDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        postService.updatePost(updatePostDto, userDetails.getId(), id);
+        return responseService.successResult(SuccessCode.PATCH_POST_SUCCESS);
     }
 
     @DeleteMapping("/{id}")

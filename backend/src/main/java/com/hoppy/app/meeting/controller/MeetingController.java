@@ -5,14 +5,9 @@ import com.hoppy.app.community.dto.PostDto;
 import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.login.auth.authentication.CustomUserDetails;
 import com.hoppy.app.meeting.domain.Meeting;
-import com.hoppy.app.meeting.dto.CreateMeetingDto;
-import com.hoppy.app.meeting.dto.MeetingDetailDto;
-import com.hoppy.app.meeting.dto.MeetingJoinDto;
-import com.hoppy.app.meeting.dto.MeetingWithdrawalDto;
-import com.hoppy.app.meeting.dto.PagingMeetingDto;
+import com.hoppy.app.meeting.dto.*;
 import com.hoppy.app.meeting.service.MeetingService;
 import com.hoppy.app.member.domain.Member;
-import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
@@ -22,14 +17,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +31,7 @@ public class MeetingController {
 
     @PostMapping
     public ResponseEntity<ResponseDto> createMeeting(
-            @RequestBody @Valid CreateMeetingDto dto,
+            @RequestBody CreateMeetingDto dto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Member member = memberService.findById(userDetails.getId());
@@ -52,9 +40,19 @@ public class MeetingController {
         return responseService.successResult(SuccessCode.CREATE_MEETING_SUCCESS);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseDto> patchMeeting(
+            @PathVariable("id") long id,
+            @RequestBody UpdateMeetingDto dto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        meetingService.updateMeeting(dto, userDetails.getId(), id);
+        return responseService.successResult(SuccessCode.UPDATE_MEETING_SUCCESS);
+    }
+
     @PostMapping("/entry")
     public ResponseEntity<ResponseDto> joinMeeting(
-            @RequestBody @Valid MeetingJoinDto meetingJoinDto,
+            @RequestBody MeetingJoinDto meetingJoinDto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Long meetingId = meetingJoinDto.getMeetingId();
@@ -64,7 +62,7 @@ public class MeetingController {
 
     @DeleteMapping("/withdrawal")
     public ResponseEntity<ResponseDto> withdrawalMeeting(
-            @RequestBody @Valid MeetingWithdrawalDto meetingWithdrawalDto,
+            @RequestBody MeetingWithdrawalDto meetingWithdrawalDto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         meetingService.withdrawMeeting(meetingWithdrawalDto.getMeetingId(), userDetails.getId());
