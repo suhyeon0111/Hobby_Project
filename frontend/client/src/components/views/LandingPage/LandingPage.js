@@ -1,5 +1,4 @@
 import React from "react";
-// import { FaCode } from "react-icons/fa";
 import { Button, Input } from "antd";
 
 import CharacterImg from "./img/character.png";

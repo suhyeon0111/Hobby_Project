@@ -7,12 +7,15 @@ import com.hoppy.app.response.dto.ResponseDto;
 import com.hoppy.app.response.service.ResponseService;
 import com.hoppy.app.response.service.SuccessCode;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.domain.story.StoryReply;
 import com.hoppy.app.story.dto.PagingStoryDto;
 import com.hoppy.app.story.dto.SaveStoryDto;
 import com.hoppy.app.story.dto.StoryDetailDto;
 import com.hoppy.app.story.dto.StoryDto;
+import com.hoppy.app.story.dto.StoryReReplyRequestDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
 import com.hoppy.app.story.dto.UploadStoryDto;
+import com.hoppy.app.story.service.StoryReplyService;
 import com.hoppy.app.story.service.StoryService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +37,11 @@ public class StoryController {
 
     private final StoryService storyService;
 
+    private final StoryReplyService storyReplyService;
     private final MemberService memberService;
 
     private final ResponseService responseService;
+
 
     @PostMapping
     public ResponseEntity<ResponseDto> uploadStory(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UploadStoryDto dto) {
@@ -56,8 +61,8 @@ public class StoryController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseDto> deleteStory(@RequestParam("id") String id) {
-        storyService.deleteStory(Long.parseLong(id));
+    public ResponseEntity<ResponseDto> deleteStory(@RequestParam("id") Long id) {
+        storyService.deleteStory(id);
         return responseService.successResult(SuccessCode.DELETE_STORY_SUCCESS);
     }
 
@@ -70,35 +75,62 @@ public class StoryController {
     @GetMapping("/like")
     public ResponseEntity<ResponseDto> likeStory(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        storyService.likeStory(userDetails.getId(), id);
+        storyService.likeOrDislikeStory(userDetails.getId(), id);
         Story story = storyService.findByStoryId(id);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
     }
-
-    @DeleteMapping("/like")
-    public ResponseEntity<ResponseDto> dislikeStory(@RequestParam(value = "id") Long id,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        storyService.dislikeStory(userDetails.getId(), id);
-        Story story = storyService.findByStoryId(id);
-        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDto.of(story));
+    @GetMapping("/detail")
+    public ResponseEntity<ResponseDto> showStoryDetails(@RequestParam(value = "id") Long id) {
+        StoryDetailDto storyDetailDto = storyService.showStoryDetails(id);
+        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, storyDetailDto);
     }
 
     @PostMapping("/reply")
     public ResponseEntity<ResponseDto> uploadReply(@RequestParam(value = "id") Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody StoryReplyRequestDto dto) {
-        storyService.uploadStoryReply(userDetails.getId(), id, dto);
+        storyReplyService.uploadStoryReply(userDetails.getId(), id, dto);
         Story story = storyService.findByStoryId(id);
         return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
     }
 
     @DeleteMapping("/reply")
     public ResponseEntity<ResponseDto> deleteReply(
-            @RequestParam(value = "storyId") Long storyId,
-            @RequestParam(value = "replyId") Long replyId,
+            @RequestParam(value = "id") Long replyId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        storyService.deleteStoryReply(storyId, replyId);
-        Story story = storyService.findByStoryId(storyId);
-        return responseService.successResult(SuccessCode.INQUIRY_STORY_SUCCESS, StoryDetailDto.from(story));
+        storyReplyService.deleteStoryReply(userDetails.getId(), replyId);
+        return responseService.successResult(SuccessCode.DELETE_REPLY_SUCCESS);
+    }
+
+
+    @GetMapping("reply/like")
+    public ResponseEntity<ResponseDto> likeStoryReply(
+            @RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyReplyService.likeOrDislikeStoryReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @PostMapping("/reply/re")
+    public ResponseEntity<ResponseDto> uploadReReply(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody StoryReReplyRequestDto dto) {
+        storyReplyService.uploadStoryReReply(userDetails.getId(), id, dto);
+        return responseService.ok();
+    }
+
+    @DeleteMapping("/reply/re")
+    public ResponseEntity<ResponseDto> deleteReReply(@RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyReplyService.deleteStoryReReply(userDetails.getId(), id);
+        return responseService.ok();
+    }
+
+    @GetMapping("/reply/re/like")
+    public ResponseEntity<ResponseDto> likeStoryReReply(
+            @RequestParam(value = "id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        storyReplyService.likeOrDisLikeStoryReReply(userDetails.getId(), id);
+        return responseService.ok();
     }
 }

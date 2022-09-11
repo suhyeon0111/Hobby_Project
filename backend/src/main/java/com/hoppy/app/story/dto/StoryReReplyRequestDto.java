@@ -2,6 +2,7 @@ package com.hoppy.app.story.dto;
 
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.domain.story.StoryReReply;
 import com.hoppy.app.story.domain.story.StoryReply;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,16 +19,18 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class StoryReplyRequestDto {
+public class StoryReReplyRequestDto {
     private String content;
+
 //    @Builder.Default
 //    private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
-    public StoryReply toEntity(Member member, Story story) {
-         return StoryReply.builder()
+    public StoryReReply toEntity(Member member, StoryReply reply) {
+        return StoryReReply.builder()
                 .content(content)
                 .member(member)
-                .story(story)
+                .reply(reply)
+//                .createdDate(createdDate)
                 .build();
     }
 }

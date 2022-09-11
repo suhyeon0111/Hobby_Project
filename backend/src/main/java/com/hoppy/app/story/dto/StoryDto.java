@@ -24,11 +24,15 @@ public class StoryDto {
 
     private Long id;
 
+    private Long memberId;
+
     private String profileUrl;
 
     private String username;
 
     private String title;
+
+    private String filename;
 
     private String content;
 
@@ -43,10 +47,12 @@ public class StoryDto {
     public static StoryDto of(Story story) {
         return StoryDto.builder()
                 .id(story.getId())
+                .memberId(story.getMember().getId())
                 .profileUrl(story.getMember().getProfileImageUrl())
                 .username(story.getMember().getUsername())
                 .title(story.getTitle())
                 .content(story.getContent())
+                .filename(story.getFilePath())
                 .likeCount(story.getLikes().size())
                 .replyCount(story.getReplies().size())
                 .createdDate(story.getCreatedDate())

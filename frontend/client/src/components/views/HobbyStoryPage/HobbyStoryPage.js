@@ -4,31 +4,35 @@ import { Button, Icon, Avatar } from 'antd'
 import React, { useState, useEffect } from 'react'
 import Axios from 'axios'
 import moment from 'moment'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 function HobbyStoryPage() {
 
     const [StoryList, setStoryList] = useState([])
-    const [Pagination, setPagination] = useState("")
+    const [LastId, setLastId] = useState("")
+    const [Fetching, setFetching] = useState(false)
+    const [FetchData, setFetchData] = useState("")
 
     const token = localStorage.getItem('Authorization')
     const headers = {
         Authorization: token
     }
     async function getStoryList() {
-        Axios
-        .get('https://hoppy.kro.kr/api/story', {
-            headers,
-            withCredentials: false
-        })
-        .then(response => {
-            if(response.data.status === 200 && response.data !== undefined) {
-                // console.log('response.data.data', response.data.data.nextPagingUrl)
-                setStoryList(response.data.data.storyList)
-                setPagination(response.data.data.nextPagingUrl)
-            } else {
-                alert("데이터 불러오기를 실패했습니다.")
-            }
-        })
+
+        await Axios
+            .get('https://hoppy.kro.kr/api/story', {
+                headers,
+                withCredentials: false
+            })
+            .then(response => {
+                if(response.data.status === 200 && response.data !== undefined) {
+                    console.log('response.data.data', response.data.data)
+                    setStoryList(response.data.data.storyList)
+                    setLastId(response.data.data.lastId)
+                } else {
+                    alert("데이터 불러오기를 실패했습니다.")
+                }
+            })
     }
 
     useEffect(() => {
@@ -42,12 +46,12 @@ function HobbyStoryPage() {
         let createDate = story.createdDate
         let datestr = createDate.substr(0, 10)
         let timestr = createDate.substr(11, 15)
-        let datemoment = moment(datestr, 'YYYY-MM-DD').add(5, 'days').format('MM/DD')
+        let datemoment = moment(datestr, 'YYYY-MM-DD').add('days').format('MM/DD')
         let timemoment = moment(timestr, 'h:mm::ss').format(' h:mm')
         let date = datemoment + timemoment
 
         const image = () => {
-            if(story.filename === '') {
+            if(story.filename === '' || story.filename === undefined) {
                 return <>
                     <Avatar shape='square' size={340} style={{display: 'none'}} />
                 </>
@@ -65,13 +69,15 @@ function HobbyStoryPage() {
         }}
         key={index}>
         <div>
-            {/* <Avatar
-                size={27}
-                src={}
-                style={{
-                    float: 'left',
-                    marginRight: '8px'
-                }}/> */}
+            <a href={`/user/${story.memberId}`}>
+              <Avatar
+                  size={27}
+                  src={story.profileUrl}
+                  style={{
+                      float: 'left',
+                      marginRight: '8px'
+                  }}/>
+            </a>
             <p
                 style={{
                     float: 'left',
@@ -109,21 +115,25 @@ function HobbyStoryPage() {
                 width: '100%',
                 justifyContent: 'flex-end',
                 alignItems: 'stretch',
-                gap: '10px',
-                padding: '0px 10px 0px 0px',
+                gap: '5px',
+                padding: '0px 5px 0px 0px',
             }}>
             <Icon
                 type='heart'
                 style={{
                     fontSize: '20px'
                 }}/>
-            <p>1</p>
+            <p>
+                {story.likeCount}
+            </p>
             <Icon
                 type='message'
                 style={{
                     fontSize: '20px'
                 }}/>
-            <p>1</p>
+            <p>
+                {story.replyCount}
+            </p>
         </div>
         <div
             style={{
@@ -135,6 +145,42 @@ function HobbyStoryPage() {
     </div>
     })
 
+    //무한 스크롤
+    //https://piaflu.tistory.com/125
+    //https://medium.com/@_diana_lee/react-infinite-scroll-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-fbd51a8a099f
+
+    const InfinityScroll = () => {
+        
+        if(LastId !== undefined) {
+            fetch(`https://hoppy.kro.kr/api/story?lastId=${LastId}`, {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(response => {
+                // console.log('resresres', response)
+                if (response.code === 'SS002') {
+                    console.log(response.message)
+                    setFetching(false)
+                } else if (response.data.storyList !== undefined && LastId !== 1) {
+                    const fetchData = response.data.storyList
+                    const mergeData = StoryList.concat(fetchData);
+                    setStoryList(mergeData);
+                    setFetchData(fetchData.length)
+                    setLastId(response.data.lastId)
+                }
+            })
+        }
+    }
+
+    console.log('Fetch', FetchData)
+
+    const MoreLoad = () => {
+        if(FetchData < 10) {
+            setFetching(false)
+        } else if(FetchData === 10) {
+            setFetching(true)
+        }
+    }
 
     return (
         <div
@@ -154,13 +200,16 @@ function HobbyStoryPage() {
                         fontSize: '16px'
                     }}>취미 스토리</p>
                     <hr style={{width: '90%', backgroundColor: '#D3BA9C'}} />
-                    <div>
+                    <InfiniteScroll
+                        dataLength={StoryList.length}
+                        next={InfinityScroll}
+                        hasMore={MoreLoad}>
                         {storyCard}
-                    </div>
+                    </InfiniteScroll>
                     <a href='/hobbystory/upload'>
-                    <Button shape='circle' style={{background: '#D3BA9C', width: '40px', height: '40px', position: 'fixed', right: 0, bottom: 0, margin: '0px 15px 50px 0px'}}>
-                        <Icon type='plus' style={{color: '#fff', fontSize: '20px'}} />
-                    </Button>
+                        <Button shape='circle' style={{background: '#D3BA9C', width: '40px', height: '40px', position: 'fixed', right: 0, bottom: 0, margin: '0px 15px 50px 0px'}}>
+                            <Icon type='plus' style={{color: '#fff', fontSize: '20px'}} />
+                        </Button>
                     </a>
             </div>
         </div>

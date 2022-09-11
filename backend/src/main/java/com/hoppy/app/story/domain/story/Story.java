@@ -56,6 +56,7 @@ public class Story extends BaseTimeEntity {
     @Exclude
     private Member member;
 
+    // TODO: cascade = CascadeType.REMOVE로 인한 삭제 시 N+1 문제 고려
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @BatchSize(size = 100)
     @Default

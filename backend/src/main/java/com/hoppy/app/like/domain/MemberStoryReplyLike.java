@@ -2,6 +2,7 @@ package com.hoppy.app.like.domain;
 
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.story.domain.story.Story;
+import com.hoppy.app.story.domain.story.StoryReply;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,11 +26,11 @@ import lombok.ToString;
 @Table(
         uniqueConstraints={
                 @UniqueConstraint(
-                        columnNames={"member_id", "story_id"}
+                        columnNames={"member_id", "reply_id"}
                 )
         }
 )
-public class MemberStoryLike {
+public class MemberStoryReplyLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,16 +40,12 @@ public class MemberStoryLike {
     private Member member;
 
     @ManyToOne
-    private Story story;
+    private StoryReply reply;
 
-    public Long getMemberId() {
-        return member.getId();
-    }
-
-    public static MemberStoryLike of(Member member, Story story) {
-        return MemberStoryLike.builder()
+    public static MemberStoryReplyLike of(Member member, StoryReply reply) {
+        return MemberStoryReplyLike.builder()
                 .member(member)
-                .story(story)
+                .reply(reply)
                 .build();
     }
 }

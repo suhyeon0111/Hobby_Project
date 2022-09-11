@@ -9,15 +9,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoppy.app.like.repository.MemberStoryLikeRepository;
+import com.hoppy.app.like.repository.MemberStoryReReplyLikeRepository;
+import com.hoppy.app.like.repository.MemberStoryReplyLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.StoryDetailDto;
+import com.hoppy.app.story.dto.StoryReReplyRequestDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
+import com.hoppy.app.story.repository.StoryReReplyRepository;
 import com.hoppy.app.story.repository.StoryReplyRepository;
 import com.hoppy.app.story.repository.StoryRepository;
+import com.hoppy.app.story.service.StoryReplyService;
 import com.hoppy.app.story.service.StoryService;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -56,7 +61,19 @@ public class StoryLikeAndReplyControllerTest {
     StoryReplyRepository storyReplyRepository;
 
     @Autowired
+    StoryReReplyRepository storyReReplyRepository;
+
+    @Autowired
+    StoryReplyService storyReplyService;
+
+    @Autowired
     MemberStoryLikeRepository memberStoryLikeRepository;
+
+    @Autowired
+    MemberStoryReplyLikeRepository memberStoryReplyLikeRepository;
+
+    @Autowired
+    MemberStoryReReplyLikeRepository memberStoryReReplyLikeRepository;
 
     @Autowired
     StoryRepository storyRepository;
@@ -94,18 +111,22 @@ public class StoryLikeAndReplyControllerTest {
                             .filePath(i+".jpg")
                             .member(member).build()
             );
-            storyService.likeStory(member2.getId(), story.getId());
+            storyService.likeOrDislikeStory(member2.getId(), story.getId());
         }
     }
 
     @AfterEach
     void afterEach() {
+        memberStoryReReplyLikeRepository.deleteAll();
+        memberStoryReplyLikeRepository.deleteAll();
+        storyReReplyRepository.deleteAll();
+        storyReplyRepository.deleteAll();
         memberStoryLikeRepository.deleteAll();
         storyRepository.deleteAll();
         memberRepository.deleteAll();
     }
 
-    @DisplayName("스토리 좋아요 컨트롤러 테스트")
+    @DisplayName("스토리 좋아요 및 좋아요 취소 컨트롤러 테스트")
     @Test
     @WithMockCustomUser(id = "8669")
     void storyLikeTest() throws Exception {
@@ -121,27 +142,6 @@ public class StoryLikeAndReplyControllerTest {
         result.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("story-like-request",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
-                ));
-    }
-
-    @DisplayName("좋아요 취소 컨트롤러 테스트")
-    @Test
-    @WithMockCustomUser(id = "7601")
-    void storyDislikeTest() throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<Story> storyList = storyRepository.findAll();
-        Long storyId = storyList.get(0).getId();
-        ResultActions result = mvc.perform(MockMvcRequestBuilders
-                .delete("/story/like")
-                .param("id", String.valueOf(storyId))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
-        );
-        result.andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("story-dislike-request",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
@@ -164,7 +164,7 @@ public class StoryLikeAndReplyControllerTest {
         );
         result.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("story-reply-request",
+                .andDo(document("story-reply-upload",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
@@ -177,35 +177,153 @@ public class StoryLikeAndReplyControllerTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Long memberId = Long.parseLong(authentication.getName());
-        Member member = memberService.findById(memberId);
 
         List<Story> storyList = storyRepository.findAll();
         Long storyId = storyList.get(0).getId();
-
-        Story story = storyService.findByStoryId(storyId);
 
         for(int i = 0; i < 3; i++) {
             String content = "This is " + String.valueOf(i+1) + "th reply";
             StoryReplyRequestDto dto = StoryReplyRequestDto.builder()
                     .content(content)
-                    .member(member)
-                    .story(story)
                     .build();
 
-            storyService.uploadStoryReply(memberId, storyId, dto);
+            storyReplyService.uploadStoryReply(memberId, storyId, dto);
         }
+
+        Long tmpStoryId = storyReplyRepository.findAll().get(0).getId();
 
         ResultActions result = mvc.perform(MockMvcRequestBuilders
                 .delete("/story/reply")
-                .param("storyId", String.valueOf(storyId))
-                .param("replyId", String.valueOf(1L))
+                .param("id", String.valueOf(tmpStoryId))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
         );
 
         result.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("story-reply-delete-request",
+                .andDo(document("story-reply-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @DisplayName("스토리 댓글 좋아요 테스트")
+    @Test
+    @WithMockCustomUser(id = "8669")
+    void likeOrDislikeStoryReplyTest() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+
+        List<Story> storyList = storyRepository.findAll();
+        for(int i = 0; i < storyList.size(); i++) {
+            storyReplyService.uploadStoryReply(memberId,
+                    storyList.get(i).getId(), StoryReplyRequestDto.builder().content("Reply Like Test").build());
+        }
+
+        Long replyId = storyReplyRepository.findAll().get(0).getId();
+
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .get("/story/reply/like")
+                .param("id", String.valueOf(replyId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+        );
+
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("story-reply-like-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @DisplayName("스토리 대댓글 업로드 테스트")
+    @Test
+    @WithMockCustomUser(id = "8669")
+    void uploadStoryReReplyTest() throws Exception {
+        Long memberId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long storyId = storyRepository.findAll().get(0).getId();
+
+        StoryReplyRequestDto replyDto = StoryReplyRequestDto.builder().content("This is Story ReReply Test").build();
+        Long replyId = storyReplyService.uploadStoryReply(memberId, storyId, replyDto).getId();
+
+        StoryReReplyRequestDto reReplyDto = StoryReReplyRequestDto.builder().content("ReReply").build();
+        String content = objectMapper.writeValueAsString(reReplyDto);
+
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .post("/story/reply/re")
+                .param("id", String.valueOf(replyId))
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+        );
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("story-reReply-upload",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+
+    }
+
+    @DisplayName("스토리 대댓글 삭제 테스트")
+    @Test
+    @WithMockCustomUser(id = "8669")
+    void deleteStoryReReplyTest() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+
+        List<Story> storyList = storyRepository.findAll();
+        for(int i = 0; i < storyList.size(); i++) {
+            Long replyId = storyReplyService.uploadStoryReply(memberId, storyList.get(i).getId(),
+                    StoryReplyRequestDto.builder().content("Reply Test").build()).getId();
+            storyReplyService.uploadStoryReReply(memberId, replyId,
+                    StoryReReplyRequestDto.builder().content("ReReply Test").build());
+        }
+
+        Long reReplyId = storyReReplyRepository.findAll().get(0).getId();
+
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .delete("/story/reply/re")
+                .param("id", String.valueOf(reReplyId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+        );
+
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("story-reReply-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @DisplayName("스토리 대댓글 좋아요 테스트")
+    @Test
+    @WithMockCustomUser(id = "8669")
+    void likeOrDislikeStoryReReplyTest() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+
+        List<Story> storyList = storyRepository.findAll();
+        for (int i = 0; i < storyList.size(); i++) {
+            Long replyId = storyReplyService.uploadStoryReply(memberId, storyList.get(i).getId(),
+                    StoryReplyRequestDto.builder().content("Reply Test").build()).getId();
+            storyReplyService.uploadStoryReReply(memberId, replyId,
+                    StoryReReplyRequestDto.builder().content("ReReply Test").build());
+        }
+
+        Long reReplyId = storyReReplyRepository.findAll().get(0).getId();
+        ResultActions result = mvc.perform(MockMvcRequestBuilders
+                .get("/story/reply/re/like")
+                .param("id", String.valueOf(reReplyId))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+        );
+        result.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("story-reReply-like",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
