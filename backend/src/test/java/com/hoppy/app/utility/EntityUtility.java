@@ -7,6 +7,8 @@ import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
 import com.hoppy.app.member.domain.Member;
 
+import java.util.UUID;
+
 /**
  * packageName    : com.hoppy.app.utility
  * fileName       : Utility
@@ -18,7 +20,7 @@ import com.hoppy.app.member.domain.Member;
  * -----------------------------------------------------------
  * 2022-08-29        Kim       최초 생성
  */
-public class Utility {
+public class EntityUtility {
 
     public static Member testMember(long id) {
         return Member.builder()
@@ -30,7 +32,7 @@ public class Utility {
         return Meeting.builder()
                 .owner(owner)
                 .url("test-url")
-                .title("test-title")
+                .title("title-" + UUID.randomUUID().toString().substring(0,5))
                 .content("test-content")
                 .category(category)
                 .memberLimit(10)
@@ -47,6 +49,7 @@ public class Utility {
         return Post.builder()
                 .title("test-title")
                 .content("test-content")
+                .imageUrl("test-imageUrl")
                 .author(author)
                 .build();
     }

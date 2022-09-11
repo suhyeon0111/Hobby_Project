@@ -15,13 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.hoppy.app.utility.Utility;
+import com.hoppy.app.utility.EntityUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -58,7 +57,7 @@ class MeetingServiceConcurrencyTest {
         final int PARTICIPANT_PEOPLE = 5;
         final int MAXIMUM_PEOPLE = 2;
 
-        Member owner = memberRepository.save(Utility.testMember(99L));
+        Member owner = memberRepository.save(EntityUtility.testMember(99L));
         Meeting meeting = meetingRepository.save(
                 Meeting.builder()
                         .owner(owner)
