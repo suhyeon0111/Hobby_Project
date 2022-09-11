@@ -59,9 +59,22 @@ public class PostServiceImpl implements PostService {
                 .title(createPostDto.getTitle())
                 .content(createPostDto.getContent())
                 .author(author)
+                .imageUrl(createPostDto.getFilename())
                 .meeting(meeting)
                 .build()
         );
+    }
+
+    @Override
+    @Transactional
+    public void updatePost(UpdatePostDto dto, long memberId, long postId) {
+        Post post = findById(postId);
+
+        if(post.getAuthor().getId() != memberId) throw new BusinessException(ErrorCode.PERMISSION_ERROR);
+
+        if(dto.getFilename() != null && !dto.getFilename().isEmpty()) post.setImageUrl(dto.getFilename());
+        if(dto.getContent() != null && !dto.getContent().isEmpty()) post.setContent(dto.getContent());
+        if(dto.getTitle() != null && !dto.getTitle().isEmpty()) post.setTitle(dto.getTitle());
     }
 
     @Override

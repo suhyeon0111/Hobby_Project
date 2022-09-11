@@ -1,16 +1,14 @@
 package com.hoppy.app.meeting.service;
 
+import com.hoppy.app.common.tool.LogBox;
 import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.meeting.Category;
 import com.hoppy.app.meeting.domain.Meeting;
-import com.hoppy.app.meeting.dto.CreateMeetingDto;
-import com.hoppy.app.meeting.dto.MeetingDto;
-import com.hoppy.app.meeting.dto.PagingMeetingDto;
+import com.hoppy.app.meeting.dto.*;
 import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.domain.MemberMeeting;
-import com.hoppy.app.meeting.dto.ParticipantDto;
 import com.hoppy.app.member.repository.MemberMeetingRepository;
 import com.hoppy.app.member.service.MemberService;
 import com.hoppy.app.response.error.exception.BusinessException;
@@ -70,11 +68,8 @@ public class MeetingServiceImpl implements MeetingService {
             - 이는 업데이트를 위해서 다수 테이블과 행에 락을 걸어야 하는 행위이므로 허용되지 않는 쿼리문인 것으로 보임
             - 따라서 단일 Entity만 조회한 후 Batch size로 N + 1 문제가 발생하지 않도록 컬렉션 조인을 수행하였음
         * */
-        Optional<Meeting> optionalMeeting = meetingRepository.findByIdUsingLock(meetingId);
-        if(optionalMeeting.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
-        }
-        Meeting meeting = optionalMeeting.get();
+        Meeting meeting = meetingRepository.findByIdUsingLock(meetingId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEETING_NOT_FOUND));
         Member member = memberService.findById(memberId);
 
         if(meeting.getOwner().getId() == member.getId()) {
@@ -173,6 +168,18 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    @Transactional
+    public void updateMeeting(UpdateMeetingDto dto, Long memberId, Long meetingId) {
+        Meeting meeting = findById(meetingId);
+
+        if(meeting.getOwner().getId() != memberId) throw new BusinessException(ErrorCode.PERMISSION_ERROR);
+
+        if(dto.getTitle() != null && !dto.getTitle().isEmpty()) meeting.setTitle(dto.getTitle());
+        if(dto.getContent() != null && !dto.getContent().isEmpty()) meeting.setContent(dto.getContent());
+        if(dto.getFilename() != null && !dto.getFilename().isEmpty()) meeting.setUrl(dto.getFilename());
+    }
+
+    @Override
     public List<Member> getParticipantList(Meeting meeting) {
         List<Long> memberIdList = meeting.getParticipants()
                 .stream()
@@ -211,17 +218,17 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @Transactional
     public void checkJoinRequestValid(long meetingId, long memberId) {
-        Optional<Meeting> optionalMeeting = meetingRepository.findByIdUsingLock(meetingId);
-        if(optionalMeeting.isEmpty()) {
-            throw new BusinessException(ErrorCode.MEETING_NOT_FOUND);
-        }
-        Meeting meeting = optionalMeeting.get();
+        Meeting meeting = meetingRepository.findByIdUsingLock(meetingId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEETING_NOT_FOUND));
+
         if(meeting.isFull()) {
             throw new BusinessException(ErrorCode.MAX_PARTICIPANTS);
         }
+
         Member member = memberService.findById(memberId);
 
         Set<MemberMeeting> participants = meeting.getParticipants();
+
         boolean alreadyJoin = participants.stream().anyMatch(M -> Objects.equals(M.getMemberId(), memberId));
         if(alreadyJoin) {
             throw new BusinessException(ErrorCode.ALREADY_JOIN);

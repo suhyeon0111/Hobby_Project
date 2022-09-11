@@ -16,13 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 import lombok.Builder.Default;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.ToString.Exclude;
 import org.hibernate.annotations.BatchSize;
 
@@ -41,11 +36,16 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false)
     private String title;
 
+    @Setter
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    @Setter
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @Exclude

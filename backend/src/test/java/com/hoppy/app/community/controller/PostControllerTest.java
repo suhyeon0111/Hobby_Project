@@ -15,9 +15,11 @@ import com.hoppy.app.community.domain.Post;
 import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.CreatePostDto;
+import com.hoppy.app.community.dto.UpdatePostDto;
 import com.hoppy.app.community.repository.PostRepository;
 import com.hoppy.app.community.repository.ReReplyRepository;
 import com.hoppy.app.community.repository.ReplyRepository;
+import com.hoppy.app.community.service.PostService;
 import com.hoppy.app.like.domain.MemberPostLike;
 import com.hoppy.app.like.repository.MemberPostLikeRepository;
 import com.hoppy.app.login.WithMockCustomUser;
@@ -28,7 +30,7 @@ import com.hoppy.app.meeting.repository.MeetingRepository;
 import com.hoppy.app.member.Role;
 import com.hoppy.app.member.domain.Member;
 import com.hoppy.app.member.repository.MemberRepository;
-import com.hoppy.app.utility.Utility;
+import com.hoppy.app.utility.EntityUtility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +65,9 @@ class PostControllerTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    PostService postService;
 
     @Autowired
     PostRepository postRepository;
@@ -169,8 +174,8 @@ class PostControllerTest {
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void createPostTest() throws Exception {
         // given
-        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
-        Meeting meeting = meetingRepository.save(Utility.testArtMeeting(member));
+        Member member = memberRepository.save(EntityUtility.testMember(TEST_MEMBER_ID));
+        Meeting meeting = meetingRepository.save(EntityUtility.testArtMeeting(member));
         CreatePostDto createPostDto = CreatePostDto.builder()
                 .meetingId(meeting.getId())
                 .title("test-title")
@@ -199,8 +204,8 @@ class PostControllerTest {
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void likePostTest() throws Exception {
         // given
-        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
-        Post post = postRepository.save(Utility.testPost(member));
+        Member member = memberRepository.save(EntityUtility.testMember(TEST_MEMBER_ID));
+        Post post = postRepository.save(EntityUtility.testPost(member));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/post/like/" + post.getId())
@@ -220,8 +225,8 @@ class PostControllerTest {
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void dislikePostTest() throws Exception {
         // given
-        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
-        Post post = postRepository.save(Utility.testPost(member));
+        Member member = memberRepository.save(EntityUtility.testMember(TEST_MEMBER_ID));
+        Post post = postRepository.save(EntityUtility.testPost(member));
         memberPostLikeRepository.save(MemberPostLike.of(member, post));
 
         // when
@@ -247,8 +252,8 @@ class PostControllerTest {
     @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
     void deletePostTest() throws Exception {
         // given
-        Member member = memberRepository.save(Utility.testMember(TEST_MEMBER_ID));
-        Post post = postRepository.save(Utility.testPost(member));
+        Member member = memberRepository.save(EntityUtility.testMember(TEST_MEMBER_ID));
+        Post post = postRepository.save(EntityUtility.testPost(member));
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
@@ -267,5 +272,37 @@ class PostControllerTest {
         // then
         Optional<Post> opt = postRepository.findByIdAndAuthorId(post.getId(), member.getId());
         assertThat(opt).isEmpty();
+    }
+
+    @DisplayName("게시물 수정 컨트롤러 테스트")
+    @Test
+    @WithMockCustomUser(id = "1", password = "pass-word", role = Role.USER, socialType = SocialType.KAKAO)
+    void patchPostTest() throws Exception {
+        // given
+        Member member = memberRepository.save(EntityUtility.testMember(TEST_MEMBER_ID));
+        Post post = postRepository.save(EntityUtility.testPost(member));
+
+        UpdatePostDto updatePostDto = new UpdatePostDto("update", null, null);
+        String content = objectMapper.writeValueAsString(updatePostDto);
+
+        // when
+        mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/post/" + post.getId())
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("message", is("게시물 수정 완료")))
+                .andDo(document("post-update-request",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andDo(print());
+
+        // then
+        post = postService.findById(post.getId());
+        assertThat(post.getTitle()).isEqualTo("update");
     }
 }

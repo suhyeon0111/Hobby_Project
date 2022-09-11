@@ -5,6 +5,7 @@ import com.hoppy.app.community.domain.ReReply;
 import com.hoppy.app.community.domain.Reply;
 import com.hoppy.app.community.dto.CreateReReplyDto;
 import com.hoppy.app.community.dto.CreateReplyDto;
+import com.hoppy.app.community.dto.UpdateReplyDto;
 import com.hoppy.app.community.repository.ReReplyRepository;
 import com.hoppy.app.community.repository.ReplyRepository;
 import com.hoppy.app.like.domain.MemberReReplyLike;
@@ -88,6 +89,16 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     @Transactional
+    public void updateReply(UpdateReplyDto updateReplyDto, long memberId, long replyId) {
+        Reply reply = findReplyById(replyId);
+
+        if(reply.getAuthor().getId() != memberId) return;
+
+        if(updateReplyDto.getContent() != null && !updateReplyDto.getContent().isEmpty()) reply.setContent(updateReplyDto.getContent());
+    }
+
+    @Override
+    @Transactional
     public void dislikeReply(long memberId, long replyId) {
         memberReplyLikeRepository.delete(
                 memberReplyLikeRepository.findByMemberIdAndReplyId(memberId, replyId).orElseThrow()
@@ -134,5 +145,15 @@ public class ReplyServiceImpl implements ReplyService {
         memberReReplyLikeRepository.delete(
             memberReReplyLikeRepository.findByMemberIdAndReplyId(memberId, reReplyId).orElseThrow()
         );
+    }
+
+    @Override
+    @Transactional
+    public void updateReReply(UpdateReplyDto updateReplyDto, long memberId, long reReplyId) {
+        ReReply reReply = findReReplyById(reReplyId);
+
+        if(reReply.getAuthor().getId() != memberId) throw new BusinessException(ErrorCode.PERMISSION_ERROR);
+
+        if(updateReplyDto.getContent() != null && !updateReplyDto.getContent().isEmpty()) reReply.setContent(updateReplyDto.getContent());
     }
 }

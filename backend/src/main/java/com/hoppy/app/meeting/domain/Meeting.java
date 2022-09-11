@@ -26,6 +26,9 @@ import org.hibernate.annotations.BatchSize;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
+@Table(
+        indexes = @Index(name = "i_title", columnList = "title", unique = true)
+)
 public class Meeting {
 
     @Id
@@ -34,28 +37,33 @@ public class Meeting {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @Exclude
+    @Setter
     private Member owner;
 
     @Column(nullable = false)
     @Builder.Default
+    @Setter
     private String url = "default-url";
 
     @Column(nullable = false)
+    @Setter
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    @Setter
     private String content;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Setter
     private Category category;
 
     @Column(nullable = false)
+    @Setter
     private Integer memberLimit;
 
-    @Column
-    @Setter
     @Builder.Default
+    @Setter
     private Boolean fullFlag = false;
 
     @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
