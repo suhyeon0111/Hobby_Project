@@ -1,4 +1,4 @@
-package com.hoppy.app.health.controller;
+package com.hoppy.app.common.controller;
 
 import com.hoppy.app.login.auth.provider.AuthTokenProvider;
 import com.hoppy.app.response.service.SuccessCode;
