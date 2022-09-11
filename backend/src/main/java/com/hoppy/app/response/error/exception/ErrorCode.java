@@ -17,6 +17,7 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE(400, "C005", "타입 오류입니다"),
     HANDLE_ACCESS_DENIED(403, "C006", "접근이 제한되었습니다"),
     WRONG_REQUEST_HEADER(403, "C007", "요청 헤더의 값이 올바르지 않습니다."),
+    PERMISSION_ERROR(403, "C008", "권한이 없습니다"),
 
     // JWT
     EXPIRED_ACCESS_TOKEN(403, "J001", "access 토큰이 만료되었습니다"),
