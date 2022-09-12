@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { Input, Button, Icon, Form } from "antd";
 import Axios from "axios";
 import TextArea from "antd/lib/input/TextArea";
@@ -253,8 +252,25 @@ function UploadTrip() {
                       display: "inline-block",
                     }}
                   />
-                  <h1 style={{ marginTop: "10px" }}>{FileName}</h1>
-                  <Icon type="delete" onClick={deleteImgHandler} />
+                  <p
+                    style={{
+                      fontSize: "15px",
+                      marginTop: "30px",
+                      display: "inline-block",
+                    }}
+                  >
+                    {FileName}
+                  </p>
+                  <Icon
+                    type="delete"
+                    style={{
+                      display: "inline-block",
+                      float: "right",
+                      fontSize: "15px",
+                      marginTop: "30px",
+                    }}
+                    onClick={deleteImgHandler}
+                  />
                 </div>
               )}
             </div>
