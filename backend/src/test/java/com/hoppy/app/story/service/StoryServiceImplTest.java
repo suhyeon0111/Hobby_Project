@@ -88,7 +88,7 @@ class StoryServiceImplTest {
         memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
     }
 
-    @Test
+/*    @Test
     @DisplayName("스토리 수정 테스트")
     void updateStory() {
         storyRepository.save(Story.builder().title("Story").content("Save").filePath("jpg").build());
@@ -97,7 +97,7 @@ class StoryServiceImplTest {
         assertThat(story.getTitle()).isEqualTo("Story");
         assertThat(story.getContent()).isEqualTo(dto.getContent());
 
-    }
+    }*/
 
 
     
