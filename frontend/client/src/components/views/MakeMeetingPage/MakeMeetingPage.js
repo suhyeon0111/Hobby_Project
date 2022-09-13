@@ -1,5 +1,4 @@
 import React from "react";
-
 import ArtImg from "../LandingPage/img/art.png";
 import DailyImg from "../LandingPage/img/daily.png";
 import ExerciseImg from "../LandingPage/img/exercise.png";
@@ -22,6 +21,7 @@ function MakeMeetingPage() {
     width: "62px",
     height: "62px",
   };
+
 
   return (
     <div

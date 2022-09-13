@@ -1,52 +1,58 @@
-import React from 'react'
-import {Input, Card} from 'antd'
+import React from "react";
+import {Input} from "antd";
+import Axios from "axios";
 // import CardHandler from '../CardHandler/CardHandler';
 
 function ExerciseMeetingPage() {
-
     const {Search} = Input;
-    const {Meta} = Card;
+    // const {Meta} = Card;
 
     const onSearch = (value) => console.log(value);
 
-    return (
+    Axios.get();
+    return (<div
+        style={{
+            textAlign: "center",
+            width: "100%"
+        }}>
         <div
             style={{
-                textAlign: 'center',
-                width: '100%'
+                width: "100%",
+                margin: "3rem auto"
             }}>
-            <div
+            <Search placeholder="찾으시는 취미를 검색해보세요!" onSearch={onSearch} style={{
+                    textAlign: "center",
+                    width: "90%"
+                }}
+                // enterButton
+                size="large"/>
+            <h3
                 style={{
-                    width: '100%',
-                    margin: '3rem auto'
+                    float: "left",
+                    paddingTop: "26px",
+                    fontSize: "16px",
+                    marginLeft: "27px"
                 }}>
-                <Search placeholder="찾으시는 취미를 검색해보세요!" onSearch={onSearch} style={{
-                        textAlign: 'center',
-                        width: '90%'
-                    }}
-                    // enterButton
-                    size='large'/>
-                <h3
-                    style={{
-                        float: 'left',
-                        paddingTop: '26px',
-                        fontSize: '16px',
-                        marginLeft: '27px'
-                    }}>운동 모임 리스트 🏃‍♂️</h3>
-                <div style={{width: '90%'}}>
-                  {/* <Card
+                운동 모임 리스트
+                <span role="img" aria-label="exercise">
+                    🏃‍♂️
+                </span>
+            </h3>
+            <div style={{
+                    width: "90%"
+                }}>
+                {/* <Card
                     hoverable="hoverable"
                     style={{
                         width: '170px',
-                        border: '1px solid #000'
-                    }}
+	@@ -43,10 +54,10 @@ function ExerciseMeetingPage() {
                     cover={<img alt = "example" src= />}>
                     <Meta title="Europe Street beat" description="www.instagram.com"/>
-                  </Card>  */}
+                  </Card>  */
+                }
                 </div>
-            </div>
         </div>
-    )
-}
+    </div>);
+            }
 
-export default ExerciseMeetingPage
+            export default ExerciseMeetingPage;

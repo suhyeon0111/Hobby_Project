@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
-import { isBrowser, BrowserView, MoblieView } from "react-device-detect";
+import { isBrowser } from "react-device-detect";
 
-import Auth from "../hoc/auth";
+// import Auth from "../hoc/auth";
 // pages for this product
 import LandingPage from "./views/LandingPage/LandingPage.js";
 
@@ -10,12 +10,12 @@ import NavBar from "./views/NavBar/NavBar";
 import Footer from "./views/Footer/Footer";
 import NotificationPage from "./views/NotificationPage/NotificationPage";
 
-// import LoginPage from "./views/LoginPage/LoginPage.js";
-import RegisterPage from "./views/RegisterPage/RegisterPage.js";
 import AuthRedirectHandler from "./views/LoginPage/KakaoLogin/AuthRedirectHandler";
 import KakaoLoginPage from "./views/LoginPage/KakaoLogin/KakaoLoginPage";
+import LogoutPage from "./views/LogoutPage/LogoutPage.js";
 
 import MyPage from "./views/MyPage/MyPage";
+import EditMyPage from "./views/MyPage/EditMyPage.js";
 import MyStoryList from "./views/MyPage/MyStoryList/MyStoryList";
 
 import ArtMeetingPage from "./views/ArtMeetingPage/ArtMeetingPage";
@@ -26,8 +26,10 @@ import MusicMeetingPage from "./views/MusicMeetingPage/MusicMeetingPage";
 import TripMeetingPage from "./views/TripMeetingPage/TripMeetingPage";
 
 import HobbyStoryPage from "./views/HobbyStoryPage/HobbyStoryPage";
-import MakeMeetingPage from "./views/MakeMeetingPage/MakeMeetingPage";
+import MakeStoryPage from "./views/MakeStoryPage/MakeStoryPage";
+import ViewUserPage from "./views/ViewUserPage/ViewUserPage";
 
+import MakeMeetingPage from "./views/MakeMeetingPage/MakeMeetingPage";
 import UploadExercise from "./views/MakeMeetingPage/UploadMeetingPage/UploadExercise";
 import UploadArt from "./views/MakeMeetingPage/UploadMeetingPage/UploadArt";
 import UploadDaily from "./views/MakeMeetingPage/UploadMeetingPage/UploadDaily";
@@ -54,106 +56,43 @@ function App() {
       <NavBar />
       <div style={{ paddingTop: "69px", minHeight: "calc(100vh - 80px)" }}>
         <Switch>
-          <Route exact path="/" component={Auth(LandingPage, null)} />
+          <Route exact path="/" component={(LandingPage)} />
 
-          <Route exact path="/login" component={Auth(KakaoLoginPage, false)} />
-          <Route
-            exact
-            path="/oauth/login/kakao"
-            component={Auth(AuthRedirectHandler, false)}
-          />
-          <Route exact path="/register" component={Auth(RegisterPage, false)} />
+          <Route exact path="/login" component={(KakaoLoginPage)} />
+          <Route exact path="/login/auth/kakao" component={(AuthRedirectHandler)} />
+          <Route exact path="/logout" component={(LogoutPage)} />
 
-          <Route
-            exact
-            path="/notification"
-            component={Auth(NotificationPage, null)}
-          />
+          <Route exact path="/notification" component={(NotificationPage)} />
 
           {/* 마이페이지 */}
           {/* 나중에 null->true로 변경 + userId가 주소값에 할당되게 */}
-          <Route exact path="/mypage" component={Auth(MyPage, null)} />
-          <Route
-            exact
-            path="/mypage/mystory"
-            component={Auth(MyStoryList, null)}
-          />
+          <Route exact path="/mypage" component={(MyPage)} />
+          <Route exact path="/mypage/edit" component={(EditMyPage)} />
+          <Route exact path="/mypage/mystory" component={(MyStoryList)} />
 
           {/* 취미 커뮤니티 */}
-          <Route
-            exact
-            path="/artMeeting"
-            component={Auth(ArtMeetingPage, null)}
-          />
-          <Route
-            exact
-            path="/dailyMeeting"
-            component={Auth(DailyMeetingPage, null)}
-          />
-          <Route
-            exact
-            path="/exerciseMeeting"
-            component={Auth(ExerciseMeetingPage, null)}
-          />
-          <Route
-            exact
-            path="/foodMeeting"
-            component={Auth(FoodMeetingPage, null)}
-          />
-          <Route
-            exact
-            path="/musicMeeting"
-            component={Auth(MusicMeetingPage, null)}
-          />
-          <Route
-            exact
-            path="/tripMeeting"
-            component={Auth(TripMeetingPage, null)}
-          />
+          <Route exact path="/artMeeting" component={(ArtMeetingPage)} />
+          <Route exact path="/dailyMeeting" component={(DailyMeetingPage)} />
+          <Route exact path="/exerciseMeeting" component={(ExerciseMeetingPage)} />
+          <Route exact path="/foodMeeting" component={(FoodMeetingPage)} />
+          <Route exact path="/musicMeeting" component={(MusicMeetingPage)} />
+          <Route exact path="/tripMeeting" component={(TripMeetingPage)} />
 
           {/* 모임 초대*/}
-          <Route
-            exact
-            path="/makeMeeting"
-            component={Auth(MakeMeetingPage, null)}
-          />
-          <Route
-            exact
-            path="/makeMeeting/exercise"
-            component={Auth(UploadExercise, null)}
-          />
-          <Route
-            exact
-            path="/makeMeeting/art"
-            component={Auth(UploadArt, null)}
-          />
-          <Route
-            exact
-            path="/makeMeeting/daily"
-            component={Auth(UploadDaily, null)}
-          />
-          <Route
-            exact
-            path="/makeMeeting/food"
-            component={Auth(UploadFood, null)}
-          />
-          <Route
-            exact
-            path="/makeMeeting/music"
-            component={Auth(UploadMusic, null)}
-          />
-          <Route
-            exact
-            path="/makeMeeting/trip"
-            component={Auth(UploadTrip, null)}
-          />
+          <Route exact path="/makeMeeting" component={(MakeMeetingPage)} />
+          <Route exact path="/makeMeeting/exercise" component={(UploadExercise)} />
+          <Route exact path="/makeMeeting/art" component={(UploadArt)} />
+          <Route exact path="/makeMeeting/daily" component={(UploadDaily)} />
+          <Route exact path="/makeMeeting/food" component={(UploadFood)} />
+          <Route exact path="/makeMeeting/music" component={(UploadMusic)} />
+          <Route exact path="/makeMeeting/trip" component={(UploadTrip)} />
 
           {/* 스토리 */}
-          <Route
-            exact
-            path="/hobbyStory"
-            component={Auth(HobbyStoryPage, null)}
-          />
+          <Route exact path="/hobbystory" component={(HobbyStoryPage)} />
+          <Route exact path="/hobbystory/upload" component={(MakeStoryPage)} />
+
+          {/* 사용자 프로필 */}
+          <Route exact path="/user/:userId" component={(ViewUserPage)} />
         </Switch>
       </div>
       <Footer />

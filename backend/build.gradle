@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id "org.asciidoctor.jvm.convert" version "3.3.2"
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.hoppy'
@@ -20,22 +21,40 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'mysql:mysql-connector-java'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'mysql:mysql-connector-java'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'junit:junit'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	implementation 'software.amazon.awssdk:s3:2.17.217'
+	testImplementation 'software.amazon.awssdk:s3:2.17.217'
+
+	runtimeOnly 'com.h2database:h2'
+	testRuntimeOnly 'com.h2database:h2'
 
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
-//	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDirectory = file('build/customJacocoReportDir')
 }
 
 ext {
@@ -47,22 +66,31 @@ test {
 	useJUnitPlatform()
 }
 
-asciidoctor {
+jacocoTestReport {
 	dependsOn 'test'
-	sourceDir 'src/docs/asciidoc'
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = file('build/jacocoHtml')
+	}
+}
 
+task beforeAsciidoctor(type: Delete) {
+	dependsOn 'jacocoTestReport'
+	delete ('src/main/resources/static/docs/api-docs.html')
+}
+
+asciidoctor {
+	dependsOn 'beforeAsciidoctor'
+	sourceDir 'src/docs/asciidoc'
 	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
 }
 
-asciidoctor.doFirst {
-	delete file('src/main/resources/static/docs')
-}
-
 task copyDocument(type: Copy) {
 	dependsOn 'asciidoctor'
-	from "build/docs/asciidoc/"
-	into "src/main/resources/static/docs"
+	from ('build/docs/asciidoc/api-docs.html')
+	into ('src/main/resources/static/docs')
 }
 
 build {

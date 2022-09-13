@@ -1,23 +1,25 @@
 import React from 'react'
+import Axios from 'axios';
 
 function AuthRedirectHandler(props) {
 
-    console.log('props', props)
-    const logKey = props.location.search
-    console.log(logKey)
-    const splitLogKey = logKey.split('=')
-    console.log(splitLogKey[1])
+  console.log('location', props.location)
+  const param = new URLSearchParams(props.location.search);
+  console.log('jwtToken>>>>>', param.get("token"))
+  const jwtToken = param.get("token");
 
-    if (splitLogKey[1] === undefined) {
-        console.log('로그인에 실패했습니다.')
-    } else {
-        console.log('로그인에 성공하였습니다.')
-    }
+  
+  if (jwtToken !== undefined) {
+    localStorage.setItem('Authorization', `Bearer ${jwtToken}`);
+    Axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+    props.history.push('/')
+  } else {
+    localStorage.removeItem('Authorization', `Bearer ${jwtToken}`);
+    delete Axios.defaults.headers.common['Authorization'];
+  }
 
   return (
-    <div>
-        hihihihihii
-    </div>
+    <div>AuthRedirectHandler</div>
   )
 }
 
