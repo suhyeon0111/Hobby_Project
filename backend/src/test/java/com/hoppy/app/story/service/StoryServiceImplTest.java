@@ -15,6 +15,7 @@ import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import com.hoppy.app.story.domain.story.Story;
 import com.hoppy.app.story.dto.PagingStoryDto;
+import com.hoppy.app.story.dto.UploadStoryDto;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,6 @@ class StoryServiceImplTest {
 
     @DisplayName("스토리 좋아요 기능 테스트")
     @Test
-    @Transactional
     void storyLikeTest() {
         Member member = memberRepository.save(Member.builder()
                 .id(8669L)
@@ -87,6 +87,17 @@ class StoryServiceImplTest {
         
         memberStoryLikeRepository.save(MemberStoryLike.of(member, story));
     }
+
+/*    @Test
+    @DisplayName("스토리 수정 테스트")
+    void updateStory() {
+        storyRepository.save(Story.builder().title("Story").content("Save").filePath("jpg").build());
+        UploadStoryDto dto = UploadStoryDto.builder().content("Update").filename("avi").build();
+        Story story = storyService.updateStory(dto, 1L);
+        assertThat(story.getTitle()).isEqualTo("Story");
+        assertThat(story.getContent()).isEqualTo(dto.getContent());
+
+    }*/
 
 
     
