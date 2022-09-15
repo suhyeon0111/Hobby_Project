@@ -64,6 +64,10 @@ public class Meeting {
 
     @Builder.Default
     @Setter
+    private Boolean premium = false;
+
+    @Builder.Default
+    @Setter
     private Boolean fullFlag = false;
 
     @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY)
@@ -84,6 +88,7 @@ public class Meeting {
     @Exclude
     private Set<Post> posts = new HashSet<>();
 
+    public Boolean isPremium() { return this.premium; }
     public Boolean isFull() {
         return this.fullFlag;
     }

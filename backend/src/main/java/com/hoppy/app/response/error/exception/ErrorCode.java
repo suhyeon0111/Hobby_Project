@@ -41,6 +41,8 @@ public enum ErrorCode {
     NOT_JOINED(403, "M006", "모임에 가입해주세요"),
     NO_MORE_MEETING(403, "M007", "더 이상 조회할 모임이 없습니다"),
     OWNER_WITHDRAW_ERROR(403, "M008", "모임 주인은 탈퇴할 수 없습니다"),
+    NOT_PREMIUM_ERROR(403, "M009", "프리미엄 모임만 정원을 설정할 수 있습니다"),
+    MEMBER_LIMIT_RANGE_ERROR(403, "M010", "설정 가능한 정원은 최소 2명에서 최대 300명입니다"),
 
     // Post
     POST_NOT_FOUND(403, "P001", "존재하지 않는 게시물입니다"),

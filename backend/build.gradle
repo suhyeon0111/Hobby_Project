@@ -93,6 +93,6 @@ task copyDocument(type: Copy) {
 	into ('src/main/resources/static/docs')
 }
 
-build {
+bootJar {
 	dependsOn 'copyDocument'
 }

@@ -1,6 +1,5 @@
 package com.hoppy.app.meeting.service;
 
-import com.hoppy.app.common.tool.LogBox;
 import com.hoppy.app.like.domain.MemberMeetingLike;
 import com.hoppy.app.like.repository.MemberMeetingLikeRepository;
 import com.hoppy.app.meeting.Category;
@@ -16,7 +15,6 @@ import com.hoppy.app.response.error.exception.ErrorCode;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +44,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     @Transactional
-    public Meeting createMeeting(CreateMeetingDto dto, Long ownerId) throws BusinessException {
+    public Meeting createMeeting(CreateMeetingDto dto, long ownerId) throws BusinessException {
         Member owner = memberService.findById(ownerId);
         if(checkTitleDuplicate(dto.getTitle())) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
@@ -61,7 +59,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     @Transactional
-    public void withdrawMeeting(Long meetingId, Long memberId) {
+    public void withdrawMeeting(long meetingId, long memberId) {
         /*
         * [error] FOR UPDATE is not allowed in DISTINCT or grouped select
             - 베타적 락을 걸기 위해 update for 문과 fetch join & distinct 문을 함께 사용하다가 해당 에러를 만났음
@@ -169,7 +167,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     @Transactional
-    public void updateMeeting(UpdateMeetingDto dto, Long memberId, Long meetingId) {
+    public void updateMeeting(UpdateMeetingDto dto, long memberId, long meetingId) {
         Meeting meeting = findById(meetingId);
 
         if(meeting.getOwner().getId() != memberId) throw new BusinessException(ErrorCode.PERMISSION_ERROR);
@@ -177,6 +175,25 @@ public class MeetingServiceImpl implements MeetingService {
         if(dto.getTitle() != null && !dto.getTitle().isEmpty()) meeting.setTitle(dto.getTitle());
         if(dto.getContent() != null && !dto.getContent().isEmpty()) meeting.setContent(dto.getContent());
         if(dto.getFilename() != null && !dto.getFilename().isEmpty()) meeting.setUrl(dto.getFilename());
+    }
+
+    @Override
+    @Transactional
+    public void setPremium(long memberId, long meetingId) {
+        Meeting meeting = findById(meetingId);
+        meeting.setPremium(true);
+    }
+
+    @Override
+    @Transactional
+    public void changeMemberLimit(long memberId, long meetingId, int memberLimit) {
+        if(memberLimit > 300 || memberLimit < 2) throw new BusinessException(ErrorCode.MEMBER_LIMIT_RANGE_ERROR);
+
+        Meeting meeting = findById(meetingId);
+
+        if(!meeting.isPremium()) throw new BusinessException(ErrorCode.NOT_PREMIUM_ERROR);
+
+        meeting.setMemberLimit(memberLimit);
     }
 
     @Override

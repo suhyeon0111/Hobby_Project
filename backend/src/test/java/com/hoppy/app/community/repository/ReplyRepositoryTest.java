@@ -11,9 +11,11 @@ import com.hoppy.app.member.repository.MemberRepository;
 import com.hoppy.app.utility.EntityUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
 import javax.persistence.EntityManager;
 import java.util.Optional;
 
@@ -55,6 +57,7 @@ public class ReplyRepositoryTest {
 
     @DisplayName("댓글 좋아요 테스트")
     @Test
+    @Order(1)
     void replyLikeTest() {
         // given
         final long TEST_MEMBER_ID = 1L;
