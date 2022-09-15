@@ -56,17 +56,17 @@ public class StoryServiceImpl implements StoryService {
 
     @Override
     public Story updateStory(UploadStoryDto dto, Long storyId) {
-        Optional<Story> optStory = storyRepository.findById(storyId);
-        if(optStory.isEmpty()) {
-            throw new BusinessException(ErrorCode.STORY_NOT_FOUND);
+        Story story = findByStoryId(storyId);
+        if(dto.getTitle() != null) {
+            story.setTitle(dto.getTitle());
         }
-        optStory.ifPresent(selectStory -> {
-            selectStory.setTitle(dto.getTitle());
-            selectStory.setContent(dto.getContent());
-            selectStory.setFilePath(dto.getFilename());
-            storyRepository.save(selectStory);
-        });
-        return optStory.get();
+        if(dto.getContent() != null) {
+            story.setContent(dto.getContent());
+        }
+        if(dto.getFilename() != null) {
+            story.setFilePath(dto.getFilename());
+        }
+        return story;
     }
 
     @Override

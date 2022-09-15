@@ -13,6 +13,8 @@ import com.hoppy.app.story.domain.story.StoryReReply;
 import com.hoppy.app.story.domain.story.StoryReply;
 import com.hoppy.app.story.dto.StoryReReplyRequestDto;
 import com.hoppy.app.story.dto.StoryReplyRequestDto;
+import com.hoppy.app.story.repository.StoryReReplyRepository;
+import com.hoppy.app.story.repository.StoryReplyRepository;
 import com.hoppy.app.story.repository.StoryRepository;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -45,6 +47,12 @@ class StoryReplyServiceImplTest {
     StoryService storyService;
     @Autowired
     StoryReplyService storyReplyService;
+
+    @Autowired
+    StoryReplyRepository storyReplyRepository;
+
+    @Autowired
+    StoryReReplyRepository storyReReplyRepository;
     
     @Autowired
     MockMvc mvc;
@@ -55,12 +63,13 @@ class StoryReplyServiceImplTest {
     @AfterEach
     void clean() {
         memberStoryLikeRepository.deleteAll();
+        storyReReplyRepository.deleteAll();
+        storyReplyRepository.deleteAll();
         storyRepository.deleteAll();
         memberRepository.deleteAll();
     }
     
     @Test
-    @Transactional
     @DisplayName("스토리 대댓글 업로드 테스트")
     void uploadStoryReReply() {
         Member member = memberRepository.save(

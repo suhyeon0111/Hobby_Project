@@ -39,12 +39,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public Member updateById(long memberId, UpdateMemberDto memberDto) {
+    public Member updateById(long memberId, UpdateMemberDto dto) {
         Member member = findById(memberId);
-        member.setUsername(memberDto.getUsername());
-        member.setIntro(memberDto.getIntro());
-        member.setProfileImageUrl(memberDto.getProfileUrl());
-
+        if(member.isDeleted()) {
+            throw new BusinessException(ErrorCode.DELETED_MEMBER);
+        }
+        if(dto.getUsername() != null) {
+            member.setUsername(dto.getUsername());
+        }
+        if(dto.getIntro() != null) {
+            member.setIntro(dto.getIntro());
+        }
+        if(dto.getProfileUrl() != null) {
+            member.setProfileImageUrl(dto.getProfileUrl());
+        }
         /*
         * 22.08.13 -tae
         * isPresent check 누락되어 수정하였음
@@ -55,18 +63,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member deleteById(long id) {
-        Optional<Member> optMember = memberRepository.findById(id);
-        if(optMember.isPresent()) {
-            if(optMember.get().isDeleted()) {
-                throw new BusinessException(ErrorCode.DELETED_MEMBER);
-            } else {
-                optMember.get().setDeleted(true);
-                memberRepository.save(optMember.get());
-            }
+        Member member = findById(id);
+        if(member.isDeleted()) {
+            throw new BusinessException(ErrorCode.DELETED_MEMBER);
         } else {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+            member.setDeleted(true);
+            memberRepository.save(member);
         }
-        return optMember.get();
+        return member;
     }
 
     @Override
@@ -89,5 +93,4 @@ public class MemberServiceImpl implements MemberService {
         return member.getMeetingLikes().stream()
                 .anyMatch(M -> M.getMeetingId() == meetingId);
     }
-
 }
