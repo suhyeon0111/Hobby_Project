@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Input, Button, Icon, Form } from "antd";
 import Axios from "axios";
 import TextArea from "antd/lib/input/TextArea";
@@ -16,7 +16,6 @@ function UploadArt() {
   const [UploadContent, setUploadContent] = useState("");
   const [UploadCategory, setUploadCategory] = useState(1);
   const [UploadMemberLimit, setUploadMemberLimit] = useState(1);
-  const [File, setFile] = useState("");
 
   // Img 파일을 미리 볼 수 있게 하는 state
   const [FileImage, setFileImage] = useState("");
@@ -49,7 +48,7 @@ function UploadArt() {
       )
         .then((response) => {
           if (response.data.status === 200) {
-            setFile(response.data.data.url);
+            // setFile(response.data.data.url);
           }
           const req = new Request(response.data.data.url, {
             method: "PUT",
@@ -70,7 +69,7 @@ function UploadArt() {
             alert("사진 업로드에 실패했습니다.");
           }
         });
-      setFile(event.target.files[0]);
+      // setFile(event.target.files[0]);
     } else {
       // 업로드 취소했을 때
       return;
