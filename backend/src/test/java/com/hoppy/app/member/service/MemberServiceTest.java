@@ -46,10 +46,12 @@ public class MemberServiceTest {
                 Member.builder().id(2L).username("경태쿼카").build()
         );
         UpdateMemberDto dto = UpdateMemberDto.builder().username("대한쿼카").build();
-        try {
-            memberService.updateById(2L, dto);
-        } catch (BusinessException e) {
-            org.junit.jupiter.api.Assertions.assertEquals(ErrorCode.MEMBER_DUPLICATE.getMessage(), e.getMessage());
-        }
+
+        Throwable exception = org.junit.jupiter.api.Assertions.assertThrows(
+                BusinessException.class, () -> {
+                    memberService.updateById(2L, dto);
+                }
+        );
+        org.junit.jupiter.api.Assertions.assertEquals(ErrorCode.MEMBER_DUPLICATE.getMessage(), exception.getMessage());
     }
 }
