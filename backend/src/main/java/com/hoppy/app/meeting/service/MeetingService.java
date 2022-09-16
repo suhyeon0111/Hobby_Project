@@ -10,13 +10,14 @@ public interface MeetingService {
 
     void createAndSaveMemberMeetingData(Meeting meeting, Member member);
     boolean checkTitleDuplicate(String name);
-    Meeting createMeeting(CreateMeetingDto dto, Long ownerId);
+    Meeting createMeeting(CreateMeetingDto dto, long ownerId);
     Meeting findById(long id);
     Meeting findByIdWithParticipants(long id);
-    void updateMeeting(UpdateMeetingDto dto, Long memberId, Long meetingId);
+    void updateMeeting(UpdateMeetingDto dto, long memberId, long meetingId);
+    void setPremium(long memberId, long meetingId);
+    void changeMemberLimit(long memberId, long meetingId, int memberLimit);
 
-
-    void withdrawMeeting(Long meetingId, Long memberId);
+    void withdrawMeeting(long meetingId, long memberId);
     void checkJoinRequestValid(long meetingId, long memberId);
     void checkJoinedMemberV1(List<Member> participants, long memberId);
     void checkJoinedMemberV2(List<ParticipantDto> participants, long memberId);

@@ -35,10 +35,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } else {
-//            logger.info(request.getRequestURI());
-//            logger.warn("인증 헤더 오류");
-//            throw new BusinessException(ErrorCode.WRONG_REQUEST_HEADER);
         }
         filterChain.doFilter(request, response);
     }

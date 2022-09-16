@@ -3,13 +3,11 @@ package com.hoppy.app.response.error;
 /**
  * @author 태경 2022-08-17
  */
-import com.hoppy.app.common.interceptor.RequestInterceptor;
-import com.hoppy.app.common.tool.LogBox;
+import com.hoppy.app.common.tool.LogUtility;
 import com.hoppy.app.response.error.exception.BusinessException;
 import com.hoppy.app.response.error.exception.ErrorCode;
 import java.nio.file.AccessDeniedException;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class GlobalExceptionHandler {
 
     private <T extends Exception> void logging(T e) {
-        log.error("[{}][{}][{}: {}]", LogBox.getUUID(), LogBox.getRequestURI(), e.getClass(), e.getMessage());
+        log.error("[{}][{}][{}: {}]", LogUtility.getUUID(), LogUtility.getRequestURI(), e.getClass(), e.getMessage());
     }
 
     /**
