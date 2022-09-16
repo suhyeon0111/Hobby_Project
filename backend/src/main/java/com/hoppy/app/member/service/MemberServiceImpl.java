@@ -45,6 +45,9 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessException(ErrorCode.DELETED_MEMBER);
         }
         if(dto.getUsername() != null) {
+            if(existsByUsername(dto.getUsername())) {
+                throw new BusinessException(ErrorCode.MEMBER_DUPLICATE);
+            }
             member.setUsername(dto.getUsername());
         }
         if(dto.getIntro() != null) {
@@ -59,6 +62,11 @@ public class MemberServiceImpl implements MemberService {
         * jpa dirty checking 으로 업데이트
         * */
         return member;
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return memberRepository.existsMemberByUsername(username);
     }
 
     @Override
@@ -93,4 +101,6 @@ public class MemberServiceImpl implements MemberService {
         return member.getMeetingLikes().stream()
                 .anyMatch(M -> M.getMeetingId() == meetingId);
     }
+
+
 }

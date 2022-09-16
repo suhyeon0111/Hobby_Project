@@ -22,4 +22,6 @@ public interface MemberService {
     public List<Long> getMeetingLikes(long memberId);
 
     public boolean checkMeetingLiked(long memberId, long meetingId);
+
+    public boolean existsByUsername(String username);
 }
