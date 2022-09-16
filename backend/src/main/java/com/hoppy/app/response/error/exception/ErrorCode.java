@@ -55,6 +55,8 @@ public enum ErrorCode {
     // Member
     MEMBER_NOT_FOUND(403, "MM001", "존재하지 않는 멤버입니다"),
     DELETED_MEMBER(403, "MM002", "탈퇴한 멤버입니다."),
+
+    MEMBER_DUPLICATE(403, "MM003", "이미 존재하는 이름입니다."),
     // Story
     STORY_NOT_FOUND(403, "SS001", "존재하지 않는 스토리입니다."),
     NO_MORE_STORY(403, "SS002", "더 이상 조회할 스토리가 없습니다")

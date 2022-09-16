@@ -61,6 +61,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return CustomUserDetails.create(member, user.getAttributes());
     }
 
+    private String createUsername(String username) {
+        int len = username.length();
+        if(len < 1) {
+            len = 4;
+        } else if(len >= 1 && len <= 3) {
+            len = len + 2;
+        } else {
+            len = 5;
+        }
+        RandomStringService stringService = new RandomStringService(len);
+        return stringService.nextString();
+    }
+
     private Member createMember(OAuth2UserInfo userInfo, SocialType socialType) {
         return memberRepository.save(
                 Member.builder()
@@ -68,7 +81,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         .id(Long.parseLong(userInfo.getSocialId()))
                         .email(userInfo.getEmail())
                         .profileImageUrl(userInfo.getProfileImageUrl())
-                        .username(userInfo.getUsername())
+                        .username(createUsername(userInfo.getUsername()))
                         .role(Role.USER)
                         .deleted(false)
                         .build()
