@@ -8,7 +8,25 @@ function ExerciseMeetingPage() {
 
   const onSearch = (value) => console.log(value);
 
-  Axios.get();
+  const token = localStorage.getItem("Authorization");
+
+  // 무한스크롤
+  const categoryNumber = 1; // 운동 카테고리
+
+  const headers = {
+    Authorization: token,
+  };
+  Axios.get(
+    `https://hoppy.kro.kr/api/meeting?categoryNumber=${categoryNumber}`,
+    { headers, withCredentials: false }
+  )
+    .then((response) => {
+      console.log("response>>>>>", response);
+    })
+    .catch((error) => {
+      console.log("error>>>>>>", error);
+    });
+
   return (
     <div
       style={{
