@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "antd";
 import Axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
 import TestImg from "./TestImg.jpeg";
 
 function ExerciseMeetingPage() {
@@ -8,25 +9,36 @@ function ExerciseMeetingPage() {
 
   const onSearch = (value) => console.log(value);
 
-  const token = localStorage.getItem("Authorization");
-
   // 무한스크롤
-  const categoryNumber = 1; // 운동 카테고리
+  const [MeetingList, setMeetingList] = useState([]);
+  // const [LastId, setLastId] = useState("");
 
+  const categoryNumber = 1; // 운동 카테고리
+  const token = localStorage.getItem("Authorization");
   const headers = {
     Authorization: token,
   };
-  Axios.get(
-    `https://hoppy.kro.kr/api/meeting?categoryNumber=${categoryNumber}`,
-    { headers, withCredentials: false }
-  )
-    .then((response) => {
-      console.log("response>>>>>", response);
-    })
-    .catch((error) => {
-      console.log("error>>>>>>", error);
-    });
 
+  async function getMeetingList() {
+    await Axios.get(
+      `https://hoppy.kro.kr/api/meeting?categoryNumber=${categoryNumber}`,
+      { headers, withCredentials: false }
+    ).then((response) => {
+      if (response.data.status === 200 && response.data !== undefined) {
+        console.log("response>>>>>", response.data.data);
+      } else {
+        alert("데이터 불러오기를 실패했습니다.");
+      }
+    });
+  }
+
+  useEffect(() => {
+    getMeetingList();
+  }, []);
+
+  const meetingCard = MeetingList.map(() => {
+    console.log();
+  });
   return (
     <div
       style={{
