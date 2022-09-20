@@ -8,7 +8,7 @@ import "./UploadMeeting.css";
 function UploadDaily() {
   // 토큰 가져오기
   const token = localStorage.getItem("Authorization");
-  console.log("token>>>>>", token);
+  // console.log("token>>>>>", token);
 
   // 모임 생성 form
   const [UploadTitle, setUploadTitle] = useState("");
@@ -134,7 +134,7 @@ function UploadDaily() {
           if (response.data.status === 200) {
             alert("모임이 생성되었습니다.");
             // 운동 모임 모집 글로 매칭
-            window.location.href("/");
+            // window.location.href("/");
           }
           console.log("form submit>>>>>", response);
         })

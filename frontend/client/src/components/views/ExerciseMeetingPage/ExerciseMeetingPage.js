@@ -11,7 +11,9 @@ function ExerciseMeetingPage() {
 
   // 무한스크롤
   const [MeetingList, setMeetingList] = useState([]);
-  // const [LastId, setLastId] = useState("");
+  const [LastId, setLastId] = useState("");
+  const [Fetching, setFatching] = useState(false);
+  const [FetchData, setFetchData] = useState("");
 
   const categoryNumber = 1; // 운동 카테고리
   const token = localStorage.getItem("Authorization");
@@ -19,13 +21,23 @@ function ExerciseMeetingPage() {
     Authorization: token,
   };
 
+  if (token == null) {
+    // 로그인 되어있는지 확인
+    alert("로그인 후 이용 가능합니다.");
+  }
+
   async function getMeetingList() {
     await Axios.get(
       `https://hoppy.kro.kr/api/meeting?categoryNumber=${categoryNumber}`,
-      { headers, withCredentials: false }
+      {
+        headers,
+        withCredentials: false,
+      }
     ).then((response) => {
       if (response.data.status === 200 && response.data !== undefined) {
         console.log("response>>>>>", response.data.data);
+        setMeetingList(response.data.data.meetingList);
+        setLastId(response.data.data.lastId);
       } else {
         alert("데이터 불러오기를 실패했습니다.");
       }
