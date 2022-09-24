@@ -3,6 +3,7 @@ import { Input } from "antd";
 import Axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import TestImg from "./TestImg.jpeg";
+import _default from "antd/lib/date-picker";
 
 function ExerciseMeetingPage() {
   const { Search } = Input;
@@ -12,8 +13,9 @@ function ExerciseMeetingPage() {
   // 무한스크롤
   const [MeetingList, setMeetingList] = useState([]);
   const [LastId, setLastId] = useState("");
-  const [Fetching, setFatching] = useState(false);
+  const [Fetching, setFetching] = useState(false);
   const [FetchData, setFetchData] = useState("");
+  const [NextpageUrl, setNextpageUrl] = useState("");
 
   const categoryNumber = 1; // 운동 카테고리
   const token = localStorage.getItem("Authorization");
@@ -37,7 +39,8 @@ function ExerciseMeetingPage() {
       if (response.data.status === 200 && response.data !== undefined) {
         console.log("response>>>>>", response.data.data);
         setMeetingList(response.data.data.meetingList);
-        setLastId(response.data.data.lastId);
+        // setLastId(response.data.data.lastId);
+        setNextpageUrl(response.data.nextPagingUrl);
       } else {
         alert("데이터 불러오기를 실패했습니다.");
       }
@@ -48,9 +51,37 @@ function ExerciseMeetingPage() {
     getMeetingList();
   }, []);
 
-  const meetingCard = MeetingList.map(() => {
-    console.log();
+  const meetingCard = MeetingList.map((meeting, index) => {
+    console.log("meeting", meeting);
+    return (
+      <>
+        <div key={index} style={{ width: "100%" }}>
+          <img src={meeting.url} style={{ width: "30px" }} />
+          {meeting.title}
+        </div>
+      </>
+    );
   });
+
+  const InfiniteScroll = () => {
+    if (LastId !== undefined) {
+      fetch(NextpageUrl, {
+        method: "GET",
+      }).then((response) => {
+        console.log("response>>>", response);
+        // setFetchData(response.data.meetingList);
+      });
+    }
+  };
+
+  const MoreLoad = () => {
+    if (FetchData < 14) {
+      setFetching(false);
+    } else if (FetchData === 14) {
+      setFetching(true);
+    }
+  };
+
   return (
     <div
       style={{
@@ -88,51 +119,13 @@ function ExerciseMeetingPage() {
           </span>
         </h3>
         {/* 모임 리스트 조회 */}
-        <div
-          style={{
-            width: "100%",
-          }}
+        <InfiniteScroll
+          dataLength={MeetingList.length} // 반복되는 컴포넌트의 개수
+          next={InfiniteScroll} // 스크롤이 바닥에 닿으면 데이터를 더 불러오는 함수
+          hasMore={MoreLoad} // 추가 데이터 유무
         >
-          <div
-            style={{
-              width: "90%",
-              margin: "0 auto",
-              // backgroundColor: "#A5A5A5",
-              display: "flex",
-            }}
-          >
-            <div
-              style={{
-                width: "48.5%",
-                height: "200px",
-                border: "0.8px solid #A5A5A5",
-                borderRadius: "8px",
-              }}
-            >
-              <img
-                alt="example"
-                src={TestImg}
-                style={{ width: "90%", marginTop: "9px" }}
-              />
-            </div>
-
-            <div
-              style={{
-                width: "48.5%",
-                height: "200px",
-                marginLeft: "3%",
-                border: "0.8px solid #A5A5A5",
-                borderRadius: "8px",
-              }}
-            >
-              <img
-                alt="example"
-                src={TestImg}
-                style={{ width: "90%", marginTop: "9px" }}
-              />
-            </div>
-          </div>
-        </div>
+          {meetingCard}
+        </InfiniteScroll>
       </div>
     </div>
   );

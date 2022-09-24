@@ -98,7 +98,7 @@ function UploadExercise() {
 
   // 폼 post 함수
   const submitHandler = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     // 운동 카테고리 1번 설정
     setUploadCategory(1);
@@ -133,13 +133,12 @@ function UploadExercise() {
         .then((response) => {
           if (response.data.status === 200) {
             alert("모임이 생성되었습니다.");
-            // 운동 모임 모집 글로 매칭
-            // window.location.href("/");
           }
           console.log("form submit>>>>>", response);
         })
         .catch((error) => {
           console.log("form error>>>>>", error);
+          alert("모임생성에 실패했습니다.");
         });
     }
   };
