@@ -13,6 +13,7 @@ import NotificationPage from "./views/NotificationPage/NotificationPage";
 import AuthRedirectHandler from "./views/LoginPage/KakaoLogin/AuthRedirectHandler";
 import KakaoLoginPage from "./views/LoginPage/KakaoLogin/KakaoLoginPage";
 import LogoutPage from "./views/LogoutPage/LogoutPage.js";
+import LogoutHandler from "./views/LogoutPage/LogoutHandler";
 
 import MyPage from "./views/MyPage/MyPage";
 import EditMyPage from "./views/MyPage/EditMyPage.js";
@@ -80,6 +81,7 @@ function App() {
             component={AuthRedirectHandler}
           />
           <Route exact path="/logout" component={LogoutPage} />
+          <Route exact path="/auth/logout" component={LogoutHandler} />
 
           <Route exact path="/notification" component={NotificationPage} />
 

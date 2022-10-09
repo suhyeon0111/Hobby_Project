@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Input } from "antd";
 import Axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
-import TestImg from "./TestImg.jpeg";
 import _default from "antd/lib/date-picker";
 
 function ExerciseMeetingPage() {
@@ -12,10 +11,9 @@ function ExerciseMeetingPage() {
 
   // 무한스크롤
   const [MeetingList, setMeetingList] = useState([]);
-  const [LastId, setLastId] = useState("");
   const [Fetching, setFetching] = useState(false);
   const [FetchData, setFetchData] = useState("");
-  const [NextpageUrl, setNextpageUrl] = useState("");
+  const [NextpagingUrl, setNextpagingUrl] = useState("");
 
   const categoryNumber = 1; // 운동 카테고리
   const token = localStorage.getItem("Authorization");
@@ -39,8 +37,7 @@ function ExerciseMeetingPage() {
       if (response.data.status === 200 && response.data !== undefined) {
         console.log("response>>>>>", response.data.data);
         setMeetingList(response.data.data.meetingList);
-        // setLastId(response.data.data.lastId);
-        setNextpageUrl(response.data.nextPagingUrl);
+        setNextpagingUrl(response.data.data.nextPagingUrl);
       } else {
         alert("데이터 불러오기를 실패했습니다.");
       }
@@ -51,30 +48,32 @@ function ExerciseMeetingPage() {
     getMeetingList();
   }, []);
 
-  const meetingCard = MeetingList.map((meeting, index) => {
-    console.log("meeting", meeting);
-    return (
-      <>
-        <div key={index} style={{ width: "100%" }}>
-          <img src={meeting.url} style={{ width: "30px" }} />
-          {meeting.title}
-        </div>
-      </>
-    );
-  });
-
-  const InfiniteScroll = () => {
-    if (LastId !== undefined) {
-      fetch(NextpageUrl, {
-        method: "GET",
+  const InfiniteScrollHandler = () => {
+    // 추가 데이터 불러오는 함수
+    if (NextpagingUrl == null) {
+      console.log("더 이상 조회할 데이터가 없습니다.");
+      setFetching(false);
+    } else if (NextpagingUrl == "end") {
+      console.log("더 이상 조회할 데이터가 없습니다.");
+      setFetching(false);
+    } else {
+      // 데이터 기져오기
+      Axios.get(NextpagingUrl, {
+        headers,
+        withCredentials: false,
       }).then((response) => {
-        console.log("response>>>", response);
-        // setFetchData(response.data.meetingList);
+        console.log("추가 데이터>>>>>>", response.data);
+        const addData = response.data.data.meetingList;
+        const mergeData = MeetingList.concat(addData);
+        setMeetingList(mergeData); // 가져온 데이터
+        setFetchData(addData.length); // 추가해줄 데이터 길이
+        setNextpagingUrl(response.data.data.nextPagingUrl); // 데이터를 불러올 다음 url
       });
     }
   };
 
   const MoreLoad = () => {
+    // 추가 데이터 유무 함수
     if (FetchData < 14) {
       setFetching(false);
     } else if (FetchData === 14) {
@@ -82,6 +81,27 @@ function ExerciseMeetingPage() {
     }
   };
 
+  const MeetingCard = MeetingList.map((meeting, index) => {
+    console.log("meeting>>>>>>", meeting);
+    return (
+      <>
+        <div
+          key={index}
+          style={{
+            width: "30px",
+            height: "100px",
+            backgroundColor: "#FFC0CB",
+            borderColor: "#FF0000",
+            border: "3px",
+            margin: "30px",
+          }}
+        >
+          {index}
+          <a href={"/"}></a>
+        </div>
+      </>
+    );
+  });
   return (
     <div
       style={{
@@ -121,10 +141,10 @@ function ExerciseMeetingPage() {
         {/* 모임 리스트 조회 */}
         <InfiniteScroll
           dataLength={MeetingList.length} // 반복되는 컴포넌트의 개수
-          next={InfiniteScroll} // 스크롤이 바닥에 닿으면 데이터를 더 불러오는 함수
+          next={InfiniteScrollHandler} // 스크롤이 바닥에 닿으면 데이터를 더 불러오는 함수
           hasMore={MoreLoad} // 추가 데이터 유무
         >
-          {meetingCard}
+          {MeetingCard}
         </InfiniteScroll>
       </div>
     </div>

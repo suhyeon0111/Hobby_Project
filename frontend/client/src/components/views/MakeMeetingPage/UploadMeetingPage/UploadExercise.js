@@ -8,7 +8,7 @@ import "./UploadMeeting.css";
 function UploadExercise() {
   // 토큰 가져오기
   const token = localStorage.getItem("Authorization");
-  // console.log("token>>>>>", token);
+  console.log("token>>>>>", token);
 
   // 모임 생성 form
   const [UploadTitle, setUploadTitle] = useState("");
@@ -98,7 +98,7 @@ function UploadExercise() {
 
   // 폼 post 함수
   const submitHandler = (event) => {
-    // event.preventDefault();
+    event.preventDefault();
 
     // 운동 카테고리 1번 설정
     setUploadCategory(1);
@@ -133,12 +133,14 @@ function UploadExercise() {
         .then((response) => {
           if (response.data.status === 200) {
             alert("모임이 생성되었습니다.");
+            // 운동 모임 모집 글로 매칭
+            window.location.href = "/exerciseMeeting";
           }
           console.log("form submit>>>>>", response);
         })
         .catch((error) => {
           console.log("form error>>>>>", error);
-          alert("모임생성에 실패했습니다.");
+          alert("모임이 생성되지 않았습니다. 다시 시도해주세요!");
         });
     }
   };
