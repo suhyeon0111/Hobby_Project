@@ -82,26 +82,48 @@ function ExerciseMeetingPage() {
   };
 
   const MeetingCard = MeetingList.map((meeting, index) => {
+    // 실제 보여지는 데이터
     console.log("meeting>>>>>>", meeting);
     return (
       <>
         <div
-          key={index}
           style={{
-            width: "30px",
-            height: "100px",
-            backgroundColor: "#FFC0CB",
-            borderColor: "#FF0000",
-            border: "3px",
-            margin: "30px",
+            float: "left",
+            width: "48.5%",
+            height: "200px",
+            border: "0.8px solid #A5A5A5",
+            borderRadius: "8px",
+            marginBottom: "20px",
           }}
         >
-          {index}
-          <a href={"/"}></a>
+          {/* <img
+              alt="example"
+              src={TestImg}
+              style={{ width: "90%", marginTop: "9px" }}
+            /> */}
+        </div>
+
+        <div
+          style={{
+            float: "left",
+            width: "48.5%",
+            height: "200px",
+            marginLeft: "3%",
+            marginBottom: "20px",
+            border: "0.8px solid #A5A5A5",
+            borderRadius: "8px",
+          }}
+        >
+          {/* <img
+              alt="example"
+              src={TestImg}
+              style={{ width: "90%", marginTop: "9px" }}
+            /> */}
         </div>
       </>
     );
   });
+
   return (
     <div
       style={{
@@ -131,6 +153,7 @@ function ExerciseMeetingPage() {
             paddingTop: "26px",
             fontSize: "16px",
             marginLeft: "27px",
+            marginRight: "27px",
           }}
         >
           운동 모임 리스트
@@ -139,13 +162,15 @@ function ExerciseMeetingPage() {
           </span>
         </h3>
         {/* 모임 리스트 조회 */}
-        <InfiniteScroll
-          dataLength={MeetingList.length} // 반복되는 컴포넌트의 개수
-          next={InfiniteScrollHandler} // 스크롤이 바닥에 닿으면 데이터를 더 불러오는 함수
-          hasMore={MoreLoad} // 추가 데이터 유무
-        >
-          {MeetingCard}
-        </InfiniteScroll>
+        <div style={{ width: "90%", margin: "70px auto" }}>
+          <InfiniteScroll
+            dataLength={MeetingList.length} // 반복되는 컴포넌트의 개수
+            next={InfiniteScrollHandler} // 스크롤이 바닥에 닿으면 데이터를 더 불러오는 함수
+            hasMore={MoreLoad} // 추가 데이터 유무
+          >
+            {MeetingCard}
+          </InfiniteScroll>
+        </div>
       </div>
     </div>
   );
