@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Input } from "antd";
+import { Input, Icon } from "antd";
 import Axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
-import _default from "antd/lib/date-picker";
 
 function ExerciseMeetingPage() {
   const { Search } = Input;
 
   const onSearch = (value) => console.log(value);
+
+  // const [like, setLike] = useState(false);
 
   // 무한스크롤
   const [MeetingList, setMeetingList] = useState([]);
@@ -50,10 +51,10 @@ function ExerciseMeetingPage() {
 
   const InfiniteScrollHandler = () => {
     // 추가 데이터 불러오는 함수
-    if (NextpagingUrl == null) {
+    if (NextpagingUrl === null) {
       console.log("더 이상 조회할 데이터가 없습니다.");
       setFetching(false);
-    } else if (NextpagingUrl == "end") {
+    } else if (NextpagingUrl === "end") {
       console.log("더 이상 조회할 데이터가 없습니다.");
       setFetching(false);
     } else {
@@ -72,6 +73,8 @@ function ExerciseMeetingPage() {
     }
   };
 
+  console.log(Fetching);
+
   const MoreLoad = () => {
     // 추가 데이터 유무 함수
     if (FetchData < 14) {
@@ -84,43 +87,78 @@ function ExerciseMeetingPage() {
   const MeetingCard = MeetingList.map((meeting, index) => {
     // 실제 보여지는 데이터
     console.log("meeting>>>>>>", meeting);
-    return (
-      <>
-        <div
-          style={{
-            float: "left",
-            width: "48.5%",
-            height: "200px",
-            border: "0.8px solid #A5A5A5",
-            borderRadius: "8px",
-            marginBottom: "20px",
-          }}
-        >
-          {/* <img
-              alt="example"
-              src={TestImg}
-              style={{ width: "90%", marginTop: "9px" }}
-            /> */}
-        </div>
 
-        <div
+    const onClickMeeting = (e) => {
+      // meeting 클릭 시 해당 모임 페이지로 매칭
+      window.location.href = "/exerciseMeeting/detail";
+    };
+
+    const onClickHeart = (e) => {
+      // 하트 색 변경 함수
+    };
+    return (
+      <div
+        key={index}
+        onClick={onClickMeeting}
+        style={{
+          float: "left",
+          width: "46%",
+          height: "220px",
+          marginRight: "2%",
+          marginLeft: "2%",
+          marginBottom: "20px",
+          border: "0.8px solid #A5A5A5",
+          borderRadius: "8px",
+        }}
+      >
+        <img
+          alt="hoppy"
+          src={meeting.url}
           style={{
+            width: "90%",
+            marginTop: "9px",
+            float: "center",
+            display: "inlineBlock",
+          }}
+        />
+        <p
+          style={{
+            fontSize: "13px",
+            margin: "9px ",
             float: "left",
-            width: "48.5%",
-            height: "200px",
-            marginLeft: "3%",
-            marginBottom: "20px",
-            border: "0.8px solid #A5A5A5",
-            borderRadius: "8px",
           }}
         >
-          {/* <img
-              alt="example"
-              src={TestImg}
-              style={{ width: "90%", marginTop: "9px" }}
-            /> */}
+          {meeting.title}
+        </p>
+        <div
+          style={{
+            width: "100%",
+            height: "20px",
+            float: "left",
+            fontSize: "16px",
+          }}
+        >
+          <Icon
+            type="user"
+            style={{
+              float: "left",
+              marginLeft: "10px",
+            }}
+          />
+          <p style={{ fontSize: "13px", float: "left" }}>
+            {meeting.participants}명
+          </p>
+          <Icon
+            type="heart"
+            onClick={onClickHeart}
+            style={{
+              float: "right",
+              marginRight: "10px",
+              marginBottom: "10px",
+            }}
+          />
         </div>
-      </>
+      </div>
     );
   });
 
@@ -162,7 +200,7 @@ function ExerciseMeetingPage() {
           </span>
         </h3>
         {/* 모임 리스트 조회 */}
-        <div style={{ width: "90%", margin: "70px auto" }}>
+        <div style={{ width: "95%", margin: "70px auto" }}>
           <InfiniteScroll
             dataLength={MeetingList.length} // 반복되는 컴포넌트의 개수
             next={InfiniteScrollHandler} // 스크롤이 바닥에 닿으면 데이터를 더 불러오는 함수

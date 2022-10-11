@@ -38,6 +38,13 @@ import UploadFood from "./views/MakeMeetingPage/UploadMeetingPage/UploadFood";
 import UploadMusic from "./views/MakeMeetingPage/UploadMeetingPage/UploadMusic";
 import UploadTrip from "./views/MakeMeetingPage/UploadMeetingPage/UploadTrip";
 
+import DetailExercise from "./views/DetailMeeting/DetailExercise";
+import DetailArt from "./views/DetailMeeting/DetailArt";
+import DetailDaily from "./views/DetailMeeting/DetailDaily";
+import DetailFood from "./views/DetailMeeting/DetailFood";
+import DetailMusic from "./views/DetailMeeting/DetailMusic";
+import DetailTrip from "./views/DetailMeeting/DetailTrip";
+
 import MobileImg from "./views/LandingPage/img/mobile.png";
 
 //null   Anyone Can go inside
@@ -103,6 +110,22 @@ function App() {
           <Route exact path="/musicMeeting" component={MusicMeetingPage} />
           <Route exact path="/tripMeeting" component={TripMeetingPage} />
 
+          {/* 모임 id별 상세조회 */}
+          <Route exact path="/artMeeting/detail" component={DetailArt} />
+          <Route exact path="/dailyMeeting/detail" component={DetailDaily} />
+          <Route
+            exact
+            path="/exerciseMeeting/detail"
+            component={DetailExercise}
+          />
+          <Route exact path="/foodMeeting/detail" component={DetailFood} />
+          <Route
+            exact
+            path="/musicMeeting/detail"
+            component={MusicMeetingPage}
+          />
+          <Route exact path="/tripMeeting/detail" component={DetailTrip} />
+
           {/* 모임 초대*/}
           <Route exact path="/makeMeeting" component={MakeMeetingPage} />
           <Route
@@ -115,7 +138,6 @@ function App() {
           <Route exact path="/makeMeeting/food" component={UploadFood} />
           <Route exact path="/makeMeeting/music" component={UploadMusic} />
           <Route exact path="/makeMeeting/trip" component={UploadTrip} />
-
           {/* 스토리 */}
           <Route exact path="/hobbystory" component={HobbyStoryPage} />
           <Route exact path="/hobbystory/upload" component={MakeStoryPage} />
