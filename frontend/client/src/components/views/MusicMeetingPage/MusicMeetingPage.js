@@ -1,14 +1,18 @@
+/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { Input, Icon } from "antd";
 import Axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
+
+import Heart from "../LandingPage/img/heart.png";
+import HeartFilled from "../LandingPage/img/heart_click.png";
 
 function MusicMeetingPage() {
   const { Search } = Input;
 
   const onSearch = (value) => console.log(value);
 
-  //   const [like, setLike] = useState(false);
+  const [like, setLike] = useState(false);
 
   // 무한스크롤
   const [MeetingList, setMeetingList] = useState([]);
@@ -95,11 +99,11 @@ function MusicMeetingPage() {
 
     const onClickHeart = (e) => {
       // 하트 색 변경 함수
+      setLike(!like);
     };
     return (
       <div
         key={index}
-        onClick={onClickMeeting}
         style={{
           float: "left",
           width: "46%",
@@ -112,8 +116,9 @@ function MusicMeetingPage() {
         }}
       >
         <img
-          alt="hoppy"
           src={meeting.url}
+          alt="hoppy"
+          onClick={onClickMeeting}
           style={{
             width: "90%",
             marginTop: "9px",
@@ -148,15 +153,30 @@ function MusicMeetingPage() {
           <p style={{ fontSize: "13px", float: "left" }}>
             {meeting.participants}명
           </p>
-          <Icon
-            type="heart"
-            onClick={onClickHeart}
-            style={{
-              float: "right",
-              marginRight: "10px",
-              marginBottom: "10px",
-            }}
-          />
+          {like ? (
+            <img
+              src={HeartFilled}
+              alt="heart"
+              onClick={onClickHeart}
+              style={{
+                float: "right",
+                marginRight: "10px",
+                marginBottom: "10px",
+              }}
+            />
+          ) : (
+            <img
+              src={Heart}
+              alt="heart"
+              onClick={onClickHeart}
+              style={{
+                width: "23px",
+                float: "right",
+                marginRight: "10px",
+                marginTop: "-3px",
+              }}
+            />
+          )}
         </div>
       </div>
     );

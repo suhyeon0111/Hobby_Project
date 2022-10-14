@@ -119,11 +119,7 @@ function App() {
             component={DetailExercise}
           />
           <Route exact path="/foodMeeting/detail" component={DetailFood} />
-          <Route
-            exact
-            path="/musicMeeting/detail"
-            component={MusicMeetingPage}
-          />
+          <Route exact path="/musicMeeting/detail" component={DetailMusic} />
           <Route exact path="/tripMeeting/detail" component={DetailTrip} />
 
           {/* 모임 초대*/}
