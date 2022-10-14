@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "https://hoppy.kro.kr",
   "dependencies": {
+    "@ant-design/icons": "^2.1.1",
     "antd": "^3.24.1",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
